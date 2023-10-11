@@ -42,10 +42,10 @@
      c=1:{
          df[0]=0:df[1]chiSquare prob>df[1]÷⍵
          df[1]=0:df[0]chiSquare prob<⍵×df[0]
-         0⌈##.Koko.Distrib.Fratio_P ⍵,df}¨w×R
+         0⌈##.KokoStats.Distrib.Fratio_P ⍵,df}¨w×R
    ⍝  c=¯1:R÷⍨{##.Koko.Distrib.Fratio_Fa ⍵,df}¨1-w
      c=¯1:R÷⍨{0∊df:df FApprox ⍵ ⋄
-         ##.Koko.Distrib.Fratio_Fa ⍵,df}¨1-w
+         ##.KokoStats.Distrib.Fratio_Fa ⍵,df}¨1-w
      X←df chiSquare randomVariable¨w        ⍝ F Distribution is ratio of
      ↑÷/X÷df                                ⍝ two chi-Square distributions
  }

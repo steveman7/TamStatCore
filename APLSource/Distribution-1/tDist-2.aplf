@@ -44,9 +44,9 @@
     ⍝ w≡'Mean':{⍵>1:0 ⋄ ∆SigErr'Only for df > 1'}m
 ⍝     w≡'Variance':{⍵>2:⍵÷⍵-2 ⋄ ⎕null}m
      c=0:m{⍺=1:÷○(1+⍵)*2 ⋄ ⍺ TDEN ⍵}w               ⍝ Density
-     c=1:m{##.Koko.Distrib.Student_P ⍵,⌊⍺}¨w
-     c=¯1:m{⍵<0.5:-##.Koko.Distrib.Student_Ta ⍵,⌊⍺
-         ##.Koko.Distrib.Student_Tp ⍵,⌊⍺}¨w
+     c=1:m{##.KokoStats.Distrib.Student_P ⍵,⌊⍺}¨w
+     c=¯1:m{⍵<0.5:-##.KokoStats.Distrib.Student_Ta ⍵,⌊⍺
+         ##.KokoStats.Distrib.Student_Tp ⍵,⌊⍺}¨w
     ⍝ c=1:m{⍺=1:0.5+(¯3○⍵)÷○1 ⋄ ⍺ TDIST ⍵}w          ⍝ Cumulative Distribution
 ⍝     c=¯1:m{⍺=1:3○○⍵-÷2 ⋄ ⍺ TINV ⍵}w                ⍝ Inverse (Critical Value)
      Y←normal randomVariable w                      ⍝ Normal Random Variable
