@@ -1,0 +1,66 @@
+ Z←HypothesisAPI NS;V
+     ⍝∇ ns-based API for Hypothesis - Last updated 6/6
+     ⍝⍵ nsIn Namespace containing the following variables
+     ⍝⍵   Event  'Init'
+     ⍝⍵   Event 'SelectStat'
+     ⍝      Labels
+     ⍝    Event 'Run'  Signficance Data Parameter Relational HypothesizedValue
+     ⍝← nsOut  Namespace containing  DataStat Report
+     ⍝← Output Results Expr
+     ⍝   Parameter:   mean, proportion, sdev, var
+     ⍝   Data:  1 or 2-item nested vector:    Expression or stats
+     ⍝   Values:  1×3 or 2×3 numeric matrix
+     ⍝   UserSpace:   Ref or
+     ⍝⍵    Parameter Levels Var GroupBy Var2
+     ⍝← nsOut Namespace contain nsIn plus the following:
+     ⍝←    Labels  2-item nested vector
+     ⍝←    Values  1x3 or 2x3 numeric matrix
+     ⍝←    Protect 2×3 boolean matrix 1=protect, 0=editable
+ ⎕IO←0 ⋄ ⎕ML←3
+ :Select NS.Event
+ :Case 'Init'
+     NS.ParameterList←'mean' 'proportion' 'var' 'sdev'
+     NS.Parameter←'mean'
+     NS.Labels←'Sample Size' 'Mean' 'Std Dev'
+     NS.Data←'stats'
+     NS.Values←1 3⍴30 0 0
+     NS.HypothesizedValue←0
+     NS.Relation←,'='
+     NS.RelationList←,¨'<≤=≠≥>'
+     NS.RelationListKeys←'lt' 'le' 'eq' 'ne' 'ge' 'gt'
+     NS.Significance←5
+     NS.Samples←1
+     NS.SplitBy←0
+     NS.ReturnCode←0
+ :Case 'SelectStat'
+     :Select NS.Parameter
+     :Case 'mean' ⋄ NS.Labels←'Sample Size' 'Mean' 'Std Dev'
+         :If NS.Data≢'stats' ⋄ V←exErr'(count,mean,sdev)',NS.Data ⋄ :EndIf
+     :Case 'proportion' ⋄ NS.Labels←'Sample Size' 'Events' 'Proportion'
+         :If NS.Data≢'stats' ⋄ V←exErr'(count,sum,proportion)',NS.Data ⋄ :EndIf
+     :CaseList 'var' 'variance' 'sdev' ⋄ NS.Labels←'Sample Size' 'Variance' 'Std Dev'
+         :If NS.Data≢'stats' ⋄ V←exErr'(count,var,sdev)',NS.Data ⋄ :EndIf
+   ⍝  :Case 'sdev' ⋄ NS.Labels←'Sample Size' 'Mean' 'Std Dev'
+     :EndSelect
+     :Trap 0 ⋄ NS.Values[0;]←⍎V ⋄ :EndTrap
+
+ :Case 'Run'
+     :If 0=⎕NC'NS.SplitBy' ⋄ NS.SplitBy←0 ⋄ :EndIf
+     Z←{xeq←⍵.(SplitBy↓Data Parameter)
+         xeq,←'hypothesis'⍵.Relation
+         xeq,←(2×~⍵.SplitBy)↓⍵.Data'splitBy'⍵.Value
+         US←{2=⎕NC'⍵':⍎⍵ ⋄ ⍵}⍵.UserSpace
+         ns←⍵
+         Expr←deleteExcessBlanks⍕(⍵.Significance÷100)'report',xeq
+         ns.ReturnCode←1
+         H←US{0::0 ⋄ ⍺⍎⍵}⍕xeq
+         2=⎕NC'H':{⍵.Expr←Expr ⋄ ⍵.Output←'Error' ⋄ ⍵}ns
+         Output←US⍎Expr
+         _←'ns'⎕NS'Expr' 'Output',↓'H','.',H.⎕NL 2
+         ns.ReturnCode←0
+         ns.(Conclusion←P<Significance÷100)
+         ns}NS
+ :Else
+     NS.Values←NS.Event NS.rectifyStats NS.Event
+ :EndSelect
+ Z←NS

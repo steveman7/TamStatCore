@@ -1,0 +1,34 @@
+ theoretical←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Calculate parameter for a theoretical distribution
+ ⍝∊ Operators
+ ⍝⍺ [L]: Parameter List
+ ⍝⍺⍺ fD: Distribution Function
+ ⍝⍵⍵ fS: Summary function
+ ⍝⍵ X:   Dummy value unless fS requires a left argument
+ ⍝← L fD theoretical ''
+ ⍝⍕  2.1 ← 7 .3 binomial thoretical mean ''
+ ⍝⍕  0.9295 ← 13 5 52 hyperGeometric theoretical sdev ''
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←0 1
+     (2=⎕NC'⍺⍺')∧⍵≠0:⍵ ⍵⍵ ⍺⍺               ⍝ If variable left arg, apply fn
+     2=⎕NC'⍺⍺':↑⍵⍵ ⍺⍺
+     f←⍺⍺{d←3 ⍵⍵ 2 2 3 5 7
+         d=6:⍺ ⍺⍺ criticalValue≥⍵÷4        ⍝ Quartile
+         d=2:⍺ ⍺⍺ criticalValue≥⍵÷100      ⍝ Percentile
+         d=60:100×⍺ ⍺⍺ probability<⍵       ⍝ PercentileRank
+     }⍵⍵
+     ⍵≠0:⍺ f ⍵
+     d←⍵⍵ 2 2 3 5 7                        ⍝ Apply function to known data
+     d=3.8:⍺ ⍺⍺'Mean'                      ⍝ Mean
+     d=4.7:⍺ ⍺⍺'Variance'                  ⍝ Variance
+    ⍝ 4.7=d*2:(⍺ ⍺⍺'Variance')*÷2           ⍝ Standard Deviation
+     4.7=d*2:⍺⍺{z←⍵ ⍺⍺'Variance'
+         z=⎕NULL:z ⋄ sqrt z}⍺
+       ⍝d=3:⍺ ⍺⍺ criticalValue≤0.5            ⍝ Median
+     d=3:⍺ ⍺⍺'Median'
+     d=2:⍺ ⍺⍺'Mode'                        ⍝ Mode
+     d=4:-/⍺ ⍺⍺ criticalValue≤0.25 0.75    ⍝ iqr
+     d<0:⍺ ⍺⍺'Kurtosis'                    ⍝ Kurtosis
+     d<1:⍺ ⍺⍺'Skewness'                    ⍝ Skewness
+
+ }

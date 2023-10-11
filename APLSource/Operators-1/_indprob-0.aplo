@@ -1,0 +1,15 @@
+ _indprob←{
+⍝⍟   Copyright 2020 by Stephen M. Mansour
+⍝∇   Calculate independent probabilies using logic rules
+⍝⍺   First probability
+⍝⍺⍺  f Logical function: e.g. (^ and) (∨ or)
+⍝⍵   Second probability
+⍝⍕   P←.5 f _indprob .3
+⍝⍎   P←.2 (∧ _indprob) .5        ⍝ Marginal prob
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←0 1       ⍝ Set defaults
+     2=⎕NC'⍺⍺':⍺⍺                ⍝ If zero or 1
+     ⍺≡0 1:(⍺⍺ 1 0)+.×⍵,1-⍵      ⍝ Monadic probability
+     T←⍺(1-⍺)∘.×⍵,1-⍵            ⍝ Contingency table
+     T←'*' 'A1' 'A2','B1' 'B2'⍪T ⍝ Add pseudo "labels"
+     'A1'(⍺⍺ _prob T)'B1'        ⍝ Get probability
+ }

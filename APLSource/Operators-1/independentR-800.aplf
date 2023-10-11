@@ -1,0 +1,24 @@
+ independentR←{
+     ⎕IO←0 ⋄ ⎕ML←3
+     fn←{0=↑0⍴⍵:⍕⍵ ⋄ q,⍵,q←'"'}
+     rn cn←{∊{⍺,','⍵}/fn¨⍵}¨1↓¨(⍵[;0])(⍵[0;])
+     rows←↓1 1↓⍵
+     str←'M <- as.table(rbind(',1↓∊(≢rows)⍴⊂',⍵'
+     _←+##.∆r.x(⊂str,'))'),rows
+     str←'dimnames(M) <- list(',(0⊃⍺),' = c(',rn,')'
+     str,←',',(1⊃⍺),' = c(',cn,'))'
+     _←+##.∆r.x str
+     _←+##.∆r.x'XSQ <- chisq.test(M)'
+     ns←⎕NS''
+     ns.TestStatistic←##.∆r.x'XSQ$statistic[[1]]'
+     ns.P←##.∆r.x'XSQ$p.value'
+     ns.DegreesOfFreedom←##.∆r.x'XSQ$parameter[[1]]'
+     u←{##.∆r.g'XSQ$',⍵}¨'observed' 'expected' 'residuals'
+     x←{o e r←,¨⍵ ⋄ o,e,(o-e),[0.5]r*2}u.Value
+     v←⊃,↑∘.{⍺ ⍵}/1↓¨(⍵[;0])(⍵[0;])
+     ns.Table←{⍵⍪(-1⊃⍴⍵)↑' ' 'Total',{⍵×1E¯10<|⍵}+⌿¯4↑[1]⍵}v,x
+     ns.Factors←⍺
+     ns.Type←'Independent'
+     ns._Distribution←'Independent'
+     ns
+ }

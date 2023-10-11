@@ -1,0 +1,11 @@
+ rankSum←{
+⍝⍺  Sample 1
+⍝⍵  Sample 2   or  Boolean order
+     ⍺←⍬ ⋄ ⎕ML←3 ⋄ ⎕IO←0
+     B←{11=⎕DR ⍵:⍵ ⋄ ⍵=↑⍵}⍵              ⍝ If not Boolean, use first item as 1, everything else as 0
+     U←⍺{⍬≡⍺:(+/B/1+⍳≢B)-×/0.5,0 1++/B←⍵ ⍝
+         +/,(⍺∘.>⍵)+0.5×⍺∘.=⍵}⍵          ⍝ calculate ranks
+     MN←⍺{⍬≡⍺:(+/⍵)×+/~⍵ ⋄ ⍺×⍥≢⍵}⍵       ⍝
+     U
+     ⌊/|-\U,MN
+ }

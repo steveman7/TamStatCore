@@ -1,0 +1,14 @@
+ transform1←{
+⍝ User-defined transformation
+⍝⍵ Namespace
+⍝← Transformed namespace
+     ⍺←1
+     X1←{⍵-mean ⍵}⍵.Height
+     X2←{×⍨⍵-mean ⍵}⍵.Height
+     X3←⍵.ShoeSize
+     M←⍵.Sex eq'M'
+     XM←(⍵.Sex eq'M')×⍵.ShoeSize
+     Y←⍵.Weight
+     Int←⍺
+     ⎕NS'X1' 'X2' 'X3' 'M' 'XM' 'Y' 'Int'
+ }

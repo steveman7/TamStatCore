@@ -1,0 +1,24 @@
+ z←lockFunctions ns
+ ⍝∇ Convert all dfns in namespace to trad fns and lock them
+ ⍝⍵ Namespace
+ ⍝⍎ lockFunctions #.TamStat.Distributions
+ ⎕IO←0 ⋄ ⎕ML←3
+ :With ns
+     ⍝{c←⎕CR ⍵
+     {c←⎕CR nm←⍵~' '
+         b←∨/∘,∘∊¨'⍺' '⍺⍺' '⍵⍵' '⍵'⍷¨⊂c
+         h←⊂'z←',{⍵=9:'∆ x'
+             ⍵=8:'(f ∆)x'
+             ⍵=11:'y(f ∆)x'
+             ⍵=14:'(f ∆ g)x'
+             ⍵=13:'y ∆ x'
+             ⍵=15:'y(f ∆ g)x'
+             ''}2⊥b
+         2=⍴↑h:0
+         h0←('∆'⎕R ⍵)¨h
+         h1←((⍵,'←')⎕R'∆←')c[0;]
+         _←⎕FX h0 h1,(1↓↓c),h
+         3 ⎕LOCK ⍵
+     }¨↓⎕NL 3 4
+
+ :EndWith

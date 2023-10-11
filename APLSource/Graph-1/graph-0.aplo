@@ -1,0 +1,48 @@
+ graph←{
+     2+
+     ⎕ML←3 ⋄ ⎕IO←1
+     ⍺←0 1
+     _←'F'⎕WC'Form'
+     ⍝lb←⍺ ⍺⍺ criticalValue>⍵
+     ⍝ub←⍺ ⍺⍺ criticalValue<⍵
+     lb ub←⍵
+     r←-/ub lb                               ⍝ Get range
+     x←lb+r×0.01×⍳101
+     X←100×{⍵-⌊/⍵}x÷r
+     Y←5+{95×1-⍵÷⌈/⍵}⍺ ⍺⍺ x
+     X←0,X,100                              ⍝ Use entire width of window
+     Y←100,Y,100                               ⍝ Leave vertical space for TrackBar, Values
+     F.YX←⍉⊃Y X                              ⍝ X, Y coordinates for poly
+     F.Bounds←lb,ub                          ⍝ Set bounds
+     _←'F.SF'⎕WC'SubForm' ''(0 0)(80 100)
+     _←'F.SF.L1'⎕WC'Poly'(2 2⍴100 100)           ⍝ Lower tail of distribution
+     F.SF.L1.FStyle←0                           ⍝   is shaded
+     _←'F.SF.L2'⎕WC'Poly'F.YX                   ⍝ Upper tail of distribution
+     F.SF.L2.FStyle←-1                          ⍝   is unshaded
+     G←⍺⍺ GetValue                          ⍝ Call back to retrieve value
+     Rc←⍺⍺ Recalculate
+     Sa←⍺⍺ ShadeArea
+     ⍝ _←'F.TB'⎕WC'TrackBar'(80 0)(90 100)('TickAlign' 'Top')('Limits' 4 100)('TickSpacing' 1)('Attach' 'Bottom' 'None' 'Bottom' 'None')
+     _←'F.TB'⎕WC'TrackBar'(80 0)(10 100)('TickAlign' 'Top')('Limits' 0 100)('TickSpacing' 1)('Attach' 'Bottom' 'None' 'Bottom' 'None')
+
+     F.TB.onThumbDrag←'G'⍺
+     Items←,¨'<≤=≥>≠'
+     _←'F.Pr'⎕WC'Button' 'Prob'(90 20)(5 7)('Attach' 'Bottom' 'None' 'Bottom' 'None')
+     F.Pr.onSelect←'Rc'⍺
+     _←'F.C'⎕WC'Combo'Items'≤'(90 30)(5 7)('Attach' 'Bottom' 'None' 'Bottom' 'None')
+     F.C.SelItems←0 1 0 0 0 0
+     F.C.onSelect←'Sa'⍺
+     _←'F.X'⎕WC'Edit'(⍕lb)(90 40)(5 20)('Attach' 'Bottom' 'None' 'Bottom' 'None')('FieldType' 'Numeric')('FormatString' 'M<->F12.5')
+     F.X.onChange←'Rc'⍺
+     _←'F.lb'⎕WC'Button' '=:'(90 70)(5 5)('Attach' 'Bottom' 'None' 'Bottom' 'None')
+     F.lb.onSelect←'Rc'⍺
+     _←'F.P'⎕WC' Edit' ''(90 80)(5 15)('Attach' 'Bottom' 'None' 'Bottom' 'None')('FieldType' 'Numeric')('FormatString' 'Q<%>K2F7 0.2 ')
+
+     F.P.onChange←'Rc'⍺
+     _←⎕DQ'.'
+     0
+
+
+
+
+ }

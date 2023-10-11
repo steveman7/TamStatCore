@@ -1,0 +1,4 @@
+ matrize←{2=⍴⍴⍵:⍵
+   ⍝  toNestedVector ⍺
+     ⎕IO←0 ⋄ ⎕ML←3
+     ⍉⊃toNestedVector¨⍵}

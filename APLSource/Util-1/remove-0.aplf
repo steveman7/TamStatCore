@@ -1,0 +1,13 @@
+ remove←{
+⍝⍺  DataSet
+⍝⍵  List of values or Boolean mask
+⍝⍵  Subset of ⍺
+     ⎕IO←0 ⋄ ⎕ML←3
+     a w←toNestedVector¨⍺ ⍵
+     b←11=⎕DR¨⍺ ⍵      ⍝ Boolean?
+     e←=/≢¨a w         ⍝ Equal lengths?
+     ∧/b,e:'Ambiguous' ⍝ If both, ambiguous
+     ~e:a~w            ⍝ If not equal, use without
+     b[1]:(~w)/a       ⍝ If r.a. boolean mask
+     a~⍵               ⍝ Else use without
+ }

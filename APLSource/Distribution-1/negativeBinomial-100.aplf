@@ -1,0 +1,40 @@
+ negativeBinomial←{
+     ⍝⍟ Copyright (c) by Stephen M. Mansour
+     ⍝∇ Negative Binomial Distribution
+     ⍝∊ Discrete Distribution Function
+     ⍝⍺ r - Number of successes
+     ⍝⍺ p - Probability of success
+     ⍝⍵ x - Number of trials
+     ⍝← Probability of X successes
+     ⍝⍕ Syntax:  P ← N Q negativeBinomial X
+     ⍝⍎ 0.3125 ← 5 0.5 negativeBinomial 3      ⍝'Nonce Error'
+     ⎕ML←3 ⋄ ⎕IO←0
+     x←⍵
+     x≡'Type':'Discrete'
+     3=⎕NC'⍺':∆SigErr 14 'Left argument missing'
+     r p c←3↑⍺
+     ⍝2≠⍴,a.Value:∆SigErr 14 'Left argument must consist of two values'
+     ⍵≡'Mean':r×(1-p)÷p
+     ⍵≡'Median':r p ∇ critVal≤0.5
+     ⍵≡'Mode':(r>1)×⌊(1-p)×(r-1)÷p
+     ⍵≡'Variance':r×(1-p)÷p*2
+     ⍵≡'Skewness':(2-p)÷(r×1-p)
+     ⍵≡'Kurtosis':(6÷r)+(p*2)÷r×1-p
+     str←'pdqr'[1 0 ¯1 ¯2⍳c],'nbinom(⍵,⍵,⍵)' ⍝ Build R expression
+     rAv:+##.∆r.x str ⍵ r p                  ⍝ If requested, use R
+     c=0:{p←(⍵!r+⍵-1)×(p*r)×(1-p)*⍵          ⍝ Probability mass function
+         p×(⍵=⌈⍵)∧⍵≥0}⍵                      ⍝
+     c=1:(x≥0)×(⊂⌊0⌈x)⌷0{⍺≥⌈/x:+\⍵           ⍝ Cumulative Probability X≤x
+         y←(1-p)×(r+⍺)÷⍺+1                   ⍝ y=P(x+1)÷P(x)
+         (⍺+1)∇ ⍵,⍵[⍺]×y},p*r                ⍝
+     c=¯1:+/x∘.>0{(+/⍵)≥⌈/x:+\⍵              ⍝ Inverse
+         y←(1-p)×(r+⍺)÷⍺+1
+         (⍺+1)∇ ⍵,⍵[⍺]×y},p*r
+     c=¯2:+⌿⌊(1-p)⍟?r ⍵⍴0                    ⍝ Random variable
+     c≠¯2:'Nonce Error'
+     m←⌈x×(1,2÷x*÷2)+.×r×(1-p)÷p*1 2         ⍝ Sample Size
+    ⍝ b←p>(0.5+?m⍴k)÷k←¯1+2*31               ⍝ successes
+     b←p>?m⍴0
+     i←(+\b)⍳r×1+⍳x                          ⍝ indexes
+     ¯2-/0,+/¨i↑¨⊂~b
+ }

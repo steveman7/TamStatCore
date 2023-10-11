@@ -1,0 +1,42 @@
+ SETUP X;FM;_;msg;f;tb;t;P;WIN;Ver
+ ⍝∊ Written by Steve Mansour, last updated 6/30/2022
+ ⎕ML←3 ⋄ ⎕IO←0 ⋄ #.⎕IO←1
+ #.⎕RL←⍬
+ _←Distribution.(?⎕TS[6]⍴0)     ⍝ Set random seed so that all students results are different
+ (# #.TamStat.Operators #.TamStat.Distribution).⎕RL←⊂⍬
+ ⍝ X can be 'R' 'DEMO' or 'GUI'
+ ⍝ _←#.Distribution.(16807⌶2)
+ Ver←3↑↑'.'⎕WG'APLVersion'
+ :If Ver≢'Win'
+     X←''         ⍝ No GUI unless Windows
+ :EndIf
+ P←'Operators Util Distribution Summary Relational Logical Arithmetic Graph Regression Anova NonParametric API UserInterface GUI'
+ P←'#.TamStat.'∘,¨(P≠' ')⊂P
+ ⎕PATH←⍕'# #.TamStat ',P
+ :If 202405<100⊥2↑⎕TS    ⍝ Check date for license expiration 2020
+     f←CreateForm''                      ⍝ Create form.
+     f.Caption←'TamStat'
+     t←'TamStat License Expired:  '
+     t←t'Contact smansour@misericordia.edu for renewal.'
+     t←t,⊂'Web version available at http://jmb.aplcloud.com/index.dyalog.'
+     tb←f AddTextBox t
+ :Else
+     X←toDelimitedList X
+     :If 'R'in X
+         SETUP_R  ⍝ This will try to connect to R and indicate success/fail in R_Available
+     :Else
+         R_Available←0
+     :EndIf
+     :If 'DEMO'in X
+         RUNPF2 LOG
+     :EndIf
+     :If 'GUI'in X
+         :If 0=⎕NC'GUI'
+
+             ⎕CY'GUI'
+
+         :EndIf
+         SessionForm←buildSession'SessionForm'
+         ⎕DQ'.'
+     :EndIf
+ :EndIf

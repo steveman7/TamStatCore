@@ -1,0 +1,19 @@
+ alias←{
+⍝∇ Generale aliases for fractional factorial designs
+⍝⍺ List of aliases
+⍝⍵ Standard Order
+⍝← Matrix of aliases
+     ⎕IO←0 ⋄ ⎕ML←1
+     ⍺≡'I':⍵
+     SO←{2=≡⍵:⍵~'I'(,'I')         ⍝ d.g. 'I' 'A' 'B' 'AB' ...
+         0=⊃0⍴⍵:1↓standardOrder ⍵↑⎕A  ⍝ e.g. 3
+         1↓standardOrder ⍵}⍵           ⍝ 'ABCD'
+     A←⊆⍺
+     f←∪~∩                             ⍝ Multiplication of Effects
+     I←⊂''                             ⍝ Plus
+     G←∪I,f pairwise A,⍨I              ⍝ Generators
+     M←{⍵[⍋⍵]}¨SO∘.f G                 ⍝ Matrix of aliases
+     Z←{⍵[⍋≢¨⍵]}across M               ⍝ Sort by # of interactions
+     Z
+    ⍝ Z[⍋(≢,⊢)¨Z[;0];]                   ⍝ Sort by main effects, then alphabetically
+ }

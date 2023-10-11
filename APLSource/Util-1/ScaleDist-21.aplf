@@ -1,0 +1,17 @@
+ ScaleDist←{
+ ⍝∊ Written by Steve Mansour  2020
+⍝⍺ Scale (Integer)
+⍝⍵ Data  (lower Bound, Upper Bound)
+⍝← Starting Point
+⍝← Ending Point
+⍝⍎ 0 50 ← 5 ScaleDist 10 32
+     ⎕IO←0 ⋄ ⎕ML←3
+     ⍺←8
+     lb ub←⍵
+     lb←0⌊lb
+     r←ub-lb
+     c m←10*0 1⊤10⍟r÷⍺
+     bw←c×m{⍵[⍺+.≥⍵]}1 2 2.5 4 5 10     ⍝ Bin width
+     st←bw×⌊lb÷bw                       ⍝ starting point
+     st+0,bw×⍺
+ }

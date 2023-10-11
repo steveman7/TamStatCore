@@ -1,0 +1,30 @@
+ confMean←{⎕IO←0 ⋄ ⎕ML←3                 ⍝ Conf interval for mean
+     w x←⍵
+     C N←⍺
+     f1←{C N←⍺ ⋄ ⎕DIV←1
+         rAv:C{str←'t.test(⍵,conf.level=⍵)'⍝ build R expression
+             u←⍺{+##.∆r.x str ⍵ ⍺}¨x       ⍝ Use R if requested
+             ⊃(3⊃u.Value).Value}⍵          ⍝ Obtain value from frame
+         m←mean ⍵                          ⍝ Sample Average
+         v←var ⍵
+         n←count ⍵                         ⍝ Sample Sizes
+         se←sqrt(1-n÷N)×v÷n               ⍝ Standard Error
+         df←n-1                            ⍝ Degrees of freedom
+         t←df tDist criticalValue<(1-C)÷2  ⍝ Get 2-tail t critical value
+         me←t×se                           ⍝ Margin of Error
+         m(-,+)me}                         ⍝ LCL, UCL
+     f2←{rAv:⍺{                            ⍝ Difference of means
+             str←'t.test(⍵,⍵,conf.level=⍵)'⍝ Build R expression
+             s←')',⍨¨{'c(',('¯'⎕R'-')(' '⎕R',')⍕⍵}¨x
+             u←+##.∆r.x't.test(',(0⊃s),',',(1⊃s),',conf.level=',(⍕⍺),')'
+             (3⊃u.Value).Value}⍵           ⍝ Use R if requested
+         m←-/mean¨⍵                        ⍝ Get mean(s)
+         n←count¨⍵                         ⍝ Get sample size(s)
+         v←(variance¨⍵)÷n                  ⍝ Get sampling variance(s)
+         se←(+/v)*÷2                       ⍝ Standard Error(s)
+         f3←{((+/⍵)*2)÷(⍵*2)+.÷⍺-1}        ⍝ Calculate degrees
+         df←n f3 v                         ⍝   of freedom
+         t←df tDist criticalValue<(1-⍺)÷2  ⍝ Get 2-tail t critical value
+         me←t×se                           ⍝ Margin of Error
+         m(-,+)me}                         ⍝ LCL, UCL
+     2=≢w:C f2 w ⋄ ⍺ f1 w}

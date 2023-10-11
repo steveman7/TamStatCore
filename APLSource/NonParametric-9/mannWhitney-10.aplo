@@ -1,0 +1,43 @@
+ mannWhitney←{
+⍝∇ Mann-Whitney (Wilcoxon) Rank-Sum Test
+⍝⍺ -  Smaller Sample
+⍝⍺⍺ - relation (<≤=≥>≠)
+⍝⍵ -  Larger Sample
+⍝← T - TestStatistic
+⍝⍎ A← 93 100 75 92 55 98 85 84 82 90
+⍝⍎ B← 99 84 76 93 87 95 77 79 61 86
+⍝⍎ A = mannWhitney  B
+     ⎕IO←0 ⋄ ⎕ML←3
+     R←⍺⍺{3=⎕NC'⍺⍺':2⊥0 0 1 ⍺⍺ 0 1 0 ⍝ Determine relation
+         ⍺⍺+(⍺⍺<1)×4+⍺⍺}0    ⍝ if ¯1 0 1 adjust
+     N←≢¨⍺ ⍵                        ⍝ Sample Sizes
+     M←median¨⍺ ⍵                   ⍝ Estimate median
+     ns←⎕NS''
+     ns.Estimate←M
+     ns.SampleSize←N
+     ns.StandardDeviation←⍬
+     ns.DegreesOfFreedom←⍬
+     W←+/¨(1 ¯1×≢¨⍺ ⍵)↑¨⊂rank ⍺,⍵   ⍝ Rank sums
+   ⍝  T←W[R⊃0,{⍵,⌽⍵}(?∘≢,>/,</)N]    ⍝ Small sample Test Statistic
+     U←⌊/W-0.5×N×N+1                   ⍝ U statistic
+     ns.TestStatistic←U
+     ns.StandardError←⍬
+     P←(10⌊N)mannWhitneyU prob≤U
+     ns.P←1⌊P×2*R∊3 4
+     ns.dist←mannWhitneyU
+     ns.ParameterList←N
+     ns._Parameter←'η'
+     ns._Relation←R⊃' ><≠≠<>'
+     ns._Claim←R∊1 2 3
+     ns._HypothesizedValue←0
+     ns._Populations←2
+     ns._Paired←0
+     ns.Type←'Hypothesis'
+     10≥⌊/N:ns
+     Z←(U-×/0.5,N)÷sqrt(×/N,+/1,N)÷12 ⍝ Z statistic
+     ns.TestStatistic←|Z
+     P←normal prob<Z
+     ns.P←1⌊P×2*R∊3 4
+     ns.dist←normal
+     ns.ParameterList←0 1
+     ns}

@@ -1,0 +1,27 @@
+ exponential←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Exponential Distribution
+ ⍝∊ Continuous Distribution Function
+ ⍝⍺ U:  Rate or inverse scale   (e.g. Failure Rate or 1/MTTF)
+ ⍝⍺ [0=Density, 1=Cumulative Distribution, ¯1=Inverse Distribution, ¯2=random]
+ ⍝⍵ T:  Value  T≥0
+ ⍝← S:  Density
+ ⍝⍕ S ← U exponential T
+ ⍝⍎ 0.14855 ← 2 exponential 1.3
+     ⎕ML←3 ⋄ ⎕IO←0                      ⍝ Set system variables
+     ⍵≡'Type':'Continuous'              ⍝
+     ⍵≡'Parameters':{⍵.f←÷∘mean ⋄ ⍵}⎕NS''
+     m c←2↑⍺                            ⍝
+     ⍵≡'Mean':÷m                        ⍝ Theoretical values
+     ⍵≡'Variance':÷m*2                  ⍝       "       "
+     ⍵≡'Median':(⍟2)÷m                  ⍝       "       "
+     ⍵≡'Mode':0                         ⍝       "       "
+     ⍵≡'Skewness':2                     ⍝       "       "
+     ⍵≡'Kurtosis':6                     ⍝       "       "
+     str←'pdqr'[1 0 ¯1 ¯2⍳c],'exp(⍵,⍵)' ⍝ Build R expression
+     rAv:+##.∆r.x str ⍵ m               ⍝ If requested, use R
+     c=0:(⍵≥0)×m×*-⍵×m                  ⍝ Density
+     c=1:1-*-m×⍵⌈0                      ⍝ Distribution
+     c=¯1:-(⍟1-⍵)÷m                     ⍝ Inverse
+     2-/+\(÷m)×⍟?0⍴⍨⍵+1                 ⍝ Random Variable
+ }

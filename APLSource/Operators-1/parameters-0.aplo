@@ -1,0 +1,9 @@
+ parameters←{
+ ⍝⍺⍺  Distribution Function
+ ⍝⍵   Data from Distribution
+ ⍝←   Parameter Estimates
+ ⍝⍎  2 1←normal parameters 1 2 3
+ ⍝⍎  0.5←exponential parameters 1 2 3
+     0::'Nonce Error'
+     NS←0 ⍺⍺'Parameters'
+     NS.f ⍵}

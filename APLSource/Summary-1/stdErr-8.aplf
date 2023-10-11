@@ -1,0 +1,4 @@
+ stdErr←{⍝11≠⎕DR ⍵:(sdev div sqrt∘count)⍵
+     11≠⎕DR ⍵:(sdev÷{⍵*÷2}∘≢)⍵
+     sqrt({⍵×1-⍵}∘proportion÷≢)⍵
+ }

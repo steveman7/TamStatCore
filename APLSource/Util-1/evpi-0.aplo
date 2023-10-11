@@ -1,0 +1,7 @@
+ evpi←{
+⍝ ⍺ vector of probabilities
+⍝ ⍺⍺ max or min
+⍝ ⍵ payoff table
+     ev←⍺⍺/⍵+.×⍺
+     evwpi←(⍺⍺⌿⍵)+.×⍺
+     |ev-evwpi}

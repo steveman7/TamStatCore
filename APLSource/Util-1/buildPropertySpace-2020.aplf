@@ -1,0 +1,5 @@
+ buildPropertySpace←{
+     r←⎕NS''
+     r.(count mean variance)←⍵
+     r
+ }

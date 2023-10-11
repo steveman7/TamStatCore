@@ -1,0 +1,8 @@
+ isFrequency←{
+     ⎕IO←0 ⋄ ⎕ML←3
+     2∨.≠(⍴,↑∘⌽)⍴⍵:0   ⍝ Must be 2-column matrix
+     1≠≡FR←⍵[;1]:0     ⍝ Can't be nested
+     0∨.>FR:0          ⍝ Can't be negative
+     FR≡⌊FR:1          ⍝ If integers, ok
+     1=+/FR            ⍝ If sums to 1, ok
+ }

@@ -1,0 +1,22 @@
+ rankSumTest←{
+     ⎕IO←0 ⋄ ⎕ML←3
+     b←2⊥1 0 1 ⍺⍺ 0 1 1
+     X C←⍺{∧/(∪⍺)∊0 1:⍺ ⍵
+         S←≢¨⍺ ⍵ ⋄ (⍺,⍵)(S/0 1)}⍵
+     I←⍋X ⋄ X←X[I] ⋄ C←C[I]          ⍝ Sort
+     R←1+(+/X∘.>X)+0.5×¯1++/X∘.=X    ⍝ Rank
+     N←(+/C),+/~C
+     W←(+/N){⍵,⍵-⍨0.5×⍺×⍺+1}C+.×R ⍝ Rank sums
+   ⍝  P←N uDist prob≤↑W
+     P←N mannWhitneyU prob≤↑W
+     P←N mannWHitneyU prob>
+     P←P×2*b∊1 6
+     P,↑W
+
+    ⍝ ⌊/W-0.5×N×N+1
+
+
+
+
+
+ }

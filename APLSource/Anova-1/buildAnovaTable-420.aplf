@@ -1,0 +1,53 @@
+ buildAnovaTable←{
+    ⍝⍟ Copyright (C) 2018, 2022 by Stephen M. Mansour  - #.TamStat.Anova
+    ⍝∇ Create anova table from SS and DF
+    ⍝∊ Util
+    ⍝⍺ FactorNames   'A,B'
+    ⍝⍵ 3 or 5 col Matrix [SS|DF|[J|[C|EFF]] (No totals)
+    ⍝← Formatted Anova Table
+     ⍝⍝⍝⍝⍝⍝⍝⍝⍝ Calculate the table ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⎕DIV←1 ⋄ ⍺←⍬          ⍝ Set system variables
+     80 160 320∊⍨⎕DR↑⍵:⍵[;0]∇ ⍵[;1 2]      ⍝ If 1st item character
+     formatAnova←{T←⍵                      ⍝ Format anova table
+         T[;4]←{⍵⌈0.000009××⍵}T[;4]        ⍝
+         D←0⌈5-⌈10⍟⌈⌿T[;0],0.000001        ⍝ Decimal Places for SS
+         FW←16 6 16 10 10                  ⍝ Field Widths
+         SSF←'C',(×D)⊃'I16'('F16.',⍕D)     ⍝ SS format
+         H←∊(-FW)↑¨⍺                       ⍝ Headers
+         U←(,1,[0.5]FW-1)/10⍴' -'          ⍝ Underlines
+         FS←SSF,',I6,B',SSF,',BF10.2,'     ⍝ Format String
+         FS,←'BO0.000009⍞<0.00001⍞F10.5'   ⍝ P-Value format
+         T←H⍪U⍪FS ⎕FMT T                   ⍝ Format it
+         ¯1(↓{⍺⍪U⍪⍵}↑)T}                   ⍝ Include total line
+     ⍝⍝⍝⍝⍝⍝ Format Row Heading ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     formatRowHeader←{
+         NMS←,¨'A',(2<≢⍵)/'B' 'AB'         ⍝ Default Names
+         FA←(0=≢⍺)⊃(toNestedVector ⍺)NMS   ⍝
+         FA←(~∨\¨1 0 0 0∘⍷¨FA='+')/¨FA     ⍝ Remove 3+ ways from aliases
+         RH←(-1+≢⍵)↑'Interaction' 'Error' 'Total'
+         RH[⍳≢FA]←FA                       ⍝ Insert Factor Names
+         RH}
+     ⍝⍝⍝⍝⍝⍝ Format Other Data ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     formatData←{
+         FS←'<S = >,F10.5,<  R-Sq = >,K2Q<%>F7.2,<  R-Sq(adj) = > ,K2F7.2,<%>'
+         FS ⎕FMT 1 3⍴⍵}
+     ⍝⍝⍝⍝⍝⍝ Put it all together ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     NS←⎕NS''                                ⍝ Create namespace
+     4=↑⌽⍴⍵:⍺ fractionalFactorial ⍵          ⍝ Fractional Factorial
+     A W←⍺{
+         (0=≢⍺)∨×⍵[¯1+≢⍵;1]:⍺ ⍵            ⍝ If DFE=0,
+         B←3>≢¨⍺ ⋄ A←(B/⍺),⊂'Error'          ⍝ use 3+ way interactions and
+         W←B{(⍺⌿⍵,1++/⍺)⍪1⌽0,⍵+.×⍨~⍺}⍵[;0 1] ⍝ Sum SS and DF for error
+         A W}⍵                               ⍝
+     TBL R←A calcAnova W                     ⍝ Calculate the table
+     0=≢A:TBL                                ⍝
+     H←toNestedVector'SOURCE,SS,DF,MS,F,P'   ⍝ Header names
+     FT←(1↓H)formatAnova TBL                 ⍝ Format ANOVA table
+     RH←A formatRowHeader W                  ⍝ Format row headers
+     FD←formatData R                         ⍝ Format other data
+     RP←¯1(↓{⍺⍪'-'⍪⍵}↑)⊃(↑H)'------',RH      ⍝ Include total line
+     NS.AnovaTable←H⍪RH,TBL
+     NS.(S RSq RSqAdj)←R×1 100 100
+     NS._Report←⍕,[⍳0]'ANOVA Table' ' '(RP,FT)' 'FD  ⍝ _Report property
+     NS                                      ⍝ Result is namespace
+ }

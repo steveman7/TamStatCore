@@ -1,0 +1,5 @@
+ deleteExcessBlanks←{w←⍕⍵~0J1
+     v←(~'  '⍷w)/w                 ⍝ Remove excess blanks
+     v←(+/∧\v=' ')↓v               ⍝ Remove leading blanks
+     (+/∨\⌽v≠' ')↑v                ⍝ Remove trailing blanks
+ }

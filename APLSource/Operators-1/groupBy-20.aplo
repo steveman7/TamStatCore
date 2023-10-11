@@ -1,0 +1,33 @@
+ groupBy←{
+⍝⍺  Numeric Field
+⍝⍺⍺ Summary function(s)
+⍝⍵  Grouping field (may be character or numeric)
+⍝←  Matrix [Key|[...[KeyM]]|Value1|[...[ValueN]]]
+⍝⍎       Height mean groupBy State
+⍝⍕  PA  69.57142857
+⍝⍕  NJ  70
+⍝⍕  NY  70
+⍝⍎       Height (mean,sdev) groupBy State
+⍝⍕  PA  69.57142857 3.10145895
+⍝⍕  NJ  70          4.281744193
+⍝⍕  NY  70          3.651483717
+⍝⍎       Height (mean,median,mode) groupBy State Sex
+⍝⍕  PA  M  70.33333333 70.5 70
+⍝⍕  NJ  F  67.66666667 68   65
+⍝⍕  NY  M  70          70   68
+⍝⍕  NJ  M  71.75       72   74
+⍝⍕  PA  F  65          65   65
+⍝⍕      Height groupBy Sex
+
+⍝⍕    M 40 71.5  2.87
+⍝⍕    F 11 65.09 3.11
+     ⎕ML←1 ⋄ ⎕IO←0
+    ⍝ 0=⎕NC'⍺':⍺⍺(count,mean,sdev)∇∇ ⍵   ⍝ Default summary
+     0=⎕NC'⍺':⍵{⍺ ⍵}⌸⍺⍺                 ⍝ Partition Left operand
+     0::⍵ ⍺⍺{⍺,⍺⍺ ⍵}⌸⍺                  ⍝ Fall back
+     a←toNestedVector ⍺                 ⍝
+     (≢a)≠≢⍵:a ⍺⍺{w←⍉↑toNestedVector¨⍵  ⍝
+         w ⍺⍺{⍺,⍺⍺ ⍵}⌸a}⍵               ⍝ Multiple Grouping
+     w←toNestedVector ⍵                 ⍝
+     w ⍺⍺{⍺,⍺⍺ ⍵}⌸a                     ⍝ Single Grouping
+ }

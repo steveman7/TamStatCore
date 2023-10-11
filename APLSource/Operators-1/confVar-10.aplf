@@ -1,0 +1,18 @@
+ confVar←{⎕IO←0 ⋄ ⎕ML←3 ⋄ C N←⍺
+     f1←{
+         v←var ⍵                         ⍝ Sample Variance
+          ⍝   n←↑⍴⍵                           ⍝ Sample Size
+         n←count ⍵
+         ⍝p←q,1-q
+         p←{⍵,1-⍵}(1-⍺)÷2
+         df←n-1                          ⍝ Degrees of Freedom
+         x2←df chiSquare criticalValue<p ⍝
+         df×v÷x2                         ⍝ Confidence Limits
+     }
+     f2←{v←÷/var¨⍵
+         n←count¨⍵                     ⍝ Two sample confInt
+         p←{⍵,1-⍵}(1-⍺)÷2              ⍝ Ratio of V1/V2
+         df←n-1
+         v÷df fDist criticalValue<p}
+     2=≢⍵:C f2 ⍵ ⋄ C f1 ⍵
+ }

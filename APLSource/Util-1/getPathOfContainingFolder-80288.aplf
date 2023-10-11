@@ -1,0 +1,5 @@
+ getPathOfContainingFolder←{
+     a←⎕WSID       ⍝ WSID
+     b←(⌽'\'⍷a)⍳1  ⍝ Look for the last '\' in the path
+     (-b)↓a        ⍝ Folder path
+ }

@@ -1,0 +1,3 @@
+ SharpPlot←{GraphOutput←'SharpPlot'
+     ⍺←0
+     ⍺ ⍺⍺ ⍵}

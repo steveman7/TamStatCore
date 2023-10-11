@@ -1,0 +1,21 @@
+ SETUP_R
+ :If 9=⎕NC'RCONNECT'
+    ⍝ We can't assume the state of R_Available. Other fn's can modify its value
+     initializeR
+ :Else
+     ⍝ Only do this if RCONNECT doesn't already exist
+     'RCONNECT'⎕NS''        ⍝ Create the namespace
+     :With RCONNECT
+         ⎕CY'RCONNECT'      ⍝ Copy dyalog's RCONNECT into our new namespace
+     :EndWith
+     ⍝ Anticipate absolute paths in RCONNECT
+     #.Renvr←⎕THIS.RCONNECT.Renvr
+     #.Rcall←⎕THIS.RCONNECT.Rcall
+     #.Robject←⎕THIS.RCONNECT.Robject
+     #.Rexpr←⎕THIS.RCONNECT.Rexpr
+     #.Rfunc←⎕THIS.RCONNECT.Rfunc
+     #.Rdataframe←⎕THIS.RCONNECT.Rdataframe
+
+     ∆r←⎕NEW RCONNECT.R     ⍝ Create R Connection
+     initializeR
+ :EndIf

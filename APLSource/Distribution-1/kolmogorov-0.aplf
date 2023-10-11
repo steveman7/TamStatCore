@@ -1,0 +1,29 @@
+ kolmogorov←{                                ⍝ Scalar,Arithmetic
+     ⍝⍟ Copyright (c) 2022 by Stephen M. Mansour
+     ⍝∇ Kolmogorov Distribution
+     ⍝
+     ⍝∊ Discrete Distribution Function
+     ⍝⍺ N - Sample Size
+     ⍝⍵ X - Value of statistic
+     ⍝← Density?
+     ⍝⍕ Syntax:  N kolmogorov X
+     ⍝⍎ 0.975 ← 10 kolmogorov prob ≤ .409
+     'Type'≡x←⍵:'Continuous'
+     N C←2↑⍺ ⋄ ⎕ML←3 ⋄ ⎕IO←0                   ⍝ Set system variable
+    ⍝ N∨.<0 1:∆SigErr'All parameters must be positive'
+     g←{T←⍵ ⋄ N←⍺ ⋄ J←⍳⌊1+N×1-T
+         1-T×+/{P←T+⍵÷N ⋄ P÷⍨N P binomial prob=⍵}¨J}
+    ⍝  x≡'Mean':M×N÷2                              ⍝ Theoretical Values
+⍝     x≡'Variance':M×N×(M+N+1)÷12                 ⍝    "           "
+  ⍝   ∨/~M N∊1+⍳10:∆SigErr'Domain Error'         ⍝ M,N integers between 1 and 10 inclusive
+    ⍝ x≡'Mode':mode RF                            ⍝    "           "
+⍝     x≡'Skewness':skewness RF                    ⍝    "           "
+⍝     x≡'Kurtosis':kurtosis RF                    ⍝    "           "
+⍝     str←'pdqr'[1 0 ¯1 ¯2⍳C],'wilcox(⍵,⍵,⍵)'     ⍝ Build R Expression
+⍝    rAv:+##.∆r.x str ⍵ M N                      ⍝ Use R if requested
+     1<≢⍵:⍺∘∇¨⍵                                  ⍝ Allow array arguments
+     C=0:(-/N g¨⍵(+,-)h)÷2×h←0.00001             ⍝ Probability (X=x)
+     C=1:N g ⍵                                   ⍝ Cumulative Probability X≤x
+     C=¯1:(⍵-N∘g)SecAlg D,⍵-N g¨D←1 0.7÷sqrt N   ⍝ Critical Values (Inverse)
+     C=¯2:'Nonce Error'                          ⍝ Random Variables
+ }

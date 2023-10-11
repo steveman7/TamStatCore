@@ -1,0 +1,2 @@
+ reverse←{⍝ reverse a vector
+     ⌽⍵}

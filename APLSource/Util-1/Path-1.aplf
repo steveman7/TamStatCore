@@ -1,0 +1,7 @@
+ Path←{
+     ⎕IO←0 ⋄ ⎕ML←3
+ ⍝P←'Operators Util Distribution Summary Relational Arithmetic Graph Regression UserInterface GUI'
+     P←'Operators Util Distribution Summary Relational Regression'
+     P←'##.'∘,¨(P≠' ')⊂P
+ ⍝⍕'# #.TamStat ',P
+     ⍕P}

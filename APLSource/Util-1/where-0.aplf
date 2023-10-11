@@ -1,0 +1,18 @@
+ where←{
+⍝⍺  A list of variable names or a namespace
+⍝⍵  A selection expression
+⍝←  selected items
+⍝⍎  D.Height where D.Sex eq 'M'
+⍝⍎  D.State D.Party where D.Age between 25 40
+⍝⍎  D where D.State in 'PA,NY,NJ'
+     ⎕IO←0 ⋄ ⎕ML←3
+     9=⎕NC'⍺':⍺{v←↓⍺.⎕NL 2  ⍝ Variables
+         _←⍎⍕v'←⍺.(⍵∘/¨'v')'
+         ns←⎕NS v
+         ↑ns}⍵
+     d←≡⍺      ⍝ Check depth of left argument
+     d≤1:⍵/⍺   ⍝ Single numeric
+     d=3:(⍵/toNestedVector)¨⍺ ⍝ Nested character
+     2=≡↑⍵:⍵/toNestedVector ⍺
+     ⍵∘/¨⍺
+ }

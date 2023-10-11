@@ -1,0 +1,50 @@
+ independent←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Test of Independence
+ ⍝∊
+ ⍝⍺ VARIABLE1: Categorical variable
+ ⍝⍵ VARIABLE2: Categorical variable
+ ⍝⍵ DataBase:  NameSpace
+ ⍝  VarNames:  Simple variable
+ ⍝⍵ ContingencyTable
+ ⍝← NAMESPACE containing the following variables
+ ⍝  DegreesOfFreedom  Factors  P  Table  TestStatistic  Type
+ ⍝⍕ [Variable1] independent Variable2|ContingencyTable|NameSpace VarNames
+ ⍝⍎ D.Sex independent D.Party
+ ⍝⍎ independent D 'Sex Party'
+ ⍝⍎ independent frequency D.Sex D.Party
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←⍬ ⋄ ⎕DIV←1      ⍝ Set system variables
+     ⍵≡0:¯1                            ⍝ Exit if improper arg
+     d nms←⍺{nms←'Factor1' 'Factor2'   ⍝ Separate data from names
+         ⍺≢⍬:(frequency ⍺ ⍵)nms        ⍝ If left arg, build contingency table
+         ns←↑⍵                         ⍝ If first item
+         b←9≠⎕NC'ns'                   ⍝  is namespace,
+         b∧(,2)≡⍴⍵:(frequency ⍵)nms    ⍝  build contingency table
+         b:⍵ nms                       ⍝ Else
+         nms←' 'toNestedVector 1⊃⍵     ⍝   Partition namelist
+         tbl←frequency⍎⍕'ns.(,'nms,')' ⍝   Build contingency table
+         tbl nms                       ⍝ Endeif
+         hdr←' 'toNestedVector nms     ⍝   Orphan code?
+         tbl←hdr⍪⍉⊃⍎⍕'ns.(,'nms,')'    ⍝
+         tbl nms}⍵                     ⍝
+     rAv:nms independentR d            ⍝ If requested call R
+     obs←1 1↓d                         ⍝ Remove header from observed counts
+     exp←(+/∘.×+⌿÷+/∘,)obs             ⍝ Calculate expected values with a train!
+     r←obs-exp                         ⍝ Get differences
+     v←⊃,↑∘.{⍺ ⍵}/1↓¨(d[;0])(d[0;])    ⍝
+     X2←+/,(2*⍨obs-exp)÷exp            ⍝ Chi-Square test Statistic
+     df←1×.-⍴obs                       ⍝ Degrees of Freedom
+     e2←(r*2)÷exp                      ⍝ Squared errors
+     tbl←v,,[⍳2]obs,exp,r,[1.5]e2      ⍝ Build explanatory table
+     tbl⍪←(-1⊃⍴tbl)↑' ' 'Total',{⍵×⎕CT<|⍵}+⌿¯4↑[1]tbl
+     tbl←(nms,'Observed' 'Expected' 'Difference' 'ChiSquare')⍪tbl
+     p←df chiSquare prob>X2            ⍝ p-Value
+     ns←⎕NS''                          ⍝ Create namespace for output
+     ns.(TestStatistic P)←X2 p         ⍝ Insert variables
+     ns.DegreesOfFreedom←df            ⍝    "      "
+     ns.Table←tbl                      ⍝    "      "
+     ns.Type←'Independent'             ⍝    "      "
+     ns._Distribution←'Independent'    ⍝    "      "
+     ns.Factors←nms                    ⍝    "      "
+     ns                                ⍝    "      "
+ }

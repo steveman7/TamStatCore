@@ -1,0 +1,42 @@
+ wilcoxon←{
+ ⍝∇ Wilcoxon Signed-RankTest
+ ⍝⍺
+ ⍝⍵
+ ⍝←
+     ⎕ML←3 ⋄ ⎕IO←0
+     rel←⍺⍺{2=⎕NC'⍺⍺':⍺⍺                ⍝ Determine relation
+         2⊥0 0 1 ⍺⍺ 0 1 0}0
+     N←count ⍵~0                        ⍝ Sample Size
+     R←(×/×,∘⍪rank∘|)⍵~0                ⍝ Get ranks
+     T←|R+.×¯1 1∘.=⍨×R                  ⍝ T+ T-
+     f←{N rel←⍺
+         T←rel⊃0,(⌽⍵),(2/⌊/⍵),⍵            ⍝ Small sample case
+         NS←⎕NS''
+         NS.P←(2*rel∊3 4)×N wilcoxonT prob≤T  ⍝
+         NS.TestStatistic←T
+         NS.dist←wilcoxonT
+         NS.ParameterList←N
+         NS}
+     g←{n rel←⍺                          ⍝ Large sample case
+         T←⌊/⍵
+         M←N wilcoxonT theoretical mean 0
+         S←N wilcoxonT theoretical sdev 0
+         Z←|(T-M)÷S
+         P←(2*rel∊3 4)×normal prob≥Z
+         TestStatistic←Z
+         dist←normal
+         ⊢NS←⎕NS'TestStatistic' 'P' 'dist'}
+     NS←N rel{25≥↑⍺:⍺ f ⍵ ⋄ ⍺ g ⍵}T
+     NS.DegreesOfFreedom←⍬
+     NS.StandardError←⍬
+     NS.StandardDeviation←0
+     NS.Type←'Hypothesis'
+     NS._Relation←rel⊃' ><≠≠<>'
+     NS._HypothesizedValue←0
+     NS._Parameter←'η'
+     NS._Populations←1
+     NS._Claim←1
+     NS.SampleSize←count ⍵
+     NS.Estimate←median ⍵
+     NS._Paired←1
+     NS}

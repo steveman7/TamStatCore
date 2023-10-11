@@ -1,0 +1,23 @@
+ meanHo←{       ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ One or two-sample t-test
+     ⎕IO←0 ⋄ ⎕ML←3
+     r s←⍺ ⋄ tails←2*r=0 ⋄ x←⍵            ⍝
+     x_←{s:mean¨⍵ ⋄ (mean↑⍵),1↓⍵}x        ⍝ Mean(s)
+     n←(-~s)↓{9=⎕NC'⍵':⍵.count ⋄ ↑⍴⍵}¨x   ⍝ Sample Size(s)
+     v←{s:var¨⍵ ⋄ var↑⍵}x                 ⍝ Sample Standard Deviation(s)
+     se←(v+.÷n)*÷2                        ⍝ Standard Error
+     g←{((+/⍵)*2)÷(⍵*2)+.÷⍺-1}            ⍝ Calculate Degrees
+     df←g{⍵:⌊n ⍺⍺ v÷n ⋄ ↑n-1}s            ⍝ Degrees of Freedom
+     t←(-/x_)÷se                          ⍝ Test Statistic
+     t←r{⍺=0:|⍵ ⋄ ⍵×⍺}t                   ⍝ Test Statistic
+     p←df tDist probability>t             ⍝ p-Value
+    ⍝ dd←(1 s∘/¨x_ n(v*0.5)),se t(p×tails)df
+     ns←⎕NS''
+     ns.(Estimate SampleSize StandardDeviation)←1 s∘/¨x_ n(v*0.5)
+     ns.StandardError←se                  ⍝ Standard Error
+     ns.TestStatistic←t
+     ns.P←p×tails                         ⍝ p-Value
+     ns.DegreesOfFreedom←df
+     ns.ParameterList←df
+     ns.dist←tDist
+     ns
+ }

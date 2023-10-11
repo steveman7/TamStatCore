@@ -1,0 +1,27 @@
+ regressionPlot←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Generate Regression plot (ScatterPlot with regression Line)
+ ⍝∊ Graphics
+ ⍝⍵ Regression Model Namespace
+ ⍝← W Namespace containing YX values, slope and intercept
+ ⍝⍕ W←regressionPlot NS
+     ⎕IO←0 ⋄ ⎕ML←3                                ⍝ Set System Variables
+     VarNames←'YX' 'Slope' 'Intercept' 'Caption'  ⍝ Variable Names
+     VarNames,←'XAxis' 'YAxis' 'Type' 'Style'     ⍝    "       "
+     Type←'Graph' ⋄ Style←'Regress'               ⍝ Scatterplot
+     Simple←{                                     ⍝ Simple regression
+         YX←⍵.YX                                  ⍝ Plot X vs Y
+         (Intercept Slope)←⍵.B                    ⍝ Regression line
+         Caption←'Regression Plot'                ⍝
+         (YAxis XAxis)←⍵.VariableNames            ⍝ Label Axes
+         ⎕NS VarNames}                            ⍝ Create namespace
+     Multi←{                                      ⍝ Multiple regression
+         YX←⍵.(E,⍪YHAT)                           ⍝ Plot residuals
+         Slope←Intercept←0                        ⍝ Horizontal line at 0.
+         Caption←'Residual Plot'                  ⍝
+         XAxis←'Fitted Values'                    ⍝ Label Axes
+         YAxis←'Residuals'                        ⍝   "     "
+         ⎕NS VarNames}                            ⍝ Create namespace
+     0::Multi ⍵
+     2<≢⍵.B:Multi ⍵                               ⍝ Multiple or simple?
+     Simple ⍵}

@@ -1,0 +1,9 @@
+ initializeR
+ ⍝ R_Available ← 0 if initialization failed
+ ⍝ R_Available ← 1 if initialization succeeded
+ :Trap 0
+     msg←∆r.init        ⍝ Initialize R
+     R_Available←1      ⍝ Set availability
+ :Else
+     R_Available←0
+ :EndTrap

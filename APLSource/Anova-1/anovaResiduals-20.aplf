@@ -1,0 +1,17 @@
+ anovaResiduals←{
+⍝ ⍵ n-dimensionalmatrix last dim residuals
+⍝ ← Vector of residuals
+     ⎕ML←1 ⋄ ⎕IO←0
+     M←mean,⍵
+     EFF←M-⍨(mean across{⍺ ⍵}mean down)mean across ⍵
+
+
+     YHAT←M+⊃∘.+/EFF
+     ⍵-⍤1 0⊢YHAT
+     ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     Y←(sum across ⍵)÷⊃⌽⍴⍵
+     EFF←Y-M
+     ⍵-⍤1 0⊢EFF
+
+
+ }

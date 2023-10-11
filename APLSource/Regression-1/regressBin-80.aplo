@@ -1,0 +1,45 @@
+ regressBin←{
+⍝∇ Binary Regression
+
+⍝⍺  Y or Name  of Binary Responses
+⍝⍺⍺ Int
+⍝⍵  C X1 .. Xn   or Database
+     ⎕ML←1 ⋄ ⎕IO←0          ⍝ Default values
+     DB←9=⎕NC'⍵'            ⍝ Is right argument a database?
+     D←DB{⍺:⍵⍎¨variables ⍵  ⍝ Obtain data values
+         ↑¨⊆⍵}⍵             ⍝
+     B←{0≢⊃0⍴⍵}¨D           ⍝ Find character fields
+     NS←(∨/B){⍺:⊃makeIndicator¨⍵ ⋄ ⎕NS''}B/D
+     X←{⊃⍣(1=≢⍵)⊢⍵}(~B)/D
+     NMS←DB B{DB B←⍺
+         DB:(~B)/variables ⍵
+         'X',¨(B+.=0)↑1↓⎕D}⍵
+     _←⍎⍕NMS'←X'            ⍝ Else assign to names in char field
+     _←'NS'⎕NS NMS
+     Z←⍺ ⍺⍺ DB{Y INT DB←⍺
+         NMS←variables ⍵
+         DB:INT leastSquares NS,⊂⍕NMS(⊢,⊣~⊢)⊂Y
+         NS.Y←Y
+         INT leastSquares NS(⍕'Y',NMS)}NS
+     W←{÷⍵×1-⍵}Z.YHAT
+     Y←⍺(DB{⍺⍺:⍵⍎⍺ ⋄ ⍺})⍵
+     ~DB:W leastSquares Y,⍥⊆X
+     V←(variables ⍵)~⊂⍺
+     W leastSquares ⍵(⍕⍺ V)
+
+
+
+     ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Create function???
+     Z.g←Deg M{⍵≡'Type':'Linear'
+         ⍺←0                                ⍝ Default
+         CL A←2↑⍺                           ⍝ Action, Conf Level
+         D M←⍺⍺
+         X←D{1=≢M:⍵∘.*(~⎕IO)+⍳⍺
+             ∊(×/⍵)pairwise↓⍵∘.*1 2}⍵-M
+         A=0:f X
+         ⍺ f X}
+
+
+
+
+ }

@@ -1,0 +1,14 @@
+ runs←{
+⍝⍟ (c) 2021 by Stephen M. Mansour
+⍝∇ Calculate the number of runs in a data set
+⍝⍵ Data Set
+⍝← Runs, M= Category 1,N=Cateogry 2
+⍝⍎ 4 ← runs 1 1 0 1 1 1 0 0
+     ⎕IO←0 ⋄ ⎕ML←3
+     X←toNestedVector ⍵         ⍝ If character or exactly two categories
+     B←{(0≠↑↑0⍴⍵)∨2=≢∪⍵:⍵∊1↑⍵   ⍝ Make boolean
+         M←median ⍵             ⍝ Else group by above or below median
+         M<⍵~M}X
+     1≥≢B:2 1/(≢B)0             ⍝ If zero or one element, exit
+     (1++/2≠/B)(+/B)(+/~B)      ⍝ Count the number of changes
+ }

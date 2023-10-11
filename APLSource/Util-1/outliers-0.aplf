@@ -1,0 +1,16 @@
+ outliers←{
+⍝⍺   [0=Quartile method], 1=Chauvernet's criterion ;
+⍝⍵   Value
+⍝←   List of outliers
+⍝⍎   50 ← outliers 9 10 10 10 11 50
+⍝⍎   50 ← 1 outliers 9 10 10 10 11 50
+     ⎕IO←0 ⋄ ⎕ML←3
+     ⍺←0
+     ⍺=1:⍵~{m s←(mean,sdev)⍵            ⍝ Get mean, sdev
+         d←normal criticalValue<÷4×≢⍵   ⍝ Find Dmax
+         (d≥(⍵-m)÷s)/⍵}⍣≡⍵              ⍝ Remove outliers and recalculate
+     ⍺=2:'*'
+   ⍝ b←(1 3 quartile ⍵)+¯1 1×1.5×iqr ⍵
+     b←{⍵+1.5×1 ¯1×-/⍵}1 3 quartile ⍵   ⍝ Create lower and upper fence values
+     (⍵ outside b)/⍵                    ⍝ Select values outside the fence
+ }

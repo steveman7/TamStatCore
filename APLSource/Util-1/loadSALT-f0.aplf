@@ -1,0 +1,14 @@
+ {DIR}loadSALT NS;STR
+
+  ⍝⍺ Directory (optional)
+  ⍝⍵ List of Namespaces, '' = All
+ ⎕IO←0 ⋄ ⎕ML←3
+ :If 0=⎕NC'DIR'
+     DIR←'E:\TamStat\TamStatScript\'  ⍝ Default directory
+ :EndIf
+ :If 0=⍴NS~' '
+     NS←'Operators,Distribution,Graph,Summary,Relational,Regression,Util,Arithmetic,API'
+ :EndIf
+ NS←toNestedVector NS
+ STR←{DIR,⍵,' -target=#.TamStat.',⍵}¨NS
+ ⎕SE.SALT.Load¨STR

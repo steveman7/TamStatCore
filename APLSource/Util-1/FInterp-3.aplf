@@ -1,0 +1,10 @@
+ FInterp←{
+     ⎕ML←3 ⋄ ⎕IO←0
+     b←×-/⌽⍺                         ⍝ Identify larger value
+     df←2 3⍴0,v←60 40                ⍝ Assemble df
+     (b↑df)←↑b↑⍺                     ⍝ Replace with smaller value
+     ⍝y←(↓⍉df)fDist criticalValue<¨⍵ ⍝ Get F Values
+     y←(↓⍉df)fDist criticalValue>¨⍵  ⍝ Get F Values
+     x←0,÷v
+     (⊃x y)interpolate÷⌈/⍺
+ }

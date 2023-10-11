@@ -1,0 +1,27 @@
+ pieChart←{
+     ⍝⍺  0=count, ¯1=sort, 1=frequency, 100=percent
+     ⍝⍵  Data or frequency distribution
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←0                             ⍝ Set System variables
+     FR←(↑⍺~0J1){1=⍴⍴⍵:⍺ frequency ⍵ ⋄ ⍵}⍵                     ⍝ Get frequency from raw data
+     Output←{0::'Error!'
+         Scale←{⌊0.5+1 2×[0]10+10×⍵}                 ⍝ Scale
+         CP←+\{⍵÷+/⍵}FR[;1]                          ⍝ Cumulative proportion
+         X←21 42⍴' '                                 ⍝
+         A←360                                       ⍝
+         J←⊂[0]Scale(1 2∘.○○2×¯90⌽(⍳A)÷A)∘.×0.05×⍳20 ⍝
+         L←' %:@.$~&,X*'
+         X←0{⍺=≢J:⍵
+             X←⍵
+             X[J[⍺;]]←L[⍺+.>A×CP]
+             (⍺+1)∇ X}X
+         C←Scale 1 2∘.○○2×(⍳62)÷62
+         X[↓⍉C]←'*'
+         X[J[359;]]←'|'
+         Y←tablebox⊂⍕((≢FR)↑L),FR
+         ⍕X(2 1⍴'Legend'Y)}⍬
+     Type←'Graph'                                     ⍝ Generate namespace for
+     Style←'Pie' ⋄ Freq←FR                            ⍝   SharpPlot
+     ns←⎕NS'Type' 'Style' 'Freq' 'Output'
+     0J1∊⍺:ns.Output
+     ns
+ }

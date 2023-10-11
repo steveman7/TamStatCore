@@ -1,0 +1,29 @@
+ ugoodnessOfFitR←{
+     v←⍺{(1=⍴⍴⍵)∧⍺≡⍬:{str←'XSQ <- chisq.test(table(⍵))'  ⍝ Raw data
+             _←##.∆r.x str(⍵⍳⍵) ⋄ ∪⍵}⍵
+         1=⍴⍴⍵:⍺{XX←frequency ⍵
+             i←⍺[;0]⍳XX[;0]
+             X←XX[i;1]
+             P←⍺[;1]
+             str←'XSQ <- chisq.test(⍵,p = ⍵)'
+             _←##.∆r.x str X(P÷+/P)
+             ⍺[;0]}⍵
+         2=↑⌽⍴⍵:{str←'XSQ <- chisq.test(c('             ⍝ Frequency data
+             X←⍕1↓,',',⍵[;0],'=',⍵[;,1]
+             _←##.∆r.x str,X,'))' ⋄ ⍵[;0]}⍵
+         3=↑⌽⍴⍵:{str←'XSQ <- chisq.test(⍵,p = ⍵)'
+             X P←↓⍉1 1↓⍵
+             _←##.∆r.x str X(P÷+/P)
+             ⍵[;0]~'*'}⍵}⍵
+     ns←⎕NS''
+     ns.TestStatistic←##.∆r.x'XSQ$statistic[[1]]'
+     ns.pValue←##.∆r.x'XSQ$p.value'
+     ns.DegreesOfFreedom←##.∆r.x'XSQ$parameter[[1]]'
+     u←{##.∆r.g'XSQ$',⍵}¨'observed' 'expected' 'residuals'
+     u←{1=≡⍵:⍵.Value ⋄ ⍵}u
+     x←{o e r←,¨⍵ ⋄ o,e,(o-e),[0.5]r*2}u
+     ns.Table←{⍵⍪(-1⊃⍴⍵)↑' ' 'Total',{⍵×1E¯10<|⍵}+⌿¯4↑[1]⍵}v,x
+     ns.Type←'GoodnessOfFit'
+     ns.Factors←'CAT1' 'CAT2' ⍝ Dummyvalues
+     ns._Distribution←(1=≢∪x[;1])⊃'Multinomial' 'Uniform'
+     ns}

@@ -1,0 +1,38 @@
+ hyperGeometric←{                                ⍝ Scalar,Arithmetic
+     ⍝⍟ Copyright (c) by Stephen M. Mansour
+     ⍝∇ HyperGeometric Distribution
+     ⍝∊ Discrete Distribution Function
+     ⍝⍺ m - Successes in population
+     ⍝⍺ n - Sample size
+     ⍝⍺ N - Population size
+     ⍝⍵ x - Number of successes
+     ⍝← Probability of X successes
+     ⍝⍕ Syntax:  m n N hyperGeometric x
+     ⍝⍎ 0.03993 ← 4 5 52 hyperGeometric 2
+     'Type'≡x←⍵:'Discrete'
+     m n N c←4↑⍺ ⋄ ⎕ML←3 ⋄ ⎕IO←0             ⍝ Set system variables
+     m n N∨.<0 1 1:∆SigErr'All parameters must be positive'
+     x≡'Mean':m×n÷N                           ⍝ Theoretical Values
+     x≡'Median':m n N ∇ critVal<0.5           ⍝    "           "
+     x≡'Variance':N{×/(⍵,⍺-⍵),÷⍺-3↑1}m n      ⍝    "           "
+     x≡'Mode':⌊(m n×.+1)÷N+2                  ⍝    "           "
+     x≡'Skewness':N{z←(⍺-1)÷×/⍵,⍺-⍵           ⍝    "           "
+         (z*÷2)×(×/⍺-2×⍵)÷⍺-2}m n             ⍝
+     x≡'Kurtosis':N{u←×/⍵,⍺-⍵                 ⍝    "           "
+         z←(⍺-1)×(⍺*2)×(⍺×⍺+1)-6+.×⍵×⍺-⍵      ⍝
+         z+←6×u×⍺⊥5 ¯6                        ⍝
+         z÷×/u,⍺-2 3}m n                      ⍝
+     str←'pdqr'[1 0 ¯1 ¯2⍳c],'hyper(⍵,⍵,⍵,⍵)' ⍝ Build R Expression
+     rAv:+##.∆r.x str ⍵ m(N-m)n               ⍝ Use R if requested
+     c=0:{p←((⍵!m)×(n-⍵)!N-m)÷n!N             ⍝ Probability (X=x)
+         p×(⍵=⌈⍵)∧⍵≥0}⍵                       ⍝
+     c=1:(x≥0)×(⊂⌊0⌈x)⌷1{⍺>⌈/x:+\⍵            ⍝ Cumulative Probability X≤x
+         11::+\m n N hyperGeometric⍳1+⌈/x     ⍝ Use brute force if ÷0
+         y←(m n×.-⍺-1)÷⍺×⍺+N-m+n              ⍝ y=P(x+1)÷P(x)
+         (⍺+1)∇ ⍵,⍵[⍺-1]×y},÷/n!⌽-\N m        ⍝
+     c=¯1:+/x∘.≥1{(+/⍵)>⌈/x:+\⍵               ⍝ Critical Value???
+         y←(m n×.-⍺-1)÷⍺×⍺+N-m+n              ⍝ y=P(x+1)÷P(x)
+         11::+\m n N hyperGeometric⍳m⌊n       ⍝ Use brute force if ÷0
+         (⍺+1)∇ ⍵,⍵[⍺-1]×y},÷/n!⌽-\N m        ⍝
+     c=¯2:{m+.>n?N}¨⍳⍵                        ⍝ Random Variables
+ }

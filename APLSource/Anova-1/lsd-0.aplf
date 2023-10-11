@@ -1,0 +1,18 @@
+ lsd←{
+⍝∇ Least Significant Difference
+⍝∊  ANOVA
+⍝⍺:  Significance level
+⍝⍵:  Namespace result of anova function
+     ⎕IO←0 ⋄ ⎕ML←3
+     ⍺←0.05
+     G N M←↓⍉1↓⍵.Means[;0 1 2]
+     DIF←-pairwise M
+     DF MSE←(⊖⍵.AnovaTable)[1;2 3]
+     SE←sqrt MSE×+⍥÷pairwise N
+     T←DIF÷SE
+     P←2×DF tDist prob>|T
+     H←{⍺,' vs ',⍵}pairwise G
+     LSD←SE×DF tDist critVal<⍺÷2
+     Z←H,0.0001 round DIF,1,SE,T,P,⍪LSD
+     'Treatment' 'Mean Difference' 'DF' 'SE' 'T' 'P' 'LSD'⍪Z
+ }

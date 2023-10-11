@@ -1,0 +1,8 @@
+ transform←{
+     NS←⎕NS''
+     NS.Y←⍵.(Weight)
+     NS.Int←1
+     NS.X1←⍵.(Height)
+     NS.X2←⍵.(Height*2)
+     NS.Male←⍵.(Sex eq'M')
+     NS}

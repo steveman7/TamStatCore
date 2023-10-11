@@ -1,0 +1,18 @@
+ fractionalFactorial←{
+⍝⍺:  Alias Structure
+⍝⍵:  5-column matrix
+⍝←:  Namespace
+     ⎕IO←0 ⋄ ⎕ML←1
+     NS←⎕NS''
+     SS DF C EFF←↓⍉⍵  ⍝ Unpack
+     FA←(~∨\¨1 0 0 0∘⍷¨⍺='+')/¨⍺
+     V←{1⌽'][',(⍵⍳'+')↑⍵}¨⍺
+  ⍝   NS.Plot←normProbPlot show EFF
+     A←'*'@{2<≢¨⍵}(⍺⍳¨'+')↑¨⍺
+     NS.Plot←(A normProbPlot EFF).Output
+     H←'Variable' 'Alias' 'Contrast' 'Effect' 'SS' 'Pct'
+     PCT←100×SS÷+/SS
+     NS.Effects←H⍪V,⍺,0.001 round C,EFF,SS,⍪PCT
+     NS._Report←⍕⍪'Fractional Factorial Design'⍬ NS.Effects ⍬'Normal Probability Plot'NS.Plot
+     NS
+ }

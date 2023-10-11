@@ -1,0 +1,97 @@
+ report←{⍺←0.05 ⋄ ⎕ML←3 ⋄ ⎕IO←0
+   ⍝  0::⍵                                       ⍝ If Error just get out with error message
+     2=⎕NC'⍵':{
+         r d←{0≢↑0⍴↑⍵:⍵ 0                          ⍝ IF text
+             r←{⍵∘.+0.5 ¯0.5×↑2-/⍵}⍵               ⍝ Range
+             d←{10+0.1×0⌈10-⍵+5}⌈/⌈10⍟|,r              ⍝ Decimal places
+             r[;1]-←10*-10×1|d
+             r d}⍵[;0]
+         c←+⍀⍵[;1]             ⍝ Cumulative
+         p←{⍵÷+⌿⍵}⍵[;1]        ⍝ Proportion
+         cp←c÷↑⌽c              ⍝ cum proportion
+         x←r,⍵[;1],c,p,[0.5]cp ⍝ Assemble columns
+         L←≢x                  ⍝ Last row
+         x←(L+1)↑x             ⍝ Append
+         b←5=1⊃⍴x              ⍝ 5 or 6 columns?
+         x[L;2 3 4 5-b]←2/(+/¯1↓x[;2-b])1 ⍝ Totals
+         x←b{⍺:(' ',9↑[1]⊃⍵[;0]),0 1↓⍵ ⋄ ⍵}x
+         FMT←b{⍺:'10A1'        ⍝ 1st column character?
+             ('2M<->','FI'[⍵=⌊⍵]),⍕⍵}d
+         FMT,←',2I10,2Q<%>K2F10.2'⍝ Format string
+         Z←FMT ⎕FMT x          ⍝ Format data
+         Z[;(~b)/11]←'-'       ⍝ Dashes for ranged data
+         W←10+10×~b
+         Z[L;⍳W]←W↑'   Total'⍝ Label for total
+         D←(60-10×b)⍴1 9/' -'  ⍝ Align dashes
+         Z←D⍪Z[⍳L;]⍪D⍪Z[,L;]   ⍝
+         H←b⊃('From' 'To')(⊂'Category') ⍝
+         H,←'Frequency' 'Cum Freq' 'Percent' 'Cum Pct'
+         Z⍪⍨∊¯10↑¨H            ⍝ Affix header
+     }⍵
+     dd←⍕⍺{
+         ⍵.Type≡'Regress':⍵._Report
+         ⍵.Type≡'Non-Parametric':⍺ nonParametricReport ⍵
+         ⍵.Type≡'ANOVA':⍺ anova_report ⍵
+         (⍵.Type≡'GoodnessOfFit')∧0=≢⍵.DegreesOfFreedom:⍺ npgofReport ⍵
+         (⊂⍵.Type)∊'GoodnessOfFit' 'Independent':⍺ chiSquare_report ⍵
+         ra←⍵._Relation
+         ro←('<≠>'⍳ra)⊃'≥=≤'                   ⍝ Null must contain equality
+         x←⍵._HypothesizedValue                ⍝ One or two samples?
+         p←⍵._Parameter,⍵._Paired/'d'
+         f1←{h0←'H₀: ',p,ro,⍵                  ⍝ One-sample test; null statement
+             h1←'H₁: ',p,ra,⍵ ⋄ h0 h1}         ⍝ Alternative statement
+         f2←{p1 p2←{(↑p),⍵,1↓p}¨'₁₂'           ⍝ Two-sample test
+             h0←'H₀: ',p1,ro,p2                ⍝ Null Statement
+             h1←'H₁: ',p1,ra,p2 ⋄ h0 h1}       ⍝ Alternative statement
+         h←x{1=⍵._Populations:f1⍕⍺ ⋄ f2 ⍺}⍵    ⍝ For hypothesized value, use one-sample test
+         (⍵._Claim⊃h),←' (Claim)'              ⍝ Indicate claim
+         d←⍵.(_Populations SampleSize){
+             P N←⍺
+             ∧/⍵∊'µ⍴':'t'
+             ⍵≡'p':'Z' ⋄
+             (⍵≡'η')∧(P=1)∧25≥↑N:'X'
+             (⍵≡'η')∧(P=2)∧10≥↑N:'U'
+             ⍵≡'η':'Z'
+             P=1:'χ²'
+             'F'}⍵._Parameter
+         d←d{⍵∧⍺≡'X':'T' ⋄ ⍺}⍵._Paired
+         tb←⊃'Test Statistic: '(d,'=',⍕⍵.TestStatistic)
+         tb←tb(⊃'P-Value: '('p'fmtP ⍵.P))
+         cv←'(α',((⍵._Relation='≠')/'/2'),{(0<≢⍵)/';df=',⍕⍵}⍵.DegreesOfFreedom
+         cv1←⍺ d{sig d←⍺ ⋄ p←sig÷1+⍵._Relation='≠'
+             df←⍵.DegreesOfFreedom
+             't'=↑d:df tDist criticalValue<p
+             'Z'=↑d:normal criticalValue<p
+             'U'=↑d:⍵.SampleSize mannWhitneyU criticalValue>p
+             'χ²'≡d:df chiSquare criticalValue<p
+             'X'≡d:¯1+(df,0.5)binomial criticalValue≥p
+             'T'≡d:¯1+(⍵.SampleSize,0.5)binomial criticalValue≥p
+             'F'=↑d:df fDist criticalValue<p
+         }⍵
+         cv←d,cv,')=',,⍕cv1
+         cv←(';df='⎕R';N=')⍣('X'≡d)⊢cv
+         tb←tb,(⊃'Critical Value:'cv)(⊃'Significance Level:'('α=',⍕⍺))
+         tb←tablebox 2 2⍴tb
+         wi←1⊃⍴tb
+         tb←(wi↑⍕(⌊wi÷2)↑¨h)⍪tb
+         C←(⍵.P<⍺)⊃'Fail to reject H₀' 'Reject H₀'
+         tb←tb⍪wi↑' Conclusion: ',C
+         d←{i←('µpση⍴',⊂'σ²')⍳⊂⍵._Parameter
+             st←i{⍺≠0:⍺⊃'XpsXr',⊂'s²' ⋄ ⍵⊃'Xd'}⍵._Paired
+             cat←{⍕2 1⍴⍺ ⍵}
+             fc←{d←((2=≢⍵)⊃' ' '₁₂'),[0.5],⍵
+                 fs←(⍵≡⌊⍵)⊃'LF15.5' 'LI15'
+                 ↓(d[;0]⎕FMT⍨'<',⍺,'>,A1,<=>'),fs ⎕FMT d[;1]}
+             d←st fc ⍵.Estimate
+             d←⍕(i⊃'_^ ~  '){⊃⍺ ⍵' '}¨d
+             d←d{0::⍺ ⋄ ⍺ cat('s','d'/⍨st≡'d')fc ⍵.StandardDeviation}⍵
+             d←d cat'n'fc ⍵.SampleSize
+             d←d cat'<Standard Error: >,LF15.5'⎕FMT ⍵.StandardError
+             me←⍵.StandardError×cv1
+             {(+/∧\⍵=' ')⌽⍵}(d∨.≠' ')⌿d}⍵
+         ⍕,[⍳0]d' ' 'Hypothesis Test' ' 'tb}⍵
+     dd←'─'⍪dd⍪'─'
+     6::dd
+     ##.Ho_Available:dd
+     (~∨/'Conclusion:'⍷dd)⌿dd
+ }

@@ -1,0 +1,29 @@
+ decision←{
+⍝⍺ probabilities (optional)
+⍝⍵ Actions
+⍝⍵ Payoffs for state of nature 1
+⍝⍵   "      "    "    "    "   2
+⍝⍵   "      "    "    "    "   n
+⍝⍺⍺ max or min
+⍝⍵⍵ decision criterion (function): max, min, mean, sdev, var, cv, rrr
+    ⍝ ##.Util.Init
+     ⎕IO←0 ⋄ ⎕ML←3
+     b←0≠↑0⍴↑⍵             ⍝ Is 1st item decision?
+     a←toNestedVector↑⍵    ⍝ Action
+     s←⊂[0]⊃1↓⍵            ⍝ Payoffs
+     ⍺←(≢1↓⍵)⍴1            ⍝
+     p←⍺÷+/⍺               ⍝ probabilities
+     x←⍵⍵∘{⍵,[0.5]p}¨s     ⍝
+     i←x⍳⍺⍺ x              ⍝
+     ns←⎕NS''              ⍝
+     ns.Action←i⊃a         ⍝
+     ns.OptimalValue←i⊃x  ⍝
+     ns.Values←x           ⍝
+     ⍝ns.EVwPI←p+.×⍺⍺¨1↓⍵       ⍝
+     ⍝ns.EVwPI←⍵⍵(⍺⍺¨1↓⍵),[0.5]p    ⍝
+    ⍝ns.(EVPI←|EVwPI-OptimalValue)
+     ns.EOL←mean¨(s-⍨⌈/s),[0.5]¨⊂p
+     ns.EVPI←⌊/ns.EOL
+     ns                    ⍝
+
+ }

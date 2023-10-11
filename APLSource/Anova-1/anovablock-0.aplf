@@ -1,0 +1,29 @@
+ anovablock←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Perform Blocked ANalysis Of VAriance (ANOVA)
+ ⍝∊ ANOVA
+ ⍝⍵ X:  Response (simple or partitioned array
+ ⍝⍵ NS: Database
+ ⍝⍵ [A1: Factor 1]
+ ⍝⍵ [A2: Factor 2]
+ ⍝← NS:   Namespace containing the following variables
+ ⍝        AnovaTable  RSq  RSqAdj  S  Type
+ ⍝⍕ NS ← anovablock X [Av1 [Av2]]
+ ⍝⍎ report anovanlock D.Environment D.Party  ⍝ One-way ANOVA
+ ⍝⍎ report anova D 'Environment Party'       ⍝ One-way ANOVA using factor name
+     ⎕IO←0 ⋄ ⎕ML←3                           ⍝ Set system variables
+     d←1 1↓⍵                                 ⍝ Remove row names and columns
+     NL←1↓¨(⍵[;0])(⍵[0;])                    ⍝ Get name lists
+     y n←(sum,count),d                       ⍝ Get sum and count
+     a b←⍴d                                  ⍝ Number of levels for each factor
+     yi yj←(+⌿{⍺ ⍵}+/)d                      ⍝ Sum columns and rows
+    ⍝yn←(y*2)÷n                              ⍝
+     ss←+/,d*2                               ⍝ Total sum of squares
+     ss,←+/((+/d)*2)÷b                       ⍝ Row sum of squares
+     ss,←+/((+⌿d)*2)÷a                       ⍝ Column sum of squares
+     SS←ss-(y*2)÷n                           ⍝ Adjusted sum of squares
+     SS←1↓SS,(↑SS)-+/1↓SS                    ⍝       "   "   "   "
+     DF←{⍵,×/⍵}a b-1                         ⍝ Degrees of freedom
+     ns←'Treatments,Blocks'buildAnovaTable SS,[0.5]DF ⍝
+     ns.Type←'ANOVA'                         ⍝ Result is ANOVA object
+     ns}

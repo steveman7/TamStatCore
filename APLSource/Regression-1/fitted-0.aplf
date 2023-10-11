@@ -1,0 +1,11 @@
+ fitted←{
+ ⍝ ∇Estimate fitted values
+ ⍝ ∊ Regression Analysis, Montgomery & Scott pp. 109-118
+ ⍝ ⍺   Parameter List (Optional)
+ ⍝ ⍵ = Dependent and Independent Variables (y), x[1], x[2] ... x[n]
+ ⍝ ← = Coefficient Estimates (fitted values yhat[1],...yhat[n])
+     ⎕ML←3 ⋄ ⎕IO←0
+     ⍺←⍬ ⋄ d←⍺≡⍬                    ⍝ Parameters on left?
+     b←⍺{d:regress ⍵ ⋄ ⍺}⍵          ⍝  Estimate parameters
+     b+.×X←1⍪d↓{,[⍳⍴⍴⍵],[¯0.5]⍵}⊃⍉⍵ ⍝ Predictor Variables
+ }

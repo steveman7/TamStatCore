@@ -1,0 +1,13 @@
+ Scale←{
+⍝⍺ Scale (Integer)
+⍝⍵ Data
+     ⎕ML←3 ⋄ ⎕IO←0
+     r←1.1×(⌈/-⌊/)⍵                 ⍝ Data range
+     k←(⍺>50)⊃5 10
+     c m←10*0 1⊤10⍟r÷⍺
+     u←c×(5⌊¯1+⌈m)⊃1 2 2.5 4 5 10   ⍝ Unit
+     t←u×k
+     lb←(0≠⌊/⍵)×t×⌊(u-⍨⌊/⍵)÷t
+     x←⌊0.5+(⍵-lb)÷u                ⍝ Data
+     t lb x
+ }

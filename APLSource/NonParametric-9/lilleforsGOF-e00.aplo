@@ -1,0 +1,39 @@
+ lilleforsGOF←{
+⍝∇ Lillefors Goodness of Fit Test
+⍝⍺⍺ Distribution - normal or exponential
+⍝⍵⍵ Relation
+⍝⍵  Data
+⍝⍎  NS←normal lilleforsGOF X
+⍝⍎  NS←exponential lilleforsGOF ¯2-/0 6 8 16 22 23 34 44 47 51 57
+     ⎕IO←1 ⋄ ⎕ML←1
+     fnorm←{
+         Z←zScore,X←sort ⍵
+         F←normal prob≤Z
+         N←count ⍵
+         S←(⍳N)÷N    ⍝  S←(+/Z∘.≥Z)÷N
+         TPlus←⌈/U←F-S-÷N
+         TMinus←⌈/V←S-F
+         T1←TPlus⌈TMinus
+         P←1-N{⍺ between 3 31:⍺(A14 tableInverse)⍵
+             D←⍺,⍺{⍵÷{⍵-0.01-0.083÷⍵}sqrt ⍺}1↓A14[≢A14;]
+             N((A14⍪D)tableInverse)⍵}T1
+         TBL←'Xi' 'Zi' 'S(Zi)' 'F(Zi)' 'T+' 'T-'
+         TBL⍪←X,Z,S,F,U,⍪V
+         MS←(mean,sdev)⍵
+         'normal'MS P T1 ⍬ TBL}
+     fexp←{⍝NS←⎕NS''
+         X←sort ⍵
+         Z←X÷mean X
+         N←count ⍵
+         F←1 exponential prob≤Z
+         S←(⍳N)÷N                   ⍝ S←(+/Z∘.≥Z)÷N
+         TPlus←⌈/U←F-S-÷N
+         TMinus←⌈/V←S-F
+         T2←TPlus⌈TMinus
+         P←1-N{⍺≤100:⍺(A15 tableInverse)⍵   ⍝  P←A15 lookup N'*'T1
+             D←A15⍪N,1↓A15[≢A15;]÷sqrt ⍺
+             ⍺(D tableInverse)⍵}T2
+         TBL←'Xi' 'Zi' 'S(Zi)' 'F(Zi)' 'T+' 'T-'
+         TBL⍪←X,Z,S,F,U,⍪V
+         'exponential'(mean ⍵)P T2 ⍬ TBL}
+     ×0 1 ⍺⍺ 1:fnorm ⍵ ⋄ fexp ⍵}

@@ -1,0 +1,37 @@
+ z←(FunX HalfStep)ABN;a;b;n;ya;yb;yz;i
+⍝∊ Written by Bill Koko
+⍝∇ trial and error by half_stepping:  if you start correctly bracketed
+⍝∇ it will always converge
+⍝∇    argument:  two values of X that with have a funtion result of
+⍝∇               opposite sign and the max number of steps (20 will
+⍝∇               reduce the uncertainty to one-millionth of the A-B
+⍝∇               gap.  default to 53 == 16 digits).
+
+ a b n←3↑ABN,53
+
+ z←a
+ ya←FunX z
+ :If ya=0 ⋄ :Return ⋄ :EndIf
+ z←b
+ yb←FunX z
+ :If yb=0 ⋄ :Return ⋄ :EndIf
+
+⍝  Check for bracketing
+ z←⍬
+ :If 0<ya×yb ⋄ :Return ⋄ :EndIf
+
+ ⍝  start halving
+ :For i :In ⍳n
+     z←0.5×a+b
+     yz←FunX z
+     :If yz=0 ⋄ 'out' ⋄ :Return ⋄ :EndIf  ⍝  may as well quit with an exact root
+     :If 0<yz×ya    ⍝  yz is on the same side as ya
+         a ya←z yz
+     :Else
+         b yb←z yz
+     :EndIf
+ :EndFor
+
+ ⍝  accept z
+
+ :Return

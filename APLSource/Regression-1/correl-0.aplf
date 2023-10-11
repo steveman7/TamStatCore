@@ -1,0 +1,10 @@
+ correl←{⎕IO←0 ⋄ ⎕ML←3
+     x←⊃⍵
+     n←↑⌽⍴x
+     sx←+/x
+     ss←(n×x+.*2)-sx*2
+     sxy←+.×pairwise ⍵
+     sxsy←×pairwise sx
+     z←(n×sxy)-sxsy
+     z÷(×pairwise ss)*÷2
+ }

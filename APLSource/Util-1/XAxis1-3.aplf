@@ -1,0 +1,22 @@
+ XAxis1←{
+⍝ XAxis for data set
+⍝⍵ Data Set
+⍝← Bounds
+⍝← Scale (Rule)
+     ⎕IO←0 ⋄ ⎕ML←3
+     R←(⌈/-⌊/)⍵                             ⍝ Range
+     C←10*⌊10⍟⌈/|R                          ⍝ Scale    (Characteristic)
+     L←C×⌊(⌊/⍵)÷C                           ⍝ Lower bound
+      ⍝ T←L+C×1+⍳10                           ⍝ Ticks
+⍝     T←T{⍺[1]>⍵:L+(C÷5)×1+⍳10              ⍝ If highest value < 2nd tick, rescale to size
+⍝         ⍺[4]>⍵:L+(C÷2)×1+⍳10              ⍝ If highest value < 5th tick, rescale to size
+⍝         ⋄ ⍺}⌈/⍵
+   ⍝ M←(5 2 1+.>((⌈/⍵)-L)÷C)⊃1 2 5         ⍝ Rescale to size
+     M←(5 2 1+.>C÷⍨L-⍨⌈/⍵)⊃1 2 5           ⍝ Find Scaling Factor
+     T←L+(C÷M)×1+⍳10                       ⍝ Rescale to size
+     TW←10
+     S←101⍴1(TW-1)/'+-'                    ⍝ Scale
+     FS←TW{⍵≥10:'I',⍕⍺                     ⍝ Format String
+         'F',(⍕⍺),'.',⍕1+⌈0.1⍟⍵}R          ⍝
+     S←S⍪' ',('10M<->',FS)⎕FMT,[¯0.5]T     ⍝ Scale
+     (L,↑⌽T)S}

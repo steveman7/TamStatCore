@@ -1,0 +1,14 @@
+ randomStat←{
+⍝⍵ = scalar integer
+     ⎕IO←0 ⋄ ⎕ML←3
+     n←5
+     v←1 ⍵⍴0
+     w←1 ⍵⍴0
+     vw←⊃{a b c d←normal randomVariable¨⊂n n
+         P←a,b,c,d
+         Q←(a,b)⍪c,d
+         v←+/0 0⍉4*⍨(⍉P)+.×P
+         w←+/0 0⍉4*⍨(⍉Q)+.×Q
+         v,w}¨⍳⍵
+     (sdev÷mean)¨↓⍉vw
+ }

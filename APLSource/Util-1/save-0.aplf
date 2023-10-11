@@ -1,0 +1,30 @@
+ Z←save Y∆;FN∆;tn;nms;b;v;⎕ML;⎕IO;i;ob;_
+⍝⍵  Path/Filename of dcf file or ''
+⍝←  Namespace containing values
+ ⎕IO←0 ⋄ ⎕ML←3
+ ob←↑Y∆
+ :If 9=⎕NC'ob'
+     {f←getform ⍵ ⋄ f.in.Text←'save '''''}ob
+ :Else
+     ⎕EX'ob'
+     :With #
+         ⎕ML←3 ⋄ ⎕IO←0
+         nms←(variables #)~⊂'Y∆'
+         FN∆←'Session.dcf'
+         {22::0
+             tn←⍵ ⎕FTIE 0
+        ⍝ ob←'Msg'⎕WC'Msgbox' 'File Warning' 'Replace existing File?' 'Warn'
+             ⍵ ⎕FERASE tn                ⍝ Erase current file
+         }FN∆
+         tn←FN∆ ⎕FCREATE 0                 ⍝ Create component file
+         v←0↑I←1⍳⍨b←'['∊¨nms              ⍝ Namespaces
+         :If 0∊b ⋄ v,←⍎¨I↑nms ⋄ :EndIf
+         :If 1∊b
+             v,←⎕OR¨('#.'∘,¨I↓nms)~¨⊂'[]'
+         :EndIf
+         nms ⎕FAPPEND tn                ⍝ Create Index into component file
+         v ⎕FAPPEND¨tn                  ⍝ Write variable names to component file
+         ⎕FUNTIE tn
+     :EndWith
+     Z←nms
+ :EndIf

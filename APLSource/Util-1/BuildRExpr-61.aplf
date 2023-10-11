@@ -1,0 +1,20 @@
+ BuildRExpr←{
+     ⎕IO←0 ⋄ ⎕ML←3
+     CompileProb←{
+         XXX←(⍵≠' ')⊂⍵
+         i←XXX⍳⊂'prob'
+         j←'normal' 'tDist' 'fDist' 'chiSquare'⍳XXX[i-1]
+         dist←j⊃'norm' 't' 'f' 'chisq'
+         rel←XXX[i+1]
+         parms←(i-1)↑XXX
+         values←(i+2)↓XXX
+         values←{1<⍴⍵:'c(',(1↓∊',',¨⍵),')' ⋄ ↑⍵}values
+         xpr←∊'p',dist,'(',values,',',¨parms
+         rel∊,¨'≤' 'le':xpr,',lower.tail = TRUE)'
+         rel∊,¨'>' 'gt':xpr,',lower.tail = FALSE)'
+
+     }
+     ∨/'prob'⍷⍵:CompileProb ⍵
+     ∨/'criticalValue'⍷⍵:CompileCV ⍵
+     ∨/'randomVariable'⍷:Random ⍵
+ }

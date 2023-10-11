@@ -1,0 +1,24 @@
+ factor←{
+ ⍝⍟ Copyright (C) 2022 by Stephen M. Mansour
+ ⍝∇ Generate 1, 2 or 3-factor model
+ ⍝∊ ANOVA
+ ⍝⍺ Number of Fixed Factors
+ ⍝⍺ Number of Random Factors
+ ⍝⍵ X:    Response - n-dimensional numeric vector; trailing dimension is replicates
+ ⍝← TBL:  [Source|SS|DF|DF2I]
+ ⍝⍕ NS ←  randomFactor X
+ ⍝⍎ X←130 155 74 180,34 40 80 75, 20  70 82 58
+ ⍝⍎ X,←150 188 159 126, 136 122 106 115, 25 70 58 45
+ ⍝⍎ X,←138 110 168 160, 174 120 150 139, 96 104 82 60
+ ⍝⍎ 2 factor 3 3 4⍴X
+ ⍝⍎ 2 factor 2 2⍴↓X
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄ A←¯1+⊃⍴⍴⍵ ⋄ ⍺←A
+     A←(0=≢⍺)⊃⍺ A             ⍝ If not specified, use rank-1
+     B←{1<≡⍵:⍵ ⋄ +/⍵}A
+     EFF SS DF←3↑↓⍉B aov ⍵
+     I←(0 2)(1 1)⍳⊂A          ⍝ 0=Random, 1=Mixed, 2=Fixed
+     J←I⊃(3 3 4)(3 4 4),⊂{⍵⍴⍨¯1+⍵}≢DF
+     ⍉↑EFF SS DF J
+
+
+ }

@@ -1,0 +1,60 @@
+ regressR←{
+ ⍝⍟ Copyright (C) 2018, 2023 by Stephen M. Mansour
+ ⍝∇ Linear Regression using R
+ ⍝∊ Regression
+ ⍝⍺ 1 = intercept, 0 = no intercept
+ ⍝⍵ Y Dependent and Independent Variables y, x[1], x[2] ... x[n]
+ ⍝⍵ X1: Independent Variable 1
+ ⍝⍵ Xn: Independent variable n
+ ⍝← NS:   Namespace containing the following variables
+ ⍝ ← = Coefficient Estimates (float) b[0], b[1], ... b[n]
+ ⍝ ← = Standard Errors (float)
+ ⍝ ← = t-Values (float)
+ ⍝ ← = p-Values (float)
+ ⍝     AnovaTable  RSq  RSqAdj  S  Type
+ ⍝⍕ NS ← regressR Y X1 [X2 ... [Xn]]
+ ⍝⍎ NS ← regressR Height ShoeSize                ⍝ Simple regression
+ ⍝⍎ NS ← regressR Height ShoeSize (Sex eq 'M')   ⍝ Multiple regression
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ns←⎕NS'' ⋄ ⍺←1              ⍝ Set system variables
+     Y←↑⍵ ⋄ X←⍉⊃1↓⍵                              ⍝ Get dependent, indep variables
+  ⍝   _←##.∆r.x'A <- lsfit(⍵,⍵, intercept = ⍵)'X Y(⍺⊃'FALSE' 'TRUE')⍝ Perform linear regression
+     W←(⍺≢0)∧⍺≢1   ⍝ Weighted Least Squares?
+     str←'A <-lsfit(⍵,⍵, ',(W⊃'intercept' 'wt'),'= ⍵)'
+     _←##.∆r.x str X Y,⊂⍺{⍵:⍺ ⋄ ⍺⊃'FALSE' 'TRUE'}W
+     INT←⍺≢0
+    ⍝ str←,'G<,A$coefficients[[Z9]]>'⎕FMT 1↓⍳⍺+⍴⍵ ⍝ Build R expression
+     str←,'G<,A$coefficients[[Z9]]>'⎕FMT 1↓⍳INT+⍴⍵ ⍝ Build R expression
+     ns.B←##.∆r.x'c(',1↓str,')'                  ⍝ Get coefficients
+     ns.E←##.∆r.x'A$residuals'                    ⍝ Get residuals
+     _←##.∆r.x'D<-ls.print(A)'                   ⍝ Generate report from R
+     CT←##.∆r.x'as.numeric(D$coef.table[[1]])'   ⍝ Get coefficient table
+     CT←,¨'Coeff' 'SE' 'T' 'P'⍪⍉4(0.25×≢CT)⍴CT   ⍝ Include headers
+    ⍝ ns.C←C←{⌹⍵+.×⍉⍵}(~⍺)↓1⍪1↓⊃⍉⍵                ⍝ Predictor Variables
+     ns.C←C←{⌹⍵+.×⍉⍵}(~INT)↓1⍪1↓⊃⍉⍵                ⍝ Predictor Variables
+    ⍝ ns.Coeff←((1 ⍺/'Variable' 'Intercept'),↓'P<B>LI2'⎕FMT ⍺↓(~⍺)+⍳≢ns.B),CT
+     ns.Coeff←((1 INT/'Variable' 'Intercept'),↓'P<B>LI2'⎕FMT INT↓(~INT)+⍳≢ns.B),CT
+     A←##.∆r.x'as.numeric(D$summary)'            ⍝ Obtain summary data from R
+     ns.(S RSq)←2↑A                              ⍝ Get std err and R-Squared
+     ns.DF←DF←-/≢¨ns.(E B)                             ⍝ Degrees of Freecom
+     T←3 5⍴0                                     ⍝ Reconstruct Anova table
+     T[0;3 4]←A[2 5]                             ⍝ F and P
+     T[;1]←{⍵,+/⍵}A[3 4]                         ⍝ Degrees of Freedom
+     T[1;2]←ns.S*2                               ⍝ Mean Squared Error MSE
+     T[0;2]←T[1;2]×A[2]                          ⍝ Mean Squared Regression MSR
+     T[;0]←{⍵,+/⍵}×/T[0 1;1 2]                   ⍝ Sum of Sauares
+     T←'SS' 'DF' 'MS' 'F' 'P'⍪T                  ⍝ Headings
+     ns.AnovaTable←'Source' 'Regression' 'Error' 'Total',T
+     ns.(_Report←⍕,[⍬]AnovaTable ⍬ Coeff ⍬(2 2⍴'S' 'R-Sq'S('K2Q<%>F7.2'⎕FMT RSq)))
+     ns.YHAT←Y-ns.E                              ⍝ Fitted values
+    ⍝ ns.H←{⍵+.×C+.×⍉⍵}(~⍺)↓[1]1,X                ⍝ Hat matrix
+     ns.H←{⍵+.×C+.×⍉⍵}(~INT)↓[1]1,X                ⍝ Hat matrix
+     ns.R←ns.E÷ns.S×sqrt 1-0 0⍉ns.H              ⍝ Studentized Residuals
+     XX←##.∆r.x'cor(⍵)'X
+     ns.VIF←0 0⍉⌹XX                              ⍝ Variance Inflation Factor
+     ns.ConditionNumber←(⌈/÷⌊/)eigenValues XX    ⍝
+     ns.f←(ns.B DF ns.S C ⍺)linear               ⍝ Build linear function
+   ⍝  ns.VariableNames←NL←'Y','X',¨(≢⍺↓ns.B)↑1↓⎕D
+     ns.VariableNames←NL←'Y','X',¨(≢INT↓ns.B)↑1↓⎕D
+     ns.Equation←NL buildRegressionEquation ns.B
+     ns._Report←⍕⍪'The regression equation is:'⍬ ns.Equation ⍬ ns._Report
+     ns.Type←'Regress' ⋄ ns}

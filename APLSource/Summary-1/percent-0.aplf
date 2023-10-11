@@ -1,0 +1,7 @@
+ percent←{⎕ML←3 ⋄ ⎕IO←0
+     z←⍵
+     z[;1]←{1=+/⍵:100×⍵           ⍝ Relative frequency
+         1=(↑⌽⍵)∧s←⍵≡⍵[⍋⍵]:100×⍵  ⍝ Relative Cumulative frequency
+         s:100×⍵÷↑⌽⍵              ⍝ Cumulative freuqnecy
+         100×⍵÷+/⍵}z[;1]          ⍝ Frequency
+     z}

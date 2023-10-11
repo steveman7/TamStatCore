@@ -1,0 +1,25 @@
+ randomVariable←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Generate random variables from a distribution
+ ⍝∊ Operators
+ ⍝⍺ L: Distribution parameters, default (0,1)
+ ⍝⍺⍺ fD: Distribution Function
+ ⍝⍵ N: Positive Integer:  Number of random values to generate
+ ⍝← Xv:  Vector of random numbers from distribution
+ ⍝⍕ Xv ← Interval ← [.95|Level] sumFn confInt SampleData[Grouping]|SampleFreq|SampleStat
+ ⍝⍎ [L|0 1] fD randomVariable N
+ ⍝⍎ 7 .3 binomial randomVariable 5
+ ⍝⍎ normal randomVariable 3
+     ⎕IO←0 ⋄ ⎕ML←3
+     ⍺←0 1                     ⍝ Default parameters
+     2=⎕NC'⍺⍺':⍺⍺{             ⍝ If left operand is a variable
+         x p←↓⍉frequency ⍺     ⍝ Separate values, probabilities
+         u←?⍵⍴0                ⍝ Generate random Variable
+         x[+/u∘.≥+\p÷+/p]}⍵    ⍝ Select from distribution
+     w←{(⊂⍵)∊0 '':⍬ ⋄ ⍵}⍵      ⍝ If 0, treat as scalar
+     2>≡⍺:w ⍺⍺⍨⍺,¯2            ⍝ If simple parameter list just calculate
+     (2 3∊⍨≢⍺)∧{(⍵∧.≥0)∧(1<≢⍵)∧1=+/⍵}1⊃⍺:w ⍺⍺⍨⍺,¯2  ⍝ If multinomial, execute
+     ⍝ 1≥≡⍺:w ⍺⍺⍨⍺,¯2          ⍝ If depth 1 or multinomial execute once, else
+     ⍝ (,/¨⍺,¯2)⍺⍺¨w           ⍝ Each if nested parameters
+     (↑,¨/⍺)∇¨⊂w               ⍝
+ }

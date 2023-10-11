@@ -1,0 +1,21 @@
+ kurtosis←{
+ ⍝∇ Excess Kurtosis  (Thickness of the tails)
+ ⍝⍟ Copyright 2018 by Stephen Mansour
+ ⍝∊ Summary Function
+ ⍝⍵ Data
+ ⍝← z>0  Leptokurtic
+ ⍝← z=0  Mesokurtic
+ ⍝← z<0  Platykurtic
+     ⎕DIV←1 ⋄ ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←0     ⍝ Set system variables
+     9=⎕NC'⍵':'Undefined for stats'   ⍝ Undefined
+    ⍝ x←{1=⍴⍴⍵:⍵ ⋄ 2=⍴⍴⍵:∊(//⌽⍵)}⍵     ⍝ If frequency, replicate values
+     x←{isFrequency ⍵:∊(//⌽⍵) ⋄ ⍵}⍵
+     x←x~⎕NULL                        ⍝ Remove ⎕nulls
+    ⍝ rAv:+#.∆r.x'kurtosis(⍵)'w       ⍝ If requested, call R
+     4>n←↑⍴,x:⎕NULL                   ⍝ If Sample size < 4, get out
+    ⍝ 4>n←≢x:'Sample Size Too Small'  ⍝ If Sample size < 4, get out
+     n m s←(count,mean,sdev)x         ⍝ Get count, mean, sdev
+     z←+/(s÷⍨x-m)*4                   ⍝ Get z-score
+     z←z×(n×n+1)÷n×.-1 2 3            ⍝
+     z-3×(n-1 2 3)×.*2 ¯1 ¯1          ⍝ Calculate kurtosis
+ }

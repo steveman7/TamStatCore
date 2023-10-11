@@ -1,0 +1,23 @@
+ tablebox←{
+     ⎕ML←3 ⋄ ⎕IO←0
+     s←{¯2↑1 1,⍴⍵}¨⍵               ⍝ Header, Footer
+     w←s⍴¨⍵
+     ch←⌈/↑¨s                     ⍝ Max row width
+     rw←⌈⌿↑∘⌽¨s                   ⍝ Max col height
+     d←(ch∘.,rw)↑¨w                   ⍝ Dimensions
+     tl tr bl br vt hz←'┌┐└┘│─'   ⍝ Top left, top right, ..
+     cl c cr tc bc←'├┼┤┬┴'
+     dd←{z←(⍵,vt)⍪hz
+         ((¯1+⍴z)⌷z)←c
+         z}¨d
+     z←hz⍪vt,↑⍪/,/dd
+     f←{1↓¯1↓⍵/⍳⍴⍵}
+     cb←f z[1;]=vt
+     rb←f z[;1]=hz
+     i j←¯1+⍴z
+     z[0;cb]←tc ⋄ z[i;cb]←bc
+     z[rb;0]←cl ⋄ z[rb;j]←cr
+     cr←0,¨¯1+⍴z
+     (cr⌷z)←2 2⍴tl tr bl br
+     z
+ }

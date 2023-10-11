@@ -1,0 +1,17 @@
+ percentileRank←{
+  ⍝ Written by Steve Mansour
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⎕DIV←1
+     isFrequency ⍵:⍺{(x p)←↓⍉⍵  ⍝ Values, probs
+         x,←(↑⌽x)--/¯2↑x        ⍝ Include upper bound
+         x+←0.5×-/2↑x           ⍝ Midpoints to lower bounds
+         p←(0,p)÷+/p            ⍝ probabilities
+         a←(⌈/x)⌊(⌊/x)⌈⍺        ⍝ Bound values
+         j←¯1++/a∘.≥x            ⍝ Find poisitions
+         c←+\p
+         r←(a-x[j])÷-/(x,⌈/x)[j∘.+1 0]
+         ⌊0.5+100×c[j]+r×p[j]
+     }⍵
+  ⍝  r←(+/⍺∘.>⍵)+0.5×+/⍺∘.=⍵  ⍝ Rank
+     1<⍴⍴⍵:'Rank Error'
+     r←(+/⍺∘.≥⍵)              ⍝ Rank
+     ⌊0.5+100×r÷≢⍵}

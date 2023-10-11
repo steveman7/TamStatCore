@@ -1,0 +1,15 @@
+ wilsonScoreInt←{
+ ⍝∊ Written by Steve Mansour
+ ⍝∇ Wilson Score Interval
+ ⍝⍺  Normal
+ ⍝⍵  N, Events
+ ⍝←  critical Value
+     ⍺←95 ⋄ ⎕ML←1                           ⍝ Default conf is 95%
+     p←÷/⌽⍵                                 ⍝ Sample Proportion
+     n←⊃⍵                                   ⍝ Sample Size
+     z←normal criticalValue<0.5×1-⍺÷100     ⍝ CriticalValue
+     z2←z*2                                 ⍝ z-squared
+     x←÷/p 1+z2÷n×2 1                       ⍝ Point Estimate
+     me←(z÷1+z2÷n)×sqrt(z2÷4×n*2)+(p×1-p)÷n ⍝ Margin of error
+     0⌈x(-,+)me                             ⍝ Confidence Interval
+ }

@@ -1,0 +1,9 @@
+ iqr←{
+ ⍝∇ Interquartile Range
+ ⍝⍟ Copyright 2018 by Stephen Mansour
+ ⍝∊ Summary Function
+ ⍝⍵ Numeric Vector
+ ⍝⍎ iqr HEIGHT
+     rAv:+##.∆r.x'IQR(⍵)'⍵            ⍝ Call R if requested
+     -/3 1 quartile ⍵   ⍝ Q3 - Q1     ⍝ Else difference between Q3 and Q1
+ }

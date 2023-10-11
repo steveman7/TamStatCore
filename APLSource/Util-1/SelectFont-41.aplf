@@ -1,0 +1,20 @@
+ Z←SelectFont OB;F;c;fo;v;mi;props;b
+ ⎕IO←0 ⋄ ⎕ML←3
+ mi←(↑OB)    ⍝ Menu Item
+ F←getform OB
+ fo←{↑⌽('.'≠⍵)⊂⍵}⍕mi
+ ⍝fo←('_'⎕R' ')c
+ props←1 0 0 700
+ 'APL385_Unicode'⎕WC'Font' 'APL385 Unicode' 24,props
+ 'Courier_New'⎕WC'Font' 'Courier New' 24,props
+ 'Lucida_Console'⎕WC'Font' 'Lucida Console' 24,props
+ 'APL_Large'⎕WC'Font' 'APL385 Unicode' 48,props
+ 'Courier_New_Large'⎕WC'Font' 'Courier New' 48,props
+ 'Lucida_Large'⎕WC'Font' 'Lucida Console' 48,props
+⍝ v←toNestedVector F.mb.mst.mf.⎕NL 9
+ v←toNestedVector(↑OB).##.⎕NL 9
+ b←v∊⊂fo
+⍝ F.mb.mf.(APL385_Unicode APL_Large Courier_New Courier_New_Large Lucida_Console Lucida_Large).Checked←b
+ (↑OB).##.(APL385_Unicode APL_Large Courier_New Courier_New_Large Lucida_Console Lucida_Large).Checked←b
+ F.in.FontObj←(2×⌊0.5×b/⍳≢b)⊃v
+ F.g.out.FontObj←fo

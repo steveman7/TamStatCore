@@ -1,0 +1,8 @@
+ pointBiserial←{
+⍝⍵  Boolean Matrix:  Students x Questions
+     ⎕IO←0 ⋄ ⎕ML←3
+     M←⍉(+/⍵)-⍤0 1⊢⍵ ⋄ B←⍉⍵
+     f←{((≢⍵)×⍺+.×⍵)-⍺×⍥(+/)⍵}⍤1
+    ⍝ f←{((≢⍵)×⍺+.×⍵)-×/+/⊃⍺ ⍵}⍤1
+     (M f B)÷(M×⍥(f⍨)B)*÷2
+ }

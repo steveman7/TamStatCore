@@ -1,0 +1,14 @@
+ paired←{
+ ⍝ Paired samples  Operator
+     ⎕IO←0 ⋄ ⎕ML←3
+⍝     ⍺≠⍥≢⍵:'Domain Error'
+⍝     1=≢⍵:'Domain Error'
+     10+⍺⍺ ⍵
+    ⍝ ns←⍺ ⍺⍺ 0J1,⍵
+⍝     ns._Paired←1
+⍝     ns
+
+
+
+
+ }

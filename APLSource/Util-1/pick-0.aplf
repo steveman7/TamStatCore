@@ -1,0 +1,2 @@
+ pick←{⍝ select from a nested array
+     ⍺⊃⍵}

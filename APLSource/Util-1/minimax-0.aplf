@@ -1,0 +1,5 @@
+ minimax←{
+⍝⍵ is a payoff table
+⍝← is the index of the decision
+     ⎕ML←3 ⋄ ⎕IO←0
+     {⍵⍳⌊/⍵}⌈/⍵}

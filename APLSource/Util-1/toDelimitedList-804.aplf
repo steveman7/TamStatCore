@@ -1,0 +1,10 @@
+ toDelimitedList←{
+     ⎕ML←3 ⋄ ⎕IO←0
+     ⍺←','
+⍝     (1=≡⍵)∧2>⍴⍴⍵:,⍵                   ⍝ Already list or numeric
+
+    ⍝ 2=≡⍵:1↓∊⍺,¨deleteExcessBlanks¨⍵   ⍝ Vector of vectors
+     (80≠⎕DR ⍵)∨2=≡⍵:1↓∊⍺,¨deleteExcessBlanks¨⍵   ⍝ Vector of vectors
+     2=⍴⍴⍵:1↓∊⍺,¨deleteExcessBlanks¨↓⍵ ⍝ Matrix
+     ,⍵
+ }

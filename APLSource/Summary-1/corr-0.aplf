@@ -1,0 +1,30 @@
+ corr←{⎕IO←0 ⋄ ⎕ML←3 ⋄ ⎕DIV←1
+  ⍝⍝⍟ Copyright 2018 by Stephen M. Mansour
+ ⍝∇ correlation
+ ⍝∊ Summary Function  (Dyadic)
+ ⍝⍺ Y simple vector
+ ⍝⍵ X simple or nested vector
+ ⍝← Sample correlation
+ ⍝← Numeric Scalar if X and Y simple numeric vectors
+ ⍝← Numeric Matrix if monadic
+ ⍝← Matrix with labels if left argument is a namespace
+ ⍝←  and right argument is a character vector
+ ⍝⍕ Z←Y corr X
+ ⍝⍕ Z←corr X1 X2 ... Xn
+ ⍝⍕ Z←N corr 'X1 X2 ... Xn'
+ ⍝⍎ Height corr Weight
+    ⍝0=⎕NC'⍺':∘.∇⍨⍵
+     0=⎕NC'⍺':∘.∇⍨⍵              ⍝ No left arg, make corr matrix
+     9=⎕NC'⍺':⍺ ∇{m←⍺⍺ ⍺.(⍎⍵)    ⍝ If namespace
+         m{(⍵,⍨⊂'corr'),⍵⍪⍺}(⍵≠' ')⊂⍵}⍵   ⍝ Add labels
+     1∊≢¨⍺ ⍵:0
+     b←∧/⎕NULL≠⍺,⍪⍵
+     y x←b∘/¨⍺ ⍵
+     rAv:+##.∆r.x'cor(⍵,⍵)'y x
+     n←≢x
+     m←mean¨y x
+     s←sdev¨y x
+     ⍝z←+/(⍺-xbar)×⍵-ybar
+     z←+/×⌿⊃y x-m
+     z÷×/s,n-1
+ }

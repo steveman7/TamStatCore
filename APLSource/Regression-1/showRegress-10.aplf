@@ -1,0 +1,15 @@
+ showRegress←{⎕ML←3 ⋄ ⎕IO←0
+     XY←⌽⍵.YX                                         ⍝ Get X and Y values
+     X y←2↑↓⍉XY
+     Z←XY,(XY*2),×/XY                                 ⍝ Get Squares and products
+     Z←Z,-⍨\⌽y,⍪⍵.B+.×⍉1,⍪X                            ⍝ Fitted values and Residuals
+     Z←Z,(¯1↑[1]Z)*2                                  ⍝ Squared residuals
+     T←{⍵×0.00001<|⍵}+⌿Z                              ⍝ Sum all values
+     Z←(1+⍳⍵.N),Z                                       ⍝ Include sequence
+     H←'n' 'x' 'y' 'x²' 'y²' 'xy' 'yhat' 'e' 'e²'
+     Z←H⍪Z⍪(⊂'Total'),T  ⍝ Result
+     FT←' ' 'X' 'Y' 'SSX' 'SSY' 'SSXY' ' ' 'SE' 'SSE'
+     AV←(2↑T)÷⍵.N
+     SS←T[2 3 4]-⍵.N÷⍨{(⍵*2),×/⍵}2↑T
+     Z⍪FT,[¯0.5]' ',AV,SS,' ',(T[7]÷⍵.N-2)*0.5 1
+ }

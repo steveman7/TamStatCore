@@ -1,0 +1,19 @@
+ predict←{
+⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+⍝∇ Predict fitted values/intervals for regression model
+⍝∊ Regression
+⍝⍺ Regression Model Namespace
+⍝⍵  Array of inputs; each row represents a set of values
+⍝←  n×5 matrix of outputs [Fitted Value, ConfInt, PredInt]
+⍝   MODEL predict X
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ M←⍺                    ⍝ Set system variables
+     c←{2≠⍵.⎕NC'Confidence':0.95            ⍝ Conf = 95% if not specified
+         0.01×⍵.Confidence}M                ⍝ Else get from namespace
+     x←↓(⍉⍵){,¨@(⍵/⍳⍴⍵)⊢⍺}1↓M.VariableTypes ⍝ Assemble right argument
+     ⍺.Confidence←100×c ⋄ ⍺.XValues←⍵       ⍝ Save conf level, X,YValues in NS
+     0=⍴x:+⍺.YValues←1 5⍴0
+     _←⍎⍕1↓M.VariableNames,'←x'             ⍝ Assign to variable names
+     in←↓⍉⊃⍎¨1↓M.VariableExpressions        ⍝ Execute variable expressions
+     y←⊃,/⊃c M.f{(⍺⍺ ⍵),(⍺ ⍺⍺ confInt ⍵),⍺ ⍺⍺ predInt ⍵}¨in
+     y←y{1=↑⌽⍴⍵:⍉(5,≢⍵)⍴⍺ ⋄ ⍺}⍵             ⍝ If 1-col matrix, reshape
+     ⊢⍺.YValues←y}

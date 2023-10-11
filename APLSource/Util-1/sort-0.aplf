@@ -1,0 +1,8 @@
+ sort←{
+     ⎕ML←3 ⋄ ⎕IO←0
+     0=↑∊0⍴⍵:⍵[⍋⍵]
+     d←toMatrix ⍵
+     m←d[⍋⊃d;]
+     2=⍴⍴⍵:m
+     2=≡⍵:toNestedVector m
+     toDelimitedList m}

@@ -1,0 +1,22 @@
+ mgof←{⍝ Multinomial/Uniform goodness of fit test
+     ⎕IO←0 ⋄ ⎕ML←3
+   ⍝  w p←{'*'≡↑⍵:{(⍵[;0 1])(↓⍉⍵[;0 2])}(1↓⍵) ⋄ ⍵ ⍬}↑⍵
+     w p←{'*'≡↑⍵:{(⍵[;0 1])(↓⍉⍵[;0 2])}(1↓⍵)
+         3≠≢⍉⍵:⍵ ⍬
+         2=⍴⍴⍵:(⍵[;0 1])(↓⍉⍵[;0 2])
+         (⍉⊃toNestedVector¨2↑⍵)(1 0 1/⍵)}↑⍵
+     d←⊂⍵[1]⊃'Multinomial' 'Uniform' ⍝ Multinomial or uniform?
+     v obs←↓⍉{(2=⍴⍴⍵)∧~(⎕DR ⍵)∊80 82 160 320:⍵   ⍝ Non character matrix
+         (2=≢⍵)∧1<≡⍵:(toNestedVector↑⍵),[0.5]1⊃⍵ ⍝ 2-item vector, make into matrix
+         frequency ⍵}w               ⍝ make frequency
+     n←+/obs                         ⍝ Sample size
+     k←≢v                            ⍝ Number of categories
+     exp←k/n÷k                       ⍝ Expected values
+     p←(⍺≡⍬)⊃⍺ p                     ⍝
+     p←⍵[1]⊃p ⍺                      ⍝ Get proportions
+     ⍵[1]∨p≡⍬:d ⍬,gof v obs exp      ⍝ Uniform output
+     p←{2=⍴⍴⍵:↓⍉⍵ ⋄ ⍵}p              ⍝
+     i←v⍳v1←toNestedVector↑p         ⍝
+     exp←n×{⍵÷+/⍵}1⊃p                ⍝ Expected Values
+     obs←(obs,0)[i]                  ⍝ Observed Values
+     d ⍬,gof v1 obs exp}

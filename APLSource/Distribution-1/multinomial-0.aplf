@@ -1,0 +1,41 @@
+ multinomial←{                                 ⍝ Custom Distribution
+     ⍝⍟ Copyright (c) by Stephen M. Mansour
+     ⍝∇ Multinomial/Custom Distribution
+     ⍝∊ Discrete Distribution Function
+     ⍝⍺ Possible Values (Numeric or Character)
+     ⍝⍺ Probabilities
+     ⍝⍵ x - Particular Value (Numeric or Character)
+     ⍝← Probability of Value
+     ⍝⍕ Syntax:  N V multinomial M
+     ⍝⍎ (0 1 2 3)(5 2 1 3)  multinomial 3
+     ⎕ML←3 ⋄ ⎕IO←0                         ⍝ Set system variables
+     ⍵≡'Type':'Discrete'                   ⍝ Discrete Distribution
+     w←toNestedVector ⍵                    ⍝ If Character, make nested vector
+     pv←{(1<≡⍵):0 ⋄ ∧/(⍵≥0),(⍵≤1),1≥+/⍵}   ⍝ Is this a probability vector?
+     v p c←{pv ⍵:(⍳⍴,⍵)(,⍵)0               ⍝ If a simple vector assume probabilities
+         b←(c←¯1↑⍵)∊¯1 0 1 ¯2              ⍝ If last item is a flag
+         b∧pv ¯1↓⍵:(⍳¯1+≡⍵)(¯1↓⍵)c
+         ∧/(pv,w←¯1↓⍵),b:(⍳⍴w)w c          ⍝
+         3=⍴,⍵:⍵                           ⍝ If 3 items, variables, proportions, flag
+         (|⊂↑⌽⍵)∊¯1+⍳4:(⊂⍳⍴,⍵),⍵           ⍝ If last item a flag, generate values
+         ⍵,0}⍺                             ⍝ Else assume density
+    ⍝ ~pv p:'Not a probability vector'      ⍝ Check probability vector
+     p∨.<0:'Negative values not permitted'
+     p←p÷+/p                               ⍝ If percents, weights or counts, convert to probability
+     v p←v{0≠↑∊0⍴⍺:⍺ ⍵ ⋄ (⊂⍋⍺)∘⌷¨⍺ ⍵}p     ⍝ Sort if numeric
+     v←toNestedVector v
+     ⍵≡'Mean':v+.×p                        ⍝ If numeric, calculate mean
+     ⍵≡'Variance':v{0≠↑0⍴↑⍺:1-+/2*⍨(⊢÷+/)⍵ ⍝ If char use Kader & Perry 2007
+         (⍵+.×⍺*2)-(⍺+.×⍵)*2}p             ⍝ Else calc pop variance
+     ⍵≡'Median':v[0.5+.>+\p]
+     ⍵≡'Mode':↑v[p⍳⌈/p]
+     ⍵≡'Skewness':skewness(⌊0.5+p×1000)/v
+     ⍵≡'Kurtosis':kurtosis(⌊0.5+p×1000)/v
+     c=0:(p,1-+/p)[v⍳w]                    ⍝ Get probability
+     c=1:{0≠↑0⍴v:'Cumulative probability not defined on nominal data.'
+         p+.×v∘.≤⍵}w
+     c=¯1:{0≠↑0⍴v:'Critical value not defined on nominal data.'
+         v[+/⍵∘.≥+\p]}w
+     u←?⍵⍴0                                ⍝ random Variable
+     v{1=⍴⍴⍺:⍺[⍵] ⋄ ⍺[⍵;]}+/u∘.≥+\p        ⍝
+ }

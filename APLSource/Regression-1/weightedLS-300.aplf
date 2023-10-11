@@ -1,0 +1,16 @@
+ weightedLS←{
+ ⍝∇  Calculate Linear Weighted Least Squares for indicator response variable
+ ⍝⍺  Y values (must be 0's and 1's)
+ ⍝⍵  X values
+ ⍝←
+     NS←regress ⍺ ⍵
+     W←{÷⍵×1-⍵}NS.YHAT  ⍝ Weights
+     SW←+/W
+     SWX←W+.×⍵
+     SWX2←W+.×⍵*2
+     SWY←W+.×⍺
+     SWXY←+/W×⍺×⍵
+     NS.B←SWY SWXY⌹2 2⍴SW SWX SWX SWX2
+     NS.f←NS.B∘{⍵⊥⌽⍺}
+     NS
+ }

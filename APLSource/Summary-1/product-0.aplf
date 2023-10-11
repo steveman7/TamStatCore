@@ -1,0 +1,13 @@
+ product←{ ⍝⍟ Copyright (c) 2018, by Stephen Mansur
+     ⍝∇ Calculate sample product of a data set or frequency distribution
+     ⍝∊ Summary Function
+     ⍝⍵ Numeric Vector: Data Set; 2-col Numeric Matrix:  Frequency Dist
+     ⍝← Numeric Scalar
+     ⍝⍕ Ys ← sum Xv|Xm|NS
+     ⍝⍎ 19 ← sum 2 8 5 1 3
+     11::(×/×⍵)×⌊/⍳0         ⍝ Represent infinity if domain error
+     9=⎕NC'⍵':(mean*count)   ⍝ Use Geometric mean
+     w←(∧/⎕NULL≠⍪⍵)⌿⍵
+     isFrequency w:×.*/↓⍉w   ⍝ Frequency Distribution
+     ×/w                     ⍝ Raw Data
+ }

@@ -1,0 +1,15 @@
+ RCompile←{
+⍝⍺:  RConnect Expression
+⍝⍵:  Variable inputs
+     ⎕IO←0 ⋄ ⎕ML←3
+     MakeRVar←{1=≢⍵:⍵
+         txt←⍕⍵               ⍝ Format
+         ((txt=' ')/txt)←','  ⍝ Insert commas
+         'c(',txt,')'         ⍝ Enclose in parens
+     }
+     v←MakeRVar¨⍵
+     i←{⍵/⍳⍴⍵}⍺='⍵'      ⍝ Get positions of ⍵'s
+     xpr←⍺
+     xpr[i]←v
+     (⍕xpr)~' '
+ }

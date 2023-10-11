@@ -1,0 +1,26 @@
+ import←{
+ ⍝⍟ Copyright (c) 2018, by Stephen Mansur
+ ⍝∇ import data from a .csv file
+ ⍝∊ Utility Function
+ ⍝⍺ Data type of result  9=Namespace(Default)  2=Numeric Matrix
+ ⍝⍵ File:  Character vector Path and filename
+ ⍝← Namespace containing values or matrix
+ ⍝⍕ NS ← import '\[Path]\FileName[.csv]'
+ ⍝⍎ D ← import 'C:\TamStat\StudentData.csv'
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←9                 ⍝ Set system variables
+     ob←↑⍵                               ⍝ If called from menu
+     9=⎕NC'ob':{f←getform ⍵ ⋄ f.in.Text←'D<-import ''''' ⋄ 1}ob
+     FN←{{('\'≠↑⌽⍵)∧0<⍴⍵}w←⍵~' ':⍵,(~∨/s⍷⍵)/s←'.csv'
+         d←{0=⍴⍵:'C:\' ⋄ ⍵}w             ⍝
+         _←'F1'⎕WC'FileBox' 'Pick File to Read'd
+         F1.Filters←⊂('*.csv' 'Comma Separated variable  (*.csv)')
+         _←⎕DQ'F1'                       ⍝
+         F1.Directory,F1.File}⍵          ⍝ Get directory and file names
+     ⍺=2:⎕CSV FN'' 3 0                  ⍝
+     D H←(⎕CSV⍠'Invert' 2)FN'' 4 1       ⍝ Get names, values from .csv
+     D←{b←(d←⍵)∊⊂'' ⋄ (b/d)←⎕NULL ⋄ d}¨D ⍝ Replace empties with ⎕null
+     H←H~¨⊂' .#$&%'                      ⍝ Remove extraneous characters
+     _←⍎⍕H'←D'                           ⍝ Assign values to names
+     NS←⎕NS H                            ⍝ Move to namespace
+     _←⎕EX¨H                             ⍝ Erase in names #.Util
+     NS}

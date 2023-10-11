@@ -1,0 +1,24 @@
+ proportionHo←{  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ One or two sample Z-test
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⎕DIV←1
+     r s←⍺ ⋄ tails←2*r=0
+     b←(-~s)↓b1 b2←⍵                      ⍝
+     p0←s⊃b2 0                            ⍝ Hypothesized Value
+     x←{9=⎕NC'⍵':⍵.events ⋄ +/⍵}¨b        ⍝ Number of successes
+     n←{9=⎕NC'⍵':⍵.count ⋄ ↑⍴⍵}¨b         ⍝ Sample Sizes
+     f←{~s:(p0×1-p0)÷↑⍵
+         (+/÷⍵)×{⍵×1-⍵}÷/+/⊃⍺ ⍵}
+     se←(x f n)*÷2                        ⍝ Standard Error
+     z←(p0-⍨x-.÷n)÷se                     ⍝ Get Z-statistic
+     z←r{⍺=0:|⍵ ⋄ ⍺×⍵}z                   ⍝ Test Statistic
+     p←normal probability<z
+    ⍝ (1 s∘/¨(x÷n)n),⍬ se z(tails×1-p)⍬}
+     ns←⎕NS''
+     ns.(Estimate SampleSize)←(1 s∘/¨(x÷n)n)
+     ns.StandardError←se                  ⍝ Standard Error
+     ns.TestStatistic←z
+     ns.P←tails×1-p                       ⍝ p-Value
+     ns.DegreesOfFreedom←⍬
+     ns.ParameterList←0 1
+     ns.dist←normal
+     ns
+ }

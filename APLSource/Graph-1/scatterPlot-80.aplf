@@ -1,0 +1,50 @@
+ scatterPlot←{
+ ⍝⍟ Copyright (C) 2018, 2023 by Stephen M. Mansour
+ ⍝∇ Generate Scatterplot
+ ⍝∊ Graphics
+ ⍝⍺  Symbol List
+ ⍝⍵  Matrix [Y|X1...Xn]
+ ⍝← CmL Character Matrix or Namespace
+ ⍝⍕ [Yv] scatterPlot  Xv
+ ⍝⍕ [  ] scatterPlot Yv Xv
+ ⍝⍎ D.Height scatterPlot show D.ShoeSize
+ ⍝⍎ scatterPlot show D.Height D.ShoeSize
+ ⍝⍎ D.Sex scatterPlot show D.Height D.ShoeSize
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←'*'                       ⍝ Set System Variables
+     0J1∊⍺:(⍺~0J1)∇ ⍵
+     G←25 75⍴' '                                 ⍝ Initialize Graph
+     A←(0=≢⍺)⊃⍺'*'
+     A W←A{
+         2=⍴⍴⍵:⍺ ∇(↓⍉⍵)                          ⍝ If matrix, make vv
+         ⍺∧⍥{(1=≡⍵)∧2|⎕DR ⍵}⍵:'*'(⍺ ⍵)           ⍝ Both args numeric vectors
+         1=≡⍵:⍺((⍳⍴⍵)⍵)                          ⍝ Simple Numeric vector on right
+        ⍝ 2<≢⍵:(⍺/⍨⍴↑⍵)((↑⍵){(⍺⍴⍨⍴⍵)⍵}∊1↓⍵)     ⍝ More than two numeric vectors on right
+         2<≢⍵:⍺{W←((↑⍵){(⍺⍴⍨⍴⍵)⍵}∊1↓⍵)
+             1=≢⍺:⍺ W ⋄ (⍺/⍨⍴↑⍵)W}⍵             ⍝ More than two numeric vectors on right
+         ⍺ ⍵}⍵
+
+     B←↑=⍥{⎕NULL≠⍵}/W ⋄ GP←(B⍴⍨≢A)/A             ⍝ Remove Nulls
+     YX←B∘/¨W
+     Output←GP{⍝0::'Error!'
+         M←⊃(¯5 ¯10+⍴G)Scale¨⍵                   ⍝ Scale
+         I←↓⍉⊃M[;2]
+         G[I]←↑¨⍺                                ⍝ Insert * for each pair
+         K←2=≢¨⍺
+         G[(⊂0 1)+K/I]←↑∘⌽¨K/⍺
+         T←M[;0]                                 ⍝ Tick Size
+         FS←{⍵≥1:'I10'                           ⍝ Format string
+             'F10.',⍕-⌊10⍟⍵}¨T
+         LB←M[;1]                                ⍝ Lower bounds
+         S←LB+T×⍳¨5 8                            ⍝ Scale
+         B←25⍴1 4/1 0                            ⍝ Expand
+         YI←(B⍀(0⊃FS)⎕FMT 0⊃S),'│┤'[B]           ⍝ Build Y-axis
+         XI←(1 81⍴1 9/'┬─')⍪' ',,(1⊃FS)⎕FMT 1⊃S  ⍝ Build X-axis
+         XI[0;⍳11]←YI[0;⍳10],'┼'                 ⍝ Insert tick marks
+         (⊖1↓YI,G,' ')⍪87↑⍤1⊢XI                  ⍝ Assemble plot
+     }YX
+     Type←'Graph'
+     Style←'ScatterPlot'
+     NS←⎕NS'Output' 'Type' 'Style' 'YX'
+     0J1∊⍺:NS.Output
+     NS
+ }

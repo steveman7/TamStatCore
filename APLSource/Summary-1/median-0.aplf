@@ -1,0 +1,36 @@
+ median←{
+     ⍝⍟ Copyright (c) 2017, 2023 by Stephen Mansur
+     ⍝∇ Calculate median of a data set or frequency distribution
+     ⍝∊ Summary Function
+     ⍝⍵ Numeric Vector: Data Set; 2-col Numeric Matrix:  Frequency Dist
+     ⍝← Numeric Scalar
+     ⍝⍕ Ys ← median Xv
+     ⍝⍎ 3 ← median 2 8 5 1 3
+     ⍝⍎ 3.5 ← median 2 8 5 1 3 4
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←⍬ ⋄ 0∊⍴⍵:0          ⍝ Set up variables
+     ⍵≡'Type':'Center'                     ⍝ Measure of center
+     showMedian←{0::⍵                      ⍝ Error check
+         n←≢d←⍵[⍋⍵]                        ⍝ Sort data and get sample size
+         odd←2∘|                           ⍝ Odd or Even?
+         c←⌈(n-1)÷2                        ⍝ Center of the data
+         odd n:(c↑d)('(',d[c],')')((-c)↑d) ⍝ If odd, show middle value
+         (c↑d)('|')(c↓d)                   ⍝ If even, put bar between values
+     }
+     0J1∊⍺:showMedian ⍵~⎕NULL              ⍝ Show operator
+    ⍝2=⍴⍴⍵:{(x p)←↓⍉⍵[⍋⍵;]                 ⍝ Frequency Dist?
+     isFrequency ⍵:{(x p)←↓⍉⍵[⍋⍵;]         ⍝ Frequency Dist?
+         p∨.<0:'Domain Error'              ⍝ Validate probabilities
+         b←(⊢∧.=⌊)⍵[;0]                    ⍝ If all integers
+         b←b∧1∧.=¯2-/⍵[;0]                 ⍝ separated by 1 unit
+         (x p)←(p≠0)∘/¨x p                 ⍝ Remove 0 frequencies
+         c←(+\÷+/)p                        ⍝ Cumulative probabilities
+         b:x[(c⍸0.5)+1,~0.5∊c]+.÷2         ⍝ Find position of midpoint
+         i j←0 1+c⍸0.5                     ⍝ Indices of neighboring groups
+         u←c[i]÷.-⍨0.5,c[j]                ⍝ Proportion within group
+         x[i]+(-/x[j i])×u+0.5             ⍝ See Tobias p. 14
+     }⍵
+     rAv:+##.∆r.x'median(⍵)'(⍵~⎕NULL)      ⍝ Call R if available
+     n←↑⍴x←{⍵[⍋⍵]}⍵~⎕NULL                  ⍝ Sort data and get sample size
+     i←¯1+(n+1)÷2                          ⍝ Find median index
+     x[(⌈i),⌊i]+.÷2                        ⍝ Average middle value(s)
+ }

@@ -1,0 +1,18 @@
+ anovaSummary←{
+    ⍝∊ ANOVA
+     ⎕IO←0 ⋄ ⎕ML←3
+     n←⍵.count
+     x←⍵.mean
+     s←⍵.sdev
+     NMS←⍵{0::⍵ ⋄ ⍺.name}¨(≢⍵)↑⎕A
+     X←(n+.×x)÷+/n
+     SST←n+.×(x-X)*2
+     SSE←(n-1)+.×s*2
+     DFT←¯1+≢x
+     DFE←(+/n)-DFT+1
+   ⍝  'A' 'Error',2 2⍴SST DFT SSE DFE
+     'A' 'Error',2 3⍴SST DFT 2 SSE DFE 0
+     ns←'Treatments'buildAnovaTable 2 2⍴SST DFT SSE DFE
+     ns.Type←'ANOVA'
+     ns.Means←'Treatment' 'N' 'Mean' 'Sdev'⍪NMS,n,x,[0.5]s
+     ns}

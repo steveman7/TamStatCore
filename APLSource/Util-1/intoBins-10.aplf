@@ -1,0 +1,9 @@
+ (bins R1)←{iw}intoBins R0;i
+ ⎕IO←0 ⋄ ⎕ML←3
+ :If 0=⎕NC'iw'
+     bins←5+⍳10 ⍝ Number of bins
+     i←1⌈5+.<(count R0)÷bins ⍝ Put at least 5 in each group
+     iw←⌈(range R0)÷bins[i-1] ⍝ Interval width
+ :EndIf
+ R1←iw×⌊R0÷iw
+ bins←iw{'[',(⍕⍵),';',(⍕⍵+⍺),')'},[⎕IO+0.1]R1

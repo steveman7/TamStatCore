@@ -1,0 +1,44 @@
+ regress←{
+ ⍝∇  Regress Operator
+ ⍝⍟  Copyright 2023 by Stephen Mansour
+ ⍝⍺  [Optional] Name of response variable
+ ⍝⍺⍺ transform
+ ⍝⍵  Namespace
+     ⍺←'' ⋄ ⎕IO←0 ⋄ ⎕ML←1
+     _←⎕EX'#.∆NS'
+     FN←⊃3=⎕NC'⍺⍺'                       ⍝ Is left operand a function?
+     DB←⊃9=⎕NC'⍵'                        ⍝ Is right argument a database?
+     Int X←{(1=≡⍵)∨~(⊂⊃⍵)∊0 1:1 ⍵ ⋄ 2=≢⍵:⍵
+         (⊃⍵)(1↓⍵)}⍵                     ⍝ Include intercept?
+     2=⍴⍴X:Int leastSquares ⍺⍺,X         ⍝ Matrix right argument?
+                                         ⍝ Any character fields?
+    ⍝FN⍱DB:Int leastSquares ⍺⍺,⍉↑,⊆X     ⍝ Old method:  Y regress X
+     ~FN:⍺⍺(Int regressInd 1)X
+     FN∧~DB:⍺ ⍺⍺{U←3 ⍺⍺ 4                ⍝ Test operand
+         U=4:⍺(Int regressPoly)⍵         ⍝ Polynomial (⊥)
+         U∊0 1:⍺(Int regressBin)⍵        ⍝ Binary regression (= or ≠)
+         ⍺(⍺⍺ vst Int)⍵                  ⍝ Variance stabilizing transformation
+     }X
+     DB∧~FN:⍺⍺(Int regressInd 1)⍵        ⍝ Don't Ignore Character Fields
+     FN∧⍺≢'':⍺ ⍺⍺{U←2 ⍺⍺ 4               ⍝ Treat char fields as
+         U=4:⍺(Int regressPoly)⍵
+         U∊0 1:⍺(Int regressBin)⍵
+     }⍵
+
+        ⍝ ⍺(Int regressInd U)⍵}⍵          ⍝  Indicator Variables
+
+     FN∧⍺≡'':⍺⍺{NS←⍺⍺ ⍵                  ⍝ If user operand, apply transformation
+         V←⊆variables NS                 ⍝ Get variable names
+         V←⍕'Y',V~,¨'Y' 'Int'            ⍝ Put response variable first
+         NS←NS.Int leastSquares NS V     ⍝ Do regression
+         ⍵ ⍺⍺ buildNL NS}X               ⍝ Build non-linear function
+
+     Y←,⍺⍺{2=⎕NC'⍺⍺':⍺⍺ ⋄ ⍵}⍺            ⍝ Get name of response variable
+     V←⊆variables ⍵                      ⍝ Get transformation variable names
+     V←⍕Y,V~'Int'Y                       ⍝ Put response variable first
+     ⍵.∆←⍺⍺¨⍣FN⊢⍵⍎V                      ⍝ Apply transformation function to all variables
+     _←⍵⍎V,'←∆'                          ⍝ Reassign transformed data function names
+     _←⍵.(⎕EX'∆')                        ⍝ Clean up garbage
+     I←{0::1 ⋄ ⊃⍵.Int}⍵                  ⍝ Include intercept?
+     I leastSquares ⍵ V                  ⍝ Do regression
+ }

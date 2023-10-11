@@ -1,0 +1,58 @@
+ leastSquares←{
+ ⍝⍟ Copyright (C) 2018, 2023 by Stephen M. Mansour
+ ⍝∇ Linear Regression using Least Squares method
+ ⍝∊ Regression
+ ⍝⍺ B: Include Intercept? or Weights
+ ⍝⍵ Y Dependent and Independent Variables y, x[1], x[2] ... x[n]
+ ⍝⍵ X1: Independent Variable 1
+ ⍝⍵ Xn: Independent variable n
+ ⍝← NS:   Namespace containing the following variables
+ ⍝ ← = Coefficient Estimates (float) b[0], b[1], ... b[n]
+ ⍝ ← = Standard Errors (float)
+ ⍝ ← = t-Values (float)
+ ⍝ ← = p-Values (float)
+ ⍝     AnovaTable  RSq  RSqAdj  S  Type
+ ⍝⍕ NS ← LeastSquares Y X1 [X2 ... [Xn]]
+ ⍝⍎ NS ← LeastSquares Height ShoeSize                      ⍝ Simple Regressionsion
+ ⍝⍎ NS ← LeastSquares Height ShoeSize (Sex eq 'M')         ⍝ Multiple Regression
+ ⍝⍎ NS ← LeastSquares D 'Height ShoeSize (Sex eq ''M'')'   ⍝  "          " with Names
+ ⍝⍎ NS ← LeastSquares M
+ ⍝⍎ NS ← LeastSquares NS
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⎕DIV←1 ⋄ ⍺←1 ⋄ int←×↑(⍺,1)~0J1   ⍝ Set system variables, defaults
+     9=⎕NC'⍵':∇{EX←⍕,{(⍵[0]∊⎕A)∧∧/⍵∊∊iotag¨'Zz9':⍵    ⍝ If simple variable name, done
+             '(',⍵,')'}¨⍵.(Select/Expressions)        ⍝ Else surround with parens
+         ⍵.Intercept ⍺⍺ ⍵.Database EX}⍵               ⍝ If simple namespace, assemble expression
+     NM W NL←{y←↑⍵                                    ⍝ Get data and name list
+         9=⎕NC'y':1,y{⍺.(⍎⍵)⍵}↑⌽⍵                     ⍝ If NS, get variable names
+         2=⍴⍴⍵:0,(↓⍉⊃⍵)(1↓,'< B>,G<9>'⎕FMT⍳↑⌽⍴⍵)       ⍝ IF matrix, columns are variables
+         0,⍵(1↓,'< B>,G<9>'⎕FMT⍳⍴⍵)}⍵                 ⍝ If data, use B0, B1 ... Bn
+    ⍝ (⍺≢1)∧⍺≢0:⍺ regressW W
+    ⍝ rAv:int regressR W                               ⍝ Use R if requested
+     rAv:⍺ regressR W
+    ⍝ns←int runRegress W                              ⍝ Run the LeastSquaresion
+     ns←⍺{(⍺≢1)∧⍺≢0:⍺ regressW ⍵
+         int runRegress ⍵}W
+    ⍝ ns←int{rAv:⍺ regressR ⍵ ⋄ ⍺ runRegress ⍵}W       ⍝ Run the regression
+     NL←{')('≡2↑¯1⌽⍵:1↓¯1↓⍵ ⋄ ⍵}¨((' '≠NL)∨≠\NL∊'()')⊂NL ⍝ Parse Name List
+     CC←(int/⊂'Intercept'),1↓NL                       ⍝ Coefficient List
+    ⍝d←(⊃CC),' ',('2F10.2,2F10.5'⎕FMT ns.(B,SB,⍪T)),'  '∘fmtP⍤0⊢ns.P ⍝ coefficients
+     d←(⊃CC),' ',('2F12.4,2F10.5'⎕FMT ns.(B,SB,⍪T)),'  '∘fmtP⍤0⊢ns.P ⍝ coefficients
+     H←,¨'Variable' 'Coeff' 'SE' 'T' 'P'              ⍝ Append Headers
+    ⍝d←d⍪⍨∊((1+⌈/≢¨CC),4/-10)↑¨H                      ⍝    to data
+     d←d⍪⍨∊((1+⌈/≢¨CC),2/-12 10)↑¨H                   ⍝    to data
+     ns.Coeff←H⍪CC,ns.(B,SB,T,⍪P)                     ⍝ Coefficient table
+     ns.Type←'Regress'                                ⍝ Object type is "Regress"
+     ns.f←(ns.(B DF S C),int)linear
+     NL←NM{⍺:⍵ ⋄ 'Y',('B'⎕R'X')¨1↓⍵}NL                ⍝ Change Bn to Xn
+     ns.Equation←NL buildRegressionEquation ns.B      ⍝ yhat = b0 + B1 x1 + ...
+     ns.VariableExpressions←NL                        ⍝ List of variable names
+     ns.VariableNames←∪↑,/getNames¨NL                 ⍝ Generate Report ↓↓↓
+     ns._Report←⍕⍪'The regression equation is:' ' 'ns.Equation' 'ns._Report' ' 'Solution' ' 'd
+     ns.VariableTypes←NM{(d v)←⍵
+         ⍺:{1<≢⍵:0≢↑0⍴⍵}¨⍎(1<≢v)↓'⊂',⍕'d.('v')'       ⍝ Get variable types
+         (≢v)⍴0}(↑⍵)ns.VariableNames                  ⍝ 1=char, 0=numeric
+     ns.Graph←regressionPlot ns                       ⍝
+     ns.⎕IO←0                                         ⍝
+     (~0J1∊⍺):ns                                      ⍝ Generate namespace
+     showRegress ns                                   ⍝
+ }

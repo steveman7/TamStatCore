@@ -1,0 +1,55 @@
+ Z←ppchi2 Y;P;V;G;X;IFAULT;E;AA;XX;C;CH;A;P1;P2;T;Q;B;S1;S2;S3;S4;S5;S6;⎕ML;⎕IO
+ ⎕ML←3 ⋄ ⎕IO←0
+ IFAULT←0
+ P V←Y
+ G←⍟!¯1+0.5×V
+ E←5E¯7
+ AA←⍟2
+ Z←¯1
+ IFAULT←1
+ →((P<0.000002)∨P>0.999998)/0
+ IFAULT←2
+ →(V≤0)/0
+ IFAULT←0
+ XX←0.5×V
+ C←XX-1
+ →(V≥¯1.24×*P)/L1
+ CH←(P×XX×*G+XX×AA)*÷XX
+ →(E<CH)↓L6 L4
+L1:→(V>0.32)/L3
+ CH←0.4
+ A←⍟1-P
+L2:Q←CH
+ P1←1+CH×4.67+CH
+ P2←CH×6.73+CH×6.66+CH
+ T←¯0.5+(4.67+2×CH)÷P1
+ T-←(6.73+CH×13.32+3×CH)÷P2
+ CH-←((1-*A+G+0.5×CH+C×AA)×P2÷P1)÷T
+ →(0.1<|Q÷CH-1)↓L4 L2
+⍝ L3:X←GAUINV P IF1
+L3:X←normal criticalValue≥P
+ P1←0.222222÷V
+ CH←V×(X×(P1*0.5)+1-P1)*3
+ :If CH>6+2.2×V
+     CH←¯2×(⍟1-P)+G-C×⍟0.5×CH
+ :EndIf
+L4:Q←CH
+ P1←0.5×CH
+⍝ P2←P-XX G gamma criticalValue≥P1
+ P2←P-gamain P1 XX G IFAULT
+ →(IFAULT=0)/L5
+ IFAULT←3
+L5:
+ T←P2×*(XX×AA)+G+P1-⍟CH
+ B←T÷CH
+ A←(0.5×T)-B×C
+ S1←(A⊥60 70 84 105 140 210)÷420
+ S2←(A⊥1278 1141 966 735 420)÷2520
+ S3←(A⊥932 707 462 210)÷2520
+ S4←(A⊥1740 889 294 1182 672 252)÷5040
+ S5←(84+(264×A)+C×175+606×A)÷2520
+ S6←(120+C×346+127×C)÷5040
+ CH←CH+T×1+0.5×T×S1-B×C×S1-B×S2-B×S3-B×S4-B×S5-B×S6
+ ⍝CH←CH+T×1+0.5×T×S1-B×C×(-B)⊥S6 S5 S4 S3 S2 S1
+ →(E<|1-Q÷CH)/L4
+L6:Z←CH

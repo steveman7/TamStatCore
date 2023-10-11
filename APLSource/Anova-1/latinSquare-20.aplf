@@ -1,0 +1,27 @@
+ latinSquare←{
+⍝∇  Latin Square design
+⍝⍟  Copyright 2023 by Stephen M. Mansour
+⍝∊  ANOVA
+⍝⍺  Latin Square pattern (Default - Cyclical)
+⍝⍵  n×n Matrix
+⍝←  Namespace
+⍝⍎  latinSquare 5 5⍴¯1 ¯5 ¯6 ¯1 ¯1 ¯8 ¯1 5 2 11 ¯7 13 1 2 ¯4 1 6 1 ¯2 ¯3 ¯3 5 ¯5 4 6
+     ⎕IO←0 ⋄ ⎕ML←1
+     P←≢⍵                      ⍝ Size
+     ⍺←(⍳P)⌽P P⍴P↑⎕A           ⍝ Default is cyclical
+     2=≡⍵:⍺ ∇⊃¨⍵               ⍝ If nested, recursive
+     YN←÷/(+/,⍵)P*2            ⍝
+     LS←P{0=≢⍵:(⍳⍺)⌽⍺ ⍺⍴⍺↑⎕A   ⍝ If not specified use default
+         ∧/,⍵∊⎕A:⍵             ⍝ If Alphabetical, OK
+         ⎕A[⍵⍳⍨∪(,⍵)[⍋,⍵]]}⍺   ⍝ Else make Alphabetical
+     D←⍵∘{+/,⍺×LS=⍵}¨P↑⎕A      ⍝ Latin Square Grouping
+     SS←P÷⍨D(+/⍵)(+⌿⍵)+.*¨2    ⍝ Sums of Squares
+     SS←SS,⍨+/,⍵*2             ⍝ Total sum of Squares
+     SS-←÷/(+/,⍵)P*2           ⍝ Correction Factor
+     SS,←(⊃SS)-+/1↓SS          ⍝ Sum of Squares Error
+     DF←(+/,⊢)3 1/×\P-1 2      ⍝ Degrees of Freedom
+     H←'Treatments' 'Rows' 'Columns' 'Error'
+     ⍉↑H(1↓SS)(1↓DF)4          ⍝ Output
+
+
+ }

@@ -1,0 +1,25 @@
+ iotag←{⎕ML←3 ⋄ ⎕IO←0                ⍝ Generalized ⍳.
+     AlphaInterval←{⍵=' ':''         ⍝ ⍳' ' is empty vector.
+         a←⎕AV⍳'a0AÁ'                ⍝ Indices of a0AÁ.
+         k←⎕IO+a+.<i←1+⎕AV⍳⍵         ⍝ Find starting point.
+         ⍺←⎕AV[a[k-1]]               ⍝ Default left argument.
+         ≤/i,j←⎕AV⍳⍺:⌽⍵ ∇ ⍺          ⍝ If ⍵ before ⍺, reverse.
+         (j-⎕IO)↓(i-⎕IO)↑⎕AV         ⍝ Truncate ⎕AV.
+     }
+    ⍝Interval←{⍺+0,+\(|d)⍴×d←⍵-⍺}    ⍝ Interval Function.
+     Interval←{s←×/1↓⍵,(⍺>↑⍵)/¯1     ⍝ Calculate step size
+         ⍺-s×⎕IO-⍳⌊1-(⍺-↑⍵)÷s}       ⍝ Generate Interval
+     IndexOf←{i←1↓⍳⍴⍴⍺               ⍝ Enclose left arg axis.
+         j←(1-⍴⍴⍺)↑⍳⍴⍴⍵              ⍝ Enclose right arg axis.
+         m←(⍴⍺)[i]⌈(⍴⍵)[j]           ⍝ Pad both arguments.
+         (⊂[i]m↑[i]⍺)⍳⊂[j]m↑[j]⍵     ⍝ Get index.
+     }
+     m←0=⎕NC'⍺'                      ⍝ Monadic?
+     m∧1=⍴⍴⍵:↑∘.,/∇¨⍵                ⍝ Vector right argument
+     m∧80=⎕DR ⍵:AlphaInterval ⍵      ⍝ Alpha Monadic.
+     m:(×⍵)×⍳|⍵                      ⍝ Integer Monadic.
+     s←0=⍴⍴⍺                         ⍝ Scalar Left Argument?
+     s∧80=⎕DR ⍵:⍺ AlphaInterval ⍵    ⍝ Alpha Interval.
+     s:⍺ Interval ⍵                  ⍝ Numeric Interval.
+     ⍺ IndexOf ⍵                     ⍝ Dyadic.
+ }

@@ -1,0 +1,43 @@
+ goodnessOfFitR←{
+ ⍝⍟ Copyright (c) 2018 by Stephen M. Mansour
+ ⍝∇ Perform goodness of fit using R
+ ⍝∊ goodnessOfFit
+ ⍝⍺ [Parameters]:   Distribution parameters (default 0 1)
+ ⍝⍺⍺ fD:  Distribution function:  normal, uniform or multinomial
+ ⍝⍵  Xv:  Numeric variable
+ ⍝⍵  Av:  Categorical variable
+ ⍝⍵  W:   2-column (possibly nested) matrix (Frequency Distribution)
+ ⍝←  NS:   Namespace containing the following variables
+ ⍝         DegreesOfFreedom  Factors  P  Table  TestStatistic  Type
+ ⍝⍕ NS ← fD goodnessOfFit Av|Xv|W
+ ⍝⍎ normal goodnessOfFit D.Height
+ ⍝⍎ uniform goodnessOfFit D.State
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ 0≡↑0⍴⍵:'Nonce Error'                   ⍝ Set system variables
+     v←⍺{(1=⍴⍴⍵)∧⍺≡⍬:{str←'XSQ <- chisq.test(table(⍵))' ⍝ Count data
+             _←##.∆r.x str(⍵⍳⍵) ⋄ ∪⍵}⍵                  ⍝
+         1=⍴⍴⍵:⍺{XX←frequency ⍵                         ⍝ Raw data
+             i←⍺[;0]⍳XX[;0]                             ⍝
+             X←XX[i;1]                                  ⍝
+             P←⍺[;1]                                    ⍝
+             str←'XSQ <- chisq.test(⍵,p = ⍵)'           ⍝
+             _←##.∆r.x str X(P÷+/P)                     ⍝
+             ⍺[;0]}⍵                                    ⍝
+         2=↑⌽⍴⍵:{str←'XSQ <- chisq.test(c('             ⍝ Frequency data
+             X←⍕1↓,',',⍵[;0],'=',⍵[;,1]                 ⍝  Uniform
+             _←##.∆r.x str,X,'))' ⋄ ⍵[;0]}⍵             ⍝   goodness of fit
+         3=↑⌽⍴⍵:{str←'XSQ <- chisq.test(⍵,p = ⍵)'       ⍝ 3-columns data
+             X P←↓⍉1 1↓⍵                                ⍝  Multinomial
+             _←##.∆r.x str X(P÷+/P)                     ⍝   goodness of
+             ⍵[;0]~'*'}⍵}⍵                              ⍝   fit
+     ns←⎕NS''                                           ⍝ Populate
+     ns.TestStatistic←##.∆r.x'XSQ$statistic[[1]]'       ⍝  namespace
+     ns.P←##.∆r.x'XSQ$p.value'                          ⍝   with
+     ns.DegreesOfFreedom←##.∆r.x'XSQ$parameter[[1]]'    ⍝    assigned
+     u←{##.∆r.g'XSQ$',⍵}¨'observed' 'expected' 'residuals' ⍝ properties
+     u←{1=≡⍵:⍵.Value ⋄ ⍵}u                              ⍝
+     x←{o e r←,¨⍵ ⋄ o,e,(o-e),[0.5]r*2}u                ⍝ Calc table
+     ns.Table←{⍵⍪(-1⊃⍴⍵)↑' ' 'Total',{⍵×1E¯10<|⍵}+⌿¯4↑[1]⍵}v,x
+     ns.Type←'GoodnessOfFit'                            ⍝
+     ns.Factors←'CAT1' 'CAT2'                           ⍝ Dummyvalues
+     ns._Distribution←(1=≢∪x[;1])⊃'Multinomial' 'Uniform'
+     ns}

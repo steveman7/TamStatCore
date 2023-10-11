@@ -1,0 +1,18 @@
+ makeTransFn←{
+⍝ Build a user transformation function
+⍝ ⍵  2-Column matrix  [Names|Expressions] or vector of expressions
+⍝ ←  Namespace containing function
+     ⎕IO←0 ⋄ ⎕ML←3  ⍝⋄ NS←⎕NS''
+   ⍝  NM XP←↓⍉⍵  ⍝ Names, Expressions
+     NM XP←↓⍉{2=⍴⍴⍵:⍵ ⍝Names,Expressions
+         ⊃(≠∘'←'⊂⊢)¨⍵}⍵
+     CR←'transform←{' 'NS←⎕NS '''''
+     CR,←⊂'NS.Int←1'
+  ⍝   CR,←⊂'2=⍴⍴⍵:⊃⍺∘∇¨↓⍵'
+     CR,←NM{ ⍝⍺≡'Int':'NS.Int←',⍵
+         'NS.',⍺,'←⍵.(',⍵,')'}¨XP
+     CR,←⊂'NS}'
+     R←⎕FX CR
+     MSG←'To run regression, enter the following:'
+     ⍪MSG'report transform regress #.[Current Database]'
+ }

@@ -1,0 +1,12 @@
+ kruskalWallisC←{
+⍝⍵ matrix
+     T←+/⍵                ⍝ Row Totals
+     NI←+⌿⍵               ⍝ Column totals
+     RBAR←(0,¯1↓+\T)+0.5×T+1
+     RJ←RBAR+.×⍵
+     N←+/NI
+     S2←(÷N-1)×(T+.×RBAR*2)-N×0.25×(N+1)*2
+     (÷S2)×((RJ*2)+.÷NI)-N×0.25×(N+1)*2
+
+
+ }

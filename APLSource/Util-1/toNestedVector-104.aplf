@@ -1,0 +1,9 @@
+ toNestedVector←{⎕ML←3 ⋄ ⎕IO←0
+     0=↑0⍴∊⍵:⍵
+     2=≡⍵:deleteExcessBlanks¨,⍵         ⍝ Already nested vector
+     ⍺←','
+     2=⍴⍴⍵:deleteExcessBlanks¨↓⍵        ⍝ Matrix                                                         ←
+    ⍝ ⍺∊⍵:deleteExcessBlanks¨(⍺≠⍵)⊂,⍵    ⍝ Delimited list
+     ⍺∊⍵:deleteExcessBlanks¨(⍺≠⍵)⊆⍵    ⍝ Delimited list
+     ⊂deleteExcessBlanks ⍵              ⍝
+ }

@@ -1,0 +1,21 @@
+ randomFactor←{
+ ⍝⍟ Copyright (C) 2022 by Stephen M. Mansour
+ ⍝∇ Generate two randomFactor model
+ ⍝∊ ANOVA
+ ⍝⍵ X:    Response - n-dimensional numeric vector; trailing dimension is replicates
+ ⍝← TBL:  [Source|SS|DF|MS|F|P]
+ ⍝⍕ NS ←  randomFactor X
+ ⍝⍎ X←130 155 74 180,34 40 80 75, 20  70 82 58
+ ⍝⍎ X,←150 188 159 126, 136 122 106 115, 25 70 58 45
+ ⍝⍎ X,←138 110 168 160, 174 120 150 139, 96 104 82 60
+ ⍝⍎ nested 3 3 4⍴X
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄ A←¯1+⊃⍴⍴⍵ ⋄ ⍺←A
+     A←(0=≢⍺)⊃⍺ A
+     EFF SS DF←↓⍉A factor ⍵
+     MS←SS÷DF
+     J←2 2 3
+     F←MS[⍳3]÷MS[J]
+     DF12←DF[⍳3],¨DF[J]
+     P←DF12 fDist prob>¨F
+     EFF,SS,DF,MS,(F,0),⍪P,0
+ }

@@ -1,0 +1,12 @@
+ runR←{
+⍝∇   Run TamStat function using R
+⍝⍎   mean runR X
+⍝⍎   normal prob > runR 2
+⍝⍎   X cov runR Y
+     ⍺←⎕NULL
+     ∆←⍺⍺{⍺≡⎕NULL:⍺⍺ ⍵ ⋄ ⍺ ⍺⍺ ⍵}
+     0::⍺{##.R_Available←0
+         ⎕←'R not available for this function'
+         ⍺ ∆ ⍵}⍵
+     ##.R_Available←1 ⋄ Z←⍺ ∆ ⍵
+     ##.R_Available←0 ⋄ Z}

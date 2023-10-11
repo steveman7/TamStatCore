@@ -1,0 +1,14 @@
+ _discreteprob←{
+⍝⍟   Copyright 2020 by Stephen M. Mansour
+⍝∇   Calculate discrete probabilities from raw data or a table
+⍝⍺⍺  Vector (raw data) or 2-column matrix (relative) frequency distribution
+⍝⍵⍵  Relational function, e.g,  >  =
+⍝⍵   Value
+⍝⍕   P←Xv|FD _discreteprob fR Y
+⍝⍎   0.5←D.Family _discreteProb > 2
+⍝⍎   0.5←(5 2⍴0 2 1 17 2 11 3 7 4 1) _discreteProb > 2
+     ⎕IO←0 ⋄ ⎕ML←3
+     1=⍴⍴⍺⍺:(≢(⍺⍺ ⍵⍵ ⍵)/⍺⍺)÷≢⍺⍺        ⍝ Raw data
+     B←⍺⍺[;0]⍵⍵ ⍵                      ⍝ Select from frequency dist
+     (B+.×⍺⍺[;1])÷+/⍺⍺[;1]             ⍝ Calculate
+ }

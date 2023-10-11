@@ -1,0 +1,5 @@
+ standardDeviation←{⍺←¯1
+     ⍵≡'Type':'Spread'
+     rAv:⍺{z←##.∆r.x'sd(⍵)'⍵
+         ⍺=1:z×sqrt÷/¯1 0+≢⍵ ⋄ z}⍵
+     (⍺ var ⍵)*÷2}

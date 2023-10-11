@@ -1,0 +1,21 @@
+ bootstrap←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Bootstrap resampling
+ ⍝∊ Operators
+ ⍝⍺ N: Number of times to sample with replacement
+ ⍝⍺⍺ fS: Summary Function
+ ⍝⍵ Xv:  Sample data
+ ⍝⍵ Xm:  2-column matrix: [midpoints|frequencies]
+ ⍝⍵ NS: Namespace containing count, mean, sdev
+ ⍝← Sample
+ ⍝⍕ Interval ← [.95|P] fS confInt X[A]|Cm|NS
+ ⍝⍎ mean confInt Height
+ ⍝⍎ mean confInt Height Sex
+ ⍝⍎ 67.581 69.419 ← mean confInt stats 49 68.5 3.2
+⍝⍺ Number of iterations
+⍝⍺⍺ Summary Function
+⍝⍵ Sample
+⍝← Vector of sample statistics
+     ⍺←1000
+     n←≢⍵
+     ⍺⍺⍤1⊢⍵[?⍺ n⍴n]}

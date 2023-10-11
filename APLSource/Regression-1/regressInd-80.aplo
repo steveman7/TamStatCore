@@ -1,0 +1,41 @@
+ regressInd←{
+⍝∇ Regress using indicator  variables
+⍝ First item or CM is Indicator Variable;
+⍝⍺  Y or Name
+⍝⍺⍺ Int
+⍝⍵  C X1 .. Xn   or Database
+⍝⍵⍵ 1=Character vectors are indicator variables
+⍝⍵⍵ 0=Character vectors are ignored
+⍝←
+     ⎕ML←1 ⋄ ⎕IO←0          ⍝ Default values
+     DB←9=⎕NC'⍵'           ⍝ Is right argument a database?
+     W←DB{⍺:⍵⍎¨variables ⍵  ⍝ Obtain data values
+         ↑¨⊆⍵}⍵            ⍝
+     B←{0≢⊃0⍴⍵}¨W           ⍝ Find character fields
+    ⍝B[0]≥←∨/B,DB           ⍝ Use 1st numeric field as Ind?
+     NS←(⍵⍵∧∨/B){⍺:⊃makeIndicator¨⍵ ⋄ ⎕NS''}B/W
+     X←{⊃⍣(1=≢⍵)⊢⍵}(~B)/W
+     NMS←DB B{DB B←⍺
+         DB:(~B)/variables ⍵
+         'X',¨(B+.=0)↑1↓⎕D}⍵
+     _←⍎⍕NMS'←X'            ⍝ Else assign to names in char field
+     _←'NS'⎕NS NMS
+     NMS←variables NS
+     DB:⍺⍺ leastSquares NS,⊂⍕NMS(⊢,⊣~⊢)⊂⍺
+     NS.Y←⍺
+     Z←⍺⍺ leastSquares NS(⍕'Y',NMS)
+     Z
+     ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Create function???
+     Z.g←Deg M{⍵≡'Type':'Linear'
+         ⍺←0                                ⍝ Default
+         CL A←2↑⍺                           ⍝ Action, Conf Level
+         D M←⍺⍺
+         X←D{1=≢M:⍵∘.*(~⎕IO)+⍳⍺
+             ∊(×/⍵)pairwise↓⍵∘.*1 2}⍵-M
+         A=0:f X
+         ⍺ f X}
+
+
+
+
+ }

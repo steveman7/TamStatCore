@@ -1,0 +1,31 @@
+ mannWhitneyU←{                                ⍝ Scalar,Arithmetic
+     ⍝⍟ Copyright (c) 2021 by Stephen M. Mansour
+     ⍝∇ Mann-Whitney U distribution
+     ⍝  Annals of Mathematical Statistics 1943, Vol114. No. 1
+     ⍝∊ Discrete Distribution Function
+     ⍝⍺ M - number of items in Category A
+     ⍝⍺ N - number of items in Category B
+     ⍝⍵ R - Value of statistic
+     ⍝← Probability of X runs
+     ⍝⍕ Syntax:  M N mannWhitneyU R
+     ⍝⍎ 0.0119 ← 3 6 mannWhitneyU 0
+     'Type'≡x←⍵:'Discrete'
+     M N C←3↑⍺ ⋄ ⎕ML←3 ⋄ ⎕IO←0                   ⍝ Set system variables
+    ⍝ M N∨.<0 1:∆SigErr'All parameters must be positive'
+     f←{K←⌈⍵÷2 ⋄ ~2|⍵:×/2,(K-1)!⍺-1              ⍝ Even Combinations
+         +/×⌿0 1⌽(K-1 2)∘.!⍺-1}                  ⍝ Odd Combinations
+     x≡'Mean':M×N÷2                              ⍝ Theoretical Values
+     x≡'Variance':M×N×(M+N+1)÷12                 ⍝    "           "
+  ⍝   ∨/~M N∊1+⍳10:∆SigErr'Domain Error'         ⍝ M,N integers between 1 and 10 inclusive
+     RF←1 frequency(+/M cmat M+N)-0.5×M×M+1      ⍝ Create frequency table
+     x≡'Mode':mode RF                            ⍝    "           "
+     x≡'Skewness':skewness RF                    ⍝    "           "
+     x≡'Kurtosis':kurtosis RF                    ⍝    "           "
+     str←'pdqr'[1 0 ¯1 ¯2⍳C],'wilcox(⍵,⍵,⍵)'     ⍝ Build R Expression
+     rAv:+##.∆r.x str ⍵ M N                      ⍝ Use R if requested
+     1<≢⍵:⍺∘∇¨⍵                                  ⍝ Allow array arguments
+     C=0:RF prob=⍵                               ⍝ Probability (X=x)
+     C=1:RF prob≤⍵                               ⍝ Cumulative Probability X≤x
+     C=¯1:RF criticalValue≥⍵                     ⍝ Critical Values (Inverse)
+     C=¯2:(-0.5×M×M+1)++/⊃1+M?¨⍵/M+N             ⍝ Random Variables
+ }

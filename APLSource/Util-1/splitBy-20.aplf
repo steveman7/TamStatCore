@@ -1,0 +1,15 @@
+ splitBy←{
+ ⍝∊ Written by Steve Mansour
+ ⍝⍺ Any Vector or vector representation
+ ⍝⍵ Any Vector or vector representation whose length is the same as ⍺
+ ⍝⍵ If ⍵ is not Boolean, create Boolean in relation to first element
+ ⍝⍕ V splitBy Bv|Av|s
+ ⍝⍎  Male Female ← Height splitBy Sex eq 'M'
+ ⍝⍎  Female Male ← Height splitBy Sex eq 'F'
+ ⍝⍎  X Y ← Height splitBy Sex
+     ⎕IO←0 ⋄ ⎕ML←3
+     a←toNestedVector ⍺           ⍝ Convert left argument to vector
+     ∧/,⍵∊0 1:/∘a¨⍵(~⍵)           ⍝ If right arg boolean, divide into two groups
+     w←{⍵∊⍵[0]}toNestedVector ⍵   ⍝ Else make first element of ⍵ is "success"
+     /∘a¨w(~w)                    ⍝ Then divide into two groups
+ }

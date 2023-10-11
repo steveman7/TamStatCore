@@ -1,0 +1,26 @@
+ coordsD←{
+ ⍝⍟ Copyright (c) 2018 by Stephen M. Mansour
+ ⍝∇ Calculate coordinates for discrete distribution
+ ⍝∊ User Interface
+ ⍝⍺ [Parameters]:   Distribution parameters (default 0 1)
+ ⍝⍺⍺ fD:  Distribution function
+ ⍝⍵⍵ fR:  Relational function, e.g.   eq, ne, gt, lt, ge, le, in, between
+ ⍝⍵  X:    Value(s)
+ ⍝← P:   Coordinates and shading indicators
+ ⍝⍕ P ←  [Parms|0 1] fD coords fR X
+     ⎕ML←3 ⋄ ⎕IO←0                      ⍝ Set system variables
+     P←⍺ ⍺⍺⍳50                          ⍝ get probabilities
+     P←((≢P)-(⌽P>0.001)⍳1)↑P            ⍝ Translate probabilites to coordinates
+     P←0,P,0                            ⍝ Surround with zero probabilities
+     P←P{⍺↑⍨↑(⍵≥≢⍺)/⍵}5 10 20 25 50     ⍝ Number of discrete values
+     M←90×P÷⌈/P                         ⍝ Get relative heights
+     Width←W←100÷N←≢P                   ⍝ Widths
+     Rect←((90-M)((W÷4)+W×⍳≢M))(M(W÷2)) ⍝ Rectangle coordinates
+     Bounds←¯1,¯2+N                     ⍝ Limits for TrackBar
+     b←2 5∊⍨2⊥0 1 0 ⍵⍵ 0 0 1            ⍝ ≤ or > ?
+     Thumb←b⊃(⌈,⌊)Bounds[1]⌊⍵           ⍝ Set thumb
+     Shading←(¯1+⍳≢M)⍵⍵ ⍵              ⍝ 1=Shade, 0=Clear
+     FS←'I',⍕⌊0.5+100÷N                 ⍝ Format String
+     Label←,FS ⎕FMT⍳⍴1↓P                ⍝ X-Axis Labels
+     ⎕NS'Rect' 'Bounds' 'Thumb' 'Shading' 'Label' 'Width' 'N'
+ }

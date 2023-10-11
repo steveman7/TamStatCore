@@ -1,0 +1,12 @@
+ Z←HideHo OB;F
+ ⎕IO←0 ⋄ ⎕ML←3
+ mi←(↑OB)    ⍝ Menu Item
+ :If mi≡mi.##.Hide
+     ##.∆r←⎕NEW ##.RCONNECT.R     ⍝ Create R Connection
+   ⍝  msg←##.∆r.init               ⍝ Initialize R
+     ##.Ho_Available←0            ⍝ Set availability
+     mi.##.(Hide Unhide).Checked←1 0
+ :Else
+     ##.Ho_Available←1
+     mi.##.(Hide Unhide).Checked←0 1
+ :EndIf

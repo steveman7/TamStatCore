@@ -1,0 +1,14 @@
+ randmatstat←{
+ ⍝∊ Written by Steve Mansour
+ ⍝⍵ Positive scalar integer
+ ⍝← 2-item floating-point vector
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ n←5
+     vw←⊃{X←normal randomVariable 4 n n ⍝ Generate random data in TamStat
+         (a b c d)←⊂[1 2]X              ⍝ Create four random 5x5 matrices
+         P←a,b,c,d                      ⍝ 5 × 20 matrix
+         Q←(a,b)⍪c,d                    ⍝ 10 x 10 matrix
+         v←+/0 0⍉4*⍨(⍉P)+.×P            ⍝
+         w←+/0 0⍉4*⍨(⍉Q)+.×Q            ⍝
+         v,w}¨⍳⍵                        ⍝
+     (sdev÷mean)¨↓⍉vw                   ⍝
+ }

@@ -1,0 +1,49 @@
+ gamma←{                ⍝ Gamma Distribution
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Gamma Distribution
+ ⍝∊ Continuous Distribution Function
+ ⍝⍺ U:  Shape Parameter
+ ⍝⍺ V:  Scale Parameter
+ ⍝⍺ [0=Density, 1=Cumulative Distribution, ¯1=Inverse Distribution, ¯2=random]
+ ⍝⍵ T:  Value  T≥0
+ ⍝← S:  Density S≥0
+ ⍝⍕ S ← U V gamma T
+ ⍝⍎ 0.062755 ← 4 2 gamma 3
+    ⍝ 11::0
+     x←⍵ ⋄ ⎕ML←3 ⋄ ⎕IO←0                    ⍝ Set system variables
+     x≡'Type':'Continuous'
+     k r c←3↑⍺                              ⍝ Get parameters
+     x≡'Mean':k×r                           ⍝ Calculate theoretical values
+     x≡'Variance':k*r*2                     ⍝      "         "         "
+     x≡'Median':k r ∇ criticalValue<0.5     ⍝      "         "         "
+     x≡'Mode':r×k-1                         ⍝      "         "         "
+     x≡'Skewness':2÷k*÷2                    ⍝      "         "         "
+     x≡'Kurtosis':6÷k                       ⍝      "         "         "
+     str←'pdqr'[1 0 ¯1 ¯2⍳c],'gamma(⍵,⍵,⍵)' ⍝ Build R expression
+     rAv:+##.∆r.x str ⍵ k r                 ⍝ Use R if requested
+     F←k r∘{                                ⍝ Cumulative distribution
+         k r←⍺ ⋄ c←⍵÷r
+         g←{x←⍵
+             s←0{y←*(⍺×⍟x⌈⎕CT)-⍟!k+⍺
+                 (170≤k+⍺)∨(⍺>10)∧⎕CT>|y:⍵
+                 (⍺+1)∇ ⍵+y}0
+             s×*(⍺×⍟⍵⌈⎕CT)+(⍟!⍺-1)-⍵}
+         k≠⌊k:|(k g¨c)÷!k-1
+         i←⍳k
+         |1-+/*(-⍟!i)+(i×⍟⎕CT⌈c)-c}
+     Finv←{⍵≤0:0
+         P0←k r{m←(×/⍺)-↑⍺                  ⍝ Estimate mean
+             s←⍺×.*0.5 1                    ⍝ Estimate std deviation
+             (m>2)∨⍵>0.5:m+s×1 2*¯1*⍵<0.5
+             m=1.5:0.05 1.5
+             m<2:0.0002 0.0001
+             (m=2)∧⍵<0.1:0.2 0.8
+             (m=2.5)∧⍵<0.025:0.4 0.6
+             m+0 1}⍵
+         G←⍵∘{⍺-↑F ⍵}¨
+         G SecAlg P0,G P0}
+     c=0:(r*-k)×(x*k-1)×(*-x÷r)÷!k-1        ⍝ Density
+     c=1:F¨x                                ⍝ Distribution
+     c=¯1:Finv¨x                            ⍝ Inverse
+     k r(16808⌶)'Gamma'⍵                ⍝ Random Variable
+ }

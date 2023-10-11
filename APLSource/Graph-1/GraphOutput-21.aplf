@@ -1,0 +1,5 @@
+ Z←GraphOutput
+⍝← Text:      Character Matrix
+⍝← SharpPlot: APL Graphics
+⍝← Dimple:    External Graphics
+ Z←'SharpPlot'

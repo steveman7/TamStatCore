@@ -1,0 +1,115 @@
+ xfrequency←{
+    ⍝∇  Obtain frequencies from a variable
+    ⍝⍟  Copyright 2018 by Stephen Mansour
+    ⍝∊  Graphical Function
+    ⍝⍺  Range (numeric integer) - Bin size if ⍺>0,
+    ⍝⍺  If ⍺ < 0, then |⍺| = number of bins
+    ⍝⍺  If ⍺ = 0 or not specified, no grouping
+    ⍝⍵  Simple Vector
+    ⍝⍵  [Grouping Vector] (optional)
+    ⍝←  Two-column matrix [Values, Frequencies]
+    ⍝←  or Contingency Table
+    ⍝⍎  frequency 2 1 2 3 4 2 3
+    ⍝⍎  frequency 'Joe,Bob,Joe,Steve,Bob,Joe'
+    ⍝⍎  frequency SEX PARTY
+     ⎕ML←3 ⋄ ⎕IO←0
+     (2=⍴⍴⍵)∧80≠⎕DR ⍵:⍺{⍺=¯1:⍵[⍒⍵[;1];] ⋄ ⍵}⍵
+     w←{(⎕DR ⍵)∊80 160:toNestedVector ⍵   ⍝ Convert right argument
+         (2≠≢⍵)∨~(⎕DR 1⊃⍵)∊83 163 323:⍵
+         (1∨.>1⊃⍵):⍵ ⋄ (toNestedVector↑⍵),[0.5]1⊃⍵}⍵
+     def←{(⎕DR ⍵)∊11 80 160 320 326:0     ⍝ Default no range
+         (83=⎕DR ⍵)∧20>range ⍵:1          ⍝ Small integer, range=1
+         bins←5+⍳10                       ⍝ Number of bins
+         i←1⌈15+.<(count ⍵)÷bins          ⍝ Put at least 10 in each group
+         ⍝⌈(range ⍵)÷bins[i-1]}           ⍝ Interval width
+         ⌈(range ⍵)÷5⌈bins[i-1]}          ⍝ Interval width
+     ⍺←def ⍵                              ⍝ Default
+     R←⍺
+     freq←{
+         d←toNestedVector ⍵               ⍝ If character, make nested
+         n←+/d∊⎕NULL,⊂,⎕NULL              ⍝ Count nulls
+         d←{⍵[⍋⊃⍵]}d~⎕NULL                ⍝ Remove nulls and sort
+         f←{⍺,≢⍵}⌸                        ⍝ Grouping function
+       ⍝  z←⍺{⍺≤0:f ⍵ ⋄ f ⍺×⌊0.5+⍵÷⍺}d     ⍝ If numeric, range the data
+         z←⍺ f{(⍺≤0)∨2=≡⍵:⍺⍺ ⍵ ⋄
+             ⍺⍺ ⍺×⌊0.5+⍵÷⍺}d                ⍝  If numeric, range the data
+         z←z[⍋⊃z[;0];]                    ⍝ Sort result
+         z←{⍵[⍒⍵[;1];]}⍣(⍺=¯1)⊣z          ⍝ Pareto if ¯1
+         ⍝0≢↑0⍴↑z:(-n=0)↓z⍪⎕null n         ⍝ Done if nominal
+         0≢↑0⍴↑z:⍺{{⍵[⍒⍵[;1];]}⍣(⍺=¯1)⊣⍵}(-n=0)↓z⍪⎕NULL n         ⍝ Done if nominal
+        ⍝ i←(¯2-/z[;0])÷⍺+⍺=0              ⍝ Missing bins?
+         i←round(¯2-/z[;0])÷⍺+⍺=0              ⍝ Missing bins?
+         z←((∊i↑¨1),1)⍀z                  ⍝ Pad with 0's
+         z[;0]←(↑z)+(⍺+⍺=0)×⍳≢z           ⍝ Insert correct midpoints
+         (-n=0)↓z⍪⎕NULL n
+     }
+     showFreq←{
+        ⍝ u←'[Null]'≡⍕↑⊖⍵                 ⍝ Are there any nulls?
+         u←⎕NULL≡↑⊖⍵
+         r d←{0≢↑0⍴↑⍵:⍵ 0                 ⍝ If text exit
+             (⍵-↑⍵)≡⍳≢⍵:(↓'I5'⎕FMT ⍵)0    ⍝ If discrete, make text
+             r←{⍵∘.+0.5 ¯0.5×↑2-/⍵}⍵      ⍝ Range
+             d←{10+0.1×0⌈10-⍵+5}⌈/⌈10⍟|,r ⍝ Decimal places
+             r[;1]-←10*-10×1|d            ⍝
+             r d}(-u)↓⍵[;0]               ⍝
+         r←(u+≢r)↑r
+         c←+⍀⍵[;1]                        ⍝ Cumulative
+         p←{⍵÷+⌿⍵}⍵[;1]                   ⍝ Proportion
+         cp←c÷↑⌽c                         ⍝ cum proportion
+         x←r,⍵[;1],c,p,[0.5]cp            ⍝ Assemble columns
+         L←≢x                             ⍝ Last row
+         x←(L+1)↑x                        ⍝ Append
+         b←5=1⊃⍴x                         ⍝ 5 or 6 columns?
+         x[L;2 3 4 5-b]←2/(+/¯1↓x[;2-b])1 ⍝ Totals
+         x←b{⍺:(' ',9↑[1]⊃⍵[;0]),0 1↓⍵ ⋄ ⍵}x
+         FMT←b{⍺:'10A1'                   ⍝ 1st column character?
+             ('2M<->','FI'[⍵=⌊⍵]),⍕⍵}d
+         FMT,←',2I10,2Q<%>K2F10.2'        ⍝ Format string
+         Z←FMT ⎕FMT x                     ⍝ Format data
+         Z[;(~b)/11]←'-'                  ⍝ Dashes for ranged data
+         W←10+10×~b
+         Z[L;⍳W]←W↑'   Total'             ⍝ Label for total
+         Z[u/L-1;⍳20]←u⌿⍉⍪¯20↑'[Null]'
+         D←(60-10×b)⍴1 9/' -'             ⍝ Align dashes
+         Z←D⍪Z[⍳L;]⍪D⍪Z[,L;]              ⍝
+         H←b⊃('From' 'To')(⊂'Category')   ⍝
+         H,←'Frequency' 'Cum Freq' 'Percent' 'Cum Pct'
+         Z⍪⍨∊¯10↑¨H                       ⍝ Affix header
+     }
+     crossTab←{
+         a←{0J1∊⍵:↑⌽⍵ ⋄ ⍵}⍺
+         XY←toNestedVector¨a ⍵
+         X Y←{{⍵[⍋⊃⍵]}∪⍵}¨XY
+         U←X∘.{⍺ ⍵}Y
+         T←{⍺,≢⍵}⌸↓⍉⊃XY
+         N←(T⍪0)[T[;0]⍳U;1]
+         ('*',X),Y⍪N
+     }
+     showCrossTab←{⍺←⍳4 ⋄ a←10 ⋄ W←⍕a    ⍝ Default Width is 10
+         NMS←⍕¨¨0 1{1↓0⌷[⍺]⍵}¨⊂⍵            ⍝ Get Row, Column Names
+         NMS←(a×¯1 1){⍺↑¨⍵,⊂'Total'}¨NMS ⍝ Include Totals
+         D←↑{⍵,[⍺]+/[⍺]⍵}/0 1,⊂1 1↓⍵     ⍝ Append Row, Column Totals
+         C R←{D÷[~⍵]0⌷[⍵]⌽[⍵]D}¨0 1      ⍝ Calc Row, Column Percents
+         T←D÷(¯1+⍴D)⌷D                   ⍝ Calc Total Percents
+         B←(⍳4)∊⍺                        ⍝
+         FS←B/1 3/('I',W)('Q<%>K2F',W,'.2')
+         Z←FS ⎕FMT¨B/D R C T             ⍝
+         H←a↑¨B/'Count' 'Row %' 'Column %' 'Total %'
+         ,[⍳0]H{X←(⊃1⊃NMS),'|',⍵         ⍝
+             H←⍺,'|',∊0⊃NMS              ⍝
+             Z←' '⍪H⍪'-'⍪(¯1↓X)⍪'-'⍪¯1↑X ⍝
+             Z[1↓⍳0⊃⍴Z;¯9+1⊃⍴Z]←'|' ⋄ Z  ⍝ Row total separator
+         }¨Z
+     }
+     rnd←{⍺≤0:⍵ ⋄ ⍺×⌊0.5+⍵÷⍺}¨         ⍝ Range the data?
+     V2←(2=≢⍵)∧1<≡⍵                      ⍝ One or two variables?
+     s←0J1≡↑⍺                            ⍝
+    ⍝ a←⍵{⍵<¯1:(range ⍺)÷-⍵+1 ⋄ ⍵}⍺~0J1
+     a←⍵{¯1>↑⍵:(range ⍺)÷-⍵+1 ⋄ ⍵}⍺~0J1
+   ⍝  a←⍵{⍵≡0:def ⍺ ⋄ ⍵}↑⍺~0J1            ⍝
+     a←⍵{⍵≡0:def ⍺ ⋄ ⍵}↑a                ⍝
+     V2∧s:a showCrossTab↑crossTab/⍵      ⍝
+     V2:↑crossTab/⍺ rnd ⍵
+     s:showFreq a freq ⍵                 ⍝
+     a freq ⍵                            ⍝
+ }

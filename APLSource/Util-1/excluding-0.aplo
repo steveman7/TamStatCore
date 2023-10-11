@@ -1,0 +1,11 @@
+ excluding←{
+⍝⍺⍺  DataSet
+⍝⍵⍵  Relation
+⍝⍵   Value
+⍝⍎   X excluding > 10
+     ⎕IO←0 ⋄ ⎕ML←3
+     2=⎕NC'⍵⍵':⍺⍺~⍵⍵,⍵   ⍝ X excluding 2,3
+     '*'≡2 ⍵⍵ ⍵:⍺⍺~⍵⍵,⍵  ⍝ X excluding outliers X
+     (~⍺⍺ ⍵⍵ ⍵)/⍺⍺       ⍝ X excluding > 1000
+
+ }

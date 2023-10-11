@@ -1,0 +1,49 @@
+ xscatterPlot←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Generate Scatterplot
+ ⍝∊ Graphics
+ ⍝⍺  Response Variable  Y coordinate
+ ⍝⍵  Predictor Variable X coordinate
+ ⍝← CmL Character Matrix or Namespace
+ ⍝⍕ [Yv] scatterPlot  Xv
+ ⍝⍕ [  ] scatterPlot Yv Xv
+ ⍝⍎ D.Height scatterPlot D.ShoeSize
+
+     ⎕IO←0 ⋄ ⎕ML←3                               ⍝ Set System Variables
+     G←25 75⍴' ' ⋄ ⍺←0                           ⍝ Initialize Graph
+     (2≤≡⍵)>80∧.=⎕DR¨,⍵:⍺ ∇{ns←⍺⍺/⍵ ⋄            ⍝ If args on right
+         0J1∊⍺:ns.Output ⋄ ns}⍵                  ⍝ If nested, apply
+
+     A←⍺~⍥,0J1                                   ⍝
+    ⍝(1=≡⍵)∧(⊂A)∊⍬(,0):⍵ ∇⍳⍴⍵                    ⍝ If no left argument, time series plot
+     (1=≡⍵)∧(⊂A)∊⍬(,0):⍵ ∇⍳↑⌽⍴⍵                  ⍝ If no left argument, time series plot
+     2=⍴⍴⍵:((⍴⍵)⍴A)∇⍥,⍵                          ⍝ If right matrix, expand left
+     2=⍴⍴⍺:A ∇(⍴A)⍴⍵                             ⍝ If left matrix, expand right
+     YX←A{⍺≡0:⍵~⎕NULL ⋄
+         b←∧/⎕NULL≠⍺,⍪⍵
+         y x←b∘/¨⍺ ⍵},⍵                          ⍝ Merge x,y variables
+     Output←{⍝0::'Error!'
+         M←⊃(¯5 ¯10+⍴G)Scale¨⍵                   ⍝ Scale
+
+         G[↓⍉⊃M[;2]]←'*'                         ⍝ Insert * for each pair
+       ⍝  QQ←⍉⊃M[;2]
+       ⍝  P←QQ[;1]{⎕ML←1 ⋄ ⍵⊂⍨1,2>/⍺}⍉QQ
+       ⍝  _←'*⍟○∘×+'{I←↓⍉⍵ ⋄ G[I]←⍺ ⋄ 0}¨P
+         T←M[;0]                                 ⍝ Tick Size
+         FS←{⍵≥1:'I10'                           ⍝ Format string
+        ⍝ FS←{⍵>2:'I10'
+             'F10.',⍕-⌊10⍟⍵}¨T
+         LB←M[;1]                                ⍝ Lower bounds
+         S←LB+T×⍳¨5 8                            ⍝ Scale
+         B←25⍴1 4/1 0                            ⍝ Expand
+         YI←(B⍀(0⊃FS)⎕FMT 0⊃S),'│┤'[B]           ⍝ Build Y-axis
+         XI←(1 81⍴1 9/'┬─')⍪' ',,(1⊃FS)⎕FMT 1⊃S  ⍝ Build X-axis
+         XI[0;⍳11]←YI[0;⍳10],'┼'                 ⍝ Insert tick marks
+         (⊖1↓YI,G,' ')⍪87↑⍤1⊢XI                  ⍝ Assemble plot
+     }YX
+     Type←'Graph'
+     Style←'ScatterPlot'
+     NS←⎕NS'Output' 'Type' 'Style' 'YX'
+     0J1∊⍺:NS.Output
+     NS
+ }

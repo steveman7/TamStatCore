@@ -1,0 +1,5 @@
+ Z←Standard OB;F
+ ⎕IO←0 ⋄ ⎕ML←3
+ mi←↑OB
+ b←mi.Caption≡'Standard'
+ mi.##.(Standard APL).Checked←b=1 0

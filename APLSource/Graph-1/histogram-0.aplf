@@ -1,0 +1,45 @@
+ histogram←{⎕ML←3 ⋄ ⎕IO←0
+ ⍝⍟ Copyright (C) 2018  by Stephen M. Mansour
+ ⍝∇ Generate Histogram
+ ⍝∊ Graphics
+ ⍝⍺ Number of bins, 0=Let system Decide, 1=don't range data
+ ⍝⍵ Xv: Numeric Vector
+ ⍝← CmL Character Matrrix
+ ⍝⍕ [W] histogram Xv
+ ⍝⍎ histogram D.Weight
+ ⍝⍎ 5 histogram D.Height
+     ⍺←0 ⋄ ⎕IO←0 ⋄ ⎕ML←3                  ⍝ Set system variables
+     a←↑⍺~0J1
+     G N←a{⍺=0:↓⍉frequency⍣(1=↑⍴⍴⍵)⊣⍵     ⍝ Midpoints, Frequencies
+         ↓⍉⍺∘frequency⍣(1=↑⍴⍴⍵)⊣⍵}⍵       ⍝
+     Output←{0::'Error!'                  ⍝
+         T X←0 1↓¨1 0 1/20 Scale 0,N      ⍝ Scale
+         Y←2⌈/,X[0],X,¯1↑X                ⍝ Heights of vertical bars
+         C←(⍳20)∘.<Y                      ⍝ Boolean image of bars
+         D←⌈10⍟⌈/G                        ⍝ Digits
+         W←5⌈2+D                          ⍝ Bar Width
+         B←1,⍨(W×≢N)⍴W↑1                  ⍝ Expand boolean image of bars
+         C1←⊖(B\C)∨∨/(⍳20)∘.={⍵,[0.5]1⌽⍵}0,W/X ⍝
+         C1←0⍪(0,C1,0)⍪0                  ⍝ Pad graph with spaces
+         M←1⌽C1⍷⍨3 1⍴1                    ⍝ │
+         M⌈←2×1⊖C1⍷⍨1 3⍴1                 ⍝ ─
+         M⌈←3×1⌽1⊖C1⍷⍨2 2⍴1 1 1 0         ⍝ ┌
+         M⌈←4×1⊖C1⍷⍨2 2⍴1 1 0 1           ⍝ ┐
+         M⌈←5×1⌽C1⍷⍨3 2⍴1 0 1 1 1 0       ⍝ ├
+         M⌈←6×C1⍷⍨3 2⍴0 1 1 1 0 1         ⍝ ┤
+         M⌈←7×1⊖C1⍷⍨2 3⍴1 1 1 0 1 0       ⍝ ┬
+         M[19;]←2 8[B,0 0]                ⍝ Base row
+         Z←21↑' │─┌┐├┤┬┴'[¯1⌽¯1⊖M]        ⍝ Replace numbers with edges
+         P←0⌈-⌊10⍟|-/2↑G                  ⍝ Decimal Places for X-Values
+        ⍝Z⍪←(1⊃⍴Z)↑(¯1+⌊0.5×W-D)↓W 0⍕G   ⍝ Base line scale
+         Z⍪←(1⊃⍴Z)↑(' '/⍨×P),W P⍕G   ⍝ Base line scale
+         L←(22⍴1 4/1 0)⍀'I5'⎕FMT T×⌽⍳5    ⍝ Build left hand scale
+         L,←,[⍬](20⍴1 4/'┤│')⍪'└ '        ⍝ Include tick marks
+         L,Z}⍬                            ⍝ Append to histogram
+     Type←'Graph'                         ⍝ Generate namespace for
+     Style←'Histogram' ⋄ YX←N,⍪G          ⍝  SharpPlot
+     Width←|-/2↑G                         ⍝ Force scalar for SharpPlot
+     Data←⍵
+     ns←⎕NS'Type' 'Style' 'YX' 'Output' 'Width' 'Data'
+     0J1∊⍺:ns.Output
+     ns}

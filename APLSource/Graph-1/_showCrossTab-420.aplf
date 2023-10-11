@@ -1,0 +1,18 @@
+ _showCrossTab←{
+     ⎕IO←0 ⋄ ⎕ML←3
+     ⍺←⍳4 ⋄ a←10 ⋄ W←⍕a              ⍝ Default Width is 10
+     NMS←⍕¨¨0 1{1↓0⌷[⍺]⍵}¨⊂⍵            ⍝ Get Row, Column Names
+     NMS←(a×¯1 1){⍺↑¨⍵,⊂'Total'}¨NMS ⍝ Include Totals
+     D←↑{⍵,[⍺]+/[⍺]⍵}/0 1,⊂1 1↓⍵     ⍝ Append Row, Column Totals
+     C R←{D÷[~⍵]0⌷[⍵]⌽[⍵]D}¨0 1      ⍝ Calc Row, Column Percents
+     T←D÷(¯1+⍴D)⌷D                   ⍝ Calc Total Percents
+     B←(⍳4)∊⍺                        ⍝
+     FS←B/1 3/('I',W)('Q<%>K2F',W,'.2')
+     Z←FS ⎕FMT¨B/D R C T             ⍝
+     H←a↑¨B/'Count' 'Row %' 'Column %' 'Total %'
+     ,[⍳0]H{X←(⊃1⊃NMS),'|',⍵         ⍝
+         H←⍺,'|',∊0⊃NMS              ⍝
+         Z←' '⍪H⍪'-'⍪(¯1↓X)⍪'-'⍪¯1↑X ⍝
+         Z[1↓⍳0⊃⍴Z;¯9+1⊃⍴Z]←'|' ⋄ Z  ⍝ Row total separator
+     }¨Z
+ }

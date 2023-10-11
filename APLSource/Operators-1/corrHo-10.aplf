@@ -1,0 +1,23 @@
+ corrHo←{ ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Ho:⍴=0
+     ⎕ML←3 ⋄ ⎕IO←0
+     tails←2*0=↑⍺ ⋄ r←↑corr/↑⍵            ⍝ Sample correlation
+     n←≢↑↑⍵ ⋄ x2←↑⌽⍵                    ⍝ Sample size
+     t←(r-x2)÷se←sqrt(1-r*2)÷df←n-2       ⍝ Test statistic
+     p←tails×df tDist prob>t              ⍝ p-Value
+    ⍝ r n ⍬ se t p df
+     ns←⎕NS''
+     ns.Estimate←r
+     ns.SampleSize←n
+  ⍝   (Estimate SampleSize StandardDeviation)←1 s∘/¨x_ n(v*0.5)
+     ns.StandardError←se                  ⍝ Standard Error
+     ns.TestStatistic←t
+     ns.P←p                          ⍝ p-Value
+     ns.DegreesOfFreedom←df
+     ns.ParameterList←⍬
+     ns.dist←tDist
+     ns
+
+
+
+
+ }

@@ -1,0 +1,28 @@
+ geometric←{        ⍝ Scalar,Arithmetic
+     ⍝⍟ Copyright (c) by Stephen M. Mansour
+     ⍝∇ Geometric Distribution
+     ⍝∊ Discrete Distribution Function
+     ⍝⍺ p - Probability of success
+     ⍝⍵ n  - Number of Trials
+     ⍝← Probability of X successes
+     ⍝⍕ Syntax:  P geometric N
+     ⍝⍎ 0.25 ←  0.5 geometric 2
+     x←⍵ ⋄ ⎕ML←3 ⋄ ⎕IO←0
+     x≡'Type':'Discrete'
+     3=⎕NC'⍺':∆SigErr 14 'Left argument missing'
+     p c←2↑⍺
+     ⍵≡'Mean':÷p
+     ⍵≡'Mode':1
+     ⍵≡'Median':⌈-÷2⍟1-p
+     ⍵≡'Variance':(1-p)÷p*2
+     ⍵≡'Skewness':(2-p)÷(1-p)*÷2
+     ⍵≡'Kurtosis':6+(p*2)÷1-p
+     str←'pdqr'[1 0 ¯1 ¯2⍳c],'geom(⍵,⍵)' ⍝ Build R expression
+    ⍝ rAv:+##.∆r.x str ⍵ p                ⍝ Use R if requested
+     rAv:+##.∆r.x str(⍵-1)p                ⍝ Use R if requested
+     c=0:((x>0)∧x=⌈x)×p×(1-p)*x-1        ⍝ Prob X=x
+     c=1:1-(1-p)*⌊x⌈0                    ⍝ Prob X≤x
+     c=¯1:(1-p)⍟1-x                      ⍝ Inverse prob
+     c=¯2:1+⌊(1-p)⍟?⍵⍴0                  ⍝ Random Variable
+     'Nonce Error'
+ }

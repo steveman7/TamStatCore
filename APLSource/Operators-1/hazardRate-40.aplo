@@ -1,0 +1,7 @@
+ hazardRate←{
+ ⍝ Hazard Rate
+ ⍝∇ = f(t)/R(t)
+ ⍝⍺ Parameters
+ ⍝⍺⍺ Distribution
+ ⍝⍵ Value
+     (⍺ ⍺⍺ ⍵)÷⍺ ⍺⍺ prob>⍵}

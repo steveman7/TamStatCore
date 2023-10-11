@@ -1,0 +1,5 @@
+ rowmajor2std←{
+⍝ Convert row major order to standard order
+⍝ ⍵ row major order
+⍝← standard order
+     ,⍉⍵⍴⍨(2⍟≢,⍵)/2}

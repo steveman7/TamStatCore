@@ -1,0 +1,53 @@
+ Z←gamain Y;⎕IO;PN;ACU;DIF;OFLO;GIN;IFAULT;P;G;I;X;TERM;RN;FACTOR;A;B;AN
+ ⎕IO←1
+⍝ X P G IFAULT←Y
+ X P←Y
+ G←⍟!¯1+P
+ PN←6⍴0
+ ACU←1E¯8
+ OFLO←1000000000000000000000000000000
+ GIN←0
+ IFAULT←0
+ :If P≤0 ⋄ IFAULT←1 ⋄ :EndIf
+ :If X<0 ⋄ IFAULT←2 ⋄ :EndIf
+ →((IFAULT>0)∨X=0)/L50
+ FACTOR←*(P×⍟X)-X+G
+ →((X>1)∧(X>P))/L30
+ GIN←1
+ TERM←1
+ RN←P
+L20:RN←RN+1
+ TERM←TERM×X÷RN
+ GIN←GIN+TERM
+ →(TERM>ACU)/L20
+ GIN←GIN×FACTOR÷P
+ →L50
+L30:A←1-P
+ B←A+X+1
+ TERM←0
+ PN[⍳4]←1 X(X+1)(X×B)
+ GIN←÷/PN[3 4]
+L32:A+←1
+ B+←2
+ TERM+←1
+ AN←A×TERM
+ :For I :In 1 2
+     PN[I+4]←(B×PN[I+2])-AN×PN[I]
+ :EndFor
+ →(PN[6]=0)/L35
+ RN←÷/PN[5 6]
+ DIF←|GIN-RN
+ →(DIF>ACU)/L34
+ →(DIF≤ACU×RN)/L42
+L34:GIN←RN
+L35:
+ :For I :In ⍳4
+     PN[I]←PN[I+2]
+ :EndFor
+ →(|PN[5]<OFLO)/L32
+ :For I :In ⍳4
+     PN[I]←PN[I]÷OFLO
+ :EndFor
+ →L32
+L42:GIN←1-FACTOR×GIN
+L50:Z←GIN

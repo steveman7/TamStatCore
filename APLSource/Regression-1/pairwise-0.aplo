@@ -1,0 +1,28 @@
+ pairwise←{
+ ⍝⍺  Optional symbol to
+ ⍝⍺⍺ Any dyadic (preferably commutative) function or a character string
+ ⍝⍵  Any vector whose elements are in the domain of ⍺⍺
+ ⍝←  A vector of shape 2!≢⍵
+ ⍝⍎     ,pairwise 'ABCD'
+ ⍝⍎ AB  AC  BC  AD  BD  CD
+ ⍝⍎     ×pairwise 1 2 3 4 5
+ ⍝⍎ 2 3 6 4 8 12 5 10 15 20
+ ⍝⍎      ',' pairwise 'ABCD'
+ ⍝⍎ A,B  A,C  B,C   A,D   B,D   C,D
+ ⍝⍎      ''  pairwise 'Bob' 'Joe 'Steve'
+ ⍝    ┌─────────┬───────────┬───────────┐
+ ⍝    │┌───┬───┐│┌───┬─────┐│┌───┬─────┐│
+ ⍝    ││Bob│Joe│││Bob│Steve│││Joe│Steve││
+ ⍝    │└───┴───┘│└───┴─────┘│└───┴─────┘│
+ ⍝    └─────────┴───────────┴───────────┘
+     ⎕IO←0 ⋄ ⎕ML←3
+     1≥≢⍵:0⍴⊂⍺⍺⍨↑⍵
+     d←⍵ ⋄ op←⍺⍺ ⋄ ⍺←⍬ ⋄ a←⍺
+    ⍝ 2=⎕NC'op':{0=≢op:⍺ ⍵ ⋄ ⍺ op ⍵}∇∇ ⍵
+     2=⎕NC'op':{0=≢op:⍺ ⍵ ⋄ ⍺,op,⍵}∇∇ ⍵
+     0<≢a:{⍺,a,⍵}∇∇ ⍵
+     op{⍺←0↑d
+         z←⍺,(⍵↑d)⍺⍺¨⍵⌷d
+         ⍵≥¯1+≢d:z
+         z ∇ ⍵+1}1
+ }

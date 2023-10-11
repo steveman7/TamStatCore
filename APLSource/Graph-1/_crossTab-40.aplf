@@ -1,0 +1,10 @@
+ _crossTab←{
+     ⎕IO←0 ⋄ ⎕ML←3
+     a←{0J1∊⍵:↑⌽⍵ ⋄ ⍵}⍺
+     XY←toNestedVector¨a ⍵
+     X Y←{{⍵[⍋⊃⍵]}∪⍵}¨XY
+     U←X∘.{⍺ ⍵}Y
+     T←{⍺,≢⍵}⌸↓⍉⊃XY
+     N←(T⍪0)[T[;0]⍳U;1]
+     ('*',X),Y⍪N
+ }

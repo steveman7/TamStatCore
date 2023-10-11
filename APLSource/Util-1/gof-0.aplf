@@ -1,0 +1,9 @@
+ gof←{⎕IO←0 ⋄ ⎕ML←3
+     v o e←⍵                         ⍝ Uniform goodness of fit
+     r←o-e                           ⍝ Error
+     x2←+/e2←(r*2)÷e                 ⍝ Calc chiSquare test stat
+     tbl←v,o,e,r,[0.5]e2             ⍝ Build explanatory table
+     tbl⍪←(-1⊃⍴tbl)↑' ' 'Total',{⍵×1E¯10<|⍵}+⌿¯4↑[1]tbl
+     ⍺←¯1+≢o ⋄ df←⍺                  ⍝ Degrees of freedom
+     p←df chiSquare probability>x2   ⍝ P-value
+     p x2 df tbl}

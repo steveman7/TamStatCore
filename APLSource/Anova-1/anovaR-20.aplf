@@ -1,0 +1,20 @@
+ AZ←NL anovaR D;A;B
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Perform ANalysis Of VAriance (ANOVA) using R
+ ⍝∊ anova
+ ⍝⍺ NL: Name List
+ ⍝⍵ NS: Database
+ ⍝⍵ [A1: Factor 1]
+ ⍝⍵ [A2: Factor 2]
+ ⍝← NS:   Namespace containing the following variables
+ ⍝        AnovaTable  RSq  RSqAdj  S  Type
+ ⍝⍕ NS ← anova X [Av1 [Av2]]
+ ⍝⍎ report anova D.Environment D.Party     ⍝ One-way ANOVA
+ ⍝⍎ report anova D 'Environment Party'     ⍝ One-way ANOVA using factor name
+ ⍝⍎ anova MPG AUTO GAS                     ⍝ Two-way ANOVA
+ D←{U←⊂(0≢↑0⍴⍵)/'"' ⋄ 'c(',(1↓∊U{','⍺,(⍕⍵),⍺}¨⍵),')'}¨D
+ _←##.∆r.x¨NL{⍺,'<-',⍵}¨D
+ ⍝NL ##.∆r.p¨D
+ A B←NL
+ _←##.∆r.x∊'XX <- data.frame('A','B')'
+ Z←##.∆r.f∊'summary(aov('A'~'B',data=XX)'

@@ -1,0 +1,43 @@
+ monadicHypothesis←{
+  ⍝∇ Special case hypotheses
+  ⍝∇ Equal variances and/or three or more groups
+     ⎕IO←0 ⋄ ⎕ML←3
+     r c i←⍺ ⋄ s←≢⍵                           ⍝ Number of groups
+     ⍝w←{2=⍴⍴⍵:⍵[;0]stats¨↓0 1↓⍵ ⋄ ⍵}⍵            ⍝ Group
+     n w←{2=⍴⍴⍵:↓⍉⍵ ⋄ ('G',¨1↓⎕D↑⍨1+≢⍵)⍵}⍵              ⍝ Group names, values
+
+     meanHoEqV←{⍝Two-sample t-test; equal variances
+       ⍝  r←⍺ ⋄ tails←2*r=0 ⋄ x←⍵              ⍝
+         r←⍺ ⋄ tails←2*r∊3 4 ⋄ x←⍵
+         m←mean¨x
+         n←{9=⎕NC'⍵':⍵.count ⋄ ≢⍵}¨x
+         v←var¨x
+         pv←(v+.×n-1)÷df←+/n,-2                 ⍝ Pooled variance
+         se←sqrt pv+.÷n                         ⍝ Standard Error
+         t←m-.÷se                               ⍝ Test Statistic
+         t←r{⍺=0:|⍵ ⋄ ⍵×⍺}t                     ⍝ Test Statistic
+         p←df tDist probability>t               ⍝ p-Value
+         m n(v*0.5),se t(p×tails)df}
+     f←{(r s)←⍺
+         (i=3)∧s=2:r meanHoEqV ⍵                ⍝ Determine
+         (i=3)∧s>2:anova ⍵                      ⍝   type
+         (i=¯1)∧s=2:independent/⍵
+         (i=¯1)∧s>2:uniform goodnessOfFit ⍵     ⍝     of
+         (i=2)∧s=2:↑r mannWhitney/(>/count¨⍵)⌽⍵ ⍝      test
+         (i=2)∧s>2:kruskalWallis ⍵
+
+        ⍝ 'Nonce Error' ⎕signal 0               ⍝       of
+         i=0:⍺ corrHo ⍵}                        ⍝         test
+     dd←r s f w                                 ⍝ Apply the test
+     9=⎕NC'dd':dd
+     ns←⎕NS''                                 ⍝ Create namespace for output
+     ns.(Estimate SampleSize StandardDeviation StandardError)←4↑dd
+     ns.(TestStatistic P DegreesOfFreedom)←4↓dd ⍝ Put variables into namespace
+     ns._Populations←s+1                      ⍝ One or two populations?
+    ⍝ns._Relation←(¯1 0 1⍳r)⊃'<≠>'            ⍝ One or two tails?
+     ns._Relation←r⊃'*><≠≠<>'
+     ns._Parameter←(¯1 0 2 3 7⍳i)⊃'p⍴ηµ',⌽,\'σ²'  ⍝ Parameter of interest
+     ns._Claim←c                              ⍝ Claim is H1 if <, > or ≠, otherwise H0
+     ns._HypothesizedValue←0                  ⍝ Assumed value
+     ns._Paired←0
+     ns.Type←'Hypothesis' ⋄ ns}

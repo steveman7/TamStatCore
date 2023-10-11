@@ -1,0 +1,15 @@
+ conform←{
+     ⍝∊ Written by Steve Mansour
+     ⍝∇ Check to see if 2 or more arguments conform
+     ⍝⍺ Any Array
+     ⍝⍵ Any Array
+     ⍝←  1 = Conformable; 0=not conformable
+     ⍝⍎  1 ← 2 3 4 conform 5 6 7     ⍝ Conformable
+     ⍝⍎  0 ← 2 3 conform 5 6 7       ⍝ Not conformable
+     ⍝⍎  1 ← conform (2 3 4)(5 6 7)8 ⍝ Conformable
+     ⍝⍎  0 ← conform (2 3 4)6(5 7)   ⍝ Not conformable
+    ⍝ 4 5::0             ⍝ Check for rank/length errors
+     0::⎕EN
+     0=⎕NC'⍺':⌈/,∘.∇⍨,⍵ ⍝ Monadic, check each item wiht the others
+     ~≢⍴⍴⍺+⍵             ⍝ Dyadic, test with scalar function
+ }

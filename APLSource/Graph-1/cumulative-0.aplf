@@ -1,0 +1,8 @@
+ cumulative←{
+ ⍝∇ Convert frequency to cumulative frequency
+ ⍝⍵ Frequency or Percent Frequency Distribution
+ ⍝← Cumulative or Percent Cumulative Ditribution
+     ⎕ML←3 ⋄ ⎕IO←0     ⍝ Set system variables
+     z←⍵               ⍝ Copy distribution
+     z[;1]←+\z[;1]     ⍝ Replace 2nd column with cumulative values
+     z}

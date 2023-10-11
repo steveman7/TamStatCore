@@ -1,0 +1,19 @@
+ x2gof←{
+ ⍝∊ Written by Steve Mansour
+ ⍝∇ ChiSquare goodness Of Fit for continuous distributions
+ ⍝⍺ Parameters (optional)
+ ⍝⍺⍺ Distribution
+ ⍝⍵ Numeric Vector or 2-column Vector
+ ⍝← Parameters
+ ⍝← Degrees of freedom
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←⍬                      ⍝ Initialize everything
+     L←⍺ ⍺⍺{⍺≡⍬:⍺⍺ parameters ⍵ ⋄ ⍺}⍵            ⍝ Get parameters
+     X←⍵[;0]+0.5×-/2↑⍵[;0]                  ⍝ Convert midpoints to lower bounds
+     P←¯2-/1⌽1 0,L ⍺⍺ prob≤1↓X                ⍝ Get interval probabilities
+     OBS←⍵[;1] ⋄ EXP←P×+/⍵[;1]                ⍝ Observed, Expected Values
+     Z←L ⍺⍺ critVal>¯1↓+\P
+     Z←Z round⍨10*5-⍨⌈/⌈10⍟|Z~0           ⍝ Round to 5 decimal places
+     A←≢⍵
+     V←(1⌽A↑1)⌽¨2,/'<',Z,'>'              ⍝ Include <,> for tails
+     V←{⍺,(⍺∊'<>')↓'-'⍵}/¨V              ⍝ Insert dashes
+     'Dist'L,(¯3+≢V)gof V OBS EXP}

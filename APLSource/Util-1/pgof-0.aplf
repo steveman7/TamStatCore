@@ -1,0 +1,14 @@
+ pgof←{⎕IO←0 ⋄ ⎕ML←3
+    ⍝⍝ Poisson goodness of fit
+     w←{2=≢⍵:⍉⊃⍵ ⋄ ⍵}⍵                ⍝ Poisson goodness of Fit ⍝⍝⍝⍝⍝⍝
+     (L N)←(mean,count)w              ⍝ Mean, count
+     v obs←↓⍉1 frequency w            ⍝ Get frequencies
+     exp←N×L poisson prob≥vv←1+↑⌽v    ⍝ Upper tail probability
+     exp,⍨←N×L poisson v              ⍝ Poisson probabilities
+     d←(v,vv),(obs,0),⍪exp            ⍝ Values,Observed,Expected
+     d←5 combinePartitions⍣(3≤≢d)⊢d   ⍝ Combine groups of < 5
+    ⍝ d←{(b⊃'≥≤'),↑(b←0∊⍵)⌽⍵}¨@(1=≡¨)d ⍝ Use ≤ and ≥ for groups
+     d[0;0]←⊂{1=≢⍵:⍵ ⋄ '≤',⌈/⍵}↑d[0;0] ⍝ First items(s)
+     k←¯1+≢d                           ⍝ Number of categories
+     d[k;0]←⊂'≥',⌊/↑d[k;0]             ⍝ Last items(s)
+     'Poisson'L,(k-1)gof↓⍉d}

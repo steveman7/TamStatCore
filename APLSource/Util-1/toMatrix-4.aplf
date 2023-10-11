@@ -1,0 +1,6 @@
+ toMatrix←{⎕ML←3 ⋄ ⎕IO←0
+     ⍺←','
+     2=⍴⍴⍵:⍵                            ⍝ Already matrix
+     2=≡⍵:⊃deleteExcessBlanks¨⍵         ⍝ Vector of vectors
+     ⊃deleteExcessBlanks¨(⍺≠⍵)⊂,⍵       ⍝ Delimited list
+ }

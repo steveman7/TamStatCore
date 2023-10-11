@@ -1,0 +1,9 @@
+ getNames←{
+⍝∇ Get all names from an expression
+⍝⍵ Character String
+⍝← Nested vector of names
+     ⎕IO←0 ⋄ ⎕ML←3
+     w←(~≠\⍵='''')/⍵ ⍝ Remove quoted strings
+     B←w∊∊iotag¨'Zz9' ⍝ Get legal characters
+     z←B⊂w
+     ((↑¨z)∊⎕A)/z}

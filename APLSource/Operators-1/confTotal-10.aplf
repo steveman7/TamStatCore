@@ -1,0 +1,12 @@
+ confTotal←{
+⍝⍺:  Conf Level
+⍝⍺:  Population Size
+⍝⍵:  Raw data or summary data
+⍝←:  Conf Interval for total
+     C N←⍺
+     M←count ⍵
+     TauH←N×mean ⍵      ⍝ Sample total
+     varH←N×(N-M)×(var ⍵)÷M
+     T←(M-1)tDist criticalValue<0.5×1-C
+     TauH(-,+)T×sqrt varH
+ }

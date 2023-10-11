@@ -1,0 +1,9 @@
+ SecAlg←{⍝Secant Algorithm      ⍝
+     ⍺←100 ⋄ (P0 P1 Q0 Q1)←⍵    ⍝ Unpack
+     11::P1                     ⍝ Exit with P1
+     TOL←⎕CT×⌈/(|P0)⌈|P1        ⍝ Set tolerance
+     P←P1-Q1×(P1-P0)÷Q1-Q0      ⍝ Apply algorithm
+     P0←P1 ⋄ Q0←Q1 ⋄ Q1←⍺⍺ P1←P ⍝ Reassign variables
+     (TOL∧.>|P-P0)∨⍺≤1:P1       ⍝ Check tolerance
+     (⍺-1)∇ P0 P1 Q0 Q1         ⍝ Continue
+ }

@@ -1,0 +1,15 @@
+ selectFrom←{
+⍝⍺ comma-delimeted list of variable names
+⍝⍵ Database
+⍝⍎ selectFrom D where D.State eq 'PA'
+⍝⍎ 'Height,Party' selectFrom D where D.State in 'PA,NJ'
+     ⎕IO←0 ⋄ ⎕ML←3
+     0=⎕NC'⍺':⍵             ⍝ If no left argument, exit
+     nms←(' '⎕R',')⍺      ⍝ Replace blanks with commas
+     nms←toNestedVector nms ⍝ Convert to nested vector
+     xpr←⍕nms'←⍵.('nms')'   ⍝ Build expression
+     d←⍎xpr                 ⍝ Execute it
+     1=≢nms:d               ⍝ If one item, create vector
+     ns←⎕NS nms             ⍝ Else create namespace
+     ns
+ }

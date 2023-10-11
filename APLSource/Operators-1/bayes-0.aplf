@@ -1,0 +1,30 @@
+ bayes←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Calculate posterior probability given prior and conditional probabilities
+ ⍝∊
+ ⍝⍺ EVENTS: List of events - show joint and posterior in table
+ ⍝⍵ PRIOR: Prior Probabilites
+ ⍝⍵ COND:  Conditonal Probabilities
+ ⍝← POST:  Posterior probabilities or Table
+ ⍝⍕ POST ← [0|EVENTS] bayes PRIOR COND
+ ⍝⍎ 0.553 0.447 ← bayes (.03 .97)(.8 .02)
+ ⍝⍎          'CANCER,NO CANCER' bayes (.03 .97)(.8 .02)
+ ⍝⍎  CANCER     0.03 0.8  0.024  0.5529953917
+ ⍝⍎  NO CANCER  0.97 0.02 0.0194 0.4470046083
+     ⍺←0 ⋄ ⎕ML←3 ⋄ ⎕IO←0                       ⍝ Set system variables
+     Posterior←↑(×÷+.×)/⍵                      ⍝ Calculate posterior probability
+     ⍺≡0:Posterior                             ⍝ If monadic, done
+     Event←toNestedVector ⍺~0J1                ⍝ Parse event list
+     Joint←↑×/⍵                                ⍝ Calculate joint probability
+     ~0J1∊⍺:Event,⍉⊃⍵,Joint Posterior ⍝ Append Events
+     Hdr←'      Prior    Conditional    Joint    Posterior'
+     Hdr,[¯0.5]←'      P(A)        P(B|A)      P(A∩B)      P(A|B)'
+     ⍝ Hdr,[¯0.5]¨←'-'                         ⍝ Construct header
+     D←48⍴5 7/' -'                             ⍝ Include Dashes
+     Tbl←'F12.5'⎕FMT{⍵⍪+⌿⍵}⍉⊃⍵,Joint Posterior ⍝ Build table
+     Tbl[¯1+≢Tbl;14+⍳14]←'Marginal P(B):'      ⍝ Include Marginal label
+     Z←⊃1⌽'Total' ' ' 'Event' ' ',Event        ⍝ Row titles
+     Z[2;]←'-'                                 ⍝ Insert Dashes under headers
+     Z,←' ',Hdr⍪D⍪Tbl                          ⍝ Append Row, Column Headers
+     (¯1↓Z)⍪Z[2;]⍪¯1↑Z                         ⍝ Insert dashes above totals
+ }

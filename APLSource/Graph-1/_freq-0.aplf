@@ -1,0 +1,27 @@
+ _freq←{
+     ⍝ Written by Steve Mansour
+     ⍝⍺ Bin width
+     ⍝⍵ Raw data
+     ⍝← 2 column matrix
+     ⎕ML←3 ⋄ ⎕IO←0
+     d←toNestedVector ⍵               ⍝ If character, make nested
+     n←+/d∊⎕NULL,⊂,⎕NULL              ⍝ Count nulls
+     d←{⍵[⍋⊃⍵]}d~⎕NULL                ⍝ Remove nulls and sort
+     c←2=≡d                           ⍝ Character?
+     f←{⍺,≢⍵}⌸                        ⍝ Grouping function
+     g←{(⍺=0)∨⍺≥≢⍵:⍵ ⋄ K←⍺-1          ⍝ Unique Groups
+         W←⍵[⍒⍵[;1];]                 ⍝ Sort by frequency
+         ⍺<2:W                        ⍝ ⍺ = 1 or ¯1 done
+         N←+/(K-≢W)↑W[;1]             ⍝ Frequency of "Other"
+         (K↑W)⍪'Other'N}
+     z←⍺ f{(⍺≤0)∨2=≡⍵:⍺⍺ ⍵
+     ⍝    ⍺⍺ ⍺×⌊0.5+⍵÷⍺}d              ⍝  If numeric, range the data
+         ⍺⍺(⍺÷2)+⍺×⌊⍵÷⍺}d             ⍝  If numeric, range the data
+     z←z[⍋⊃z[;0];]                    ⍝ Sort result
+     c:⍺ g(-n=0)↓z⍪⎕NULL n            ⍝ Done if nominal
+     i←round(¯2-/z[;0])÷⍺+⍺=0         ⍝ Missing bins?
+    ⍝ z←((∊i↑¨1),1)⍀z                 ⍝ Pad with 0's
+     z←i{5::⍵ ⋄ ((∊⍺↑¨1),1)⍀⍵}z       ⍝ Pad with 0's?
+     z[;0]←(↑z)+(⍺+⍺=0)×⍳≢z           ⍝ Insert correct midpoints
+     (-n=0)↓z⍪⎕NULL n
+ }

@@ -1,0 +1,10 @@
+ z←{y}(f prime)x
+⍝ ((⍺⍺ ⍵+h)-⍺⍺ ⍵)÷h←1E¯10}
+ :If 0≠⎕NC'y' ⋄ f←y∘f ⋄ :EndIf
+ z←f{⍺←0(|0.00001×⍵+⍵=0)
+     d0 h←⍺ ⋄ ⎕IO←0
+   ⍝  d←(⍺⍺ ⍵(+,[-0.5]-)⍤0⊣h)-.÷2×h
+     y←⍺⍺ ⍵(+,[-0.5]-)⍤0⊣h ⍝ Find y values
+     d←(-/y)÷2×h           ⍝ Estimate dy/dx
+     d∧.=d0:d              ⍝ If equal done
+     d(h÷2)∇ ⍵}x

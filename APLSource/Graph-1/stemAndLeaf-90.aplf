@@ -1,0 +1,36 @@
+ stemAndLeaf←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Generate StemAndLeaf Plot
+ ⍝∊ Graphics
+ ⍝⍺ S: Stem Size (Default 10)
+ ⍝⍵ Xv: Numeric Vector
+ ⍝← CmL Character Matrrix
+ ⍝⍕ [S] stemAndLeaf Xv
+ ⍝⍎ stemAndLeaf D.Weight
+ ⍝⍎ 5 stemAndLeaf D.Height
+     ⍺←10 ⋄ ⎕IO←0 ⋄ ⎕ML←3                 ⍝ Stem Size must be
+     a←↑(⍺,10)~0J1                        ⍝ Stem Size
+     ~5 1∊⍨10*1|10⍟a:'Domain Error'       ⍝    1 or 5 x 10^N
+     2=≡⍵:{k←≢s←{⍵[⍋⍵]}↑∪/ss←{⍵[;0]}¨⍵    ⍝ If 2 samples
+         i←(ss⍷¨⊂s)⍳¨1 ⋄ z←'|',s,[0.5]'|' ⍝ Create a double
+         d←i{k↑(⍺⍴⊂⍬),⍵[;2],k⍴⊂⍬}¨⍵       ⍝   stemAndLeaf
+         ¯1⌽z,⌽⍉⊃d}⍺ ∇¨⍵                  ⍝   plot
+     d←0.1×⌊0.5+⍵[⍋⍵]÷u←10*¯1+⌈10⍟a       ⍝ Data
+     Stem←d{⍵:⌊⍺ ⋄ 0.5×⌊⍺×2}0=1|10⍟a      ⍝ Generate stems
+     Leaf←⌊0.5+10×1|d                     ⍝ Generate leaves
+     z←Stem{(⌊⍺)'|'(⍵[⍋⍵])}⌸Leaf          ⍝ Group leaves by stems
+     z←{1∧.=i←¯2-/z[;0]:⍵                 ⍝ Missing bins?
+         i≡(⍴i)⍴(1=↑i)⌽0 1:⍵              ⍝ Alternating bins?
+         ~0∊i:i{u←∊⍵[;0]+⍳¨⍺,1                ⍝
+             z←(b←(∊i↑¨1),1)⍀⍵                ⍝ Pad with 0's
+             z[;0]←u                          ⍝
+             z[;1]←'|'                        ⍝
+             z[(~b)⌿⍳⍴b;2]←⊂⍬ ⋄ z}⍵           ⍝
+         'Nonce Error'
+     }z
+     Stem←z[;0] ⋄ Leaf←z[;2]
+     Output←⍕z
+     LeafUnit←u
+     ns←⎕NS'Output' 'Stem' 'Leaf' 'LeafUnit'
+     0J1∊⍺:ns.Output ⋄ ns
+ }

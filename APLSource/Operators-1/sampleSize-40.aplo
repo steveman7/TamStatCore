@@ -1,0 +1,53 @@
+ sampleSize←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Estimate a sample size
+ ⍝∊ Operators
+ ⍝⍺ [Q]: Confidence level - default .95
+ ⍝⍺⍺ fS: Summary Function:  sum, mean, proportion, variance
+ ⍝⍵ T:  Margin of Error
+ ⍝⍵ S:  Standard Deviation | Proportion
+ ⍝⍵ M:  Population Size
+ ⍝⍵ NS: Namespace containing [count, mean, sdev]
+ ⍝← N:  Positive integer (sample size)
+ ⍝⍕ N ← [.95|Q] fS sampleSize T S|[P|0.5] [M]
+ ⍝⍕ Q mean sampleSize T S [M]
+ ⍝⍕ Q proportion sampleSize T [0.5|(P [M])]
+ ⍝⍕ Q variance E S2
+ ⍝⍎ mean sampleSize 1 3
+ ⍝⍎ .99 proportion sampleSize .02
+     ⎕IO←0 ⋄ ⎕ML←3                       ⍝
+     ⍺←0.95                              ⍝ Default is 95% confidence
+    ⍝N←↑1↓⍺                              ⍝ Sample Size, 0 = infinite
+    ⍝i←⍺⍺ ¯1 1                           ⍝ Mean, proportion or variance?
+     i←⍺⍺ 0 1 5                          ⍝ Mean, proportion or variance?
+     n_sum←{p←0.5×1-⍺                    ⍝ Sample size for total
+         Z←normal criticalValue<p        ⍝ Calculate normal critical value
+         E S M←3↑⍵                       ⍝ Margin of Error, Sdev,
+         ⍝E V M←3↑⍵
+         N0←(M×Z×S÷E)*2                  ⍝ Sample Size Estimate
+         ⍝N0←V×(M×Z÷E)*2
+         ⌈÷N0+⍥÷M}                       ⍝ Finite correction factor
+     n_mean←{p←0.5×1-⍺ ⋄ M←↑⌽3↑⍵         ⍝ Sample size for mean
+         z←normal criticalValue<p        ⍝   First pass use normal
+        ⍝n←10⌈⌈(÷/z,⍵)*2                 ⍝   Estimate n from normal distribution
+         n←2*⍨÷/z,2↑⍵                    ⍝   Estimate n from normal distribution
+         M>0:⌈÷M+⍥÷n ⋄ ⌈n              ⍝   Finite population factor
+         ⍝⌈M(÷+⍥÷)⍣(×⊣)n                  ⍝   Include finite pop. factor?
+         ⍵{t←(↑⍵-1)tDist criticalValue<p ⍝   Estimate using tDist
+             2⌈⌈(÷/t,⍺)*2}n}             ⍝   Using n-1, estimate from t dist
+     n_p←{E p M←⍵[0,1+{~⍺}\(⊢=⌈)1↓⍵]     ⍝ Sample Size for proportion
+         p←p+0.5×p=0                     ⍝ Default p = 0.5
+         z←normal criticalValue<0.5×1-⍺  ⍝   Use normal dist
+         N←(p×1-p)×(z÷E)*2               ⍝ Estimate sample Size
+         M=0:⌈N                          ⍝ If population infinite, done
+         ⌈M×N÷M+N-1}                     ⍝ Otherwise use Hypergeometric formula
+     n_var←{E s2←2↑⍵                     ⍝ Sample size for variance
+         f←⍺∘{x2←(⍵-1)chiSquare criticalValue<1(×,-)0.5×1-⍺
+             E+0.5×-/s2×(⍵-1)÷x2}        ⍝ Estimate error from sample size
+         ⌈f SecAlg 3 100,f¨20 100}       ⍝   Backsolve
+     i=6:⍺ n_sum ⍵                       ⍝ Sample size for total
+     i=2:⍺ n_mean ⍵                      ⍝ Sample size for mean
+     i=¯1:⍺ n_p 3↑⍵~0                    ⍝ Sample size for proportion
+     i=7:⍺ n_var ⍵                       ⍝ Sample size for variance
+     7=i*2:⍺ n_var ⍵*2                   ⍝ Sample size for stdDev
+     'Domain Error'}

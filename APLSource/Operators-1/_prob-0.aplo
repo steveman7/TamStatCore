@@ -1,0 +1,41 @@
+ _prob←{
+⍝⍟   Copyright 2020 by Stephen M. Mansour
+⍝∇   Calculate probabilies using logic rules
+⍝⍺   A Variable 1 Name (Optional)
+⍝⍺⍺  f Logical function:  (~ not) (^ and) (∨ or) (| conditional)
+⍝⍵⍵  T Contingency or probability table, vector or 2-vector of vectors
+⍝⍵   B Variable 2 Name
+⍝⍕   P←'A' (f prob T) 'B'
+⍝⍎   Table←frequency D.Sex D.Party        ⍝ Contingency table
+⍝⍎   P←(⊢ prob Table)'Female'             ⍝ Marginal prob
+⍝⍎   P←(~ prob Table)'Republican'         ⍝ Complement rule
+⍝⍎   P←'Male' (∧ prob Table)'Republican'  ⍝ Multipication rule
+⍝⍎   P←'Female (∨ prob Table)'Democrat'   ⍝ Addition rule
+⍝⍎   P←'Republican' (| prob Table)'Male'  ⍝ Conditional rule
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⎕DIV←1 ⋄ ⍺←0 1       ⍝ Set defaults
+     2∊≡¨⍺ ⍵:⍺ ∇¨⍥⊆⍵                      ⍝ Scalar extension
+     1=⍴⍴⍵⍵:⍺(⍺⍺ ∇∇(frequency ⍵⍵))⍵       ⍝ Create table from data
+     '*'≠↑↑⍵⍵:⍺(⍺⍺ ∇∇('*' '⍙⍙'⍪⍵⍵))⍵      ⍝ If freq dist make contingency
+     2=⎕NC'⍺⍺':⍺⍺                         ⍝ If 0 or 1, make result
+     R←,¨1↓⍵⍵[;0] ⋄ C←,¨1↓⍵⍵[0;]          ⍝ Row, column names
+     P←{⍵÷+/,⍵}1 1↓⍵⍵                     ⍝ Probabilities
+     B←R C∊¨⊂,¨⍺ ⍵ ⋄ i←(⊂,⍵)∊R            ⍝ Row, column categories
+     G←+/¨B                               ⍝ Categories in same group?
+     OP←0 1 0 1 ⍺⍺ 0 0 1 1                ⍝ Test operand
+     (0=≢OP)∧⍺≡0 1:⍵(~⊢)∇∇ ⍵⍵⊢⍵           ⍝ monadic ~
+     0 1≡⍺:∇⍨⍵                            ⍝ Supply left arg if missing
+     Cond←⍺⍺{2≠2⊥⍵:0 ⋄ 2 ⍺⍺ 1}OP          ⍝ Conditional probability?
+     Cond∧G≡1 1:⍺{U←∨/¨B1←R C∊¨⊂⊂,⍵       ⍝ Where is right arg?
+         X←,B1{(⍵⊃⍺)/[⍵]P}1⊃U             ⍝
+         X{(⍺+.×⍵)÷+/⍺}(U[0]⊃R C)∊⊂,⍺}⍵   ⍝ p(A|B) Conditional prob
+     Alt←⍺⍺{0 5∊⍨2⊥⍵:+/1 2 ⍺⍺ 2 3 ⋄ 3}OP  ⍝ Check for alternate symbols
+     Alt=2:⍺∧∇∇ ⍵⍵⊢⍵                      ⍝ Substitute ∧ for ∩
+     Alt=1:⍺>∇∇ ⍵⍵⊢⍵                      ⍝ Substitute > for dyadic ~
+     Alt=6:⍺∨∇∇ ⍵⍵⊢⍵                      ⍝ Substitute ∨ for ∪
+     (1∊G)∧⍺≢⍵:(⍉⍣i⊢P)+.×⍥,↑∘.⍺⍺/⌽⍣i⊢B    ⍝ Subset
+     G≡0 0:⍺ ⍺⍺ ∇∇(⍵⍵⍪(⊂⍵),0⍴⍨⍴C)⊢⍵       ⍝ Add if right arg not in table
+     M←1⌽(⌽∘⍳∘≢⌽⊢,(0 ¯1+≢)⍴0∘⍴)+/[i]P     ⍝ Put marginal probs into diagonal matrix
+     L←↑(×G)/R C                          ⍝ Labels
+     T←('*',L,¨'∆')⍪L,M                   ⍝ Build Table - Make col names unique
+     ⍺ ⍺⍺ ∇∇ T⊢⍵,'∆'                      ⍝ Recalculate
+ }

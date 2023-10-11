@@ -1,0 +1,21 @@
+ logistic1←{
+⍝∇ Calculate logistic regression model
+⍝⍺ Sample Sizes (Optional Vector)
+⍝⍵ Response Variable (Boolean or Number of Successes)
+⍝⍵ Predictor Variable
+⍝← Coefficients
+⍝← Function
+⍝⍎ NS←N logistic C X
+⍝⍎ NS←logistic B X
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄           ⍝ Initialize
+     Y←⍺ ⋄ X←⍵
+     p←{÷1+*-⍵⊥⌽⍺}
+     f←{U←Y-÷1+*-(⍪X)⊥⌽⍵
+         (U+.×1,⍪X)+.*2}
+     f SecAlg 1 1,f 1 1
+           ⍝ Vector
+     NS←⎕NS''
+     NS.B←V⌹M                  ⍝ Int, Slope Parameters
+     NS.f←NS.B∘{÷1+*-⍵⊥⌽⍺}     ⍝ Function
+     NS
+ }

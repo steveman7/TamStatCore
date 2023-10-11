@@ -1,0 +1,22 @@
+ percentRank←{
+⍝∇ Calculate PERCENTRANK as defined by Excel
+⍝⍺ Value
+⍝⍺⍺ 0=Include enpoints (.INC) , 1=Exclude endpoiints (.EXC)
+⍝⍵ DataSet
+⍝← 0≤P≤100 ⍝ Percent in ⍵ ≤ values in ⍺
+⍝⍎ W←1 2 3 6 6 6 7 8 9
+⍝⍎ 0 12.5 25 37.5 37.5 37.5 75 87.5 100←0 percentRank W
+⍝⍎ 10 20 30 40 40 40 70 80 90 ← 1 percentRank W
+⍝⍎ 38.1 ← 5.43 (1 percentRank) W
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⎕DIV←1 ⍝ Set system variables
+     ⍺←⍵                     ⍝ Default left arg is all values on right
+     n←≢⍵                    ⍝ Get count (Sample Size)
+     v←{⍵[⍋⍵]}∪⍵             ⍝ Unique, sorted values
+     fr←+/v∘.=⍵              ⍝ Include frequencies
+     j←v⍸⍺                   ⍝ Locate lower bounds
+     bw←(¯2-/v),0            ⍝ bin widths
+     r←(⍺-v[j])÷bw[j]        ⍝ remainder
+     b←r>0                   ⍝
+     i←r++/¨(~b),¨(j+b)↑¨⊂fr ⍝ combine position, remainder
+     100×(i-~⍺⍺)÷n-1-2×⍺⍺    ⍝ One-liner for ⍺⍺=0,1
+ }

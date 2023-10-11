@@ -1,0 +1,41 @@
+ binomial←{                             ⍝ Scalar,Arithmetic
+     ⍝⍟ Copyright (c) by Stephen M. Mansour
+     ⍝∇ Binomial Distribution
+     ⍝∊ Discrete Distribution Function
+     ⍝⍺ n - Number of Trials
+     ⍝⍺ p  Probability of success
+     ⍝⍺ [0=Probability, 1=Cumulative Prob, ¯1=Inverse Distribution, ¯2=random]
+     ⍝⍵ x - Number of successes
+     ⍝← Probability of X successes
+     ⍝⍕ Syntax:  N P binomial M
+     ⍝⍎ 0.3125 ← 5 0.5 binomial 3        ⍝ Probability of exactly 3 heads in 5 tosses
+     ⍺←1 0.5 ⋄ x←⍵ ⋄ ⎕ML←3 ⋄ ⎕IO←0       ⍝ Set system variables
+     n p c←3↑⍺                           ⍝
+     x≡'Type':'Discrete'
+ ⍝    ~'X123'check ⍺:⎕SIGNAL 5            ⍝ Parameters must be numeric, 2 chars
+     (c≠¯2)∧~'X123'check ⍺:⎕SIGNAL 5     ⍝ Parameters must be numeric, 2 chars
+     ~'O'check c:⎕SIGNAL 11              ⍝ Operator domain error
+     ~'IU'check n:⎕SIGNAL 11             ⍝ N must be positive interger
+     ~'Q'check p:⎕SIGNAL 11              ⍝ P must be a probability
+     1<≡n p:n ∇{⍺ ⍵ c ⍺⍺ x}¨p            ⍝ If multiple n, expand for simulation
+     x≡'Mean':n×p                        ⍝
+     x≡'Variance':n×p×1-p                ⍝
+     x≡'Median':y←↑{(⍵≥0.5)/⍵}n p ∇ prob≤y←(⌊,⌈)n×p
+     x≡'Mode':y⊃⍨</n p ∇ y←¯1 0+⌊p×n+1
+     x≡'Skewness':(1-2×p)÷(n×p×1-p)*÷2
+     x≡'Kurtosis':1 0÷.+¯6 n×p×1-p
+     ~'X'check ⍵:⎕SIGNAL 11              ⍝ Right argument must be numeric
+     str←'pdqr'[1 0 ¯1 ¯2⍳c],'binom(⍵,⍵,⍵)' ⍝ Build R expression
+     rAv:+##.∆r.x str ⍵ n p              ⍝ If requested, use R
+     ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     f←{(⍵!n)×(p*⍵)×(1-p)*0⌈n-⍵}         ⍝ Binomial formula
+     c=0:(⍵=⌊⍵)×f ⍵                      ⍝ Probability X=x
+     (c=1)∧n>200:+/¨f⍳¨⌊1+⍵              ⍝ Cumulative for Large n
+     c=1:(⍵≥0)×(⊂⌊0⌈⍵)⌷0{⍺≥⌈/x:+\⍵       ⍝ Cumulative Probability X≤x
+         y←(p÷1-p)×(n-⍺)÷⍺+1             ⍝ y=P(x+1)÷P(x)
+         (⍺+1)∇ ⍵,⍵[⍺]×y},(1-p)*n        ⍝
+     c=¯1:+/x∘.>0{(+/⍵)≥⌈/x:+\⍵          ⍝ Critical Value
+         y←(p÷1-p)×(n-⍺)÷⍺+1             ⍝ y=P(x+1)÷P(x)
+         (⍺+1)∇ ⍵,⍵[⍺]×y},(1-p)*n        ⍝
+     c=¯2:p+.>?(n,⍵)⍴0                   ⍝ Random Variable
+ }

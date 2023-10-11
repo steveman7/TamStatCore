@@ -1,0 +1,26 @@
+ buildNL←{⎕IO←0 ⋄ ⎕ML←3
+     g←⍺⍺ ⋄ CR←↓⎕CR'g' ⍝ Get function
+     CR←deleteExcessBlanks¨CR
+     CR←CR/⍨{∨/'NS.'⍷⍵}¨CR
+     CR←(~↑¨'NS.Int←'∘⍷¨CR)/CR              ⍝ Remove Int
+     NM XP←↓⍉{⍵↓⍨1+⍵⍳'.'}¨⊃(CR≠'←')⊂¨CR     ⍝Parse NMS Expr
+    ⍝ J←{1⍳⍨'mean'⍷⍵}¨XP
+⍝             J+5↓¨XP
+ ⍝⍝⍝⍝⍝⍝⍝⍝⍝ Build model function ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+
+     D←∊{' ',(~2∨/0,≠\⍵='''')/⍵}¨1↓XP ⍝ Eliminate Quotes
+     B←D∊⎕A,⎕UCS 32+⎕UCS ⎕A           ⍝ Find Names
+     VN←{∪(⎕A∊⍨↑¨⍵)/⍵}B⊂D             ⍝ Unique Variable Names
+     CR←⊂'h←{⍵≡''Type'':''Linear'''
+    ⍝CR,←⊂'⍺←0'
+    ⍝CR,←⊂'2=⍴⍴⍵:⍺∇⍤1⊢⍵'              ⍝ Multiple inputs?
+     CR,←'⍺←0'(⍕VN'←⍵')
+     ⍝CR,⊂(⍕VN'←⍵')                    ⍝ Assign names
+     CR,←1↓NM{⍺,'←',⍵}¨XP             ⍝ Do the transformation
+     X←{⍵[⍋⍵]}1↓NM                    ⍝ Sort the names
+     f←(⍵.(B DF S C),1)linear
+     CR,←⊂'⍺ ⍺⍺ ',⍕X,'}'
+     R←⎕FX CR
+     ⍵.g←f h
+     ⍵
+ }

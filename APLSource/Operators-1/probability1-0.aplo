@@ -1,0 +1,49 @@
+ probability1←{
+ ⍝⍟ Copyright (c) 2018 by Stephen M. Mansour
+ ⍝∇ Calculate probability of a distribution
+ ⍝∊ Operators
+ ⍝⍺ [Parameters]:   Distribution parameters (default 0 1)
+ ⍝⍺⍺ fD:  Distribution function
+ ⍝⍵⍵ fR:  Relational function, e.g.   eq, ne, gt, lt, ge, le, in, between
+ ⍝⍵  X:    Value
+ ⍝← P:    Probability 0≤P≤1
+ ⍝⍕ P ←  [Parms|0 1] fD probability fR X
+ ⍝⍎ 0.1640625 ← 7 0.5    binomial probability = 2
+ ⍝⍎ 0.76193 ← 5.2 poisson probability > 3
+ ⍝⍎ 0.89435 ← normal probability < 1.25
+ ⍝⍎ 0.58885 ← 68 3 normal probability between 66 71
+     ⍺←0 1 ⋄ ⎕ML←3 ⋄ ⎕IO←0                  ⍝ Default parameters (0,1)
+     1<|≡⍵:⍺∘∇ pervasive ⍵                  ⍝ Pervasive right argument
+    ⍝2=⎕NC'⍺⍺':⍺(⍺⍺ probability_ ⍵⍵)⍵       ⍝ ???
+     c←(⍺ ⍺⍺'Type')≡'Continuous'            ⍝ Is distribution continuous?
+     b←1 0 1 ⍵⍵ 0 1 1                       ⍝ Test relation
+    ⍝ fc←⍺⍺{a←⍺,1                           ⍝ Continuous
+⍝        2>≡⍵:|b[0]-(a ⍺⍺ ⍵)×≠/2↑b          ⍝ Simple case
+⍝         |b[0]-(a∘⍺⍺¨⍵)×≠/2↑b}             ⍝
+     fc←⍺⍺{g←⍺⍺ variant 1                   ⍝ Continuous
+         2>≡⍵:|b[0]-(⍺ g ⍵)×≠/2↑b            ⍝ Simple case
+         |b[0]-(a∘⍺⍺¨⍵)×≠/2↑b}              ⍝
+     fd←⍺⍺{e←(↑b)≠1↓b                       ⍝ Discrete
+         d←⌊⍵+(⍵≠⌊⍵)∨∧/e                    ⍝ round up or down
+         a←⍺,↑e                             ⍝ cumulative?
+         =/2↑b:|b[0]-a ⍺⍺ ⍵                 ⍝ P(X=x) or P(X≠x)
+         2>≡⍵:|b[0]-a ⍺⍺ d-↑e               ⍝ P(X<x) , P(X≤x) etc.
+         |b[0]-a∘⍺⍺¨d-↑e}                   ⍝ Nested case
+     fk←⍺⍺{                                 ⍝ Character
+         |b[0]-⍺ ⍺⍺ ⍵}
+     fi←⍺⍺{+/⍺ ⍺⍺ ⍵}                        ⍝ Pr(X∊x1,...,xn)
+     fb←⍺⍺{a←⍺,1                            ⍝ Pr(X∊(a,b))
+         2=≢⍵:|-/a ⍺⍺ ⍵                     ⍝ If 2 values, include both
+         1=≢⍵:1-2×1-a ⍺⍺ ⍵}                 ⍝ If 1 value include negative
+     f←⍵⍵{a b c←⍺                           ⍝ General probability
+         ∧/b:a fi ⍵                         ⍝ X∊⍵
+         0≠↑0⍴∊⍵:a fk ⍵                     ⍝ X is character
+         c∧∧/~b:|(a fb ⍵)-1 ⍺⍺ 2 3          ⍝ X cont between a,b
+         c:a fc ⍵                           ⍝ X cont
+         1≠≢∪b:a fd ⍵                       ⍝ X discrete
+         lu←(⌊↑⍵),⌈¯1+↑⌽⍵                   ⍝ lower, upper bounds
+     ⍝   b[0]:a fb ¯1 1+lu                  ⍝ discrete include
+         2 ⍺⍺ 1 3:a fb lu                   ⍝ discrete between
+         1-a fb ¯1 1+lu}                    ⍝ discrete outside
+     ⍺ b c f ⍵                              ⍝ Apply it
+ }

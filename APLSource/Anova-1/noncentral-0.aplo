@@ -1,0 +1,11 @@
+ noncentral←{
+⍝⍺ Degrees of Freedom, Non-Centrality Parameter
+⍝⍺⍺ Distribution e.g. fDist
+⍝⍵⍵ Relation
+⍝⍵ Test statistic
+⍝← P-value
+     DF1 DF2 Phi←3↑⍺
+     F←⍵×DF1÷DF1+Phi*2
+     DF1P←(2*⍨DF1+Phi*2)÷DF1+2×Phi*2
+     DF1P DF2 ⍺⍺ prob ⍵⍵ F
+ }

@@ -1,0 +1,14 @@
+ randomGivenMean←{
+⍝∇: Generate a random variable with a specified min, max and mean
+⍝∊: Written by Steve Mansour
+⍝⍺: Lower Bound
+⍝⍺: Upper Bound
+⍝⍵: Mean
+⍝⍵: Sample Size
+⍝←: Random Variable with min > L, max < U and mean = M
+⍝⍎: X←2 10 randomGiven mean 5 100
+⍝⍎: 2.3246 7.52 4.82←(⌊/,⌈/,+/÷≢)X ⍝ (min,max,mean)X
+     L U←⍺ ⋄ M N←⍵                 ⍝ Unpack left/right args
+     P←(2-/U M L)(16808⌶)'Beta'N   ⍝ Generate random Variable
+     U+P×L-U                       ⍝ Scale result
+ }

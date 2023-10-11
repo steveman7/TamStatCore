@@ -1,0 +1,55 @@
+ barChart←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Generate Bar Chart
+ ⍝∊ Graphics
+ ⍝⍺ Groups
+ ⍝⍵ Xv: Numeric Vector
+ ⍝← Cm Character Matrrix
+ ⍝⍕ barChart Xv
+ ⍝⍎ barChart D.State                     ⍝ Simple bar chart
+ ⍝⍎ D.Party barChart D.State50           ⍝ Grouped bar chart
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←0                 ⍝ Set system variables
+     Bins←(↑⍺~0J1)                       ⍝ Bins
+     f1←{G N←↓⍉⍵                         ⍝ Categories, Names for simple bar chart
+         U X←0 1↓¨1 0 1/100 Scale 0,N    ⍝ Scale the counts
+         C←' ─'[X∘.>⍳101]                ⍝ Generate top bars
+         B←(3×≢X)⍴1 0 1                  ⍝ Expansion vector
+         C←B⍀2⌿C                         ⍝ Expand bars
+         C←((≢C)⍴'├│├'),(-3/X)⌽2↓[1]((3/X)⌽C),(3×≢X)⍴'┐│┘'
+         C[;¯1+1⊃⍴C]←' '                 ⍝ Insert blanks
+         S←101⍴1 9/'┬─'                  ⍝ Horizontal Scale
+         T←U×1+⍳10                       ⍝ Tick marks
+         FS←'10I10'                      ⍝ Format string
+         S←S⍪' ',FS ⎕FMT,[¯0.5]T         ⍝ Scale
+         S[;0]←'├0'                      ⍝ Zero count marker
+         W←1+10×1+⌈0.1×5+⌈/X             ⍝ Width
+         PRE←(~B,1 1)⍀⊃{2=≡⍵:⍵ ⋄ ⍕¨⍵}G   ⍝ Prefix - use names
+         PRE,W↑[1]C⍪S}                   ⍝ Assmble graph
+     f2←{                                ⍝ Multiple Bar Chart
+         R←1↓⍵[;0]                       ⍝ Row names
+         C←1↓⍵[0;]                       ⍝ Column names
+         N←1 1↓⍵                         ⍝ Counts
+         U X←0 1↓¨1 0 1/100 Scale 0,,N   ⍝ Scale the counts
+         X←(⍴N)⍴X                        ⍝
+         D←' ▉░▒%⌹⎕'[(X∘.>⍳101)×[1]1+⍳≢C]⍝ Shade the bars
+         Z←((⍴N)⍴C),D                    ⍝
+         Z←⍕(⊃(≢C)↑∘⊂¨R),[2]Z            ⍝
+         S←101⍴1 9/'┬─'                  ⍝
+         T←U×1+⍳10                       ⍝
+         FS←'10I10'                      ⍝
+         S←S⍪' ',FS ⎕FMT,[¯0.5]T         ⍝ Scale
+         I←⌊/Z⍳⍤1⊢'▉'                    ⍝
+         2 1⍴Z((I⍴' '),⍤1⊣0 1↓S)         ⍝
+         C⍪S}                            ⍝
+     T←{2=⍴⍴⍵:⍵                          ⍝ Raw data or
+         2=≢⍵:Bins frequency ⍵
+         1=≢⍵:Bins frequency↑⍵                ⍝ Summary?
+         Bins frequency ⍵}⍵
+   ⍝  2=1⊃⍴T:f1 T ⋄ f2 T                  ⍝ 2-cols is freq
+     S←2=↑⌽⍴T                             ⍝ Simple bar?
+     Output←S{0::'Error!' ⋄ ⍺:f1 ⍵ ⋄ f2 ⍵}T     ⍝ 2-cols is freq
+     Type←'Graph'                         ⍝ Generate namespace for
+     Style←'Bar' ⋄ Freq←T                 ⍝  SharpPlot
+     ns←⎕NS'Type' 'Style' 'Freq' 'Output'
+     0J1∊⍺:ns.Output
+     ns}

@@ -1,0 +1,23 @@
+ makeIndicator←{
+⍝∇  Generate indicator variables from a character field
+⍝⍺ Left argument indicates default item | 1 = Single Value
+⍝⍵ Right argument is character vector
+⍝← Indictor variable(s)
+     ⎕IO←0 ⋄ ⎕ML←1
+     D←{0=⊃⊃0⍴⍵:⍕⍪⍵ ⋄ toMatrix ⍵}⍵
+     f←{~⍵∊' _',⎕D,(⊢,¯1∘⎕C)⎕A} ⍝ Replace illegal chars
+     D←('_'@f)D            ⍝ with underscores
+     D←~∘' '⍤1⊢D           ⍝ Remove Blanks
+     D[;0]←1 ⎕C D[;0]      ⍝ First char upper case
+     OK←D[;0]∊⎕A           ⍝ If 1st char numeric
+     D←(-~OK)⌽D,'∆ '[OK]   ⍝ Append suitable char
+     U←∪D                  ⍝ Unique character
+     ⍺←U[0;]               ⍝ Base case is first unless specified
+     B←↓⍉D∧.=⍉U            ⍝ Create booleans
+   ⍝ B←~⍣(⍺≡¯1)⊢B          ⍝ If left arg = ¯1, flip it
+     ⍺≡1:⊃B                ⍝ If left arg = 1, make boolean vector
+     _←⍎⍕(↓U)'←B'          ⍝ Else assign to names in char field
+   ⍝  _←⎕EX'#.∆NS'                 ⍝ Clear namespace
+     _←'#.∆NS'⎕NS(↓U)~⊂(≢⍉U)↑⍺  ⍝ Put into namespace
+     #.∆NS
+ }

@@ -1,0 +1,50 @@
+ beta←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Beta Distribution
+ ⍝∊ Continuous Distribution Function
+ ⍝⍺ Shape Parameter
+ ⍝⍺ Scale Parameter
+ ⍝⍺ [0=Density, 1=Distribution, ¯1=Inverse Distribution, ¯2=random]
+ ⍝⍵ Value 0≤X≤1
+ ⍝← Density
+     x←⍵ ⋄ ⎕ML←3 ⋄ ⎕IO←0                   ⍝ System variables
+     x≡'Type':'Continuous'
+     a b c←3↑⍺
+     x≡'Mean':a÷a+b                        ⍝ a=Shape; b=Scale
+     x≡'Variance':(a×b)÷(a+b+1)×(a+b)*2
+     x≡'Mode':(a-1)÷a+b-2
+     x≡'Skewness':{z←(1 2++/⍵)×.*0.5 ¯1
+         ×/2(-/⍵)z,⍵*¯0.5}b a
+     x≡'Kurtosis':a{z←(2*⍨⍺-⍵)×(1 2÷.×⍺+⍵+2 1)÷⍺×⍵
+         6×(z-1)÷⍺+⍵+3}b
+     str←'pdqr'[1 0 ¯1 ¯2⍳c],'beta(⍵,⍵,⍵)' ⍝ Build string for R
+     rAv:+##.∆r.x str ⍵ a b                ⍝ If requested use R
+     I←a b∘{a b←⍺                          ⍝ Incomplete Beta Function
+         HyperG←{a b z←⍵                   ⍝ Hypergeometric Function
+             f←{⍵×(z÷⍺+1)×(×/a+⍺)÷×/b+⍺}   ⍝ Recursive Kummer terms
+             0{x t←⍵                       ⍝
+                 x=x+t:x                   ⍝
+                 (⍺+1)∇(x+t)(⍺ f t)        ⍝
+             }0 1
+         }
+         z←HyperG(a,1-b)(a+1)⍵
+         z×(⍵*a)÷a
+     }
+     Finv←{⍵≤0:0                           ⍝ Inverse cumulative dist
+         P0←{                              ⍝ Get startingpoints
+             m←a÷a+b                       ⍝ Estimate mean
+             s←(a×b)÷(a+b+1)×(a+b)*2       ⍝ Estimate std deviation
+             m+s×1 2*¯1*⍵<0.5
+         }⍵
+         G←⍵∘{⍺-↑I ⍵}¨
+         z←G SecAlg P0,G P0                ⍝ Build function G(x)
+         z                                 ⍝ Use secant alg to solve G(x)=0
+     }
+     B←÷b×(a-1)!a+b-1                      ⍝ Beta Function
+     c=0:(÷B)×{
+         pr←1≠×/×⍵∘.-0 1                   ⍝ x∊[0,1]?
+         pr×(⍵*a-1)×(1-⍵)*b-1}x            ⍝ Density
+     c=1:(I¨0⌈1⌊x)÷B                       ⍝ Cumulative Distribution
+     c=¯1:9○Finv¨B×x                       ⍝ Inverse Distribution
+     a b(16808⌶)'Beta'⍵                 ⍝ Random Variable
+ }

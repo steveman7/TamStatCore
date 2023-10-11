@@ -1,0 +1,22 @@
+ normProbPlot←{
+ ⍝⍟ Copyright (C) 2022 by Stephen M. Mansour
+ ⍝∇ Generate Normal Probability Plot
+ ⍝∊ Graphics
+ ⍝⍺ Symbol list (Optional)
+ ⍝⍵ Data
+ ⍝← CmL Character Matrix or Namespace
+ ⍝⍕ normProbPlot  Xv
+ ⍝⍎ normProbPlot D.Height
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←'*'
+     X←⍵[⍋⍵]  ⍝ Sort the data
+     N←≢X     ⍝
+     F←((1 to N)-0.375)÷N+0.25
+     Z←normal critVal≥F
+     ⍺≡'*':Z scatterPlot X
+     ⍺≡,0J1:0J1 scatterPlot Z X
+    ⍝ NS←⍺[⍋⍵]scatterPlot Z X
+     A←(~0J1∊⍺)↓0J1,(⍺~0J1)[⍋⍵]
+     A scatterPlot Z X
+   ⍝  NS.Style←'NormProbPlot'
+   ⍝  NS
+ }

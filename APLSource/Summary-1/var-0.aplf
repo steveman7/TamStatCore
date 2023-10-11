@@ -1,0 +1,30 @@
+ var←{
+ ⍝⍟ Copyright 2017 by Stephen M. Mansour
+ ⍝∇ Variance
+ ⍝∊ Summary Function
+ ⍝⍺ 1=population, 0=sample ¯1=determine from input
+ ⍝⍵ vector = raw data
+ ⍝⍵ matrix = frequency or distribution
+ ⍝← variance if numeric, unalikeability if character
+     ⍵≡'Type':'Spread'              ⍝ Spread function
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←¯1           ⍝ Set system variables
+     9=⎕NC'⍵':⍵.var                 ⍝ If namespace, extract variance
+   ⍝ b←↑(2=⍴⍴w)∧(2=≡w)∨0≡↑0⍴w←1/⍵   ⍝ Frequency?
+     b←isFrequency⊢w←1/⍵
+     b←↑b∧(2=≡w)∨0≡↑0⍴w             ⍝
+     w←toNestedVector⍣(~b)⊢w        ⍝ Nest it?
+     varChar←{⍺:1-+/2*⍨(⊢÷+/)⍵[;1]  ⍝ Variability for Categorial Variables
+         (+/,∘.≢⍨⍵)÷(≢⍵)*2}         ⍝   (Kader and Perry 2007)
+     0J1∊⍺:(⍺~0J1)showCov w         ⍝ Display form?
+     0≠↑0⍴↑w:b varChar w            ⍝ Character variability
+    ⍝ b:↑⍺{n←+/⍵ ⋄                  ⍝ Matrix form
+     b:↑⍺{(⍺⍺=0)∧1≥n←+/⍵:⎕NULL
+         n≠1:+/((⍵+.×⍺*2)-n÷⍨2*⍨⍵+.×⍺)÷n-⍺⍺≠1 ⍝ Frequency
+         (⍵+.×⍺*2)-(⍵+.×⍺)*2}/↓⍉w   ⍝ Probability
+     w←w~⎕NULL
+     rAv∧1=⍴⍴⍵:⍺{z←##.∆r.x'var(⍵)'⍵ ⍝ Do R calculation?
+         ⍺=1:z×÷/¯1 0+≢⍵ ⋄ z}w
+    ⍝ 1≥n←≢w:0                      ⍝ 0 for n≤1
+     (0≥⍺)∧1≥n←≢w:⎕NULL             ⍝
+     (n-⍺≤0)÷⍨(w+.*2)-n÷⍨(+/w)*2    ⍝ unweighted variance
+ }

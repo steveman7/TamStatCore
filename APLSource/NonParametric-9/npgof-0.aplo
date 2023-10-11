@@ -1,0 +1,12 @@
+ npgof←{
+⍝∇ Non-Parametric Goodness of Fit
+⍝⍺ Parameter List or ⍬
+⍝⍺⍺ Distribution
+⍝⍵⍵ Relation
+⍝⍵  Data
+     ⎕IO←1 ⋄ ⎕ML←1
+     ⍺←⍬                            ⍝If left operand is
+     2=⎕NC'⍺⍺':⍺⍺ smirnovGOF ⍵⍵ ⍵   ⍝ Vector, test two independent samples
+     ⍬≡⍺:⍺⍺ lilleforsGOF ⍵          ⍝ If no parameters, normalize data
+     ⍺ ⍺⍺ kolmogorovGOF ⍵⍵ ⍵        ⍝ If parameters, check largest difference
+ }

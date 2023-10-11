@@ -1,0 +1,19 @@
+ calcNested←{
+⍝⍺ Source
+⍝⍵ SS, DF
+⍝← Anova Table
+     ⎕IO←0 ⋄ ⎕ML←1
+     MS←÷/⍵                            ⍝ Mean Square
+     S←(⊃⌽MS)*÷2                       ⍝ Error
+       ⍝  F←¯1↓MS÷↑⌽MS                      ⍝ Test Statistic (F)
+     F←⍺{3=≢⍵:2÷/⍵
+         WI←'('∊¨⍺
+         ¯1↓⍵÷⍵[4 2 5 4 5 5]
+     }MS
+     pF←fDist probability>             ⍝ Upper-tail Probability
+     P←⎕CT⌈({¯1↓⍵,¨⊃⌽⍵}⍵[;1])pF¨F      ⍝ P-Value
+     T←⍵⍪+⌿⍵                           ⍝ Include totals
+     R2←1-÷/¯2↑T[;0]                   ⍝ r-Squared
+     R2A←1-÷/÷/¯2 2↑T                  ⍝ r-Squared Adj
+     T←T,0⍪⍨⍉↑MS F P                   ⍝ Build ANOVA Table
+     T(S R2 R2A)}

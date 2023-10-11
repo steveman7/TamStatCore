@@ -1,0 +1,10 @@
+ anovaSource←{
+⍝3-way Anova
+⍝⍵:  n-dimensional array
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄ N←⍴⍵
+     Eff←,¨(¯1+≢N)↑⎕A        ⍝ Main Effects
+     Eff,←,pairwise Eff      ⍝ Two-way Interactions
+     Eff,←(4>≢N)↓⊂'ABC'       ⍝ Include 3-way, error
+     1=⊃⌽N:(¯1↓Eff),⊂'Err'   ⍝ If 1 replicate, Int=Error
+     Eff,⊂'Err'              ⍝ Else append Error
+ }

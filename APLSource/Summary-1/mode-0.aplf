@@ -1,0 +1,30 @@
+ mode←{
+     ⍝⍟: Copyright (c) 2017, by Stephen Mansur
+     ⍝∇: Calculate mode of a data set or frequency distribution
+     ⍝∊ Summary Function
+     ⍝⍺: 0 - find first mode; 1 - find all modes
+     ⍝⍵: Numeric Vector: Data Set; 2-col Numeric Matrix:  Frequency Dist
+     ⍝⍵: Character vector
+     ⍝←  Numeric Scalar or Vector; character vector or nested vector
+     ⍝⍎ 2 ← mode 2 5 1 2 2 3      ⍝ Most frequent value
+     ⍝⍎ 3 ← 0 mode 2 3 3 5 5 7    ⍝ First most frequent value
+     ⍝⍎ 3 5 ← 1 mode 2 3 3 5 5 7  ⍝ Bimodal
+     ⍝⍎ ⍬ ← 1 mode 1 2 3 4 5      ⍝ No mode
+     ⍝⍎ 'NJ' ←  mode 'NY,NJ,NJ,PA,NJ,PA' ⍝ Character Data
+     ⍝⍎ 'NJ' 'PA' ← 1   mode 'NY,NJ,NJ,PA,NJ,PA,PA' ⍝ Bimodal character data
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←0          ⍝ Set up variables
+     9=⎕NC'⍵':⎕SIGNAL 11          ⍝ Don't permit namespace input
+    ⍝b←(2=⍴⍴w)∧(2=≡w)∨0≡↑0⍴w←1/⍵  ⍝ Frequency?
+   ⍝ b←2∧.=(⍴,↑∘⌽)⍴w←1/⍵          ⍝ Frequency?
+     b←isFrequency⊢w←1/⍵
+     b←↑b∧(2=≡w)∨0≡↑0⍴w           ⍝
+     b:⍺{(x p)←↓⍉⍵                ⍝ If frequency
+         ⍺=0:↑x[p⍳⌈/p]            ⍝ Pick first mode
+         z←(p=m←⌈/p)/x            ⍝ Get all modes
+         ((,1)≢∪m,⌊/p~0)/z}⍵      ⍝ No mode if all unique
+     w←toNestedVector ⍵           ⍝ If character, make nested vector
+     d←{i,⍪+⌿⍵∘.=i←∪⍵}⍳⍨w         ⍝ Count occurrences
+     j←d[{(⍵=⌈/⍵)/⍳≢⍵}d[;1];0]    ⍝ Select greatest frequencies
+     ⍺=0:↑w[j]                    ⍝ First mode
+     (1<⌈/d[;1])/w[j]             ⍝ All modes
+ }

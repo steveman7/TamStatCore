@@ -1,0 +1,44 @@
+ showCov←{
+     ⎕IO←0 ⋄ ⎕ML←3
+     ⍺←0
+     showFreq←{xd←(⍵[;0]-mean ⍵)∘.*1 2
+         fr←1≠n←+/⍵[;1]                ⍝ Is this a frequency or a distribution?
+         m s p←fr⊃'µσp' 'xsn'              ⍝ Parameter or statistic?
+        ⍝ x←⍵÷⍤1⊢1,n*b
+         g←≢⍵                           ⍝ Number of bins
+         z←⍵,(×/⍵),xd,xd[;,1]×⍵[;,1]   ⍝ Differences
+         z⍪←+⌿z
+         ⍝z⍪←z[g;]÷n-0 0 0 0 0 1 1 1
+         z←0.001 round z
+        ⍝ z[g;0 3 4]←'Total' ' ' 'Var'
+         z[g;0 1 3 4]←' '(m,' = ')' '(s,'² = ')
+         z⍪←'    ',(s,' = ')(z[g;5]*÷2)
+        ⍝ z⍪←'    ','Sdev'(z[g;5]*÷2)
+        ⍝ z←'x' 'p' 'xp' 'x-x' '(x-x)²' '(x-x)²p'⍪z
+         d2←'(x-',m,')²'
+         z←'x'p('x',p)(1↓¯2↓d2)d2(d2,p)⍪z
+         z←z⍪⍨fr⊃' ',⊂' ' ' ' '  ' '  _' '   _  ' '   _   '
+         z}
+
+     showRaw←{⍺∧.=0:(∇⍨⍵)[;0 1 3 6]
+         n←≢⍵
+         xd yd←⍺ ⍵-mean¨⍺ ⍵
+         z←(1+⍳n),⍺,⍵,xd,yd,(xd×yd),⍉⊃xd yd*2
+         z⍪←+⌿z
+         z⍪←z[n;]÷n-0 0 0 0 0 1 1 1
+         z←0.0001 round z
+         z[n+0 1;0]←'Total' 'Mean'
+         z[n+1;4]←⊂'Cov'
+         z⍪←¯8↑' ' 'Corr',z[n+1;5]{⍵,⍨⍺÷×/⍵}sqrt z[n+1;6 7]
+         z←'n' 'x' 'y' 'x-x' 'y-y' '(x-x)(y-y)' '(x-x)²' '(y-y)²'⍪z
+         z←' ' ' ' ' ' '  _' '  _' '   _    _ ' '   _  ' '   _  '⍪z
+         z}
+   ⍝  b←⍺≡0
+
+     z←⍺{2=⍴⍴⍵:showFreq ⍵ ⋄ ⍺ showRaw ⍵}⍵
+     b←⍺∧.=0
+     b←2≠⍴⍴⍵
+     z[b/3 4+≢⍵;2]←b/'Var' 'Sdev'
+     ⍵{n←≢⍺
+         ⍵[0 1;]⍪'-'⍪⍵[2+⍳n;]⍪'-'⍪(2+n)↓⍵}⍕z
+ }

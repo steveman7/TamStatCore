@@ -1,0 +1,29 @@
+ linear←{
+⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+⍝∇ Linear function
+⍝∊ Regression
+⍝⍺:  Confidence level
+⍝⍺:  Variant 0=function 1=conf  2=pred
+⍝⍺⍺: Coefficients
+⍝⍺⍺: Degrees of Freedom
+⍝⍺⍺: Mean Square Error
+⍝⍺⍺: Covariance Matrix
+⍝⍺⍺: Include intercept?
+⍝⍵:  Array
+⍝←:  b0+(b1×x1)+...+(bn×xn)
+⍝    linear
+     ⎕IO←0 ⋄ ⎕ML←3
+     B DF S C int←⍺⍺                    ⍝ Unpack operator
+     ⍵≡'Type':'Linear'                  ⍝ Function type is linear
+     ⍺←0                                ⍝ Default
+     CL A←2↑⍺                           ⍝ Action, Conf Level
+     B1←(int~1),B                       ⍝ Coefficients
+     (2=≢B1)∧1<≢,⍵:⊃⍺∘∇¨⍵               ⍝ Simple regression multiple inputs
+     1<⍴⍴⍵:⊃⍺∘∇¨↓⍵                      ⍝ Multiple regression multiple input
+   ⍝ A=0:B1+.×⍉int,⍤(2<≢B1)⊢⍵           ⍝ Function
+     Y←B1+.×⍉int,⍤(2<≢B1)⊢⍵             ⍝ Function
+     A=0:Y
+     d←(S*2)×(A-1)+x+.×C+.×x←(int~0),⍵  ⍝ Calculate standard error(s)
+     t←DF tDist criticalValue<0.5×1-CL  ⍝ Critical value of t-distribution
+     ⍝(f ⍵)(-,+)t×d*÷2}
+     Y(-,+)t×d*÷2}

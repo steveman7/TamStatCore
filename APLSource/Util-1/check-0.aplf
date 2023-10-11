@@ -1,0 +1,29 @@
+ check←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Check
+ ⍝∊ Utility Function
+ ⍝⍺ Y: Checking Parameters
+ ⍝⍵ X: Value
+ ⍝← 1 = Valid    0 = not valid
+ ⍝⍕ 1 ← 'I' check 3
+ ⍝    0::0 ⋄
+     ⎕IO←0 ⋄ ⎕ML←3                  ⍝ Set variables
+     ≡⍺:⍺ ∇¨{L←(⍺∊⎕D)/⍺                ⍝ Length parameters
+         2>≢L:∧/⍺ ⍺⍺⊂⍵                ⍝ Multiple checks
+         ∧/(∨/L ⍺⍺⊂⍵),(⍺~L)⍺⍺⊂⍵}⍵   ⍝ If multiple lengths, or them together
+ ⍝    ≡⍺:∧/⍺ ∇¨⊂⍵
+     'A'=⍺:(⎕DR ⍵)∊80 160           ⍝ Character
+     'W'=⍺:9=⎕NC'⍵'                 ⍝ Namespace
+     'v'=⍺:1=↑⍴⍴⍵                   ⍝ Vector
+     'm'=⍺:2=↑⍴⍴⍵                   ⍝ Matrix
+     (⎕DR ⍵)∊80 160 326 1289:0      ⍝ Check for numeric
+     'X'=⍺:1                        ⍝
+     'B'=⍺:11=⎕DR ⍵                 ⍝ Boolean
+     'I'=⍺:⍵≡⌊⍵                     ⍝ Integer
+     'P'=⍺:∧/(,⍵)between 0 1        ⍝ Probability/Proportion
+     'Q'=⍺:∧/(,⍵)include 0 1        ⍝ Include 0 and 1
+     'S'=⍺:0∧.<,⍵                   ⍝ Postive
+     'U'=⍺:0∧.≤,⍵                   ⍝ Non-negative
+     ⍺∊⎕D:(≢⍵)=⍎⍺                  ⍝ Check length
+     'O'=⍺:⍵∊0 1 ¯1 ¯2 ¯3           ⍝ Operator
+ }

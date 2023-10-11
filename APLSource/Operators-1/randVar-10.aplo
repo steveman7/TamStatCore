@@ -1,0 +1,2 @@
+ randVar←{⍺←0 1
+     ⍺(⍺⍺ randomVariable)⍵}

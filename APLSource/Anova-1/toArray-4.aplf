@@ -1,0 +1,25 @@
+ toArray←{
+⍝Vector of equal-length vectors or NS 'Data Factor1 Factor2 ... FactorN'
+     ⎕IO←0 ⋄ ⎕ML←1
+     1<⍴⍴⍵:⍵  ⍝ If already matrix or higher rank, done
+     L D←{1=≢⊃⍵:(' 'toNestedVector 1⊃⍵)(⍵[0]⍎1⊃⍵)
+         (⎕A⍨↑≢⍵)⍵}⍵ ⍝ If 1st item namespace, unpack
+     DD←↓(↑D)[;⍋⍉↑1↓D]                     ⍝ Sort data by levels
+     X←⊃DD                                 ⍝ Data are first item
+     1=≢D:'No Treatments Specified'        ⍝ Check for treatments
+
+     A←toNestedVector¨1↓D                  ⍝ Make factor(s) into nested vector(s)
+     S←(≢∘∪¨A)                                 ⍝ Find unique Values
+     X⍴⍨S,(⍴X)÷×/S
+     i←↓↑u⍳¨a                              ⍝ Get indexes
+     b←i{⍉⍺∘.=⍳≢⍵}¨u                       ⍝ Selection matrix(ices)
+     n←+/¨b                                ⍝ Determine sample size(s)
+     (1∨.≠≢∘∪¨n)∧2<≢d:'Unbalanced Design'  ⍝ Don't permit unbalanced 2-way ANOVA
+
+
+
+
+
+
+
+ }

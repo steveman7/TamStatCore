@@ -1,0 +1,18 @@
+ count←{
+ ⍝∇ Summary Function
+ ⍝⍟ Copyright 2017 by Steve Mansour
+ ⍝⍵ Vector, Matrix or Namespace
+ ⍝← Number of items
+ ⍝⍕  Is ← count Xv
+ ⍝⍎  5 ← count 2 5 1 3 2
+     ⎕IO←0 ⋄ ⎕ML←3
+     9=⎕NC'⍵':⍵.count          ⍝ If namespace, extract count variable
+     w←toNestedVector ⍵        ⍝ If character convert to nested vector
+    ⍝2≠⍴⍴w:≢w~⎕NULL            ⍝ If vector, get tally
+     1=⍴⍴w:≢w                  ⍝ If vector, get tally
+     ~isFrequency w:'Rank Error'
+     n←⍵[;1]                   ⍝ Count is 2nd col of matrix
+     n∧.=⌊n:+/n                ⍝ If integer treat as freq dist
+     (1=+/n)∧n∧.≥0:⌊/⍬         ⍝ If prob distribution, pop is infinite
+     'Domain Error'            ⍝ Else domain
+ }

@@ -1,0 +1,1 @@
+ critVal←{⍺←0 1 ⋄ ⍺(⍺⍺ criticalValue ⍵⍵)⍵}

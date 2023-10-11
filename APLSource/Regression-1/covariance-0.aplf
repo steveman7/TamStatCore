@@ -1,0 +1,10 @@
+ covariance←{
+     0=⎕NC'⍺':cov ⍵
+     ⍺ cov ⍵
+    ⍝ ⎕ML←3 ⋄ ⎕IO←0
+⍝     n←1⊃⍴XX←⊃⍉⍵
+⍝     SXSY←∘.×⍨+/XX
+⍝     SXY←+/¨∘.×⍨↓XX
+⍝     ((n×SXY)-SXSY)÷n×n-1
+
+ }

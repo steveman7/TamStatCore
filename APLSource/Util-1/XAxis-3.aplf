@@ -1,0 +1,17 @@
+ XAxis←{
+⍝ XAxis for data set
+⍝⍵ Data Set or summary
+⍝← Bounds
+⍝← Scale (Rule)
+     ⎕IO←0 ⋄ ⎕ML←3
+     R←{⍵+⍵=0}(⌈/-⌊/)⍵                     ⍝ Range
+     C←10*⌊10⍟R                            ⍝ Scale    (Characteristic)
+     L←C×⌊(⌊/⍵)÷C                          ⍝ Lower bound
+     M←(5 2 1+.>C÷⍨L-⍨⌈/⍵)⊃1 2 5 10        ⍝ Find Scaling Factor
+     T←L+(C÷M)×1+⍳10                       ⍝ Rescale to size
+     TW←10                                 ⍝ Tick Width
+     S←101⍴1(TW-1)/'+-'                    ⍝ Scale
+     FS←TW{⍵≥10:'I',⍕⍺                     ⍝ Format String
+         'F',(⍕⍺),'.',⍕1+⌈0.1⍟⍵}R          ⍝
+     S←S⍪' ',('10M<->',FS)⎕FMT,[¯0.5]T     ⍝ Scale
+     (L,↑⌽T)S}

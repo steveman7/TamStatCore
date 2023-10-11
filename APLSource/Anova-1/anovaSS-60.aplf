@@ -1,0 +1,20 @@
+ anovaSS←{
+⍝∇ N-way Anova SS
+⍝∊ (c) 2022, Stephen Mansour
+⍝⍺  Optional:  Levels Deep
+⍝⍵  n-dimensional array
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄ N←⍴⍵ ⋄ TOL←1E¯10
+     YN←(2*⍨+/,⍵)÷×/,N                        ⍝ Correction Factor
+     SST←(+/,⍵*2)-YN                          ⍝ Total sum of squares
+     FA←¯1+≢N                                 ⍝ Factors
+     Y←+/⍣FA¨({(-⍵)⌽¨⊂⍵}⍳FA+1)⍉¨⊂⍵            ⍝ Main-Effect Sums
+     SSA←¯1↓YN-⍨(Y+.*¨2)÷(×/÷⊢)N              ⍝ Main-Effect SS
+     I←⍋∘⍒¨(⍳FA+1)∘∊¨,pairwise⍳FA             ⍝ Transpose vectors
+     Y←,¨+/⍣(FA-1)¨I⍉¨⊂⍵                      ⍝ 2-way Interaction Sums
+     SSAB←(Y+.*¨2)÷{(×/⍵)÷×pairwise ¯1↓⍵}N    ⍝
+     SSAB-←YN++pairwise SSA                   ⍝ 2-way Sum of Squares
+     SSABC←SST-+/SSA,SSAB                     ⍝ 3+way Sum of Squares
+     1=R←⊃⌽N:SSA,SSAB,(TOL<SSABC)/SSABC       ⍝ Replicates?
+     SSE←(+/,var across ⍵)×R-1                ⍝ Separate Error from 3+way
+     SSA,SSAB,(TOL>|SSE-SSABC)↓(SSABC-SSE),SSE ⍝ List them
+ }

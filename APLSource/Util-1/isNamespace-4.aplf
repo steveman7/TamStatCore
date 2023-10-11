@@ -1,0 +1,1 @@
+ isNamespace←{9=⎕NC'⍵'}

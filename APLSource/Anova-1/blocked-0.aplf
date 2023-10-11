@@ -1,0 +1,30 @@
+ blocked←{
+ ⍝⍟ Copyright (C) 2022 by Stephen M. Mansour
+ ⍝∇ Generate blocked design
+ ⍝∊ ANOVA
+ ⍝⍵ X:    Response - n-dimensional numeric vector; trailing dimension is replicates
+ ⍝← NS:   Namespace containing the following variables
+ ⍝        AnovaTable  RSq  RSqAdj  S  Type
+ ⍝⍕ NS ←  factorialDesign X
+ ⍝⍎ blocked 4 3⍴98 97 99 96 91 90 93 92 96 95 97 95 95 96 99 98
+ ⍝⍎ blocked   4 4⍴.1×93 94 96 100 94 93 98 99 92 94 95 97 97 96 100 102
+⍝⍎ factor Data Factor1 ... FactorN
+ ⍝⍎ factor NS  Data 'Factor1 ... FactorN'
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄
+    ⍝ 1=⍴⍴⍵:{A B← ∪¨1↓⍵  ⋄ I J← A B⍳¨⍵
+⍝           I J{         ⊃⍵                      }
+     W NMS←{isNamespace⊃⍵:(toArray⊃⍎/⍵)(1↓' 'toNestedVector⊃⌽⍵)
+         NMS←(¯1+≢⍵)↑⎕A  ⍝ Factor Names
+         (1=⍴⍴⍵)∧2≤|≡⍵:(toArray ⍵)NMS ⋄ ⍵ 0J1}⍵
+    ⍝ N←≢,W
+⍝     Y2N←N÷⍨(+/,W)*2
+     EFF SS DF←↓⍉(≢⍴W)aov W   ⍝ Calculate factorial
+     Source←'Treatments' 'Blocks' 'Error'
+     2=⍴⍴W:⍉↑Source SS DF(≢SS)
+     Source←'Rows' 'Columns' 'Interaction' 'Blocks' 'Error'
+     D←'RCBIEEE'{⍺,+⌿⍵}⌸SS,⍪DF
+     Source,0 1↓D[(⊃¨Source)⍳D[;0];],5↑3/≢D
+
+
+
+ }

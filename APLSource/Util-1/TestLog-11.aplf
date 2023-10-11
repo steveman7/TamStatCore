@@ -1,0 +1,69 @@
+ Z←TestLog;COLORS;PROPORTION;DATA;B;V;VV;BALANCE;NS;RATE;GROUPA;GROUPB;BEFORE;AFTER
+ ⎕ML←3 ⋄ ⎕IO←0
+ 3 0.25 binomial 2
+ 3 0.25 binomial 0 1 2
+ 3 0.25(binomial probability=)2
+ 3 0.25 binomial probability=2
+ 3 0.25 binomial probability≤2
+ +/3 0.25 binomial 0 1 2
+ 3 0.25 binomial probability≠2
+ 3 0.25 binomial probability>2
+ 10 0.25 binomial probability between 3 6
+ 10 0.25 binomial probability∊4 5
+ COLORS←'Brown,Yellow,Red,Blue,Orange,Green'
+ PROPORTION←0.14 0.13 0.2 0.24 0.16 0.13
+ COLORS PROPORTION multinomial probability='Red'
+ COLORS PROPORTION multinomial probability≠'Green'
+ 0.1 0.5 0.4 multinomial probability=1
+ 0.1 0.5 0.4 multinomial probability<2
+ normal ¯2 ¯1 0 1 2          ⍝ Standard Normal density
+ 8 3 normal 4 6 8 10 12      ⍝ mean=8, std deviation=3
+ normal probability≤2 ⍝ Cumulative probability
+ normal probability<2 ⍝ Strict inequality doesn’t matter
+ normal probability=2 ⍝ Probability of exact value is zero.
+ normal probability between ¯1.96 1.96 ⍝ Interval probability
+ 8 2 normal probability>5 ⍝ Non-standard upper-tail normal probability
+ normal criticalValue>0.05 ⍝ Right tail value
+ normal criticalValue<0.05 ⍝ Left tail value
+ normal criticalValue≠0.05 ⍝ Two-tail value
+ 0.5 exponential probability≤2
+ 0.5 exponential criticalValue≤0.63212
+ normal randomVariable 5     ⍝ Generate 5 standard normal r.v.’s
+ 3 poisson randomVariable 10 ⍝ Generate 10 poisson r.v.’s (mean=3)
+ DATA←25 30 10 22 23 29 29 28 ⍝ sample mean
+ mean DATA
+ mean confInt DATA      ⍝ confidence interval (95%)
+ 0.99 mean confInt DATA   ⍝ 99% confidence interval
+ B←binomial randomVariable 1000       ⍝ sample proportion (p0=0.5)
+ proportion B
+ proportion confInt B ⍝ 95% confidence interval contains 0.5
+ V←variance DATA                 ⍝ sample variance
+ V*÷2                            ⍝ sample standard deviation
+ VV←0.99 variance confInt DATA  ⍝99% confidence int for variance
+ VV*÷2                           ⍝ confidence interval for std dev
+ BALANCE←72000 20000 normal randomVariable 30
+ mean BALANCE
+ NS←BALANCE mean hypothesis=70000
+ NS.pValue
+ NS.TestStatistic
+ report NS
+ RATE←3 4 8 triangular randomVariable 30
+ report RATE mean hypothesis≤5
+ 0.01 report(RATE>6)proportion hypothesis≥0.15
+ GROUPA←2 5 3 8 1
+ GROUPB←4 3 2 2
+ report GROUPA mean hypothesis=GROUPB
+ mean confInt GROUPA GROUPB
+ BEFORE←2 5 3 8 1
+ AFTER←4 3 2 5 2
+ report(AFTER-BEFORE)mean hypothesis=0
+ mean confInt AFTER-BEFORE
+ report GROUPA variance hypothesis=GROUPB
+ DATA←2 1 2 7 4 1⌿toMatrix COLORS
+ uniform goodnessOfFit DATA
+ report COLORS PROPORTION multinomial goodnessOfFit DATA
+ report normal goodnessOfFit?100⍴100
+ report normal goodnessOfFit BALANCE
+ 8 0.3 binomial theoretical mean''
+ 8 0.3 binomial theoretical var''
+ Z←'Test Successful'

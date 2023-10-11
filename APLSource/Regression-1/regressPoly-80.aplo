@@ -1,0 +1,34 @@
+ regressPoly←{
+⍝Polynomial regression
+⍝⍺  Y D
+⍝⍺⍺ Int
+⍝⍵  X1 [X2]
+⍝←
+     ⎕ML←1 ⋄ ⎕IO←0 ⋄ ⎕PP←5
+     Y Deg←2↑(⊆⍺),2
+     NS←Deg makePolynomial{2=≢⊆⍵:⊃⍺⍺/⍵
+         ⍺ ⍺⍺ ⍵}⍵
+     ⍝X←⊃⍣(2=≢⍵)⊢1↓⍵
+    ⍝NS.Int←⍺⍺
+     NS.Y←Y
+    ⍝Z←'Y'regress NS
+     NMS←variables NS
+     Z←⍺⍺ leastSquares NS,⊂⍕NMS(⊢,⊣~⊢)⊂,'Y'
+     M←mean¨⊆⍵
+     Z.g←Deg M{⍵≡'Type':'Linear'
+         ⍺←0                                ⍝ Default
+         CL A←2↑⍺                           ⍝ Action, Conf Level
+         D M←⍺⍺
+         X←D{1=≢M:⍵∘.*(~⎕IO)+⍳⍺
+             ∊(×/⍵)pairwise↓⍵∘.*1 2}⍵-M
+         A=0:f X
+         ⍺ f X}
+     rAv:Z
+     V←⊆M{'X',(⍕⍵),'-',⍕⍺}¨1+⍳⍴M            ⍝ Variable names
+     E←V∘.{⍵=1:⍺ ⋄ '(',⍺,')*',⍕⍵}1+⍳Deg   ⍝ Expression Names
+     XY←'×'pairwise'(',¨V,¨,')'
+     E←XY{0=≢⍺:,⍵ ⋄ ⊃⍺ pairwise↓⍵}E
+     Z.Equation←⊃⌽E{Z.Equation←(⍵ ⎕R ⍺)Z.Equation}¨1↓Z.VariableNames
+     Z.(_Report←Equation{D←↓⍵ ⋄ (2⊃D)←⍺ ⋄ ↑D}_Report)
+     Z
+ }

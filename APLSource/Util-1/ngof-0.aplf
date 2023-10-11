@@ -1,0 +1,29 @@
+ ngof←{
+ ⍝∊ Written by Steve Mansour
+ ⍝∇ Normal goodness Of Fit
+ ⍝⍵ Numeric Vector or 2-column Vector
+ ⍝← Parameters
+ ⍝← Degrees of freedom
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←⍬                      ⍝ Initialize everything
+     W←{2=≢⍵:⍉⊃⍵ ⋄ ⍵}⍵                        ⍝ Normal goodness of fit
+     (M S N)←(mean,sdev,count)W               ⍝ Get mean, sdeV, count
+     f←{(V OBS)←↓⍉⍵                           ⍝ Frequency
+         INT←2+/V÷2                           ⍝ InterVals
+         P←M S∘(normal prob between)¨2,/INT   ⍝ middle probabilities
+         P←¯1⌽P,|1 0-M S normal prob≤¯2↑1⌽INT ⍝ lower and upper prOBS
+         EXP←P×N                              ⍝ Expected values
+         ↓⍉5 combinePartitions V,OBS,[0.5]EXP}⍝ Combine groups of < 5
+     g←{⍺←5⌈20⌊⌊N÷10                          ⍝ Set bins or use default
+         P←(1↓⍳⍺)÷⍺                           ⍝ Get cumulative probs
+         Z←M S normal criticalValue>P         ⍝ Find boundary points
+         OBS←{⍺,≢⍵}⌸Z⍸W                       ⍝ Put into values into buckets
+         OBS←⍺{(⍵⍪0)[⍵[;0]⍳¯1+⍳⍺;1]}OBS       ⍝ Sort in ascending order
+         Z←Z round⍨10*5-⍨⌈/⌈10⍟|Z~0           ⍝ Round to 5 decimal places
+         V←(1⌽⍺↑1)⌽¨2,/'<',Z,'>'              ⍝ Include <,> for tails
+         V←{⍺,(⍺∊'<>')↓'-'⍵}/¨V              ⍝ Insert dashes
+         EXP←N×⍺⍴÷⍺                           ⍝ Expected values
+         V OBS EXP}                           ⍝ Result
+     (V OBS EXP)←⍺{B←2⊥(1=⍴⍴⍵),⍺≢⍬            ⍝ Determine which function
+         B=0:f ⍵ ⋄ B=2:g ⍵ ⋄ ⍺ g ⍵}W          ⍝ to use
+     DF←¯3+≢V                                 ⍝ Degrees of Freedom
+     'Normal'(M S),DF gof V OBS EXP}

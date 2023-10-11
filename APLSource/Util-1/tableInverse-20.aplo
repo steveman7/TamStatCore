@@ -1,0 +1,33 @@
+ tableInverse←{
+⍝∇ Table Inverse with interpolation
+⍝⍟ (c) 2022 by Stephen Mansour
+⍝⍺ Row Index
+⍝⍵ Critical Value
+⍝⍺⍺ Table
+⍝← Probability from column headings (1st row)
+⍝← If index is between row and/or column, interpolate
+     ⎕IO←0 ⋄ ⎕ML←3
+     1<⍺⌈⍥≢⍵:⍺ ∇¨⍵
+     int←{(|⍺-⍵)÷-/⍵}                 ⍝ Interpolate function
+     f0←{I←⍺⍺[;0]⍳⍺ ⋄ J←1+(1↓⍺⍺[I;])⍳⍵
+         ⍺⍺[0;J]}
+     f1←{RT←⍺⍺[;0] ⋄ CT←⍺⍺[0;]         ⍝ Row, Column Titles
+         I←RT⍳⍺ ⋄ J←1+(1↓⍺⍺[I;])⍸⍵
+      ⍝   X←⍺⍺[I;J+0 1]
+⍝         Y←⍺⍺[0;J+0 1]
+         X Y←↓⍺⍺{I J←⍵
+             J<¯1+↑⌽⍴⍺:⍺[I 0;J+0 1]
+             +\-\⍺[I 0;J-0 1]}I J
+         Y[0]+(⍵-↑X)×Y÷⍥(-/)X
+     }
+     f2←{RT←⍺⍺[;0] ⋄ J←RT⍸⍺
+         CT←⍺⍺[J+0 1;]+.×⍨⍺ int RT[J+1 0]          ⍝ Interpolate row
+         J←1+(1↓CT)⍸⍵                            ⍝ Column Index
+         J<¯1+≢CT:⍺⍺[0;J+0 1]+.×⍵ int CT[J+1 0]    ⍝ Interpolate column
+         X Y←↓+\-\(⍉⍺⍺[0;],⍪CT)[;J-0 1]
+         Y[0]+(⍵-↑X)×Y÷⍥(-/)X
+     }
+     (⍺∊⍺⍺[;0])∧⍵∊⍺⍺[(¯1+≢⍺⍺)⌊⍺⍺[;0]⍳⍺;]:⍺(⍺⍺ f0)⍵
+     ⍺∊⍺⍺[;0]:⍺(⍺⍺ f1)⍵
+     ⍺(⍺⍺ f2)⍵
+ }

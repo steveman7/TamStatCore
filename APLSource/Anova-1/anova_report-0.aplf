@@ -1,0 +1,19 @@
+ anova_report←{0::⍵._Report ⋄
+     ⎕IO←0 ⋄ ⎕ML←3
+    ⍝ DF←(¯1∘↓,¨↑∘⌽)¯1↓1↓⍵.AnovaTable[;2]
+     DF←⍵.DF2,⍨¨¯2↓1↓⍵.AnovaTable[;2]
+     DF←(~¯2↓1↓⍵.AnovaTable[;0]∊'Blocks' 'Rows' 'Columns')/DF ⍝ Don't calc F for blocks
+     H←⊂¯9↑' '~⍨,'K3G<F(⍺=.99Z)>'⎕FMT ⍺   ⍝ Header for critical Value
+     FC←(∪DF)fDist criticalValue<¨⍺    ⍝ Append F(⍺) to table
+     TBL←⍵.AnovaTable,H,(¯1+≢⍵.AnovaTable)↑FC[DF⍳⍨∪DF]
+     RPT←⍵._Report{⍺,(≢⍺)↑' '⍪¯1⊖(↑⍵)⍪'-'⍪'BF9.2'⎕FMT 1↓⍵}TBL[;6]
+     ⍝4<≢⍵.AnovaTable:⍵._Report                   ⍝ Append F(⍺) to Report
+     4<≢TBL:RPT                              ⍝ Append F(⍺) to Report
+     U←stats¨↓{n m s←↓⍉⍵ ⋄ N←1+n+.-1         ⍝ Adjust "sample size" and
+         vp←((s*2)+.×n-1)÷N-1                ⍝ Pooled var to tie confints
+         N,m,[0.5]sqrt vp×N÷n}1 1↓⍵.Means    ⍝ to Minitab for anova
+     D←(1-⍺)1(1↓⍵.Means[;0])mean formatConfInt U
+           ⍝  LSD←'Treatment' 'Mean Diff' 'DF' 'SE' 'T' 'P' 'LSD'⍪lsd ⍵
+     LSD←⍺ lsd ⍵
+     TXT←⍕,[⍳0]RPT' '⍵.Means' ' 'Confidence Interval' ' 'D.Output' 'LSD
+     120↑[1]TXT}

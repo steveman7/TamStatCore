@@ -1,0 +1,40 @@
+ vst←{
+⍝ ∇ Variance stablizing transformation
+⍝ Copyright 2023 by Stephen Mansour
+⍝ ⍺ Response variable
+⍝ ⍺⍺ transformation function
+⍝ ⍵⍵ Intercept
+⍝ ⍵ Predictor variables
+⍝     0=⍟;1=⊢;2=sqrt;3=arcsin sqrt;4=×*;5=÷sqrt;6=÷
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄ ⎕PP←5
+     I←1+0.25 0.5 0.52 1 2 4⍸¯1⌈⍺⍺ 0.25
+     F←I⊃'ln' '' 'sqrt' 'arcsin sqrt' 'exp' '÷sqrt' '÷'
+     insert←{D←↓⍵ ⋄ (2⊃D)←⍺ ⋄ ↑D}
+     I=4:⍵⍵{NS←⍺ leastSquares⍟⍵
+         NS.g←{⍵≡'Type':'Linear'
+             ⍺←0 ⋄ CL A←2↑⍺
+             A=0:*f⍟⍵
+             *⍺ f⍟⍵}
+         NS.Equation←(⊃NS.VariableNames),'←',(⍺/⍕*⊃NS.B)
+         NS.Equation,←(~⍺)↓∊(1↓NS.VariableNames){'×(',⍺,'*',(⍕⍵),')'}¨⍺↓NS.B
+         NS.Equation,←'+E'
+        ⍝ NS.(B[0]←*B[0])
+         NS←{1=≢⍵.B:⍵ ⋄ ⍵.B[0]←*⍵.B[0] ⋄ ⍵}NS
+         NS.(_Report←Equation insert _Report)
+         NS}⍺ ⍵
+     NS←⍵⍵ leastSquares(⍺⍺ ⍺)⍵
+     INV←I⊃'exp' '⊣' '×⍨' '×⍨sin' 'ln' '×⍨÷' '÷'
+     NS.g←(⍎INV){⍵≡'Type':'Linear'              ⍝ Build function
+         ⍺←0                                ⍝ Default
+         CL A←2↑⍺                           ⍝ Action, Conf Level
+         A=0:⍺⍺ f ⍵
+         ⍺⍺⊢⍺ f ⍵}
+
+     NEW←'←',INV,' '
+     NS.Equation←('←'⎕R NEW)NS.Equation
+     NS.(_Report←Equation insert _Report)
+     NS
+
+
+
+ }

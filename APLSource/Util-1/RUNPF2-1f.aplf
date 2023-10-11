@@ -1,0 +1,17 @@
+ {I}RUNPF2 LOG;I;J;K
+ ⎕ML←3 ⋄ ⎕IO←0
+ ⎕SE.⎕WX←1
+ ⎕ML←3 ⋄ ⎕IO←0
+⍝ ⎕SE.FontObj←'Dyalog Std' 22 1 0 0 700 0
+ LOG←(-+/∧\⌽' '∧.=LOG)↓[1]LOG ⍝ Remove trailing blanks
+ :If 0=⎕NC'I' ⋄ I←1 ⋄ :EndIf
+ K←'→⎕LC+1'⎕PFKEY 3
+ :While I<↑⍴LOG
+     K←LOG[I;]⎕PFKEY 2
+     ⍞←5⍴' '
+     J←⍞
+     I←I+K≡5↓J
+     ⍎J
+ :End
+ 'End Demo'
+ ⍝ ⎕SE.FontObj←'Dyalog Std' 16 1 0 0 400 0

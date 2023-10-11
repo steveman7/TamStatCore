@@ -1,0 +1,2 @@
+ across←{0=⎕NC'⍺':⍺⍺⍤1⊢⍵  ⍝ Apply function across
+     ⍺ ⍺⍺⍤1⊢⍵}

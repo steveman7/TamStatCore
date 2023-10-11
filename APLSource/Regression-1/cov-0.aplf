@@ -1,0 +1,27 @@
+ cov←{
+ ⍝⍝⍟ Copyright 2018 by Stephen M. Mansour
+ ⍝∇ Covariance
+ ⍝∊ Summary Function
+ ⍝⍺ Y simple vector
+ ⍝⍵ X simple or nested vector
+ ⍝← Sample covariance
+ ⍝← Numeric Scalar if X and Y simple numeric vectors
+ ⍝← Numeric Matrix if monadic
+ ⍝← Matrix with labels if left argument is a namespace
+ ⍝←  and right argument is a character vector
+ ⍝⍕ Z←Y cov X
+ ⍝⍕ Z←cov X1 X2 ... Xn
+ ⍝⍕ Z←cov N 'X1 X2 ... Xn'
+ ⍝⍎ Height cov Weight
+ ⍝⍎ cov Height Weight ShoeSize
+     ⎕IO←0 ⋄ ⎕ML←3
+     0=⎕NC'⍺':∘.∇⍨⍵              ⍝ No left arg, make cov matrix
+     9=⎕NC'⍺':⍺ ∇{m←⍺⍺ ⍺.(⍎⍵)    ⍝ If namespace
+         m{(⍵,⍨⊂'cov'),⍵⍪⍺}(⍵≠' ')⊂⍵}⍵   ⍝ Add labels
+     0J1∊⍺:(1↓⍺)showCov ⍵        ⍝ Display covariance
+     1∊≢¨⍺ ⍵:0                   ⍝ 0 if scalar
+     rAv:+##.∆r.x'cov(⍵,⍵)'⍺ ⍵   ⍝ R calculation
+     n←≢⍵                        ⍝ Sample Size
+     z←(n×⍺+.×⍵)-×/+/⊃⍺ ⍵        ⍝ Sum of Squares
+     z÷n×n-1                     ⍝ Covariance
+ }

@@ -1,0 +1,7 @@
+ confCorr←{⍺←0.95
+     C N←2↑⍺
+     X Y←{2=≡⍵:⍵ ⋄ ↓⍉⍵}⍵
+     R←X corr Y
+     Z←normal critVal<0.5×1-C
+     7○(¯7○R)(-,+)Z÷sqrt ¯3+≢X
+ }

@@ -1,0 +1,20 @@
+ skewness←{
+ ⍝⍟ Copyright 2017 by Stephen Mansour
+ ⍝∇ Sample Skewness
+ ⍝∊ Summary Function
+ ⍝⍺ 1=Population, 0=Sample
+ ⍝⍵ Data (Numeric)
+ ⍝← z>0  Skewed right
+ ⍝← z=0  Symmetric
+ ⍝← z<0  Skewed left
+ ⍝⍕ Zs ← skewness Xv
+    ⍝ rAv:+##.∆r.x'skewness(⍵)'⍵    ⍝ If requested call R
+     ⎕DIV←1 ⋄ ⎕ML←3 ⋄ ⎕IO←0         ⍝ Set system variables
+     n m s←(count,mean,sdev)⍵       ⍝ Get count, mean, sdev of data
+     9=⎕NC'⍵':'Nonce Error'
+    ⍝ x←{1=⍴⍴⍵:⍵ ⋄ 2=⍴⍴⍵:∊(//⌽⍵)}⍵
+     x←{isFrequency ⍵:∊(//⌽⍵) ⋄ ⍵}⍵
+    ⍝ z←+/(s÷⍨⍵-m)*3
+     3>n←≢x:'Sample Size Too Small' ⍝ If Sample size < 3, get out
+     z←+/(s÷⍨m-x~⎕NULL)*3
+     -z×n÷×/n-1 2}

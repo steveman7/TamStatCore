@@ -1,0 +1,9 @@
+ load←{
+  ⍝⍺ Directory (optional)
+  ⍝⍵ List of Namespaces, '' = All
+     ⍺←'E:\TamStat\TamStatScript\'  ⍝ Default directory
+     x←{0≠≢⍵~' ':⍵
+         'Operators,Distribution,Graph,Summary,Relational,Regression,Util,Arithmetic,UserInterface'}⍵
+     ⊃⍺∘{str←'#.TamStat.',⍵,' ',⍺,⍵
+         ⎕SE.SALT.Load ⍺,⍵'-target=#.TamStat'}¨toNestedVector x
+ }

@@ -1,0 +1,10 @@
+ Z←Init
+ ⎕IO←0
+ ⎕ML←3
+ 2+
+ :If 0
+     P←'Operators Util Distribution Summary Relational Arithmetic Graph Regression UserInterface GUI'
+     P←⍕'##.'∘,¨(P≠' ')⊂P
+     ⎕PATH←P
+ :EndIf
+ Z←0

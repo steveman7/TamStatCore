@@ -1,0 +1,14 @@
+ standardOrder←{
+⍝ Put the right argument into standard order
+⍝        standard order 'ab'
+⍝  ⍬ 'a' 'b' 'ab'
+⍝        standard order 'abc'
+⍝  ⍬ 'a' 'b' 'ab' 'c' 'ac' 'ab' 'abc'
+⍝  ⍵ Character string
+     ⎕IO←0 ⋄ ⎕ML←1
+     Z←(⊂''){⍺←
+         0=≢⍵:⍺
+         (⍺,⍺,¨⊃⍵)∇ 1↓⍵}⍵
+     3=I←'Aa'⍳⊃⍵:Z
+     (I⌷'I',⊂'(1)')@0⊢Z
+ }

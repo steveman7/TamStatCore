@@ -1,0 +1,55 @@
+ tDist←{                ⍝ t Distribution
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Student's t Distribution
+ ⍝∊ Continuous Distribution Function
+ ⍝⍺ N: Degrees of Freedom
+ ⍝⍵ X: Value
+ ⍝← S: Density
+ ⍝⍕ N chiSquare T
+ ⍝⍎ 0.02833 ← 5 chiSquare 10⍝⍺ Degrees of Freedom
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ w←⍵                           ⍝ Set system variables
+     w≡'Type':'Continuous'
+     m c←2↑⍺                                        ⍝ Parameter (D.F)
+   ⍝ c←checkOperator
+     w≡'Mean':{⍵>1:0 ⋄ ⎕NULL}m          ⍝ Calculate theoreetical value
+     w≡'Variance':{⍵>2:⍵÷⍵-2 ⋄ ⎕NULL}m  ⍝    "          "          "
+     (⊂w)∊'Mode' 'Skewness':0                       ⍝    "          "          "
+     w≡'Kurtosis':{⍵≤4:⌊/⍳0 ⋄ 6÷⍵-4}m               ⍝    "          "          "
+     str←'pdqr '[1 0 ¯1 ¯2⍳c],'t(⍵,⍵)'              ⍝ Build R expression
+     rAv:+##.∆r.x str ⍵ m                           ⍝ Use R if requestedion
+     TDEN←{Z←÷⌿!¯1+0.5×1 0∘.+K←⍺⌊342                ⍝ Density Function
+         Z←Z÷(○K)*÷2
+         Z÷(1+(⍵*2)÷K)*(K+1)÷2}
+     INTEGRAL←{AB←¯2↑0,⍵                            ⍝ Definite Integral
+         H←(-/⌽AB)÷N←⍺
+         XI0←+/⍺⍺ AB
+         XI←((N÷2),2)⍴0,⍺⍺ H×1↓⍳N
+         H×(1 2 4+.×XI0,+⌿XI)÷3}
+     PRIME←{∆X←0.000001×⌊/X←,⍵                      ⍝ Derivative
+         Z←(2⍴⍴X)⍴X
+         Z←⍺⍺ X,[0]Z+∆X×N∘.=N←⍳⍴X
+         ⍉((1 0↓Z)-Z[(⍴X)/0;])÷∆X}
+     INV←{TOL←0.0001 ⋄ ⍺←1 ⋄ ⎕DIV←1                 ⍝ Inverse Operator
+         FX←(⍺⍺ ⍺)-⍵
+         X←⍺-FX÷⍺⍺ PRIME ⍺
+         TOL<⌈/|X-⍺:X ∇ ⍵ ⋄ X}
+     SNORM←{d←0.3193815 ¯0.3565638 1.781478 ¯1.821256 1.330274
+         |(⍵≥0)-(0.3989423×*¯0.5×⍵*2)×d+.××⍀(5,⍴⍵)⍴÷1+0.2316419×100⌊|⍵}
+     TDIST←{⍺>1001:SNORM ⍵                          ⍝ Cumulative Distribution
+         0.5+(×⍵)×100(⍺∘TDEN)INTEGRAL¨|⍵}
+     TINV←{↑¨(⍺∘TDIST)INV¨⍵}                        ⍝ Critical Value
+    ⍝ w←⍵
+⍝     w≡'Type':'Continuous'
+⍝     m c←2↑⍺
+    ⍝ w≡'Mean':{⍵>1:0 ⋄ ∆SigErr'Only for df > 1'}m
+⍝     w≡'Variance':{⍵>2:⍵÷⍵-2 ⋄ ⎕null}m
+     c=0:m{⍺=1:÷○(1+⍵)*2 ⋄ ⍺ TDEN ⍵}w               ⍝ Density
+     c=1:m{##.Koko.Distrib.Student_P ⍵,⌊⍺}¨w
+     c=¯1:m{⍵<0.5:-##.Koko.Distrib.Student_Ta ⍵,⌊⍺
+         ##.Koko.Distrib.Student_Tp ⍵,⌊⍺}¨w
+    ⍝ c=1:m{⍺=1:0.5+(¯3○⍵)÷○1 ⋄ ⍺ TDIST ⍵}w          ⍝ Cumulative Distribution
+⍝     c=¯1:m{⍺=1:3○○⍵-÷2 ⋄ ⍺ TINV ⍵}w                ⍝ Inverse (Critical Value)
+     Y←normal randomVariable w                      ⍝ Normal Random Variable
+     Z←m chiSquare randomVariable w                 ⍝ Chi Square random Variable
+     Y÷(Z÷m)*÷2                                     ⍝ t Random Variable
+ }

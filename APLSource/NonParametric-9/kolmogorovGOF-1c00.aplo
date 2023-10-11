@@ -1,0 +1,30 @@
+ kolmogorovGOF←{
+⍝∇ Kolmogorov Goodness of Fit Test
+⍝⍺ Parameters
+⍝⍺⍺ Distribution
+⍝⍵⍵ Relation
+⍝⍵  Data
+⍝⍎  4 8 rectangular kolmogorovGOF = 6.3 4.2 4.7 6 5.7
+     ⍺←0 1 ⋄ ⎕IO←1 ⋄ ⎕ML←1
+   ⍝  NS←⎕NS''
+     X←⍵[⍋⍵]
+  ⍝  F←⍺ ⍺⍺ prob≤X           ⍝ Theoretical Distribution
+     F←⍺ ⍺⍺{11::⍺⍺ ⍵ ⋄ ⍺ ⍺⍺ prob≤⍵}X
+     N←≢⍵                    ⍝ Sample Size
+     R←⌊/|-\⌽7,2⊥(⊢⍵⍵⌽)⍳3    ⍝ (>,1),(=,2),(<,3)
+     S←(+/X∘.≥X)÷N           ⍝ Empirical Distribution
+     Tplus←⌈/U←F-S-÷N
+     Tminus←⌈/V←S-F
+     T←R⊃Tplus(Tplus⌈Tminus)Tminus
+     P←(2*R=2)×N kolmogorov prob>T
+     TBL←'Value' 'S(x)' 'F(x)' 'T+' 'T-'
+     TBL⍪←X,S,F,U,⍪V
+    ⍝ NS.rel←⍵⍵
+⍝     NS.TestStatistic←T
+⍝     NS.P←P
+⍝     NS.Parameters←N
+⍝     NS.distribution←kolmogorov
+     ⍝NS
+     D←'kolmogorov'
+     D(mean ⍵)P T ⍬ TBL
+ }

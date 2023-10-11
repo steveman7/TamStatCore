@@ -1,0 +1,15 @@
+ predInt←{
+ ⍝⍟ Copyright (C) 2018, 2023 by Stephen M. Mansour
+ ⍝∇ Calculate a prediction interval for a parameter
+ ⍝∊ Regression
+ ⍝⍺ [Level]: Confidence level - default .95
+ ⍝⍺⍺ fL: Linear Function  f(X) =  b0 + b1*x1 + ... + bn*xn
+ ⍝⍵ Xv:   numeric vector
+ ⍝← Interval:   2-item vector
+ ⍝⍕ Interval ← [.95|P] fL predInt X[A]|Cm|NS
+ ⍝⍎ MODEL.f predInt 5
+ ⍝⍎ .99 MODEL.f predIt 5
+     ⍺←0.95 ⋄ ⎕IO←0 ⋄ ⎕ML←3    ⍝ Default 95%
+     ⍺ 2 ⍺⍺ ⍵             ⍝ Call linear function
+    ⍝ ⊃⍺ 2∘⍺⍺¨⍵                 ⍝
+ }

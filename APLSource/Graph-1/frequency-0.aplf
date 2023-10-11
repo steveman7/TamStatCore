@@ -1,0 +1,41 @@
+ frequency←{
+    ⍝∇  Obtain frequencies from a variable
+    ⍝⍟  Copyright 2018 by Stephen Mansour
+    ⍝∊  Graphical Function
+    ⍝⍺  Integer ≥ 0
+    ⍝⍺  If ⍺ = 0, let system decide number of bins
+    ⍝⍺  If ⍺ = 1, don't range data if numeric; sort by frequency if character
+    ⍝⍺  If ⍺ > 1, (maximum) number of bins
+    ⍝⍺  If ⍺ < 0, bin width
+    ⍝⍵  Simple Vector
+    ⍝⍵  [Grouping Vector] (optional)
+    ⍝←  Two-column matrix [Values, Frequencies]
+    ⍝←  or Contingency Table
+    ⍝⍎  frequency 2 1 2 3 4 2 3
+    ⍝⍎  frequency 'Joe,Bob,Joe,Steve,Bob,Joe'
+    ⍝⍎  frequency SEX PARTY
+     ⎕ML←3 ⋄ ⎕IO←0                            ⍝ Set system variables
+     (2=⍴⍴⍵)∧80≠⎕DR ⍵:⍵
+     w←{(⎕DR ⍵)∊80 160:toNestedVector ⍵       ⍝ Convert right argument
+         (2≠≢⍵)∨~(⎕DR 1⊃⍵)∊83 163 323:⍵       ⍝
+         (1∨.>1⊃⍵):⍵                          ⍝
+         (toNestedVector↑⍵),[0.5]1⊃⍵}⍵        ⍝
+     def←{(⎕DR ⍵)∊11 80 160 320 326:0         ⍝ Default no range
+         (83=⎕DR ⍵~⎕NULL)∧20>range ⍵:≢∪⍵      ⍝ Small integer, range=1
+         bins←5+⍳10                           ⍝ Number of bins
+         i←1⌈15+.<(count ⍵)÷bins              ⍝ Put at least 10 in each group
+         bins[i-1]}                           ⍝ Interval width
+     ⍺←def w                                  ⍝ Default number of bins
+     rnd←{⍺≤0:⍵ ⋄ ⍺×⌊0.5+⍵÷⍺}¨                ⍝ Range the data?
+     V2←(2=≢⍵)∧1<≡⍵                           ⍝ One or two variables?
+     s←0J1≡↑⍺                                 ⍝ If no left argument?
+     R←(w~⎕NULL)def{0=≢⍵:⍺⍺ ⍺ ⋄ ↑⍵}⍺~0 0J1    ⍝ Number of bins?
+     a←w{⍵=≢∪⍺:0
+       ⍝ (1<↑⍵)∧326≠⎕DR ⍺~⎕NULL:⍵{(⌊10⍟⍵)round ⍵÷⍺-1}range ⍺ ⍝ Remove nulls and
+         (1<↑⍵)∧326≠⎕DR ⍺~⎕NULL:⍵{(10*¯1+⌊10⍟⍵)round ⍵÷⍺-1}range ⍺ ⍝ Remove nulls and
+         |⍵}R                                 ⍝ Get bin width
+     V2∧s:a _showCrossTab↑_crossTab/⍵         ⍝ Enhanced Contingency table
+     V2:↑_crossTab/⍺ rnd ⍵                    ⍝ Simple contingency table
+     s:_showFreq a _freq w                    ⍝ Enhanced frequency table
+     a _freq w                                ⍝ Simple frequency table
+ }

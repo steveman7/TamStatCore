@@ -1,0 +1,14 @@
+ buildArithmetic
+ :Namespace Arithmetic1
+     sin←1∘○
+     cos←2∘○
+     tan←3∘○
+     exp←*
+     ln←⍟
+     sqrt←*∘0.5
+     arcsin←¯1∘○
+     arccos←¯2∘○
+     arctan←¯3∘○
+     transpose←⍉
+     poly←⊥
+ :EndNamespace

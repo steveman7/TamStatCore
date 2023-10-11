@@ -1,0 +1,27 @@
+ quartile←{⎕ML←3 ⋄ ⎕IO←0
+     ⍺←⍳5
+     showQuartile←{
+        ⍝ showMedian¨showMedian ⍵
+         l c r←showMedian ⍵
+         (showMedian l)c(showMedian r)
+     }
+     showMedian←{
+         0::⍵
+         n←≢d←⍵[⍋⍵]   ⍝ Sample Size
+         odd←2∘|      ⍝ Odd or Even?
+         c←⌈(n-1)÷2   ⍝ Center of the data
+         odd n:(c↑d)('(',d[c],')')((-c)↑d)
+         (c↑d)('|')(c↓d)
+     }
+     0J1∊⍺:showQuartile ⍵~⎕NULL
+     1=≡⍺:⍺ ∇¨⊂⍵
+     ⎕NULL∊⍵:⍺∘quartile tolerant ⍵
+     ⍺=0:↑⌊⌿⍵
+     ⍺=4:↑⌈⌿⍵
+     m←median ⍵
+     ⍺=2:m
+     2=⍴⍴⍵:(25×⍺)percentile ⍵
+     n←≢x←⍵[⍋⍵]
+     ⍺=1:median(⌊n÷2)↑x
+     ⍺=3:median(⌈n÷2)↓x
+ }

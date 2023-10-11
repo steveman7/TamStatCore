@@ -1,0 +1,11 @@
+ interpolate←{
+    ⍝ Written by Steve Mansour
+    ⍝ Interpolate
+    ⍝⍺ matrix of x's and y's
+    ⍝⍵ Value of x
+     ⎕ML←3 ⋄ ⎕IO←0
+     1<⍴,⍵:⍺∘∇¨⍵             ⍝ Apply to array on right
+     x y←↓⍺
+     f←{↑×/(⊂⍺)-(1↓⍳⍴⍵)⌽¨⊂⍵}
+     y+.×(⍵ f x)÷x f x
+ }

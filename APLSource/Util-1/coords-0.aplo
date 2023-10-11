@@ -1,0 +1,65 @@
+ coords←{
+ ⍝⍟ Copyright (c) 2018 by Stephen M. Mansour
+ ⍝∇ Calculate coordinates for distribution graphs
+ ⍝∊ User Interface
+ ⍝⍺ [Parameters]:   Distribution parameters (default 0 1)
+ ⍝⍺⍺ fD:  Distribution function                                                                       `
+ ⍝⍵⍵ fR:  Relational function, e.g.   eq, ne, gt, lt, ge, le, in, between                        `
+ ⍝⍵  X:    Value(s)
+ ⍝←  W:  Namespace containing coordinates and shading indicators
+ ⍝←  Bounds, Shading, Thumb, Label, XY coordinates
+ ⍝⍕ W ←  [Parms|0 1] fD coords fR X
+ ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     ⍺←0 1 ⋄ ⎕ML←3 ⋄ ⎕IO←0                        ⍝ Default parameters (0,1)
+     VarNames←'Bounds' 'Shading' 'Type' 'Thumb' 'Label' 'YX' 'Style'
+     ⍝(⍺ ⍺⍺'Type')≡'Discrete':⍺ ⍺⍺ coordsD ⍵⍵ ⍵   ⍝ Is distribution discrete?
+     0≠↑0⍴∊⍵:⍺ ⍺⍺{X←toNestedVector ⍵              ⍝ If value is character, assume multinomial
+         Y←toNestedVector↑⍺
+         Y←0 5 10 20 25 50{⍺[1+⍺⍸≢⍵]↑⍵}Y
+         Bounds←1,1+N←⍴Y
+         Shading←(Y∊X)=1 ⍵⍵ 1
+         K←⌊0.5+100÷N
+         Label←∊K↑¨Y
+         Type←'Graph'
+         Style←'Histogram'
+         ⍝YX←(1⊃⍺),⍪1+⍳N
+         YX←⍉⊃(1⊃⍺)(1+⍳N)
+         Thumb←↑Y⍳X
+         ⎕NS VarNames}⍵⍵ ⍵
+     (⍺ ⍺⍺'Type')≡'Discrete':⍺ ⍺⍺{
+         P←⍺ ⍺⍺⍳50                                ⍝ get probabilities
+         P←((≢P)-(⌽P>0.001)⍳1)↑P                  ⍝ Translate probabilites to coordinates
+         P←0,P,0                                  ⍝ Surround with zero probabilities
+         P←P{⍺↑⍨↑(⍵≥≢⍺)/⍵}5 10 20 25 50           ⍝ Number of discrete values
+         Bounds←¯1,¯2+N←≢P                        ⍝ Limits for TrackBar
+         b←2 5∊⍨2⊥0 1 0 ⍵⍵ 0 0 1                  ⍝ ≤ or > ?
+         Thumb←b⊃(⌈,⌊)Bounds[1]⌊⍵                 ⍝ Set thumb
+         Shading←(¯1+⍳N)⍵⍵ ⍵                      ⍝ 1=Shade, 0=Clear
+         FS←'I',⍕⌊0.5+100÷N                       ⍝ Format String
+         Label←,FS ⎕FMT⍳⍴1↓P                      ⍝ X-Axis Labels
+         Type←'Graph'                             ⍝
+         Style←'Histogram'
+         YX←P,⍪¯1+⍳N                              ⍝
+         ⎕NS VarNames                             ⍝ Put into namespace
+     }⍵⍵ ⍵    ⍝ Is distribution discrete?
+     rel←∨/1 0 1 ⍵⍵ 0 1 1                         ⍝ Test relation
+     w←rel{⍺:⍵ ⋄ ¯2↑(-⍵),⍵}⍎⍕⍵                    ⍝ Append negative for outside?
+     inf←1                                        ⍝
+     lb ub←⍺ ⍺⍺ criticalValue>|0 1-0.001×inf      ⍝
+     lb ub←(↑,↑∘⌽)L←ScaleDist lb ub               ⍝ Update lower and upper bounds
+     lb←0⌊lb ⋄ Bounds←lb ub                       ⍝ Start lower bound at 0?
+     r←ub-lb                                      ⍝ Get range
+     x←lb+r×0.01×⍳101                             ⍝ Density domain
+     y←⍺ ⍺⍺ x                                     ⍝ Density range
+     y[0]←y[10<↑y]                                ⍝ If infinite, use y[1]
+     YX←y,⍪x                                      ⍝ Merge the two
+     Shading←¯2 0 2 ⍵⍵ 1                          ⍝ Shade area of interest
+     Thumb←w                                      ⍝ Thump position
+     ⎕PP←5                                        ⍝ 5 significant digits
+     Label←1↓,¯12↑[1]⍕⍪{⍵×1E¯9<|⍵}lb+(ub-lb)×0.125×⍳9 ⍝ Tick marks
+     Label←⍺{2>≡⍺:1↓,¯12↑[1]⍕⍪{⍵×1E¯9<|⍵}lb+(ub-lb)×0.125×⍳9
+         ¯12↑[1]⍕⍺[;,1]}⍵
+
+     Type←'Graph' ⋄ Style←'Curve'                 ⍝ Continuous
+     ⎕NS VarNames                                 ⍝ Put into namespace
+ }

@@ -1,0 +1,6 @@
+ z←rAv
+ :Trap 0
+     z←##.R_Available
+ :Else
+     z←0
+ :EndTrap

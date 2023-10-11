@@ -1,0 +1,14 @@
+ exErr←{
+⍝ Execute user expression; trap user error   7/25
+⍝⍵: Executable user expression
+⍝←: Result or error message
+     0::⎕DMX.(EM,'    ',Message)
+     ⍺←#
+     ∆←1↓('<>'⎕R'≠')('<='⎕R'≤')('>='⎕R'≥')('<-'⎕R'←')' ',⍵
+     b←{0::⍵ ⋄ #.TamStat.UserInterface.SessionForm.mb.mst.msy.Standard.Checked}0
+     ∆←b{⍺=0:⍵
+         ∆←('\x{5E}'⎕R'*')('/'⎕R'÷')('\x{2A}'⎕R'×')⍵
+         ('([\s,\,])-([\d,\.])'⎕R'\1¯\2')∆}∆
+   ⍝  ∆←⍎'#.(',∆,')'
+     ∆←⍺⍎∆
+     9≠⎕NC'∆':⍕∆ ⋄ ∆}

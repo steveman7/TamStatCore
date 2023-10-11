@@ -1,0 +1,18 @@
+ percentile←{⎕ML←3 ⋄ ⎕IO←0
+    ⍝ #.R_Available:+#.∆r.x'quantile(⍵,⍵)'⍵(⍺÷100)
+     ∨/⍺ outside 0 100:⎕SIGNAL 11 ⍝ Domain error
+     P←⍺÷100
+     isFrequency ⍵:P{(x p)←↓⍉⍵[⍋⍵;]       ⍝ Frequency Dist?
+         p∨.<0:'Domain Error'
+         i←+/⍺∘.≥c←(+\p)÷+/p            ⍝ Cum probs
+         x[i⌊¯1+≢x]
+     }⍵
+     ⍝n←≢x←x[⍋x←,⍵]                   ⍝ Sort, get shape
+     ⍝n←≢x←(,⍵)[⍋,⍵]
+     n←≢x←⍵[⍋⍵]
+     (n×P){i←⌊⍺
+         i≠⍺:⍵[i]                     ⍝ If not integer, Round up
+         0.5+.×⍵[i-0 1]}¨⊂x               ⍝ Else average
+
+
+ }

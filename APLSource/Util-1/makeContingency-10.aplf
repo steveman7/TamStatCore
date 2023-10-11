@@ -1,0 +1,23 @@
+ makeContingency←{
+⍝ Make contingency table
+⍝ ⍵:  Namespace
+⍝ ←:  Contingency Table
+     ⎕IO←0 ⋄ ⎕ML←3
+     F1 F2 O E D X2←↓⍉¯1↓1↓⍵  ⍝ Strip off 1st,last rows
+     H←∪¨F1 F2                ⍝ Get headers
+     SH←≢¨H                   ⍝ Get shape
+     O E←SH∘⍴¨O E
+     RT←+/E
+     CT←+⌿E
+     OE←O{⍪⍺,⍵,' '}¨E
+     T←(OE,RT)⍪CT,+/CT
+     H←{⍵,[¯0.5]¨' '}¨H,¨⊂⊂'Total'
+     T←⍕('*',0⊃H),(1⊃H)⍪T
+     ⍕2 1⍴T(⊃'Key: Observed' '     Expected')
+
+
+
+
+
+
+ }

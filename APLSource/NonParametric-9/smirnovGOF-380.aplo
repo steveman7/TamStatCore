@@ -1,0 +1,25 @@
+ smirnovGOF←{
+⍝∇ Smirnov Goodness of Fit Test
+⍝⍺⍺ Data from Distribution 1
+⍝⍵⍵ Relation
+⍝⍵  Data from Distribution 2
+⍝⍎ X←7.6 8.4 8.6 8.7 9.3 9.9 10.1 10.6 11.2
+⍝⍎ Y←5.2 5.7 5.9 6.5 6.8 8.2 9.1 9.8 10.8 11.3 11.5 12.3 12.5 13.4 14.6
+⍝⍎  NS← X smirnovGOF = Y
+     ⎕IO←1 ⋄ ⎕ML←1
+     NS←⎕NS''
+     B←(X←sort ⍺⍺,⍵)∊⍺⍺        ⍝ Get positions of X variables
+     SS←(+\÷+/)¨B(~B)        ⍝ Empirical Distributions
+     R←⌊/|-\⌽7,2⊥(⊢⍵⍵⌽)⍳3    ⍝ (>,1),(=,2),(<,3)
+     M←≢⍺⍺ ⋄ N←≢⍵
+     T1←⌈/U←|⍣(R=2)⊃-/(R=3)⌽SS ⍝ Test Statistic
+   ⍝  P←1-A19 lookup N'*'(T1×N)
+     P←{M=N:÷/(N+⍵×N 0)!2×N
+         *-2×(⍵*2)×M(×÷+)N}T1
+     P×←2*R=2
+     D←'smirnov'
+     f←{⍵\⍵/⍺}
+     TBL←'X' 'Y' 'S1' 'S2' 'S1-S2'
+     TBL⍪←⍉↑(X f B)(X f~B),SS,⊂U
+     D(M N)P T1 ⍬ TBL
+ }

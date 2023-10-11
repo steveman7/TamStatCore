@@ -1,0 +1,13 @@
+ buildAnovaConfInt←{
+ ⍝∇ Calculate Confidence Interval for Anova
+     ⎕ML←3 ⋄ ⎕IO←0
+     l n m s←↓⍉⍵.Table ⋄
+     N←1+n+.-1    ⍝ Adjust "sample size" and
+     vp←((s*2)+.×n-1)÷N-1     ⍝ Pooled var to tie confints
+     A←N,m,[0.5]sqrt vp×N÷n   ⍝ Stats
+     U←stats¨↓A               ⍝ Create Stats objects
+     ⍵.Results←⊃mean confInt¨U   ⍝
+     ⍵.PointEstimate←m
+     ⍵.ResultsLabels←l
+     ⍵
+ }

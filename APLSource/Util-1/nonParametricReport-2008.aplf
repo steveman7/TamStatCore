@@ -1,0 +1,21 @@
+ nonParametricReport←{
+     ⎕IO←0 ⋄ ⎕ML←3
+     SS←⎕UCS 8321+⍳≢⍵.Estimate                ⍝ Subscripts
+     D←↓('X',⍪SS),'=',⍕⍪⍵.Estimate
+     D←⍕D,[¯0.5]↓('n',⍪SS),'=',⍕⍪⍵.SampleSize
+     h0←'H₀: ',1↓,'=','η',⍪SS                  ⍝ One-sample test; null statement
+    ⍝ D←D,[¯0.5]⍨(D='X')\'~'
+     D←⊃('~'\⍨D[0;]='X')⍪D
+     h1←'H₁: At least one median is different.'         ⍝ Alternative statement
+     C←⊂'Test Statistic:'('χ²=',⍕⍵.TestStatistic)
+     C,←⊂'P-Value:'('p'fmtP ⍵.P)
+     X2←⍵.DegreesOfFreedom chiSquare criticalValue<⍺
+     C,←⊂'Critical Value:'(' '~⍨'χ²(⍺;df=',(⍕⍵.DegreesOfFreedom),')=',8 3⍕X2)
+     C,←⊂'Significance Level:'('α=',⍕⍺)
+     Z←(⍵.P<⍺)⊃'Fail to reject H₀' 'Reject H₀'
+     Z←##.Ho_Available/'Conclusion:  ',Z
+     ⍕⍪'Kruskal-Wallis Test'D' 'h0 h1(tablebox 2 2⍴⊃¨C)Z
+
+
+
+ }

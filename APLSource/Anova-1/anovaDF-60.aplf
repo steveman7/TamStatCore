@@ -1,0 +1,11 @@
+ anovaDF←{
+⍝3-way Anova
+⍝⍵:  n-dimensional array
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄ N←⍴⍵
+     DF←¯1+¯1↓N                ⍝ Main Effects
+     DF,←×pairwise DF          ⍝ Two-way Interactions
+     DFT←¯1+×/N                ⍝ Total degrees of freedom
+     DFE←×/N-(-≢N)↑1           ⍝ Error    "     "    "
+     DF,0~⍨(DFT-+/DF,DFE),DFE  ⍝
+
+ }

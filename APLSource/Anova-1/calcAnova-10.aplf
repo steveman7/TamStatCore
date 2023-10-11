@@ -1,0 +1,19 @@
+ calcAnova←{
+     ⍝∇ Calculate anova table and r-Squared values
+     ⍝⍵ 3-column matrix [SS|DF|J]   (Denominator index)
+     ⎕IO←0 ⋄ ⎕ML←1                  ⍝ Set system variables
+     SS DF J←↓⍉⍵                    ⍝ unpack data
+     MS←SS÷DF                       ⍝ Mean Squares
+     I←¯1+J~0                       ⍝ Index of denomator
+     B←J≠0                          ⍝ Test items
+     F←(B/MS)÷MS[I]                 ⍝ Calculate F statistics
+     P←((B/DF),¨DF[I])fDist prob>¨F ⍝ Get P values
+     F P←B∘\¨F P                    ⍝ Expand to fit
+     T←+⌿SS,⍪DF                     ⍝ Totals
+     Z←(⍉↑SS DF MS F P)⍪5↑T         ⍝ Build Anova Table
+     E←,¯1 2↑⍵                      ⍝ Error values
+     R2←1-E÷⍥⊃T                     ⍝ r-Squared
+     R2A←1-÷/(2↑E)÷T                ⍝ r-Squared Adjusted
+     S←(⊃⌽MS)*÷2                    ⍝ std error
+     Z(S R2 R2A)                    ⍝ Result
+ }

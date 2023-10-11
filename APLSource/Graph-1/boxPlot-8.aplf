@@ -1,0 +1,51 @@
+ boxPlot←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Generate Box Plot
+ ⍝∊ Graphics
+ ⍝⍺ Starting Point (Default 0)
+ ⍝⍵ Xv: Numeric Vector
+ ⍝← Cm Character Matrrix
+ ⍝⍕ [Ys] histogram Xv
+ ⍝⍎ boxPlot D.Height                     ⍝ Single box plot
+ ⍝⍎ 50 boxPlot D.Height                  ⍝ Start at 50 inches
+ ⍝⍎ 50 boxPlot D.Height D.Sex            ⍝ Comparison box plot
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←0                 ⍝ Set system variables
+     Start←↑⍺~0J1                        ⍝ Starting point
+     NL W←{1=≡⍵:''⍵ ⋄ ↓⍉↑{⍺,⊂⍵}⌸/⌽⍵}⍵    ⍝ Name list, Variables
+     a←2↑Start,10*⌈10⍟⌈/∊W               ⍝ Scale
+     R←-/⌽a                              ⍝ Range
+     S←101⍴1 9/'+-'                      ⍝ Tick marks
+     T←(A←↑Start)+0.1×(1+⍳10)×R          ⍝ Tick Marks
+     FS←{⍵≥10:'I10' ⋄ 'F10.',⍕1+⌈0.1⍟⍵}R ⍝ Format String
+     S←S⍪' ',('10',FS)⎕FMT,[¯0.5]T       ⍝ Scale
+     S[,1;⍳5]←('L',('10'⎕R'5')FS)⎕FMT↑a  ⍝ Format tick values
+     f←{Q←(⍳5)quartile ⍵                 ⍝ Five number summary
+         F←Q[1 3]+¯1 1×1.5×-/Q[3 1]      ⍝ Fence
+         OUT←(1=×/×⍵∘.-F)/⍵              ⍝ Outliers
+        ⍝ Q[0]⌈←F[0] ⋄ Q[4]⌊←F[1]        ⍝ Whisker bounds
+         Q[0 4]←(⌊/,⌈/)⍵~OUT             ⍝ Whisker bounds
+         D←⍳101                          ⍝
+         QS←⌊0.5+100×(Q-A)÷R             ⍝ Scale quartiles
+         OUT←⌊0.5+100×(OUT-A)÷R          ⍝ Scale outliers
+         C←(D between QS[1 3])           ⍝ Box boundaries
+         C←C,[¯0.5]D∊QS[1 2 3]           ⍝ Mark Q1, Median, Q3
+         CB←CT←' ─'[D between QS[1 3]]   ⍝ Character Bottom
+         CT[QS[1 2 3]]←'┌┬┐'             ⍝ Corner top
+         CB[QS[1 2 3]]←'└┴┘'             ⍝ Corner bottom
+         CM←' ─'[∨/D between QS[2 2⍴0 1 3 4]] ⍝ Character middle
+         CM[QS]←'├┤│├┤'                  ⍝ Box whisker boundaries
+         CM[OUT]←'*'                     ⍝ Outliers
+         ((⍴⍺)↑CM)←⍺                     ⍝ Label item
+         Z←⊃CT CM CB                     ⍝ Assemble top, middle, bottom
+         Q[0]⌈←F[0] ⋄ Q[4]⌊←F[1]         ⍝ Replace min,max with fence?
+         Z Q OUT}                        ⍝ Output, 5-no summary, outliers
+     NL W←NL{2>≡⍵:,∘⊂¨⍺ ⍵ ⋄ ⍺ ⍵}W        ⍝ Enclose if one group
+     Z Q OUT←↓⍉⊃NL f¨W                   ⍝ Apply the function to each group
+     Output←↑⍪/Z,⊂S                      ⍝ Character matrix
+     FiveNumberSummary←⊃Q                ⍝ (Min Q1, Median, Q3, Max)
+     Outliers←OUT                        ⍝ Values outside the fence
+     Groups←NL                           ⍝ Group Names
+     Type←'Graph'
+     Style←'Box'
+     NS←⎕NS'Output' 'FiveNumberSummary' 'Outliers' 'Groups' 'Type' 'Style'
+     0J1∊⍺:NS.Output ⋄ NS}

@@ -1,0 +1,9 @@
+ sdev←{⍺←¯1
+     9=⎕NC'⍵':⍵.sdev
+     ⍵≡'Type':'Spread'
+     rAv:⍺{z←##.∆r.x'sd(⍵)'(⍵~⎕NULL)
+         z≡⎕NULL:0
+         ⍺=1:z×sqrt÷/¯1 0+≢⍵ ⋄ z}⍵
+     ⍝(⍺ var ⍵)*÷2}
+     ⎕NULL≡z←⍺ var ⍵:z
+     z*÷2}

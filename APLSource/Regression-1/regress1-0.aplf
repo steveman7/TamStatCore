@@ -1,0 +1,16 @@
+ regress1←{
+ ⍝ ∇Regression
+ ⍝ ∊ Regression Analysis, Montgomery & Scott pp. 109-118
+ ⍝ ⍺ Include Intercept?
+ ⍝ ⍵ = Dependent and Independent Variables y, x[1], x[2] ... x[n]
+ ⍝ ← = Coefficient Estimates (float) b[0], b[1], ... b[n]
+ ⍝ ← = Standard Errors (float)
+ ⍝ ← = t-Values (float)
+ ⍝ ← = p-Values (float)
+     ⎕ML←3 ⋄ ⎕IO←0      ⍝ Set system variables
+     ⍺←1                ⍝ Include y-intercept?
+     X←(~⍺)↓1⍪1↓⊃⍉⍵     ⍝ Predictor Variables
+     n←≢y←↑⍵            ⍝ Sample size
+     C←⌹X+.×⍉X          ⍝ Covariance Matrix
+     C+.×X+.×y          ⍝ Estimate coefficients
+ }

@@ -1,0 +1,19 @@
+signTest←{
+ ⍝ Written by Steve Mansour  2020
+⍝∇ Perform sign Test
+⍝⍺ Significance Level (Default 0.05)
+⍝⍵ Vector of Differences or Two Vectors or Matrix
+     ⍺←0.05 ⋄ NS←⎕NS''
+     D←⊃-/⊆⍣(1=↑⍴⍴⍵)⊢⍵                   ⍝ Differences
+     FR←{⍺,≢⍵}⌸×⍵                        ⍝ Frequency
+     X N←(⌊/,+/)(FR[;0]≠0)/FR[;1]        ⍝ Less frequent sign occurances
+     Z←N{⍺>25:(1-⍺-2×⍵)÷⍺*÷2 ⋄ ⍵}X       ⍝ Test Statistic
+     CV←N 0.5 binomial criticalValue>⍺ ⍝ Critical Value
+     P←N{⍺>25:normal prob≥⍵              ⍝ P-Value
+         ⍺ 0.5 binomial prob≥⍵}Z
+     NS.TestStatistic←Z
+     NS.CriticalValue←CV
+     NS.P←P
+     NS.Significance←⍺
+     NS
+ }

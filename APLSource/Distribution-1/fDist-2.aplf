@@ -1,0 +1,51 @@
+ fDist←{                      ⍝ F  Distribution
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ F Distribution
+ ⍝∊ Continuous Distribution Function
+ ⍝⍺ M:  Numerator Degrees of Freedom
+ ⍝⍺ N:  Denominator Degrees of Freedom
+ ⍝⍺ [Phi]: Non-Central Parameter C≥0      (Optional)
+ ⍝⍺ [0=Density, 1=Cumulative Distribution, ¯1=Inverse Distribution, ¯2=random]
+ ⍝⍵ T:  Value  T≥0
+ ⍝← S:  Density
+ ⍝⍕ S ← M N fDist T
+ ⍝⍎ 0.17229 ← 5 3 fDist 1.8
+     w←⍵ ⋄ ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⎕FR←1287 ⋄ ⎕DIV←0        ⍝ Set system variables
+     w≡'Type':'Continuous'                    ⍝
+     2=≡⍺:(↑,¨/⍺)∇¨⍵                          ⍝ Left argument pervasive
+     df←2↑⍺ ⋄ ⍝c←↑2↓⍺                         ⍝
+     Phi2 c←{2=≢⍵:⍵*2 1 ⋄ 0=≢⍵:0 ⋄ ⍵∊0 1 ¯1 ¯2:0 ⍵ ⋄ ⍵ 0}2↓⍺
+     w≡'Mean':{⍵>2:⍵÷⍵-2 ⋄ ⎕NULL
+         'df in denominator must be > 2'}df[1]
+     w≡'Variance':{⍵>4:2×(⍵*2)×(⍺+⍵-2)÷⍺×(2*⍨⍵-2)×⍵-4 ⋄ ⎕NULL
+         'df in denominator must be > 4'}/df
+     w≡'Mode':(df+¯2 2)×.÷df
+     w≡'Skewness':↑{⍵>6:(¯2+⍵+2×⍺)×((8×⍵-4)*÷2)÷(⍵-6)×(⍺×⍺+⍵-2)*÷2
+         ⎕NULL}/df
+     w≡'Kurtosis':⎕NULL
+     str←'pdqr'[1 0 ¯1 ¯2⍳c],'f(⍵,⍵,⍵,⍵)'   ⍝ Build R expression
+     rAv:+##.∆r.x str ⍵,df,Phi2             ⍝ Use R if requested
+     R←df[0]÷df[0]+Phi2
+  ⍝   df[0]←(2*⍨df[0]+Phi2)÷df[0]+2×Phi2        ⍝ Adjust numerator df?
+     df[0]←{⍵=0:⍵ ⋄ (2*⍨⍵+Phi2)÷⍵+2×Phi2}df[0]        ⍝ Adjust numerator df?
+     FDEN←{MN←254⌊⍺+(172<⍺)×2|⍺                 ⍝ Density
+         M←↑MN ⋄ H←÷2                            ⍝ (Adjust DF to prevent domain error -
+         Z←H×M×!/¯1+H×+\⌽MN                     ⍝ may cause slight inaccuracy)
+         Z←Z×÷/MN*M×H
+         Z←Z×⍵*H×M-2
+         Z÷(1+⍵×÷/MN)*H×+/MN}
+     FApprox←{0∧.=⍺:1  ⍝ Abramowitz & Stegun p. 947 Eq. 26.6.11 & 26.6.12
+         0=↑⍺:⍺[1]÷⍺[1]chiSquare criticalValue>⍵
+         (⍺[0]chiSquare criticalValue<⍵)÷⍺[0]}
+     c=0:df FDEN 0.001⌈w                    ⍝ Density
+   ⍝  c=1:{0⌈##.Koko.Distrib.Fratio_P ⍵,df}¨w×R
+     c=1:{
+         df[0]=0:df[1]chiSquare prob>df[1]÷⍵
+         df[1]=0:df[0]chiSquare prob<⍵×df[0]
+         0⌈##.Koko.Distrib.Fratio_P ⍵,df}¨w×R
+   ⍝  c=¯1:R÷⍨{##.Koko.Distrib.Fratio_Fa ⍵,df}¨1-w
+     c=¯1:R÷⍨{0∊df:df FApprox ⍵ ⋄
+         ##.Koko.Distrib.Fratio_Fa ⍵,df}¨1-w
+     X←df chiSquare randomVariable¨w        ⍝ F Distribution is ratio of
+     ↑÷/X÷df                                ⍝ two chi-Square distributions
+ }

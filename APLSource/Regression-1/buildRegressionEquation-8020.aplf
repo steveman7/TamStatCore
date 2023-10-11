@@ -1,0 +1,21 @@
+ buildRegressionEquation←{
+⍝⍺ Name List
+⍝⍵ Coefficients
+⍝← Format
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⎕PP←5             ⍝ set system variables
+     w←,∘⎕FMT¨|⍵
+     s←'+-'[⍵<0]
+     statEq←{(≢⍺)>≢⍵:(↑⍺)'=',,s,⍵,⍪1↓⍺        ⍝ No intercept?
+         z←(('+'=↑s)↓↑s),(↑⍺)'='(↑⍵)          ⍝ indep var, intercept
+         z,,1↓s,⍵,⍪⍺}                         ⍝ slopes
+     APLEq←{b←,∘⎕FMT¨⍵
+         i←>/≢¨⍺ ⍵                            ⍝ Intercept excluded?
+         z←(↑⍺),'←',(~i)/↑b                   ⍝ Start expression
+         a←{')('≡2↑x←¯1⌽⍵:2↓x ⋄ ⍵}¨⍺          ⍝ Remove redundant parens
+         z←∊z,i↓,'+','(',1⌽')',(~i)↓b,'×',⍪i↓a
+         z,'+E'} ⍝ Build Expression
+     ⍺ APLEq ⍵                                ⍝ Default is APL expression
+     z←⍺ statEq w                             ⍝ Math equation
+     z←deleteExcessBlanks,⍕z                  ⍝ Flatten
+     ⊃((-⌈0.5×z⍳'=')↑'∧')z                    ⍝ Add hat for estimate
+ }

@@ -1,0 +1,23 @@
+ buildComparisonTable←{
+     ⍝⍺: RandomVariables
+     ⍝⍵: Property Space Object
+     ⍝←: Table object
+     ⍝p←4 rd ⍵.Value
+     ⎕IO←0 ⋄ ⎕ML←3
+     N←'TestStatistic,P_Value,CriticalValue,Significance'
+     C←2 2⍴(','≠N)⊂N
+     ps←⍵
+     df←ps.DegreesOfFreedom.Value
+     df←{' '~⍨1↓,'<,>,G<ZZZZZZZ>'⎕FMT ⍵}df
+     D←ps.Distribution.Value
+     x←2 2⍴⍎'ps.(',N,').Value'   ⍝ Statistics
+     d←1⌈5-⌈10⍟⌈⌿0.00001⍪|x      ⍝ Decimal Places
+     V←↓2 2 10⍴(∊10,¨d)⍕x
+     b←'≠'∊ps.H1.Value
+     cv←1⌽')',D,'(⍺',(b/'/2'),('Z'≠↑D)/';df=',df
+     W←25
+     V←V{(-W)↑' '~⍨⍵,'=',⍺}¨2 2⍴D'p'cv'⍺'
+     V←C{⊃(⍺,':')⍵}¨V
+     T←tableBox V
+     T
+ }

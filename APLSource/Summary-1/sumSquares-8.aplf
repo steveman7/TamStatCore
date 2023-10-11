@@ -1,0 +1,15 @@
+ sumSquares←{
+     ⍝⍟ Copyright (c) 2018, by Stephen Mansur
+     ⍝∇ Calculate sample sum of squares of a data set or frequency distribution
+     ⍝∊ Summary Function
+     ⍝⍵ Numeric Vector: Data Set; 2-col Numeric Matrix:  Frequency Dist
+     ⍝← Numeric Scalar
+     ⍝⍕ Ys ← sum Xv|Xm|NS
+     ⍝⍎ 19 ← sumSquares 2 8 5 1 3
+     ⎕IO←0                             ⍝ Set system variables
+   ⍝ 9=⎕NC'⍵':⍵.(((count-1)×sdev*2)+count×mean*2) ⍝ Namespace
+     9=⎕NC'⍵':{ss←⍵.(count-1)×⍵.sdev*2 ⍝ Namespace
+         ss+⍵.(count×mean*2)}⍵         ⍝
+     2=⍴⍴⍵:⍵[;1]+.×⍵[;0]*2             ⍝ Frequency Distribution
+     ⍵+.*2                             ⍝ Raw data
+ }

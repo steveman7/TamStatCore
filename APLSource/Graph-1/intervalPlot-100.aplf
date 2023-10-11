@@ -1,0 +1,30 @@
+ intervalPlot←{
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Generate interval Plot
+ ⍝∊ Graphics
+ ⍝⍺ 3-item boolean:   Point, Conf, Pred Int
+ ⍝⍵ Y-Values: 3-N or 5-N Numeric Vector
+ ⍝← Character Matrrix
+ ⍝⍎ intervalPlot 68 66 72                   ⍝ Interval with only conf interval
+ ⍝⍎ intervalPlot 68 66 72 62 75             ⍝ Point estimate and conf and pred intsw
+ ⍝⍎ 1 0 0 intervalPlot  68 66 72 62 75      ⍝ Point estimate only
+ ⍝⍎ 1 0 1 intervalPlot  68 66 72 62 75      ⍝ Point estimate and prediction interval
+ ⍝⍎ 1 1 0 intervalPlot  68 66 72 62 75      ⍝ Point estimate and confidence interval
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←1                    ⍝ Default is all values
+     w←(¯2↑1,⍴⍵)⍴⍵                          ⍝ Force matrix
+     (A S)←XAxis,w                          ⍝ Build axis
+     I←↓⌊0.5+100×(A[0]-w)÷-/A               ⍝ Find relative positions
+     B←(⍳W←1⊃⍴S)∘between¨¯2↑¨I                ⍝ Include values between limits
+     C←↑⌽⍴w                                 ⍝ Number of columns
+     K←'Key:' '* Point Estimate' '() Confidence Interval' '[] Prediction Interval'
+     J←⊃B{B←⍺ ⋄ B[⍵]←C↑2+⍳6                 ⍝ Insert brackets and parens
+         B}¨I⌊¯1+≢¨B                        ⍝ Find position on axis
+     Z←' -*()[]'[J]                         ⍝ Create intervals
+     ⍺∧.=1:Z⍪S⍪W↑⍕K,¨⊂'     '               ⍝ Default, show point and all intervals
+     Z←('\*'⎕R'-')⍤1⍣(~↑⍺)⊢' ',Z,' '        ⍝ Eliminate point estimate?
+     Z←('\)'⎕R'-')∘('\('⎕R'-')⍤1⍣(~↑⌽2↑⍺)⊢Z ⍝ Eliminate confidence interval?
+     Z←('\]'⎕R'-')∘('\['⎕R'-')⍤1⍣(~↑⌽3↑⍺)⊢Z ⍝ Eliminate prediction interval?
+     Z←('- '⎕R'  ')∘(' -'⎕R'  ')⍤1⍣≡Z       ⍝ Eliminate outside dashes
+     Z←0 1↓0 ¯1↓Z                           ⍝ Drop 1st, last columns
+     Z⍪S⍪W↑⍕(1,3↑⍺)/K,¨⊂'     '             ⍝ Append scale and key
+ }

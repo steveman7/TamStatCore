@@ -1,0 +1,47 @@
+ _showFreq←{
+             ⍝ u←'[Null]'≡⍕↑⊖⍵                 ⍝ Are there any nulls?
+     ⎕ML←3 ⋄ ⎕IO←0
+     u←⎕NULL≡↑⊖⍵
+     r d←{0≢↑0⍴↑⍵:⍵ 0                 ⍝ If text exit
+         (⍵-↑⍵)≡⍳≢⍵:(↓'I5'⎕FMT ⍵)0    ⍝ If discrete, make text
+         r←{⍵∘.+0.5 ¯0.5×↑2-/⍵}⍵      ⍝ Range
+         d←{10+0.1×0⌈10-⍵+5}⌈/⌈10⍟|(,r)~0 ⍝ Decimal places
+         r[;1]-←10*-10×1|d            ⍝
+         r d}(-u)↓⍵[;0]               ⍝
+     r←(u+≢r)↑r
+     c←+⍀⍵[;1]                        ⍝ Cumulative
+     p←{⍵÷+⌿⍵}⍵[;1]                   ⍝ Proportion
+     cp←c÷↑⌽c                         ⍝ cum proportion
+     x←r,⍵[;1],c,p,[0.5]cp            ⍝ Assemble columns
+     L←≢x                             ⍝ Last row
+     x←(L+1)↑x                        ⍝ Append
+     b←5=1⊃⍴x                         ⍝ 5 or 6 columns?
+     x[L;2 3 4 5-b]←2/(+/¯1↓x[;2-b])1 ⍝ Totals
+     data←x                           ⍝ remember "raw" values
+     x←b{⍺:(' ',9↑[1]⊃⍵[;0]),0 1↓⍵ ⋄ ⍵}x
+     FMT←b{⍺:'10A1'                   ⍝ 1st column character?
+         ('2M<->','FI'[⍵=⌊⍵]),⍕⍵}d
+     data←b{⍺:⍵ ⋄ ⍎⍤1⊢FMT ⎕FMT ⍵}data ⍝ From/To 5 sig digits
+     FMT,←',2I10,2Q<%>K2F10.2'        ⍝ Format string
+     Z←FMT ⎕FMT x                     ⍝ Format data
+     Z[;(~b)/11]←'-'                  ⍝ Dashes for ranged data
+     W←10+10×~b
+     Z[L;⍳W]←W↑'   Total'             ⍝ Label for total
+     Z[u/L-1;⍳20]←u⌿⍉⍪¯20↑'[Null]'
+     D←(60-10×b)⍴1 9/' -'             ⍝ Align dashes
+     Z←D⍪Z[⍳L;]⍪D⍪Z[,L;]              ⍝
+     H←b⊃('From' 'To')(⊂'Category')   ⍝
+     H,←'Frequency' 'Cum Freq' 'Percent' 'Cum Pct'
+         ⍝ Z⍪⍨∊¯10↑¨H                       ⍝ Affix header
+     Z←Z⍪⍨∊¯10↑¨H                       ⍝ Affix header
+    ⍝ 9=⎕NC'##.Graph':Z                ⍝ If Desktop version, exit
+     0=#.⎕NC'Boot':Z                ⍝ If Desktop version, exit
+     a←⎕NS''
+     ns←⎕NS''
+     ns.data←H⍪data
+     ns.Type←'Table'
+     ns.Style←'Smart'
+     a.ExtOut←ns
+     a.Type←'ExtOut'
+     a
+ }

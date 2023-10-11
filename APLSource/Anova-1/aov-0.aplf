@@ -1,0 +1,57 @@
+ aov←{
+ ⍝⍟ Copyright (C)  2022 by Stephen M. Mansour
+ ⍝∇ Generate factorial design
+ ⍝∊ ANOVA
+ ⍝⍵ X:    Response - n-dimensional numeric vector; trailing dimension is replicates
+ ⍝← Z:   Table containing the following columns [Source|SS|DF]
+ ⍝        AnovaTable  RSq  RSqAdj  S  Type
+ ⍝⍕  ←  factorialDesign X
+ ⍝⍎ 1 factor 4 4⍴98 97 99 96 91 90 93 92 96 95 97 95 95 96 99 98
+ ⍝⍎ 2 factor 3 3 4⍴130 155 74 180 34 40 80 75 20 70 82 58 150 188 159 126 136 122 106 115 25 70 58 45 138 110 168 160 174 120 150 139 96 104  82 60
+ ⍝⍎ 3 factor 3 2 2 2⍴ ¯3 ¯1 ¯1 0 ¯1 0 1 1 0 1 2 1 2 3 6 5 5 4 7 6 7 9 10 11
+ ⍝⍎ factor Data Factor1 ... FactorN
+ ⍝⍎ factor NS  Data 'Factor1 ... FactorN'
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄
+     W NMS←{isNamespace⊃⍵:(toArray⊃⍎/⍵)(1↓' 'toNestedVector⊃⌽⍵)
+         NMS←(¯1+≢⍵)↑⎕A  ⍝ Factor Names
+         (1=⍴⍴⍵)∧2≤|≡⍵:(toArray ⍵)NMS ⋄ ⍵ 0J1}⍵
+
+     R←⊃⍴⍴W ⋄ ⍺←R-1 ⋄ NL←~1 2 3 4∊⍨⊃⊃⍺ ⋄
+     A←≢⍣NL⊢⍺ ⋄ NMS←NL⊃NMS ⍺
+     NMS←(NMS≡0J1)⊃NMS(A↑⎕A)
+     A=R+1:latinSquare W
+     A=R+2:graecoLatinSquare W
+     A=1:oneWay W
+     W←A{R←⊃⍴⍴⍵ ⋄ ⍺=R-1:⍵ ⋄ ⍺=R:(1⌽1,⍴⍵)⍴⍵ ⋄ ⍺<R-1:,[⍺↓⍳R]⍵
+         ⎕SIGNAL'Nonce Error'}W ⍝ Reshape right arg
+     X←+/W
+     L R←¯1(↓{⍺ ⍵}↑)⍴W ⋄ K←≢L ⋄ N←×/L,R
+     Y2N←N÷⍨(+/,W)*2
+     SST←(sumSquares,W)-Y2N
+     ⍝⍝⍝⍝⍝ Main Effects ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     XA←K{⍺=2:+/¨⍵(⍉⍵)
+         ⍺=3:+/⍣2¨(0 1 2)(2 0 1)(1 2 0)⍉¨⊂⍵
+         ⍺=4:+/⍣3¨(0 1 2 3)(3 0 1 2)(2 3 0 1)(1 2 3 0)⍉¨⊂⍵
+         'Nonce Error'}X
+     SSA←Y2N-⍨N÷⍨L×sumSquares¨XA
+     ⍝⍝⍝⍝⍝ 2-way Interactions ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     XAB←K{⍺=2:,¨⍵
+         ⍺=3:,¨+/¨(0 1 2)(0 2 1)(2 0 1)⍉¨⍵
+         ⍺=4:+/⍣2¨(0 1 2 3)(0 2 1 3)(2 0 1 3)(3 0 1 2)(3 0 2 1)(3 2 0 1)⍉¨⍵}⊂X
+     D←(N÷⍨×pairwise L)×sumSquares¨XAB
+     SSAB←D-Y2N++pairwise SSA
+     ⍝⍝⍝⍝⍝⍝ Error Sum of Squares ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     SUBT←Y2N-⍨R÷⍨sumSquares,X
+     SSE←SST-SUBT
+     SSABC←SST-+/SSA,SSAB,SSE   ⍝ 3+ interactions
+     ⍝⍝⍝⍝⍝ Assemble Data ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     SS←SSA,SSAB,SSABC,SSE,SST
+     Source←2⌽'Error' 'Total',{⍵,(,pairwise ⍵),⊂⍵}NMS
+    ⍝Source←2⌽'Error' 'Total',{⍵,({⍺ ⍵}pairwise ⍵),⊂⍵}NMS
+     DFE←×/L,R-1
+     MSE←SSE÷DFE
+     DF←(L-1),×pairwise L-1
+     DF,←N-1++/DF,DFE      ⍝ Include ABC
+     DF,←DFE,N-1
+     ¯1↓(DF≠0)⌿Source,SS,⍪DF
+ }

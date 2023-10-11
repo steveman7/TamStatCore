@@ -1,0 +1,6 @@
+ variant←{
+⍝ Equivalent to variant operator
+⍝ Allowed on user-defined functions
+     ∆∆←⍵⍵                     ⍝ ∆∆ is passed globally to ⍺⍺
+     0=⎕NC'⍺' ⋄ ⍺⍺ ⍵
+     ⍺ ⍺⍺ ⍵}

@@ -1,0 +1,12 @@
+ Z←RInterface OB;F;⎕IO;⎕ML
+ ⎕IO←0 ⋄ ⎕ML←3
+ mi←(↑OB)    ⍝ Menu Item
+ :If mi≡mi.##.Yes
+     ##.∆r←⎕NEW ##.RCONNECT.R     ⍝ Create R Connection
+     msg←##.∆r.init               ⍝ Initialize R
+     ##.R_Available←1             ⍝ Set availability
+     mi.##.(Yes No).Checked←1 0
+ :Else
+     ##.R_Available←0
+     mi.##.(Yes No).Checked←0 1
+ :EndIf

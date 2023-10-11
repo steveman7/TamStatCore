@@ -1,0 +1,58 @@
+ hypothesis←{
+ ⍝⍟ Copyright (c) 2018 by Stephen M. Mansour
+ ⍝∇ Perform a hypothesis test
+ ⍝∊ Operators
+ ⍝⍺ Y: Sample Data
+ ⍝⍺⍺ fS: Summary Function: e.g. mean, proportion, var
+ ⍝⍵⍵ fR: Relational Function
+ ⍝⍵ X:   Hypothesized Value
+ ⍝⍵ Xv:  Sample2Data
+ ⍝← NameSpace containing the following variables
+ ⍝  DegreesOfFreedom  Estimate  P  SampleSize  StandardDeviation
+ ⍝  StandardError  TestStatistic  Type
+ ⍝⍕ Interval ← Yv fS hypothesis  fR X|Xv
+ ⍝⍎ Height mean hypothesis = 68               ⍝ One sample t-test
+ ⍝⍎ (Sex eq 'F') proportion hypothesis > 0.5  ⍝ One sample proportion
+ ⍝⍎ MaleHeight mean hypothesis > FemaleHeight ⍝ Two-sample t test
+ ⍝⍎ mean hypothesis = Height splitBy Sex
+ ⍝⍎ mean hypothesis > Height splitBy Sex eq 'M'
+ ⍝⍎ (After-Before) mean hypothesis > 0        ⍝ Paired t-test
+ ⍝⍎ Height var hypothesis < 9                 ⍝ Chi-Square test
+ ⍝⍎ MaleHeight var hypothesis = FemaleHeight  ⍝ F-test
+    ⍝ 0=⎕NC'⍺':∇/⍵                            ⍝ Is left argument missing?
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍝x1 x2←⍺ ⍵               ⍝ Set system variables
+     r←2⊥0 0 1 ⍵⍵ 0 1 0                       ⍝ Identify relation
+    ⍝ (r∊¯1 0)∨2=1 ⍵⍵ 2:⍺ ⍺⍺ _paired ⍵⍵ ⍵      ⍝ If right operand is -,⌈,⌊ use paired samples
+    ⍝ 0J1≡↑⍵:⍺ ⍺⍺ _paired ⍵⍵ 1↓⍵               ⍝ If paired samples, treat differently
+     c←r<4                                    ⍝ Identify claim 0=null, 1=alternative
+     R←(¯1+r⌊7-r)⊃1 ¯1 0                      ⍝ Lower, upper or two tails?
+     i←+/,⍺⍺ 1 2 6
+     0=⎕NC'⍺':r c i monadicHypothesis ⍵       ⍝ Equal Variances; three or more groups
+     i=12:⍵⍵ wilcoxon ⍺-⍵                     ⍝ paired median
+    ⍝ i=13:(⍺-⍵)mean hypothesis ⍵⍵ 0           ⍝ paired mean
+     i=13:⍺ ⍵⍵{ns←(⍺-⍵)mean hypothesis ⍺⍺ 0    ⍝ paired mean
+         ns._Paired←1 ⋄ ns}⍵
+     x1 x2←⍺ ⍵
+     s←↑(⍴⍴x2)∨9=⎕NC'x2'                      ⍝ One or two samples?
+    ⍝ corrHo←{ ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Ho:⍴=0
+⍝         tails←2*0=↑⍺ ⋄ r←↑corr/↑⍵            ⍝ Sample correlation
+⍝         n←≢↑↑⍵                               ⍝ Sample size
+⍝         t←(r-x2)÷se←sqrt(1-r*2)÷df←n-2       ⍝ Test statistic
+⍝         p←tails×df tDist prob>t              ⍝ p-Value
+⍝         r n ⍬ se t p df}                     ⍝
+     f←{
+         i=3:⍺ meanHo ⍵                       ⍝ Determine
+         i=¯1:⍺ proportionHo ⍵                ⍝   type
+         i=2:⍺ medianHo ⍵
+         7∊i*1 2:⍺ varianceHo ⍵               ⍝       of
+         i=0:⍺ corrHo ⍵}                      ⍝         test
+     y←{9=⎕NC'⍵':⍵ ⋄ ⍵*2*(s=0)∧i≠⌊i}x2        ⍝ Square if sdev
+     ns←R s f x1 y                            ⍝ Apply the test
+     ns.Estimate*←÷2*i≠⌊i                      ⍝ Adjust for sdev
+     ns._Populations←s+1                      ⍝ One or two populations?
+     ns._Relation←(¯1 0 1⍳R)⊃'<≠>'            ⍝ One or two tails?
+     ns._Parameter←(¯1 0 2 3 7⍳i)⊃'p⍴ηµ',⌽,\'σ²'  ⍝ Parameter of interest
+     ns._Claim←c                              ⍝ Claim is H1 if <, > or ≠, otherwise H0
+     ns._HypothesizedValue←s⊃x2 0             ⍝ Assumed value
+     ns._Paired←{0::0 ⋄ ⍵._Paired}ns          ⍝ Set paired to 0 if it doesn't exist
+     ns.Type←'Hypothesis' ⋄ ns}

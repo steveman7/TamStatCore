@@ -1,0 +1,27 @@
+ nested←{
+ ⍝⍟ Copyright (C) 2022 by Stephen M. Mansour
+ ⍝∇ Generate nested design
+ ⍝∊ ANOVA
+ ⍝⍵ X:    Response - n-dimensional numeric vector; trailing dimension is replicates
+ ⍝← NS:   Namespace containing the following variables
+ ⍝        AnovaTable  RSq  RSqAdj  S  Type
+ ⍝⍕ NS ←  nested X
+ ⍝⍎ nested 3 2 3⍴20 18 14 19 20 20 14 18 14 12 12 9 13 16 13 9 4 4
+ ⍝⍎ X2←1 ¯1 0 ¯2 ¯3 ¯4 ¯2 0 1 1 4 0 , 1 ¯2 ¯3 0 4 2 ¯1 0 ¯2 0 3 2,2 4 0 ¯2 0 2 1 ¯1 2 3 2 1
+ ⍝⍎ nested 3 4 3⍴X2
+ ⍝⍎ X3←22 24 23 24 28 29 25 23 26 28 27 25 28 25 24 23
+ ⍝⍎ X3,←30 27 29 28 30 32 27 25 29 28 30 27 24 23 28 30
+ ⍝⍎ X3,←25 21 24 22 27 25 26 23 27 25 26 24 24 27 28 27
+ ⍝⍎ nested 3 2 4 2⍴X3
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄ A←¯1+⊃⍴⍴⍵ ⋄ ⍺←A
+     A←(0=≢⍺)⊃⍺ A
+     TBL←A aov ⍵
+     f←{U V←⍵[;0] ⋄
+         FA←⊂U,1⌽')(',V~U
+         FA,(+⌿0 1↓⍵)}
+     K←{0=⊃0⍴⊃⍵:⍵ ⋄ ≢⍵}A
+     K=2:2 3 0,⍨TBL[0;]⍪(f TBL[1 2;])⍪TBL[,3;]
+     Z←TBL[0 1;]⍪(f TBL[2 5;])⍪TBL[,3;]
+     Z⍪←(f TBL[4 6;])⍪TBL[,7;]
+     Z,5 3 6 5 6 0
+ }

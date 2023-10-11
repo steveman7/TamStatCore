@@ -1,0 +1,15 @@
+ chiSquare_report←{
+     ⎕IO←0 ⋄ ⎕ML←3
+     i←'Normal' 'Uniform' 'Multinomial' 'Independent'⍳⊂⍵._Distribution
+     T←⍵.Type{⍺≡'Independent':makeContingency ⍵ ⋄ ⍵}⍵.Table
+     T←{⎕PP←5 ⋄ '-'@('¯'∘=)⍕⍵}T   ⍝ Format 5 decimal places, replace hi-minus
+     P←⍕{6::' ' ⋄ ' ',[-0.5](≢⍵.Parameters)↑'Mean:' 'Standard Deviation:',¨2↑⍵.Parameters}⍵
+     tb←⊃'Test Statistic: '('χ²=',⍕⍵.TestStatistic)
+     tb←tb(⊃'P-Value: '('p'fmtP ⍵.P))
+     x2←⍵.DegreesOfFreedom chiSquare criticalValue<⍺
+     cv←' '~⍨,'<χ²(α;df=>,LI3,<)=>,LF9.3'⎕FMT 1 2⍴⍵.DegreesOfFreedom,x2
+     tb←tb,(⊃'Critical Value:'cv)(⊃'Significance Level:'('α=',⍕⍺))
+     h←'H₀: ' 'H₁: not ',¨⊂⍵._Distribution
+     tb←tablebox 2 2⍴tb
+     C←(⍵.P<⍺)⊃'Fail to reject H₀' 'Reject H₀'
+     ⍕,[⍬]T P' 'h tb('Conclusion:'C)}

@@ -1,0 +1,15 @@
+ combinePartitions←{
+⍝∇ Combine small groups for goodnessOfFit tests
+⍝∊ Written by Steve Mansour
+⍝⍺ Minimum partition Size (Default 5)
+⍝⍵ Numeric frequency distribution (3-column matrix)  Values, Obs, Exp
+⍝← Numeric frequency distribution  ≢Result ≤ ≢Right Argument
+⍝⍎ 5 combinePartitions 5 3⍴0 2 3.92 1 9 7.56 2 8 7.56 3 5 5.04 4 4 3.92
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←5           ⍝ Set system variables
+     v n←↓⍉1 0 1/⍵                 ⍝ Values, Expected
+     i←(n<⍺)⍳1                     ⍝ Small expected values
+     i≥≢⍵:⍵                        ⍝ If no small values, done
+     b←{(>/⍵)⌽⍵}i+0,¯1*(i+1)=≢⍵    ⍝ Indices of adjoining values to combine
+     v[b]←,/v[b]                   ⍝ Combine key adjoining values
+     ⍺ ∇ v{⍺,+⌿⍵}⌸1↓[1]⍵           ⍝ Combine observed, expected values
+ }

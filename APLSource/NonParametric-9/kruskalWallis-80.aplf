@@ -1,0 +1,21 @@
+ kruskalWallis←{
+     ⎕IO←0 ⋄ ⎕ML←3
+     NT←+/N←≢¨⍵
+     R←+/¨(∊N⍴¨1+⍳≢N)⊂rank∊⍵
+     H←(-3×NT+1)+(12÷NT×NT+1)×(R*2)+.÷N
+     DF←¯1+≢N
+     M←median¨⍵
+     P←DF chiSquare prob>H
+     NS←⎕NS''
+   ⍝ NS.(Estimate SampleSize)←M NT
+     NS.(Estimate SampleSize)←M N
+     NS.(TestStatistic P DegreesOfFreedom)←H P DF
+     NS.dist←chiSquare
+     NS._Populations←≢N
+     NS._HypothesizedValue←0
+     NS._Parameter←'η'
+     NS._Relation←'≠'
+     NS._Claim←1
+     NS.Type←'Non-Parametric'
+     NS
+ }

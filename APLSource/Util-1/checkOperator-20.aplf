@@ -1,0 +1,5 @@
+ Z←checkOperator;op
+ ⎕ML←3 ⋄ ⎕IO←0
+ ⍝ Check operator
+ op←↑↑2↓⎕SI             ⍝ Get operator name
+ Z←↑(op='pcr')/1 ¯1 ¯2  ⍝ Use 1st char

@@ -1,0 +1,33 @@
+ varianceHo←{   ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Chi-Square or F-test
+     ⎕IO←0 ⋄ ⎕ML←3
+     r s←⍺ ⋄ tails←2*r=0 ⋄ d1 d2←⍵        ⍝
+     d←(-~s)↓d1 d2←⍵                      ⍝
+     v←var¨d                              ⍝ Sample Variance
+     n←{9=⎕NC'⍵':⍵.count ⋄ ↑⍴⍵}¨d         ⍝ Sample Sizes
+     df←n-1                               ⍝ Degrees of Freedom
+     ⍝TestX2←{x2←v×⍵÷d2                    ⍝ Test Statistic
+⍝         p←tails×↑(df←⍵)chiSquare probability>¨x2
+⍝         v n ⍬ ⍬ x2 p df}                 ⍝ Chi-Square for 1 sample
+⍝     TestF←{ts←÷/v                        ⍝ Test Statistic
+⍝         p←tails×⍵ fDist probability>ts   ⍝ p-Value
+⍝         v n ⍬ ⍬ ts p df}                 ⍝ F-test for 2 samples
+     TestX2←{x2←v×⍵÷d2                    ⍝ Test Statistic
+         p←↑⍵ chiSquare probability>¨x2
+         x2 p}                            ⍝ Chi-Square for 1 sample
+     TestF←{ts←÷/v                        ⍝ Test Statistic
+         p←⍵ fDist probability>ts   ⍝ p-Value
+         ts p}                            ⍝ F-test for 2 samples
+     dd←{1=⍴⍵:TestX2 ⍵ ⋄ TestF ⍵}df
+     ns←⎕NS''
+     ns.TestStatistic←↑dd
+     ns.P←tails{⍺=1:⍵ ⋄ 2×⌊/⍵,1-⍵}1⊃dd
+     ns.Estimate←v
+     ns.SampleSize←n
+     ns.StandardDeviation←⍬
+     ns.StandardError←⍬
+     ns.DegreesOfFreedom←df
+     ns.ParameterList←df
+     ns.dist←chiSquare
+     1=≢df:ns
+     ns.dist←fDist ⋄ ns
+ }

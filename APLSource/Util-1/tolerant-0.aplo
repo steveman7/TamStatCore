@@ -1,0 +1,20 @@
+ tolerant←{
+     ⎕IO←0 ⋄ ⎕ML←3
+     mon←{b←⍵≠⎕NULL        ⍝ Monadic Case
+         z←⍺⍺ b/⍵         ⍝ Remove nulls
+         1=≢⍺⍺ 1 2 3 4:z    ⍝ If summary function, done
+         z←b\z            ⍝ Expand result
+         ((~b)/z)←⎕NULL   ⍝ Fill with nulls
+         (⍴⍵)⍴z}          ⍝ Done
+     dya←{1=≢1 ⍺⍺ 1 1:⍺ ⍺⍺ ⍵~⎕NULL ⍝ Summary Function?
+         x←⍺,[0.5]⍵        ⍝ Dyadic case
+         b←x∧.≠⎕NULL
+         x←b⌿x
+         z←x[;0]⍺⍺ x[;1]
+         1=≢⍺⍺⍨1 2 3:z
+         z←b\z
+         ((~b)/z)←⎕NULL
+         z}
+     ⍺←⎕NULL
+     ⍺≡⎕NULL:⍺⍺ mon ⍵
+     ⍺ ⍺⍺ dya ⍵}
