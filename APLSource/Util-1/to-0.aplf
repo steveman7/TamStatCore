@@ -1,0 +1,9 @@
+ to←{⍝
+   ⍝⍺ Start
+   ⍝⍵ End[Step]
+   ⍝← Start ... End
+     ⎕IO←0
+     ⍺←1
+     end step←2↑⍵,1
+     n←⌈1+(end-⍺)÷step
+     ⍺+step×⍳n}
