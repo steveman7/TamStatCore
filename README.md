@@ -1,0 +1,7 @@
+# TamStatCore
+Statistical library for Dyalog APL developed by Dr. Stephen Mansour
+
+See http://www.tamstat.com/
+
+Run ```SETUP ''``` to initialize. 
+N.B. This will set ⎕PATH 
