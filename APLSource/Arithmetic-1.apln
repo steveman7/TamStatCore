@@ -1,0 +1,104 @@
+:Namespace Arithmetic        
+    (⎕IO ⎕ML ⎕WX)←1 1 3
+
+      cos←{⍺←0 ⋄
+          ⍺=0:2○⍵
+          2○○⍵÷180}
+
+      det←{⎕IO ⎕ML←0 1       ⍝ Determinant of square matrix.
+          rAv:+##.∆r.x'det(⍵)'⍵ ⍝ Use R if requested
+          ⍺←1                     ⍝ product of co-factor coefficients so far
+          0=n←≢⍵:⍺                ⍝ result for 0-by-0
+          i j←(⍴⍵)⊤{⍵⍳⌈/⍵}|,⍵     ⍝ row and column index of maximal element
+          k←⍳n
+          (⍺×⍵[i;j]×¯1*i+j)∇ ⍵[k~i;k~j]-⍵[k~i;j]∘.×⍵[i;k~j]÷⍵[i;j]
+      }
+
+    div←{0::⍺÷tolerant ⍵
+    ⍺÷⍵}
+
+    
+
+      eigenValues←{
+          ⍝⍟  (c) 2022 by Steve Mansour
+          ⍝∇  Calculate eigenvalues of a square matrix
+          ⍝⍵  Any square matrix
+          ⍝
+          ⎕IO←0 ⋄ ⎕ML←1   
+          (⍉≢⊢)⍵:'Non-Symmetric Matrix'  
+          rAv:,{_←##.∆r.x'V <- eigen(⍵)'⍵   ⍝ Use R if requested
+              +##.∆r.x'V$values'}⍵         ⍝ Get eigenvalues
+          1=≢⍵:,⍵ 
+         ⍝1⊃1 #.TamStat.Koko.Dutils.SymetricEigen ⍵  
+          1⊃1 ##.Koko.Dutils.SymetricEigen ⍵  
+⍝⍝          Z[⍒|Z]                           ⍝ Sort largest to smallest
+      }
+
+      eigenVectors←{⎕IO←0 ⋄ ⎕ML←1
+          (⍉≢⊢)⍵:'Non-Symmetric Matrix'  
+          rAv:{_←##.∆r.x'V <- eigen(⍵)'⍵                 ⍝ Use R if requested
+              +##.∆r.x'V$vectors'}⍵  
+          1=≢⍵:⍪1
+         ⍝ 0⊃1 #.TamStat.Koko.Dutils.SymetricEigen ⍵  
+           0⊃1 ##.Koko.Dutils.SymetricEigen ⍵
+      }
+
+      exp←{0::*tolerant ⍵
+      *⍵}
+
+
+    ∇ Z←infinity
+      Z←sqrt⌊/⍳0
+    ∇
+
+     ln←{0::⍟tolerant ⍵
+     ⍟⍵}   
+
+
+      matrix←{
+      ⍝∇ Create a matrix
+      ⍝⍺ [Shape] Iv 2-item vector indicated rows and columns
+      ⍝⍵ Vector  Xv Data vector 
+      ⍝← Matrix  Xm Data matrix
+      ⍝⍕ Matrix ← [Shape] matrix Vector [Vector ...[Vector]] 
+      ⍝⍎ matrix 1 2 3
+      ⍝⍎ matrix (1 2 3)(4 5 6)
+      ⍝⍎ 2 3 matrix 1 2 3 4 5 6
+          ⍺←⍬ ⋄ ⎕ML←1
+          2=≢⍺:⍺⍴⍵
+          1=≢⍺:⍪⍺⍴⍵
+          2=≡⍵:↑⍵
+          ⍪⍵
+      }
+
+      pi←{⍝ Pi times
+          ○⍵} 
+          
+      poly←{⍺ ⊥ ⍵} 
+
+    round←{⍺←1 ⋄ ⍺×⌊0.5+⍵÷⍺}
+
+      sin←{⍺←0 ⋄
+          ⍺=0:1○⍵
+          1○○⍵÷180}
+
+    sqrt←{0::∇ tolerant ⍵  
+          ⍵*÷2}
+
+      tan←{⍺←0 ⋄
+          ⍺=0:3○⍵
+          3○○⍵÷180}
+
+    times←{0::⍺× tolerant ⍵
+    ⍺×⍵}
+
+      to←{⍝
+        ⍝⍺ Start
+        ⍝⍵ End[Step]
+        ⍝← Start ... End
+          ⎕IO←0
+          ⍺←1
+          end step←2↑⍵,1
+          n←⌈1+(end-⍺)÷step
+          ⍺+step×⍳n}
+:EndNamespace

@@ -1,0 +1,2 @@
+ nor←{⍝ Not a or b
+     ⍺⍱⍵}

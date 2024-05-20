@@ -1,0 +1,2 @@
+ iff←{⍝ If and only if
+     ⍺=⍵}

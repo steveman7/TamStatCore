@@ -1,0 +1,2 @@
+ xor←{⍝ Exclusive or
+     ⍺≠⍵}

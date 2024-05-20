@@ -1,0 +1,26 @@
+  <p style="margin-left: 0"><span style="font-size:10.0pt;mso-bidi-font-size:
+24.0pt;font-family:Arial"><b>KEY:</b> </span></p>
+  <blockquote>
+    <p style="margin-left: 0"><span style="font-size:10.0pt;mso-bidi-font-size:
+24.0pt;font-family:Arial;font-weight:normal"><i>Italics <span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </span></i><i><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </span></i>Indicate </span><span style="font-size: 10.0pt; mso-bidi-font-size: 24.0pt; font-family: Arial; font-weight: normal">
+    variable input<br>
+    </span><span style="font-size: 10.0pt; mso-bidi-font-size: 24.0pt; font-family: Arial"><b>Boldface&nbsp;&nbsp;
+    </b></span><span style="font-size: 10.0pt; mso-bidi-font-size: 24.0pt; font-family: Arial; font-weight: normal"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </b>Indicates&nbsp; literal input<br>
+    Brackets
+    []&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Indicate optional input<br>
+    Vertical Line |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Indicates
+    alternative inputs<br>
+    Quotes '
+    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </span><span style="font-size: 10.0pt; mso-bidi-font-size: 24.0pt; font-family: Arial; font-weight: normal">Must
+    be used around input <br>
+    <u>Underscore</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Indicates the default value</span><span style="font-size:10.0pt;mso-bidi-font-size:
+24.0pt;font-family:Arial">&nbsp; </span></p>
+  </blockquote>
+</blockquote>
+
