@@ -1,0 +1,495 @@
+:Namespace Help
+    ⎕io←0
+    ⎕ml←3
+    Prefix←'&'
+
+
+
+
+
+
+
+
+
+
+
+
+    ∇ Z←Funct_Cat;_
+      _←⍬
+      _,←⊂'  All                                  '
+      _,←⊂'⍥ Operator                             '
+      _,←⊂'⌿ Summary                              '
+      _,←⊂'< Relational                           '
+      _,←⊂'& Logical                              '
+      _,←⊂'~ Distribution                         '
+      _,←⊂'+ Arithmetic                           '
+      _,←⊂'⊂ Group                                '
+      _,←⊂'⍞ Text                                 '
+      _,←⊂'⍳ Sequential                           '
+      _,←⊂'⋄ Special                              '
+      _,←⊂'* Miscellaneous                        '
+      _,←⊂'⌊ Obsolete                             '
+      _,←⊂'⌈ Beta                                 '
+      _,←⊂'∪ User Defined                         '
+      _,←⊂'↓ Subroutine                           '
+      Z←⊃_
+    ∇
+
+    ∇ Z←Footer;_
+      _←⍬
+      _,←⊂'  <p style="margin-left: 0"><span style="font-size:15.0pt;mso-bidi-font-size:                                                                                                                                                                                                                                                              '
+      _,←⊂'24.0pt;font-family:Arial"><b>KEY:</b> </span></p>                                                                                                                                                                                                                                                                                          '
+      _,←⊂'  <blockquote>                                                                                                                                                                                                                                                                                                                             '
+      _,←⊂'    <p style="margin-left: 0"><span style="font-size:15.0pt;mso-bidi-font-size:                                                                                                                                                                                                                                                            '
+      _,←⊂'24.0pt;font-family:Arial;font-weight:normal"><i>Italics <span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                                                                                                                                                                                         '
+      _,←⊂'    </span></i><i><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                                                                                                                                                                                                 '
+      _,←⊂'    </span></i>Indicate </span><span style="font-size: 15.0pt; mso-bidi-font-size: 24.0pt; font-family: Arial; font-weight: normal">                                                                                                                                                                                                       '
+      _,←⊂'    variable input<br>                                                                                                                                                                                                                                                                                                                     '
+      _,←⊂'    </span><span style="font-size: 15.0pt; mso-bidi-font-size: 24.0pt; font-family: Arial"><b>Boldface&nbsp;&nbsp;                                                                                                                                                                                                                         '
+      _,←⊂'    </b></span><span style="font-size: 15.0pt; mso-bidi-font-size: 24.0pt; font-family: Arial; font-weight: normal"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                                                                                                                      '
+      _,←⊂'    </b>Indicates&nbsp; literal input<br>                                                                                                                                                                                                                                                                                                  '
+      _,←⊂'    Brackets                                                                                                                                                                                                                                                                                                                               '
+      _,←⊂'    []&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                                                                                                                                                                                                                                 '
+      _,←⊂'    Indicate optional input<br>                                                                                                                                                                                                                                                                                                            '
+      _,←⊂'    Vertical Line |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Indicates                                                                                                                                                                                                                                                  '
+      _,←⊂'    alternative inputs<br>                                                                                                                                                                                                                                                                                                                 '
+      _,←⊂'    Quotes ''                                                                                                                                                                                                                                                                                                                               '
+      _,←⊂'    ''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                                                                                                                                                                                                                '
+      _,←⊂'    </span><span style="font-size: 15.0pt; mso-bidi-font-size: 24.0pt; font-family: Arial; font-weight: normal">Must                                                                                                                                                                                                                       '
+      _,←⊂'    be used around input <br>                                                                                                                                                                                                                                                                                                              '
+      _,←⊂'    <u>Underscore</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                                                                                                                                                                                                                  '
+      _,←⊂'    Indicates the default value</span><span style="font-size:15.0pt;mso-bidi-font-size:                                                                                                                                                                                                                                                    '
+      _,←⊂'24.0pt;font-family:Arial">&nbsp; </span></p>                                                                                                                                                                                                                                                                                               '
+      _,←⊂'  </blockquote>                                                                                                                                                                                                                                                                                                                            '
+      _,←⊂'</blockquote>                                                                                                                                                                                                                                                                                                                              '
+      _,←⊂331⍴' '
+      _,←⊂'</body>                                                                                                                                                                                                                                                                                                                                    '
+      _,←⊂331⍴' '
+      _,←⊂'</html>                                                                                                                                                                                                                                                                                                                                    '
+      _,←⊂331⍴' '
+      Z←⊃_
+    ∇
+
+    ∇ Z←Header;_
+      _←⍬
+      _,←⊂'<html>                                                                                                                                                                                                                                                                                                                   '
+      _,←⊂313⍴' '
+      _,←⊂'<head>'
+      _,←⊂'<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">                                                                                                                                                                                                                                               '
+      _,←⊂'<meta name="GENERATOR" content="Microsoft FrontPage 4.0">                                                                                                                                                                                                                                                                '
+      _,←⊂'<meta name="ProgId" content="FrontPage.Editor.Document">                                                                                                                                                                                                                                                                 '
+      _,←⊂'<title>Function Help</title>                                                                                                                                                                                                                                                                                                     '
+      _,←⊂'</head>                                                                                                                                                                                                                                                                                                                  '
+      _,←⊂313⍴' '
+      _,←⊂'<body>                                                                                                                                                                                                                                                                                                                   '
+      _,←⊂313⍴' '
+      _,←⊂313⍴' '
+      _,←⊂313⍴' '
+      _,←⊂313⍴' '
+      Z←⊃_
+    ∇
+
+    ∇ Z←{Y}CAP X;R;I;B
+     ⍝ Turn all letters in X to Capitals.
+     ⍝ ... if Y, else do nothing
+      Z←X                  ⍝ Default
+      ⍎(0=⎕NC'Y')/'Y←1'    ⍝ ...
+      →(~Y)/0              ⍝
+      R←⍴X ⋄ X←,X
+      I←⎕AV[17+⍳26]⍳X
+      B←I≠26
+      X[B/⍳⍴X]←⎕AV[65+B/I]
+      Z←R⍴X
+    ∇
+
+    ∇ Z←{X}DEB Y;A;B
+     ⍝ Delete extraneous X characters from vector Y. X defaults to blank.
+      X←DFLT' ' ⋄ B←2⍴X ⋄ A←B,Y,B ⋄ Z←¯2↓1⌽(~B⍷A)/A
+    ∇
+
+    ∇ Z←DFLT Y
+     ⍝ Sets default left argument X to Y of an ambivalent function.
+     ⍝ Only valid when called bu other utility functions.
+      Z←,Y ⋄ →(0=⎕NC'X')/0 ⋄ Z[⍳⍴X]←X
+    ∇
+
+    ∇ Z←DOCARG R
+      :If 0≠↑⍴R
+          Z←'<blockquote><p style="margin-left: 0">'
+         ⍝ Z←DOCTERM¨⊂[1]R
+          Z,←,⊃DOCTERM¨⊂[1]R
+          ⍝Z←∊'<UL>'Z'</UL>'
+          Z,←'</blockquote>'
+      :Else ⋄ Z←'' ⋄ :EndIf
+    ∇
+
+
+    ∇ Z←S DOCFN N;GET;FNS;C;G;D;L;R;Y;I;X;CR;CAT;T;CAP;B;IM;Z;OP
+     ⍝∇ Document a function
+     ⍝∊ Text
+     ⍝⍺ Sort method:  0=Alphabetic, 1=By category
+     ⍝⍵ Function Name:  Character Vector
+     ⍝← 2-item nested vector:
+     ⍝← Category name
+     ⍝← HTML text string
+     ⍝⍎ 1 DOCFN 'pv'
+     ⍝ Z←Header ⋄ →0
+      N←ss N Prefix'∆'
+     ⍝ CR←{(+/∧\' '=⍵)⌽⍵}⎕CR'#.USER.',N   ⍝ Get Cannonical Representation
+      CR←{(+/∧\' '=⍵)⌽⍵}⎕CR'#.TamStat.',N             ⍝ Get Cannonical Representation
+      :If 0∊⍴CR ⋄ Z←'' ⋄ →0 ⋄ :EndIf       ⍝ Exit if not found or empty
+      N←{(1+⌈/('.'=⍵)/⍳⍴⍵)↓⍵}'.',N~' '   ⍝ Strip out function name
+     ⍝ N[('∆'=↑N)/0]←'@'                  ⍝ Replace ∆ with @
+      CR←0 1↓(0,∧\1↓CR[;0]='⍝')⌿CR       ⍝ Extract comments
+      :If ∨/B←CR[;0]='>'                 ⍝ If continuation character
+          CR←⊃,¨⊃¨(+\~B)⊂B↓¨⊂[1]CR       ⍝ Append to end of previous row
+      :EndIf                             ⍝
+     ⍝ GET←{0 1↓(⍺=⍵[;0])⌿⍵}              ⍝ Define GET function
+      GET←{(0,≢⍺)↓(⍵⍷⍨⍺,' ')[;0]⌿⍵}              ⍝ Define GET function
+      Z←,Header
+      Z,←'<h1 style="margin-left: 0"><code><span style="font-size:15.0pt;font-family:Arial">'
+      Z,←N,'<span style="mso-spacerun: yes">&nbsp;'
+      Z,←'</span><i>-<span style="mso-spacerun: yes">&nbsp; </span></i></span><span style="font-size:15.0pt;font-family:Arial;font-weight:normal">'
+      :If ' '≠↑CR                            ⍝
+          :If '⌊'=↑CR                        ⍝ Obsolete
+              Z,←'Obsolete</span><span style="font-size:15.0pt;font-family:Arial"><br></span><span style="font-size:15.0pt;font-family:Arial;font-weight:normal">'
+              Z,←'Replace with:  ',(1↓CR[0;]),'</span></code></h1>'
+          :Else
+              D←'∇'GET CR                    ⍝
+              :If 0∊⍴D ⋄ D←1↓CR[0;] ⋄ :EndIf
+              CAT←dbr,'∊'GET CR
+              Z,←CAT,'</span><span style="font-size:15.0pt;font-family:Arial"><br></span><span style="font-size:15.0pt;font-family:Arial;font-weight:normal">'
+              Z,←(,D),'</span></code></h1>'
+              :If 0<↑⍴X←'⍎'GET CR            ⍝ Get example
+                  Z,←'<p style="margin-left: 0"><b><span style="font-size:15.0pt;mso-bidi-font-size:18.0pt;font-family:Arial">Examples:<span style="mso-spacerun:'
+                  Z,←'yes">&nbsp;&nbsp;</span></span></b></p>'
+                  Z,←∊(DOCXMP¨⊂[1]X)
+              :EndIf
+              :If 0<↑⍴IM←,'⎕'GET CR         ⍝ Image
+                  Z,←' <p style="margin-left: 0"><b><span style="font-size:15.0pt;mso-bidi-font-size:18.0pt;font-family:Arial">'
+                  Z,←IM,'<span style="mso-spacerun: yes"> </span></span></b></p> '
+                  Z,←'<p><img src="',N,'.gif"></p>' ⋄ :EndIf
+              :If 0<↑⍴T←'#'GET CR            ⍝ Table
+                  CAP←T[0;]                  ⍝
+                  T←(' '∨.≠T)⊂T←1↓[0]T       ⍝
+                  T←{#.U.ss ⍵'_' ' '}¨T      ⍝ Replace _ with blank
+                  Z,←#.HTML.TABLE CAP(T[,0;])(1↓[0]T)(0↑[0]T)
+              :EndIf
+              Z,←∊(⊂N)DOCSYN¨⊂[1]'⍕'GET CR
+     
+              L←'⍺'GET CR                    ⍝ Get left argument
+              L←DOCARG L
+              :If 0<↑⍴L ⋄ Z,←' <p style="margin-left: 0"><b><span style="font-size:15.0pt;mso-bidi-font-size:18.0pt;font-family:Arial">'
+                  Z,←'Left Argument: <span style="mso-spacerun: yes"> </span></span></b></p> ',L ⋄ :EndIf
+              L←'⍺⍺'GET CR
+              L←DOCARG L             ⍝ Left Operand Description
+              :If 0<↑⍴L ⋄ Z,←' <p style="margin-left: 0"><b><span style="font-size:15.0pt;mso-bidi-font-size:18.0pt;font-family:Arial">'
+                  L←'<blockquote><p style="margin-left: 0">',(,L),'</blockquote>'
+                  Z,←'Left Operand: <span style="mso-spacerun: yes"> </span></span></b></p> ',,L ⋄ :EndIf
+              OP←'⍥'GET CR          ⍝ Operator Description
+              OP←DOCARG OP
+              :If 0<↑⍴OP ⋄ Z,←' <p style="margin-left: 0"><b><span style="font-size:15.0pt;mso-bidi-font-size:18.0pt;font-family:Arial">'
+                  OP←'<blockquote><p style="margin-left: 0">',(,OP),'</blockquote>'
+                  Z,←'Operator: <span style="mso-spacerun: yes"> </span></span></b></p> ',,OP ⋄ :EndIf
+     
+              R←'⍵⍵'GET CR
+              R←DOCARG R             ⍝ Right Argument Description
+              :If 0<↑⍴R ⋄ Z,←' <p style="margin-left: 0"><b><span style="font-size:15.0pt;mso-bidi-font-size:18.0pt;font-family:Arial">'
+                  R←'<blockquote><p style="margin-left: 0">',(,R),'</blockquote>'
+                  Z,←'Right Operand: <span style="mso-spacerun: yes"> </span></span></b></p> ',,R ⋄ :EndIf
+              R←'⍵'GET CR                    ⍝ Get right argument
+              R←DOCARG R
+              :If 0<↑⍴R ⋄ Z,←' <p style="margin-left: 0"><b><span style="font-size:15.0pt;mso-bidi-font-size:18.0pt;font-family:Arial">'
+                  Z,←'Right Argument: <span style="mso-spacerun: yes"> </span></span></b></p> ',,R ⋄ :EndIf
+              Y←DOCARG'←'GET CR              ⍝ Get explicit result
+              Z,←' <p style="margin-left: 0"><b><span style="font-size:15.0pt;mso-bidi-font-size:18.0pt;font-family:Arial">'
+              Z,←'Result: <span style="mso-spacerun: yes"> </span></span></b></p> ',Y ⋄
+              :If 0<↑⍴D←1↓,' ','⌹'GET CR
+                  Z,←' <p style="margin-left: 0"><b><span style="font-size:15.0pt;mso-bidi-font-size:18.0pt;font-family:Arial">'
+                  Z,←'See Also: <span style="mso-spacerun: yes"> </span></span></b></p> ',D ⋄
+              :EndIf
+              Z,←,Footer
+          :EndIf
+      :Else
+          Z,←'</CODE></H1><HR>'
+          Z,←∊,/(1 0↓CR),⊂'<BR>'
+      :EndIf
+     ⍝ ((Z='∆')/Z)←'@'
+      C←{⍵,(⍵='&')/'amp'}Prefix
+      Z←DEB ss Z'∆'C
+      :If 9=⎕nc '#.TamStat.Test' 
+          'H'⎕WC'htmlrenderer'('html'Z)
+      :EndIf
+    ⍝  R←Z ⎕NPUT'C:\Users\Stephen\Documents\TamStat\Help.htm' 1
+    ∇
+
+    ∇ Z←S DOCNS NS;NL;C;D;B;H1;A;CU;G;TOC;L;UL
+      NL←NS.⎕NL 3
+      (C D)←⊂[0]⊃S DOCFN¨⊂[1]↑,/(⍕NS),'.',⊂NL
+      G←{w←#.U.dbr ⍵ ⋄ '<LI><A HREF="#',w,'">',w,'</A></LI>'}
+      L←{w←#.U.dbr ⍵ ⋄ '<LI><A NAME="',w,'">',w,'</A></LI>'} ⍝Create link
+      UL←{'<UL>',⍵,'</UL>'}
+      :If S
+         ⍝ B←⊂[0]C∘.∊∪C    ⍝ Unique Categories
+          A←{⍵[⍋⊃⍵]}∪C
+          B←{⍵∘.=⍳1+⌈/⍵}A⍳C
+         ⍝ H1←{'<H1><A NAME="',⍵,'">',⍵,' Functions</A></H1>'}¨CU ⍝ Name and anchor
+          H1←{'<H2>',⍵,' Functions</H2>'}¨A
+          TOC←'<H1>Functions by Category</H1><UL>'
+          ⍝TOC←{'<H1><A NAME="',⍵,'">',⍵,' Functions</A></H1>'}¨CU ⍝ Name and anchor
+      :Else
+          ⍝A←'abcdefghijklmnopqrstuvwxyz'
+          A←⎕C ⎕A
+          B←NL[;0]∘.=A
+          ⍝H1←{'<H1><A NAME="',⍵,'">',⍵,'</A></H1>'}¨A            ⍝ Name and anchor
+          H1←{'<H1>',⍵,'</H1>'}¨A
+          TOC←'<H0>Functions by Name</H0><UL>'
+      :EndIf
+      TOC,←(∊G¨A),'</UL>'
+      ⍝TOC,←UL∊(L¨A),¨UL¨∊¨G¨¨⊂[1]¨(⊂[0]B)⌿¨⊂NL
+      TOC,←UL∊(L¨A),¨UL¨∊¨G¨¨⊂[1]¨(⊂[0]B)⌿¨⊂NL
+      H1←H1,¨⊂'<HR>'
+      Z←TOC,∊H1,¨(⊂[0]B)/¨⊂D
+      Z←(⍕NS)Z
+    ∇
+
+    ∇ Z←{FN}DOCSYN X;XX;B;V;L;AA;I;Q;U;BB;KBD;EKBD;VAR;EVAR
+      ⍝ Document Syntax
+      ⍝B←X∊' _∆',⎕D,AA←⎕A,#.USER.lowercase ⎕A
+      B←X∊' _∆',⎕D,AA←⎕A,⎕C ⎕A
+      X←(∊((0 1 0)1)[B])\X              ⍝ Find non-alphanumeric data
+      XX←{(' '≠⍵)⊂⍵},X                  ⍝ Tokenize data
+      U←'_'=I←↑¨XX                      ⍝ Get first characters
+      XX←U↓¨XX
+      V←(~XX∊⊂FN)∧I∊AA                  ⍝ Identify variables
+      L←(~V)∧~I∊'()[]{}∣'               ⍝ Identify literals
+      Q←I=''''                          ⍝ Identify quotes
+      KBD←'<kbd><b><span style="font-size:15.0pt;font-family:Arial">'
+      EKBD←'</span></b></kbd>'
+      VAR←'<span style="font-size:15.0pt;mso-bidi-font-size:18.0pt;font-family:Arial"><var>'
+      EVAR←'</var><i> </i></span>'
+      (U/XX)←{'<U>',⍵,'</U>'}¨U/XX      ⍝ Underscore defaults
+      ⍝(V/XX)←{'</B><VAR>',⍵,'</VAR><B>'}¨V/XX  ⍝ Make variables italic
+      (V/XX)←{VAR,⍵,EVAR}¨V/XX  ⍝ Make variables italic
+      ⍝(L/XX)←{'<STRONG><KBD>',⍵,'</KBD></STRONG>'}¨L/XX  ⍝ Make it boldface
+      (L/XX)←{KBD,⍵,EKBD}¨L/XX  ⍝ Make it boldface
+      B←0,2∧/L∨V
+      XX←(BB←∊(1(0 1))[B])\XX
+      B←{(¯1⌽⍵⍲≠\⍵)∧(1⌽⍵≤≠\⍵)}BB\Q
+      ⍝Z←'<br> . . . ',↑,/B/XX
+      Z←'<p style="margin-left: 0"><b><span style="font-size:15.0pt;mso-bidi-font-size:'
+      Z,←'18.0pt;font-family:Arial">Syntax:</span></b></p>'
+      Z,←'<blockquote>'
+      Z,←'<p style="margin-left: 0"><kbd><span style="font-size:15.0pt;font-family:Arial">'
+      Z,←↑,/B/XX
+      Z,←'</span></p></blockquote>'
+      Z←ss Z'∣' '&#166;'
+      Z←ss Z'←' '&#8592;'
+    ∇
+
+    ∇ Z←DOCTERM R;NAME;TYPE;DESC;DEF;OPT;B;I;FF
+      ⍝TYPE:
+      (NAME TYPE DESC)←3↑{((~B)∨2<+\B←' '=⍵)⊂⍵}dbr R
+      OPT←'['=↑NAME
+      (NAME DEF)←2↑{(~⍵∊'[]←')⊂⍵}NAME
+     ⍝ Z←'<LI><VAR>',NAME,' </VAR> - ',OPT/'<I>(Optional)</I> '
+      Z←'<var><span style="font-size:15.0pt;mso-bidi-font-size:18.0pt;font-family:Arial">'
+      Z,←NAME,OPT/' (Optional)'
+      Z,←'</span></var><span style="font-size:15.0pt;mso-bidi-font-size:'
+      Z,←'18.0pt;font-family:Arial"> - '
+      Z,←'<span style="mso-spacerun: yes">&nbsp; </span>'
+      :If ' '∨.≠DESC ⋄ Z,←DESC,'; ' ⋄ :EndIf
+      :Select ↑TYPE
+      :CaseList 'XYZ' ⋄ Z,←'Numeric, Real'
+      :CaseList 'AB' ⋄ Z,←'Boolean:  ',NAME,'∊{0,1}'
+      :CaseList 'CD' ⋄ Z,←'Character'
+      :Case 'E' ⋄ Z,←'Nested'
+      :CaseList 'MN' ⋄ Z,←'Positive Integer: ',NAME,'∊{1,2,3,...}'
+      :Case 'I' ⋄ Z,←'Non-negative Integer: ',NAME,'∊{0,1,2,...}'
+      :Case 'J' ⋄ Z,←'Integer: ',NAME,'∊{...¯2,¯1,0,1,2,...}'
+      :CaseList 'P' ⋄ Z,←'Probability: (0≤',NAME,'≤1)'
+      :CaseList 'Q' ⋄ Z,←'Probability: (0<',NAME,'<1)'
+      :Case 'R' ⋄ Z,←'Unit (-1≤',NAME,'≤1)'
+      :CaseList 'ST' ⋄ Z,←'Non-negative Real: (',NAME,'≥0)'
+      :CaseList 'UV' ⋄ Z,←'Positive Real:  (',NAME,'>0)'
+      :Case 'W' ⋄ Z,←'Namespace'
+      :CaseList 'fgh' ⋄ Z,←'Function; '
+      :Case 'o' ⋄ Z,←'Operator: '
+      :EndSelect
+      I←'svmanDSRL '⍳↑1↓TYPE
+      :If 'o'=↑TYPE
+          :If 'D'=↑1↓TYPE
+              Z,←'<b>prob|critVal|randVar|theoretical</b>'
+          :Else
+              Z,←'confInt|hypothesis'
+          :EndIf
+      :Else
+          FF←'Distribution' 'Summary' 'Relational: <b>lt|≤|=|≥|gt|≠|between|outside|include</b>' 'Logical: <b>∧|∨|=|≠|~|⍲|⍱</b>'
+          Z,←' ',I⊃'Scalar' 'Vector' 'Matrix' 'Array' 'Nested',FF,⊂''
+      :EndIf
+     
+     ⍝ I←'DSRL'⍳↑1↓TYPE
+⍝      Z,←I⊃'Distribution' 'Summary' 'Relational' 'Logical' ''
+     
+      ⍝:If ∨/B←'DSRL'∊1↓TYPE
+⍝          Z,←' ',↑{⍺,' or ',⍵}/('FCXS'∊TYPE)/'Field' 'Constant' 'Expression' 'String'
+⍝      :EndIf
+⍝      Z,←';'
+⍝      :If ∨/'>0'⍷TYPE ⋄ Z,←' Positive ' ⋄ :EndIf
+⍝      :If ∨/'≥0'⍷TYPE ⋄ Z,←' Non-negative ' ⋄ :EndIf
+⍝      :If '%'∊TYPE ⋄ Z,←' Percentage ' ⋄ :EndIf
+⍝      :If '$'∊TYPE ⋄ Z,←' Dollar Amount' ⋄ :EndIf
+⍝      :If 'I'∊TYPE ⋄ Z,←' Integer' ⋄ :EndIf
+⍝      :If '{'∊TYPE ⋄ Z,←'; Range  ',1↓(≠\TYPE∊'{}')/TYPE ⋄ :EndIf
+⍝      ⍝:If 'W'∊TYPE ⋄ Z,←' Width = ',(1+TYPE⍳'W')↓TYPE ⋄ :EndIf
+      :If ' '∨.≠DEF ⋄ Z,←' Default = ',DEF ⋄ :EndIf
+      Z←(-';'=↑⌽Z)↓Z
+     ⍝ Z,←'</LI>'
+      Z,←'<br>'
+    ∇
+
+    ∇ Z←DOCXMP X;R;C;L;I;J;D
+      (I J)←X⍳'←⍝'
+      I←I×I<⍴X
+      C←dbr(J+1)↓X,':'
+      R←I↑X
+      X←(I+1)↓J↑X
+      X←ss X' ' '&nbsp;'
+      Z←'<p style="margin-left: 0"><code><span style="font-size:15.0pt;font-family:Arial;'
+      ⍝ Z←'<p style="margin-left: 0"><code><span style="font-size:15.0pt;font-family:APL385 Unicode;'
+      Z,←'mso-bidi-font-weight:bold">'
+      :If 0<⍴C
+          Z,←C,'<br>'
+      :EndIf
+      Z,←'Expression:<span style="mso-spacerun: yes">&nbsp;&nbsp;'
+      ⍝Z,←'</span><b>',X,'<br>'
+      Z,←'</span></span><code><b>'
+      Z,←'<span style="font-size:15.0pt;font-family:APL385 Unicode;color: green">'
+      Z,←X,'</span></b></code>'
+      ⍝Z,←'</span><b><code><span style="font-size:15.0pt;font-family:APL385 Unicode"',X,'</span></code><br>'
+      Z,←'<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></b></span></code>'
+      :If I>0
+          Z,←'<span style="font-size:15.0pt;mso-bidi-font-size:18.0pt;'
+          Z,←'font-family:Arial">Result:<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;'
+          ⍝Z,←'font-family:APL385 Unicode">Result:<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;'
+          Z,←'</span></span><code><b>'
+          Z,←'<span style="font-size:15.0pt;font-family:APL385 Unicode">'
+          Z,←R,'</span></b></code>'
+      :EndIf
+      Z,←'</p>'
+    ∇
+
+      GetUserFunctionCategory←{
+          x←{'&'≡↑⍵:'∆',1↓⍵ ⋄ ⍵}⍵
+          foo←#.USER.ljust #.USER.⎕CR x
+          type←foo[1;1]
+     ⍝     1⊃,(type⍷FunctionCategoryList[;0])⌿FunctionCategoryList[;1]
+          index←FunctionCategoryList[;0]⍳type
+          ↑FunctionCategoryList[index;1]
+      }
+
+      GetUserFunctionList←{
+          F←(⊂[1]#.USER.⎕NL 3 4)~¨' '
+          F←{'∆'=↑⍵:#.UDF.Prefix,1↓⍵ ⋄ ⍵}¨F      ⍝ SMM 10/10/01
+          F
+      }
+
+      dbr←{
+          0=↑⍴⍵:⍵
+          DEB ⍵
+      }
+
+    ∇ Z←ljust Y
+     ⍝⍞ Left justify
+     ⍝∇ Move text to the leftmost position.
+     ⍝∇ Leading blanks are moved to the end of the field
+     ⍝⍕ ljust TextField
+     ⍝⍵ TextField TFWn Raw Data
+     ⍝← NewField TFWn  Formatted data; width remains the same
+     ⍝⍎ 'Steve    ' ← ljust '   Steve '
+     ⍝⍎ ljust PROPTYPE
+      Z←(+/∧\' '=Y)⌽Y
+    ∇
+
+    ∇ Z←rjust Y
+     ⍝⍞ Right justify
+     ⍝∇ Move text to the rightmost position.
+     ⍝∇ Trailing blanks are moved to the beginning of the field
+     ⍝⍕ rjust TextField
+     ⍝⍵ TextField TFWn Raw Data
+     ⍝← NewField TFWn  Formatted data; width remains the same as input field
+     ⍝⍎ '   Steve' ← rjust 'Steve   '
+      Z←⌽ljust⌽Y
+    ∇
+
+      ss←{                               ⍝ Simulates xutils.ss
+          ⍺←0 0                          ⍝ Simple replaces only, no regex
+          uc br←2↑⍺,0                    ⍝ Uppercase, boolean result
+          t f←,¨{uc:CAP¨⍵ ⋄ ⍵}2↑⍵    ⍝ Text, from, replacement
+          3=⍴⍵:(0⊃⍵)ss_cap t f(2⊃⍵)  ⍝ 3 items, find and replace
+          ⍝ b←f⍷t                        ⍝ Phil's find, to remove overlapping
+          ⍝ find←{(⍴⍺)↓⌽~⊃(¯1+⍴⍺){(⍺∨⍺⍺>+/∧\⍵),⍵}/⌽(⍺=⍺),~⍺⍷⍵}
+          find←{(⍴⍺){⍵\⍺{⍵∊⊃⍺{⍵,⍺/⍨⍺≥⍺⍺+⌈/⍵}/⌽(-⍺),⍵}⍵/⍳⍴⍵}⍺⍷⍵} ⍝ Faster
+          b←f find t
+          br:b                           ⍝ Boolean result
+          1+b/⍳⍴b                        ⍝ Integer, ⎕IO 0
+      }
+
+      ss_cap←{⎕ML←3                       ⍝ Approx alternative to xutils' ss.
+          uc←⍺                            ⍝ UnCapped source
+          srce find repl←,¨⍵              ⍝ Source, find and replace vectors.
+          i←{+\find⍷⍵}find,srce           ⍝ Partitioned at find points.
+          cvex←i⊂find,uc                  ⍝ Partitioned at find points.
+          (⍴repl)↓∊{repl,(⍴find)↓⍵}¨cvex  ⍝ Collected with replacements.
+      }
+
+      tpath←{
+          i←{(⍴,⍵)-1+(⌽,⍵)⍳⍳1+⌈/⍵}¨,\⍵ ⍝ Get path indices
+          ↑¨{⍺,'\',⍵}/¨i{⍵[⍺]}¨⊂⍺      ⍝ Assemble path names
+      }
+
+    where1←{{⍵/⍳⍴⍵}⍺⍷⍵}
+
+    ∇ Z←{X}word Y;F;D;N;B;I;W;⎕ML
+     ⍝⍞ Word
+     ⍝∇ Extract a word or string from a character field.
+     ⍝∇ NOTE: If the delimiter is blank, (ie: ' ')
+     ⍝∇ then consecutive delimiters as treated as one unless overridden
+     ⍝∇ by left argument
+     ⍝⍕ [0∣1∣2] word TextField Delimiter Position
+     ⍝⍺ 0 = Treat Consecutive Delimiters separately
+     ⍝⍺ 1 = Treat Consecutive Delimiters as one
+     ⍝⍺ 2 = Treat only blanks as consecutive delimiters (default)
+     ⍝⍵ TextField TF Raw data
+     ⍝⍵ Delimiter TC e.g. ','
+     ⍝⍵ Position  IC>0 e.g. 2 = get second word
+     ⍝← NewField  TF Extracted data
+     ⍝⍎ word ADDRESS ',' N    ⍝ Extract the nth word from the beginning
+     ⍝⍎ word ADDRESS ',' (-N) ⍝ Extract the nth word from the end
+      :If 0=⎕NC'X' ⋄ X←2 ⋄ :EndIf
+      (F D N)←Y
+      I←¯1+|N
+      ⍝:If D=' '       ⍝ Treat Consecutive delimiters as one
+      :If (X=1)∨(X=2)∧D=' '
+        ⍝  F←⊂[1]F     ⍝
+          F←↓F
+          F←(D≠F)⊂¨F  ⍝
+          F←N↑¨F
+          Z←⊃↑¨(-×N)↑¨F
+      :Else           ⍝
+          F←D,F
+          B←D=F
+         ⍝F←⊂[1]F
+          F←↓F
+         ⍝B←⊂[1]B
+          B←↓B
+          ⎕ML←0 ⋄ F←B⊂¨F ⋄ ⎕ML←3
+          F←N↑¨F
+          Z←⊃↑¨(-×N)↑¨F
+         ⍝Z←0 1↓Z
+          Z←1↓[¯1+⍴⍴Z]Z
+      :EndIf
+    ∇
+
+
+:EndNamespace
