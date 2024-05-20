@@ -1,27 +1,31 @@
  gamma←{                ⍝ Gamma Distribution
- ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
- ⍝∇ Gamma Distribution
- ⍝∊ Continuous Distribution Function
- ⍝⍺ U:  Shape Parameter
- ⍝⍺ V:  Scale Parameter
- ⍝⍺ [0=Density, 1=Cumulative Distribution, ¯1=Inverse Distribution, ¯2=random]
- ⍝⍵ T:  Value  T≥0
- ⍝← S:  Density S≥0
- ⍝⍕ S ← U V gamma T
- ⍝⍎ 0.062755 ← 4 2 gamma 3
+  ⍝⍟ Copyright (c) by Stephen M. Mansour
+  ⍝∇ Gamma Distribution
+  ⍝∊ Distribution Function; Continuous
+  ⍝⍺ K      T  Shape Parameter 1
+  ⍝⍺ Theta  T  Scale Parameter 2
+  ⍝⍺_ C Cs ['d'=Probability, 'p'=Cumulative Prob, 'q'=Inverse Distribution, 'r'=random]
+  ⍝⍥ [op] oD
+  ⍝⍵⍵ [rel]  fR  Only for prob or critVal operators
+  ⍝⍵ X        T   Probability, CriticalValue or sampleSize
+  ⍝← Result   S  Density, Probability or Critical Value
+  ⍝⍕ Result ← K Theta beta [op [rel]] X
+  ⍝⍎ 0.065642 ← 4 2 gamma prob < 3   ⍝ Cumulative Distribution Function
+  ⍝⍎ 0.062755 ← 4 2 gamma 3          ⍝ Density
     ⍝ 11::0
-     x←⍵ ⋄ ⎕ML←3 ⋄ ⎕IO←0                    ⍝ Set system variables
+     x←⍵ ⋄ ⎕ML←3 ⋄ ⎕IO←0              ⍝ Set system variables
      x≡'Type':'Continuous'
-     k r c←3↑⍺                              ⍝ Get parameters
-     x≡'Mean':k×r                           ⍝ Calculate theoretical values
-     x≡'Variance':k*r*2                     ⍝      "         "         "
-     x≡'Median':k r ∇ criticalValue<0.5     ⍝      "         "         "
-     x≡'Mode':r×k-1                         ⍝      "         "         "
-     x≡'Skewness':2÷k*÷2                    ⍝      "         "         "
-     x≡'Kurtosis':6÷k                       ⍝      "         "         "
-     str←'pdqr'[1 0 ¯1 ¯2⍳c],'gamma(⍵,⍵,⍵)' ⍝ Build R expression
-     rAv:+##.∆r.x str ⍵ k r                 ⍝ Use R if requested
-     F←k r∘{                                ⍝ Cumulative distribution
+     (k r)c←getParameters ⍺           ⍝ Get parameters
+     x≡'Mean':k×r                     ⍝ Calculate theoretical values
+     x≡'Variance':k*r*2               ⍝      "         "         "
+     x≡'Median':k r ∇ critVal<0.5     ⍝      "         "         "
+     x≡'Mode':r×k-1                   ⍝      "         "         "
+     x≡'Skewness':2÷k*÷2              ⍝      "         "         "
+     x≡'Kurtosis':6÷k                 ⍝      "         "         "
+     2=≡k r:(1⌽¨↑,¨/c k r)∇¨⍵         ⍝ Left argument pervasive
+     str←c,'gamma(⍵,⍵,⍵)'             ⍝ Build R expression
+     rAv:+##.∆r.x str ⍵ k r           ⍝ Use R if requested
+     F←k r∘{                          ⍝ Cumulative distribution
          k r←⍺ ⋄ c←⍵÷r
          g←{x←⍵
              s←0{y←*(⍺×⍟x⌈⎕CT)-⍟!k+⍺
@@ -42,8 +46,8 @@
              m+0 1}⍵
          G←⍵∘{⍺-↑F ⍵}¨
          G SecAlg P0,G P0}
-     c=0:(r*-k)×(x*k-1)×(*-x÷r)÷!k-1        ⍝ Density
-     c=1:F¨x                                ⍝ Distribution
-     c=¯1:Finv¨x                            ⍝ Inverse
-     k r(16808⌶)'Gamma'⍵                ⍝ Random Variable
+     c='d':(r*-k)×(x*k-1)×(*-x÷r)÷!k-1        ⍝ Density
+     c='p':F¨x                                ⍝ Distribution
+     c='q':Finv¨x                             ⍝ Inverse
+     k r(16808⌶)'Gamma'⍵                      ⍝ Random Variable
  }

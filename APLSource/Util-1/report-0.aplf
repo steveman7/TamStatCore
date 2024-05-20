@@ -1,5 +1,15 @@
  report←{⍺←0.05 ⋄ ⎕ML←3 ⋄ ⎕IO←0
-   ⍝  0::⍵                                       ⍝ If Error just get out with error message
+     ⍝⍟ Copyright (c) 2024 by Stephen Mansour
+     ⍝∇ Generate a report from a namespace
+     ⍝∊ Utility Function
+     ⍝⍺ [Significance] Ps Signficance Level - Default = 0.05
+     ⍝⍵ NameSpace     W   Contains results of statistical test
+     ⍝← Result        Cm  Readable Report
+     ⍝⍕ Result←[Significance|_0.05] report NameSpace
+     ⍝⍎ report Height regress ShoeSize          ⍝ Regression Report (⍺=0.05)
+     ⍝⍎ report oneWay anova Height Party        ⍝ ANOVA Report      (⍺=0.05)
+     ⍝⍎ report 0.1 Height mean hypothesis = 68  ⍝ Hypothesis report (⍺=0.01)
+      ⍝  0::⍵                                       ⍝ If Error just get out with error message
      2=⎕NC'⍵':{
          r d←{0≢↑0⍴↑⍵:⍵ 0                          ⍝ IF text
              r←{⍵∘.+0.5 ¯0.5×↑2-/⍵}⍵               ⍝ Range

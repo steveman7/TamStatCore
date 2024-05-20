@@ -2,12 +2,12 @@
  ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
  ⍝∇ Generate StemAndLeaf Plot
  ⍝∊ Graphics
- ⍝⍺ S: Stem Size (Default 10)
- ⍝⍵ Xv: Numeric Vector
- ⍝← CmL Character Matrrix
- ⍝⍕ [S] stemAndLeaf Xv
- ⍝⍎ stemAndLeaf D.Weight
- ⍝⍎ 5 stemAndLeaf D.Height
+ ⍝⍺ [StemSize←10] Ns Stem Size
+ ⍝⍵ Data Xv Numeric Vector
+ ⍝← Graphic W Stem and Leaf Plot
+ ⍝⍕ Graphic←[StemSize] stemAndLeaf Data
+ ⍝⍎ stemAndLeaf Weight
+ ⍝⍎ 5 stemAndLeaf Height
      ⍺←10 ⋄ ⎕IO←0 ⋄ ⎕ML←3                 ⍝ Stem Size must be
      a←↑(⍺,10)~0J1                        ⍝ Stem Size
      ~5 1∊⍨10*1|10⍟a:'Domain Error'       ⍝    1 or 5 x 10^N

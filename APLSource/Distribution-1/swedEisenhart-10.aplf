@@ -1,5 +1,5 @@
  swedEisenhart←{                                ⍝ Scalar,Arithmetic
-     ⍝⍟ Copyright (c) 2021 by Stephen M. Mansour
+     ⍝⍟ Copyright (c) 2021, 2024 by Stephen M. Mansour
      ⍝∇ Swed-Eisenhart Distribution
      ⍝  Annals of Mathematical Statistics 1943, Vol114. No. 1
      ⍝∊ Discrete Distribution Function
@@ -10,8 +10,9 @@
      ⍝⍕ Syntax:  M N swedEisenhart R
      ⍝⍎ 0.0079 0.031746 ← 5 5 swedEisenhart 2 3
      'Type'≡x←⍵:'Discrete'
-     M N C←3↑⍺ ⋄ ⎕ML←3 ⋄ ⎕IO←0                   ⍝ Set system variables
-     M N∨.<0 1:∆SigErr'All parameters must be positive'
+     ⎕ML←3 ⋄ ⎕IO←0
+     (M N)C←getParameters ⍺ ⍝ Set system variables
+     ∨/∊M N<0 1:∆SigErr'All parameters must be positive'
      f←{K←⌈⍵÷2 ⋄ ~2|⍵:×/2,(K-1)!⍺-1              ⍝ Even Combinations
          +/×⌿0 1⌽(K-1 2)∘.!⍺-1}                  ⍝ Odd Combinations
      x≡'Mean':1+2×(M×N)÷M+N                      ⍝ Theoretical Values
@@ -21,9 +22,10 @@
      x≡'Kurtosis':'Nonce Error'                  ⍝    "           "
 ⍝    str←'pdqr'[1 0 ¯1 ¯2⍳c],'hyper(⍵,⍵,⍵,⍵)'    ⍝ Build R Expression
 ⍝    rAv:+##.∆r.x str ⍵ m(N-m)n                  ⍝ Use R if requested
-     1<≢⍵:⍺∘∇¨⍵                                  ⍝ Allow array arguments
-     C=0:(M N f ⍵)÷M!M+N                         ⍝ Probability (X=x)
-     C=1:(M!M+N)÷⍨+/M N∘f¨2↓⍳⍵+1                 ⍝ Cumulative Probability X≤x
-     C=¯1:(⍵≥0.5)+⍵⍸⍨(M!M+N)÷⍨+\M N∘f¨⍳M+N+2     ⍝ Critical Values (Inverse)
-     C=¯2:{↑runs ⍵[?⍨≢⍵]}¨⍵⍴⊂M N/0 1             ⍝ Random Variables
+⍝     1<≢⍵:⍺∘∇¨⍵
+     (1≠≡M N ⍵)∧C≠'r':(↑,¨/M N C)∇¨⍵                                  ⍝ Allow array arguments
+     C='d':(M N f ⍵)÷M!M+N                         ⍝ Probability (X=x)
+     C='p':(M!M+N)÷⍨+/M N∘f¨2↓⍳⍵+1                 ⍝ Cumulative Probability X≤x
+     C='q':(⍵≥0.5)+⍵⍸⍨(M!M+N)÷⍨+\M N∘f¨⍳M+N+2     ⍝ Critical Values (Inverse)
+     C='r':{↑runs ⍵[?⍨≢⍵]}¨⍵⍴⊂M N/0 1             ⍝ Random Variables
  }

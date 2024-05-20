@@ -1,27 +1,37 @@
  normal←{                                ⍝ Scalar,Arithmetic⍝⍝⍝⍝⍝⍝
- ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
- ⍝∇ (Standard) Normal Distribution
- ⍝∊ Continuous Distribution Function
- ⍝⍺ Y: Mean  (default 0)
- ⍝⍺ S: Standard Deviation  (default 1)
- ⍝⍵ X: Value
- ⍝← U: Density U>0
- ⍝⍕ U ← Y S normal X
- ⍝⍎ 0.1941 ← normal 1.2
- ⍝⍎ 0.0806 ← 68 3 normal 65
+  ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+  ⍝∇ (Standard) Normal Distribution
+  ⍝∊ Distribution Function; Continuous
+  ⍝⍺ [Mu←0]    X Population mean
+  ⍝⍺ [Sigma←1] S Population standard deviation
+  ⍝⍺_ C Cs ['d'=Probability, 'p'=Cumulative Prob, 'q'=Inverse Distribution, 'r'=random]
+  ⍝⍥ [op] oD
+  ⍝⍵⍵ [rel]  fR  Only for prob or critVal operators
+  ⍝⍵ Value    S Test Statistic, probability or Sample Size
+  ⍝← Result   S  Density, Probability or Critical Value
+  ⍝⍕ Result ← [Mu|_0 Sigma|_1] normal [op [rel]] Value
+  ⍝⍎ 0.975 ← normal prob ≤ 1.96      ⍝ Probability from Standard Normal Distribution Table; p-Value
+  ⍝⍎ 1.645 ← normal critVal ≤ .05    ⍝ Standard Critical Value
+  ⍝⍎ 0.25249 ← 68 3 normal prob ≥ 65 ⍝ Probability that someone is taller than 65 inches
+  ⍝⍎ 72.935 ← 68 3 normal critVal ≥ .95 ⍝ 95th percentile of height
      ⍺←0 1 ⋄ ⎕ML←3 ⋄ ⎕IO←0                  ⍝ Default to standard normal
      ⍵≡'Type':'Continuous'                  ⍝ Continuous Distribution
      ⍵≡'Parameters':{⍵.f←(mean,sdev) ⋄ ⍵}⎕NS'' ⍝ Get parameter estimates
-     ~'X23'check ⍺:⎕SIGNAL 5                ⍝ Length error
-     m s c←3↑⍺                             ⍝ Mean, sdev, action
+     ⍝m s c←3↑⍺                             ⍝ Mean, sdev, action
+     (m s)c←getParameters ⍺
   ⍝   m s←⍺ ⋄  ∆∆←0 ⋄ c←∆∆
-     ~'S'check s:⎕SIGNAL 11                 ⍝ Sdev must be > 0
-     ~'O'check c:⎕SIGNAL 11                 ⍝ Check Operator
      'Mean' 'Median' 'Mode'∊⍨⊂⍵:m           ⍝ Obtain theoretical values
-     ⍵≡'Variance':s*2                       ⍝     "    "          "
+     'Variance'≡⍵:s*2                       ⍝
      'Skewness' 'Kurtosis'∊⍨⊂⍵:0            ⍝     "    "          "
-     ~'X'check ⍵:⎕SIGNAL 11                 ⍝ Right argument must be numeric
-     str←'pdqr '[1 0 ¯1 ¯2⍳c],'norm(⍵,⍵,⍵)' ⍝ Build R expression
+   ⍝ 2=≡⍺:(↑,¨/⍺)∇¨⍵                        ⍝ PervasiveLeft argument
+   ⍝  2=≡m s:(↑,¨/⍺)∇¨⍵                        ⍝ PervasiveLeft argument
+     2=≡m s:(1⌽¨c,¨m,¨s)∇¨⍵
+    ⍝ ~'X23'check ⍺:⎕SIGNAL 5                ⍝ Length error
+⍝     ~'S'check s:⎕SIGNAL 11                 ⍝ Sdev must be > 0
+⍝     ~'O'check c:⎕SIGNAL 11                 ⍝ Check Operator
+⍝     ~'X'check ⍵:⎕SIGNAL 11                 ⍝ Right argument must be numeric
+    ⍝str←'pdqr '[1 0 ¯1 ¯2⍳c],'norm(⍵,⍵,⍵)' ⍝ Build R expression
+     str←c,'norm(⍵,⍵,⍵)' ⍝ Build R expression
      rAv:+##.∆r.x str ⍵ m s                 ⍝ Use R if requested
      sden←{m s←⍺                            ⍝ Normal Density
          (÷s×(○2)*÷2)×*-0.5×(s÷⍨⍵-m)*2}     ⍝  e ^ (x^2)- 2
@@ -32,10 +42,10 @@
          ⍵∘f{⍺⍺ SecAlg ⍵,⍺⍺ ⍵}⍺}            ⍝ Use secant algorithm
      Rand←{u0←?⍵⍴0 ⋄ u1←?⍵⍴0                ⍝ Generate two uniform random vars
          ((-2×⍟u0)*÷2)×2○○2×u1}             ⍝ Transform and combine them
-     c=0:m s sden ⍵                         ⍝ Density
-     c=1:snorm(⍵-m)÷s                       ⍝ Cumulative Distribution
-     c=¯3:*(m×⍵)+0.5×(s×⍵)*2                ⍝ Moment Generating function?
-     c=¯2:m+s×Rand ⍵                        ⍝ Random Variable
+     c='d':m s sden ⍵                         ⍝ Density
+     c='p':snorm(⍵-m)÷s                       ⍝ Cumulative Distribution
+     c='m':*(m×⍵)+0.5×(s×⍵)*2                ⍝ Moment Generating function?
+     c='r':m+s×Rand ⍵                        ⍝ Random Variable
   ⍝   c=¯2:m s(16808⌶)'Normal'⍵             ⍝ Random Variable using Ron's random variable generator
      b←⍵<0.5                                ⍝ Prob < 0.5?
      z←1 2∘(snorm Inv)¨|⍵-b                 ⍝ Find Z from P

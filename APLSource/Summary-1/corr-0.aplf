@@ -1,22 +1,32 @@
  corr←{⎕IO←0 ⋄ ⎕ML←3 ⋄ ⎕DIV←1
-  ⍝⍝⍟ Copyright 2018 by Stephen M. Mansour
- ⍝∇ correlation
- ⍝∊ Summary Function  (Dyadic)
- ⍝⍺ Y simple vector
- ⍝⍵ X simple or nested vector
- ⍝← Sample correlation
- ⍝← Numeric Scalar if X and Y simple numeric vectors
- ⍝← Numeric Matrix if monadic
- ⍝← Matrix with labels if left argument is a namespace
- ⍝←  and right argument is a character vector
- ⍝⍕ Z←Y corr X
- ⍝⍕ Z←corr X1 X2 ... Xn
- ⍝⍕ Z←N corr 'X1 X2 ... Xn'
+ ⍝⍟ Copyright 2018 by Stephen M. Mansour
+ ⍝∇ Correlation
+ ⍝∊ Summary Function (Dyadic); Measure of Association
+ ⍝⍺ [Y]          Yv  Raw Data
+ ⍝⍺ [Database]   W   Namespace containing Variables
+ ⍝⍵ X            Xv  Raw Data
+ ⍝⍵ NameList     Cv  List of Variable Names
+ ⍝⍵ XX           Xv  X1 X2 ... Xn
+ ⍝⍵ Database     W   Namespace
+ ⍝← Value   Xs  Sample Covariance
+ ⍝← Matrix  Xm  Correlation Matrix
+ ⍝← Table   Cm  Correlation Table with Labels
+ ⍝⍕ [Y|Database] corr X|XX|NameList|Database
+ ⍝⍎ Value←Y corr X                      ⍝ Produces Sample Correlation Coefficient
+ ⍝⍎ Matrix←corr X1 X2 ... Xn            ⍝ Produces Correlation Matrix
+ ⍝⍎ Table←Database corr 'X1 X2 ... Xn'  ⍝ Produces Correlation Table for X1 ... Xn
+ ⍝⍎ Matrix←corr Database.(X1 X2 ... Xn) ⍝ Produces Correlation Matrix
+ ⍝⍎ Table←corr Database                 ⍝ Produces Correlation Table for all numeric variables
  ⍝⍎ Height corr Weight
-    ⍝0=⎕NC'⍺':∘.∇⍨⍵
-     0=⎕NC'⍺':∘.∇⍨⍵              ⍝ No left arg, make corr matrix
-     9=⎕NC'⍺':⍺ ∇{m←⍺⍺ ⍺.(⍎⍵)    ⍝ If namespace
-         m{(⍵,⍨⊂'corr'),⍵⍪⍺}(⍵≠' ')⊂⍵}⍵   ⍝ Add labels
+ ⍝⍎ corr Height Weight ShoeSize
+    ⍝0=⎕NC'⍺':∘.∇⍨⍵                     ⍝ No left arg, make corr matrix
+     0=⎕NC'⍺':∇{9≠⎕NC'⍵':∘.⍺⍺⍨⍵         ⍝ No left arg, make corr matrix
+         ⍵ ⍺⍺⍕2 variables ⍵}⍵           ⍝  unless namespace, then make corr table
+     9=⎕NC'⍺':⍕⍺ ∇{m←⍺⍺ ⍺.(⍎⍵)          ⍝ If namespace
+         m{(⍵,⍨⊂'corr'),⍵⍪⍺}(⍵≠' ')⊂⍵}⍵ ⍝ Add labels
+     B←(2=≢⍺)∧(1=≡⍺)∧(↑⍺)between 0 1    ⍝ If 1st item prob and
+     B∧←⍵{(⍵=0)∨(⍵=⌊⍵)∧⍵>≢↑⊆⍺}↑⌽⍺       ⍝ 2nd item sample size
+     B:⍺ confCorr ⍵                     ⍝ Do conf interval
      1∊≢¨⍺ ⍵:0
      b←∧/⎕NULL≠⍺,⍪⍵
      y x←b∘/¨⍺ ⍵
@@ -24,7 +34,6 @@
      n←≢x
      m←mean¨y x
      s←sdev¨y x
-     ⍝z←+/(⍺-xbar)×⍵-ybar
      z←+/×⌿⊃y x-m
      z÷×/s,n-1
  }

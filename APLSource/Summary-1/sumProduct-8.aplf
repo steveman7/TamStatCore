@@ -1,1 +1,11 @@
- sumProduct←{⍺+.×⍵}
+ sumProduct←{
+ ⍝⍟ Copyright (c) 2018, by Stephen Mansur
+     ⍝∇ Calculate vector product
+     ⍝∊ Summary Function; Measure of Quantity
+     ⍝⍺ Quantity Xv List of Quantities
+     ⍝⍵ Price    Yv Corresponding Prices
+     ⍝← TotalCost Zv Numeric Scalar
+     ⍝⍕ Ys ← Quantity sumProduct Price
+     ⍝⍎ 16.5 ← 2 5 3 sumProduct 1 2 1.5
+
+     ⍺+.×⍵}

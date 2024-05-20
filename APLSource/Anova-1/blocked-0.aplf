@@ -2,26 +2,33 @@
  ⍝⍟ Copyright (C) 2022 by Stephen M. Mansour
  ⍝∇ Generate blocked design
  ⍝∊ ANOVA
- ⍝⍵ X:    Response - n-dimensional numeric vector; trailing dimension is replicates
- ⍝← NS:   Namespace containing the following variables
- ⍝        AnovaTable  RSq  RSqAdj  S  Type
- ⍝⍕ NS ←  factorialDesign X
- ⍝⍎ blocked 4 3⍴98 97 99 96 91 90 93 92 96 95 97 95 95 96 99 98
+ ⍝⍵ DataMatrix       X  Response - n-dimensional numeric vector; trailing dimension is replicates
+ ⍝← Source           C  Description
+ ⍝← SumOfSquares     Xv
+ ⍝← DegreesOfFreedom Nv
+ ⍝← DenominatorIndex Nv Row position of denomator mean square
+ ⍝⍕ NS ←  blocked X
+ ⍝⍎ blocked 4 3⍴98 97 99 96 91 90 93 92 96 95 97 95 95 96 99 98     ⍝ Balanced Design
+ ⍝⍎ blocked 4 3⍴98 97 99 96 91 90 93 92 96 ⎕null 97 95 95 96 99 98  ⍝ Missing Data
  ⍝⍎ blocked   4 4⍴.1×93 94 96 100 94 93 98 99 92 94 95 97 97 96 100 102
-⍝⍎ factor Data Factor1 ... FactorN
+ ⍝⍎ factor Data Factor1 ... FactorN
  ⍝⍎ factor NS  Data 'Factor1 ... FactorN'
      ⎕IO←0 ⋄ ⎕ML←1 ⋄
-    ⍝ 1=⍴⍴⍵:{A B← ∪¨1↓⍵  ⋄ I J← A B⍳¨⍵
-⍝           I J{         ⊃⍵                      }
      W NMS←{isNamespace⊃⍵:(toArray⊃⍎/⍵)(1↓' 'toNestedVector⊃⌽⍵)
          NMS←(¯1+≢⍵)↑⎕A  ⍝ Factor Names
          (1=⍴⍴⍵)∧2≤|≡⍵:(toArray ⍵)NMS ⋄ ⍵ 0J1}⍵
-    ⍝ N←≢,W
-⍝     Y2N←N÷⍨(+/,W)*2
-     EFF SS DF←↓⍉(≢⍴W)aov W   ⍝ Calculate factorial
-     Source←'Treatments' 'Blocks' 'Error'
+     W←{~⎕NULL∊⍵:⍵                 ⍝ If missing values
+         I←⍸⍵=⎕NULL                ⍝ Find nulls
+         YIJ←(+/,+⌿)(0@I)⍵         ⍝ Row, Column Sums
+         YT←+/(≢⍵)↑YIJ             ⍝ Total
+         X←YIJ[↑I+⊂0,≢⍵]+.×AB←⍴⍵   ⍝
+         X←(X-YT)÷×/AB-1           ⍝ Denominator
+         (X@I)⍵}W
+     EFF SS DF←↓⍉(≢⍴W)aov W        ⍝ Calculate factorial
+     (¯1↑DF)-←+/,⍵∊⎕NULL           ⍝ Remove
+     Source←'Treatments' 'Blocks' 'Error'    ⍝ One-Factor blocked
      2=⍴⍴W:⍉↑Source SS DF(≢SS)
-     Source←'Rows' 'Columns' 'Interaction' 'Blocks' 'Error'
+     Source←'Rows' 'Columns' 'Interaction' 'Blocks' 'Error'  ⍝ 2 factor blocked
      D←'RCBIEEE'{⍺,+⌿⍵}⌸SS,⍪DF
      Source,0 1↓D[(⊃¨Source)⍳D[;0];],5↑3/≢D
 

@@ -1,4 +1,16 @@
- quartile←{⎕ML←3 ⋄ ⎕IO←0
+ quartile←{
+     ⍝⍟ Copyright (c) 2018, by Stephen Mansur
+     ⍝∇ Find the Nth Quartile of a data set
+     ⍝∊ Summary Function; Measure of Position
+     ⍝⍺ [N]         Iv  Quartile (0=min,2=Median,4=max),omitted = All quartiles
+     ⍝⍵ RawData     Xv  Sample or Population Data
+     ⍝⍵ FreqDist    Xm2 Values followed by Counts or Probabilities
+     ⍝← Result      Zs  Numeric Scalar
+     ⍝⍕ Result ←  [0|1|2|3|4] quartile RawData|FreqDist
+     ⍝⍎ 32 ← 1 quartile 32 58 57 96 76 87 21 58 90 5  ⍝ First Quartile (Q1)
+     ⍝⍎ 87 ← 3 quartile 32 58 57 96 76 87 21 58 90 5  ⍝ Third Quartile (Q3)
+     ⍝⍎ 5 32 58 87 96 ← quartile 32 58 57 96 76 87 21 58 90 5 ⍝ All quartiles
+     ⎕ML←3 ⋄ ⎕IO←0
      ⍺←⍳5
      showQuartile←{
         ⍝ showMedian¨showMedian ⍵
@@ -24,4 +36,5 @@
      n←≢x←⍵[⍋⍵]
      ⍺=1:median(⌊n÷2)↑x
      ⍺=3:median(⌈n÷2)↓x
+     ⎕SIGNAL 11
  }

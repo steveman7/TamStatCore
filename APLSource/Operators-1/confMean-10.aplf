@@ -1,20 +1,24 @@
  confMean←{⎕IO←0 ⋄ ⎕ML←3                 ⍝ Conf interval for mean
-     w x←⍵
+ ⍝w x←⍵
      C N←⍺
      f1←{C N←⍺ ⋄ ⎕DIV←1
          rAv:C{str←'t.test(⍵,conf.level=⍵)'⍝ build R expression
-             u←⍺{+##.∆r.x str ⍵ ⍺}¨x       ⍝ Use R if requested
+             x←{2=⍴⍴⍵:⊃(//↓⍉⌽⍵) ⋄ ⍵}⍵
+             u←(↑⍺){+##.∆r.x str ⍵ ⍺}¨⊆x   ⍝ Use R if requested
+             ⍝u←⍺{+##.∆r.x str ⍵ ⍺}x       ⍝ Use R if requested
              ⊃(3⊃u.Value).Value}⍵          ⍝ Obtain value from frame
          m←mean ⍵                          ⍝ Sample Average
          v←var ⍵
          n←count ⍵                         ⍝ Sample Sizes
-         se←sqrt(1-n÷N)×v÷n               ⍝ Standard Error
+        ⍝se←sqrt(1-n÷N)×v÷n                ⍝ Standard Error
+         se←sqrt(1-(×N)×n÷N⌈1)×v÷n
          df←n-1                            ⍝ Degrees of freedom
          t←df tDist criticalValue<(1-C)÷2  ⍝ Get 2-tail t critical value
          me←t×se                           ⍝ Margin of Error
          m(-,+)me}                         ⍝ LCL, UCL
      f2←{rAv:⍺{                            ⍝ Difference of means
              str←'t.test(⍵,⍵,conf.level=⍵)'⍝ Build R expression
+             x←{2=⍴⍴⍵:⊃(//↓⍉⌽⍵) ⋄ ⍵}¨⍵     ⍝ Convert freq to data
              s←')',⍨¨{'c(',('¯'⎕R'-')(' '⎕R',')⍕⍵}¨x
              u←+##.∆r.x't.test(',(0⊃s),',',(1⊃s),',conf.level=',(⍕⍺),')'
              (3⊃u.Value).Value}⍵           ⍝ Use R if requested
@@ -27,4 +31,5 @@
          t←df tDist criticalValue<(1-⍺)÷2  ⍝ Get 2-tail t critical value
          me←t×se                           ⍝ Margin of Error
          m(-,+)me}                         ⍝ LCL, UCL
-     2=≢w:C f2 w ⋄ ⍺ f1 w}
+    ⍝2=≢w:C f2 w ⋄ ⍺ f1 w}
+     2=≢⍵:C f2 ⍵ ⋄ ⍺ f1 ⍵}

@@ -1,31 +1,36 @@
  chiSquare←{
- ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
- ⍝∇ Chi-Square Distribution
- ⍝∊ Continuous Distribution Function
- ⍝⍺ Degrees of Freedom
- ⍝⍺ [0=Density, 1=Cumulative Distribution, ¯1=Inverse Distribution, ¯2=random]
- ⍝⍵ Value  T≥0
- ⍝← Density
- ⍝⍕ N chiSquare T
- ⍝⍎ 0.02833 ← 5 chiSquare 10
+  ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+  ⍝∇ Chi-Square Distribution; Special case of Gamma Distribution
+  ⍝∊ Distribution Function; Continuous
+  ⍝⍺ DF  N Degrees of Freedom
+  ⍝⍺_ C Cs ['d'=Probability, 'p'=Cumulative Prob, 'q'=Inverse Distribution, 'r'=random]
+  ⍝⍥ [op] oD
+  ⍝⍵⍵ [rel]  fR  Only for prob or critVal operators
+  ⍝⍵ Value  S Test Statistic, probability or Sample Size
+  ⍝← Result   S  Density, Probability or Critical Value
+  ⍝⍕ Result ← DF chiSquare [op [rel]] Value
+  ⍝⍎ 11.07 ← 5 chiSquare critVal < .05 ⍝ Value from ChiSquare Table
+  ⍝⍎ 0.023379 ←   5 chiSquare prob > 13  ⍝  P-Value
+  ⍝⍎ 0.097304 ← 5 chiSquare 6   ⍝ Density
      ⎕ML←3 ⋄ ⎕IO←0 ⋄ w←⍵                       ⍝ Set System variables
      w≡'Type':'Continuous'
-     m c←2↑⍺                                   ⍝
+     m c←getParameters ⍺
      w≡'Mean':m                                ⍝ Theoretical Values
      w≡'Variance':2×m                          ⍝      "        "
      w≡'Skewness':(8÷m)*÷2                     ⍝      "        "
      w≡'Kurtosis':12÷m                            ⍝      "        "
      w≡'Median':m×(1-2÷9×m)*3                     ⍝      "        "
      w≡'Mode':0⌈m-2                               ⍝      "        "
-     str←'pdqr'[1 0 ¯1 ¯2⍳c],'chisq(⍵,⍵)'         ⍝ Build R expression
+     (1≠≢m)∧c≠'r':∊(m,¨c)∇¨⍵
+     str←c,'chisq(⍵,⍵)'                           ⍝ Build R expression
      rAv:+##.∆r.x str ⍵ m                         ⍝ If requested, use R
      p←(m÷2),2                                    ⍝ Paramters for gamma distribution
-     c=0:p gamma 0.001⌈w                          ⍝ Chi-Square special case of gamma
-     c=1:{⍵≤0:0 ⋄
+     c='d':p gamma 0.001⌈w                          ⍝ Chi-Square special case of gamma
+     c='p':{⍵≤0:0 ⋄
          m=1:1-2×normal prob>⍵*÷2                 ⍝ 1 df
-         ##.KokoStats.Distrib.ChiSq_P ⍵ m}¨⍵  ⍝
-     c=¯1:{##.KokoStats.Distrib.ChiSq_Xa ⍵ m}¨1-⍵
-    ⍝ c=1:p{m>250:normal prob<(⍵-m)÷(2×m)*÷2
+         ##.Koko.Distrib.ChiSq_P ⍵ m}¨⍵  ⍝
+     c='q':{##.Koko.Distrib.ChiSq_Xa ⍵ m}¨1-⍵
+⍝ c=1:p{m>250:normal prob<(⍵-m)÷(2×m)*÷2
 ⍝         si←(⍺≡⌊⍺)∨15≥↑⍺                       ⍝ If small and integer
 ⍝         si:⍺ gamma prob<0⌈⍵                   ⍝ Use gamma
 ⍝         x←{⌊⍵+¯1 0 1}↑⍺                       ⍝ Otherwise
@@ -38,6 +43,8 @@
 ⍝         x←{⌊⍵+¯1 0 1}↑p                       ⍝ find surrounding integers
 ⍝         q←(x,¨2)gamma criticalValue>¨⊂⍵       ⍝ Otherwise
 ⍝         p[0]{(⊃x ⍵)interpolate ⍺}¨↓⍉⊃q}⍵      ⍝
-     d←normal randomVariable m×w               ⍝ Chi-Square is sum of
-     +⌿m w⍴d*2                                 ⍝ squared normal random variables
+     1<≢m:m randomVariable¨⍵
+     d←normal randomVariable m×w                ⍝ Chi-Square is sum of
+     ⍝+⌿m w⍴d*2                                 ⍝ squared normal random variables
+     +⌿(m,w)⍴d*2
  }

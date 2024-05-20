@@ -1,12 +1,16 @@
  table←{
-⍝⍺   Parameters or left argument to function (optional)
-⍝⍺⍺  Function or Distribution expression, e.g (normal prob <=)
-⍝⍵   Right argument to function
-⍝    20 (.1 * iota 10) Binomial prob table = iota 20
-⍝    normal  prob table <=  0 +.01 * iota 100
-⍝    1 2 3 tDist criticalValue < table  .05  .025 .1
-⍝    fDist criticalValue  table < .05
-⍝   chiSquare criticalValue table > .01 .025 .05 .1 .9 .95 .975
+⍝⍟   Copyright (c) 2024 by Stephen Mansour
+⍝∇   Create a function table
+⍝⍺   RowValues      Xv  Parameters or left argument to function (optional)
+⍝⍺⍺  fn             f   Dyadic Function or Distribution expression, e.g (normal prob <=)
+⍝⍵   ColValues      Xv  Right argument to function
+⍝←   DataTable      Xm  Matrix (Rows from left argument; columns from right argument)
+⍝⍕   DataTable←[RowValues] fn table ColValues
+⍝⍎    ×table 10     ⍝ Multiplication Table
+⍝⍎    20 (.1 × ⍳ 10) binomial prob = table  ⍳ 20 ⍝ Binomial Table
+⍝⍎    normal prob < 0 1 2 3 +table .1×¯1+⍳10     ⍝ Normal table
+⍝⍎    (⍳3) tDist criticalValue < table  .05  .025 .1 ⍝ Student-t Table
+⍝⍎    (⍳5) chiSquare criticalValue  < table .01 .025 .05 .1 .9 .95 .975  ⍝ ChiSquare Table
      ⎕IO←0 ⋄ ⎕ML←3
      la←×⎕NC'⍺'                        ⍝ Check for left argument
      x←⍵
@@ -16,6 +20,7 @@
      (1<≢⍺)∧2=≡⍺:⊃(↑∘.,/⍺)⍺⍺¨⊂x        ⍝ If scalar right argument, vary the parameters
      ⍝⍝⍝⍝⍝⍝⍝⍝⍝ New Code ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
      b←(1 1 1≡×,≢,⊢=⌊)⍵                ⍝ If positive integer scalar
-     w←b{⍺:1+⍳⍵ ⋄ ⍵}⍵                  ⍝ Make index generator
+    ⍝w←b{⍺:1+⍳⍵ ⋄ ⍵}⍵                  ⍝ Make index generator
+     w←(1+⍳)⍣b⊢⍵                       ⍝ Make index generator?
      ⍺≡⍬:∘.⍺⍺⍨w                        ⍝ If no left argument, generate a selfie
  }

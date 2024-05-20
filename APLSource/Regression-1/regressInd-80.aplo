@@ -24,17 +24,17 @@
      DB:⍺⍺ leastSquares NS,⊂⍕NMS(⊢,⊣~⊢)⊂⍺
      NS.Y←⍺
      Z←⍺⍺ leastSquares NS(⍕'Y',NMS)
-     Z
-     ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Create function???
-     Z.g←Deg M{⍵≡'Type':'Linear'
-         ⍺←0                                ⍝ Default
-         CL A←2↑⍺                           ⍝ Action, Conf Level
-         D M←⍺⍺
-         X←D{1=≢M:⍵∘.*(~⎕IO)+⍳⍺
-             ∊(×/⍵)pairwise↓⍵∘.*1 2}⍵-M
-         A=0:f X
-         ⍺ f X}
 
+     ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Create function???
+     ⍝Z.g←Deg M{⍵≡'Type':'Linear'
+⍝         ⍺←0                                ⍝ Default
+⍝         CL A←2↑⍺                           ⍝ Action, Conf Level
+⍝         D M←⍺⍺
+⍝         X←D{1=≢M:⍵∘.*(~⎕IO)+⍳⍺
+⍝             ∊(×/⍵)pairwise↓⍵∘.*1 2}⍵-M
+⍝         A=0:f X
+⍝         ⍺ f X}
+     Z
 
 
 

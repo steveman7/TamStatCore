@@ -1,20 +1,17 @@
  pairwise←{
- ⍝⍺  Optional symbol to
- ⍝⍺⍺ Any dyadic (preferably commutative) function or a character string
- ⍝⍵  Any vector whose elements are in the domain of ⍺⍺
- ⍝←  A vector of shape 2!≢⍵
- ⍝⍎     ,pairwise 'ABCD'
- ⍝⍎ AB  AC  BC  AD  BD  CD
- ⍝⍎     ×pairwise 1 2 3 4 5
- ⍝⍎ 2 3 6 4 8 12 5 10 15 20
- ⍝⍎      ',' pairwise 'ABCD'
- ⍝⍎ A,B  A,C  B,C   A,D   B,D   C,D
- ⍝⍎      ''  pairwise 'Bob' 'Joe 'Steve'
- ⍝    ┌─────────┬───────────┬───────────┐
- ⍝    │┌───┬───┐│┌───┬─────┐│┌───┬─────┐│
- ⍝    ││Bob│Joe│││Bob│Steve│││Joe│Steve││
- ⍝    │└───┴───┘│└───┴─────┘│└───┴─────┘│
- ⍝    └─────────┴───────────┴───────────┘
+ ⍝⍟  Copyright (c) 2024 by Stephen M. Mansour
+ ⍝∇  Apply dyadic function to each pair from vector on right
+ ⍝∊  Operator
+ ⍝⍺⍺  Delimeter  Cs Any Character scalar or empty vector ''
+ ⍝⍺⍺  dyadicFn    f Any dyadic (preferably commutative) function
+ ⍝⍵   Cv Cv Any character vector whose elements are in the domain of dyadFn
+ ⍝⍵   Xv  Xv Any numric vector whose elements are in the domain of dyadFn
+ ⍝←   Result    A vector of shape 2!≢⍵
+ ⍝⍕   Cs|f pairwise Cv|Xv
+ ⍝⍎   AB  AC  BC  AD  BD  CD ←  ,pairwise 'ABCD'
+ ⍝⍎   2 3 6 4 8 12 5 10 15 20 ←  ×pairwise 1 2 3 4 5
+ ⍝⍎   A,B  A,C  B,C   A,D   B,D   C,D ←   ',' pairwise 'ABCD'
+ ⍝⍎ ('Bob' 'Joe')('Bob' 'Steve')('Joe' 'Steve')←''  pairwise 'Bob' 'Joe 'Steve'
      ⎕IO←0 ⋄ ⎕ML←3
      1≥≢⍵:0⍴⊂⍺⍺⍨↑⍵
      d←⍵ ⋄ op←⍺⍺ ⋄ ⍺←⍬ ⋄ a←⍺

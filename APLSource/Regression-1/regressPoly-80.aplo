@@ -6,12 +6,13 @@
 ⍝←
      ⎕ML←1 ⋄ ⎕IO←0 ⋄ ⎕PP←5
      Y Deg←2↑(⊆⍺),2
+   ⍝ W←{(~∨/⍵∊¨⎕NULL)/¨⍵}Y,⍥⊆⍵        ⍝ Remove Nulls
+     Y W←Y removeNulls ⍵
      NS←Deg makePolynomial{2=≢⊆⍵:⊃⍺⍺/⍵
-         ⍺ ⍺⍺ ⍵}⍵
-     ⍝X←⊃⍣(2=≢⍵)⊢1↓⍵
-    ⍝NS.Int←⍺⍺
+      ⍝   ⍺ ⍺⍺ ⍵}⍵
+         ⍺ ⍺⍺ ⍵}W
      NS.Y←Y
-    ⍝Z←'Y'regress NS
+   ⍝ NS.Y←⊃W
      NMS←variables NS
      Z←⍺⍺ leastSquares NS,⊂⍕NMS(⊢,⊣~⊢)⊂,'Y'
      M←mean¨⊆⍵
@@ -27,8 +28,12 @@
      V←⊆M{'X',(⍕⍵),'-',⍕⍺}¨1+⍳⍴M            ⍝ Variable names
      E←V∘.{⍵=1:⍺ ⋄ '(',⍺,')*',⍕⍵}1+⍳Deg   ⍝ Expression Names
      XY←'×'pairwise'(',¨V,¨,')'
-     E←XY{0=≢⍺:,⍵ ⋄ ⊃⍺ pairwise↓⍵}E
+    ⍝E←XY{0=≢⍺:,⍵ ⋄ ⊃⍺ pairwise↓⍵}E
+     E←XY{0=≢⍺:,⍵ ⋄ ⍕¨⍵[0;],⍺,⍵[1;]}E
      Z.Equation←⊃⌽E{Z.Equation←(⍵ ⎕R ⍺)Z.Equation}¨1↓Z.VariableNames
-     Z.(_Report←Equation{D←↓⍵ ⋄ (2⊃D)←⍺ ⋄ ↑D}_Report)
+    ⍝Z.(_Report←Equation{D←↓⍵ ⋄ (2⊃D)←⍺ ⋄ ↑D}_Report)
+    ⍝Z.(_Report←Equation{D←↓⍵ ⋄ (2⊃D)←⍺ ⋄ ⊃D}_Report) ⍝ Note Z.⎕ML = 3; Z.⎕IO=0
+     Z._Report←(Z._Report⌈⍥⍴⍉⍪Z.Equation)↑Z._Report ⍝ Expand report to fit equation
+     Z._Report[2;⍳⍴Z.Equation]←Z.Equation           ⍝ Insert polynomial equation
      Z
  }

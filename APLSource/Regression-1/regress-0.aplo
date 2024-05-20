@@ -1,9 +1,22 @@
  regress←{
  ⍝∇  Regress Operator
  ⍝⍟  Copyright 2023 by Stephen Mansour
- ⍝⍺  [Optional] Name of response variable
- ⍝⍺⍺ transform
- ⍝⍵  Namespace
+ ⍝∊  Operator
+ ⍝⍺  Y         Yv Respose Variable
+ ⍝⍺⍺ YName     Cv Name of response variable
+ ⍝⍺⍺ f         f  Transformation Function
+ ⍝⍵  X         Xv Predictor Variable
+ ⍝⍵  Xn        Xn List of Predictor Variables
+ ⍝⍵  DataBase W  Contains Predictor and Response Variables
+ ⍝← Model W Contains Coefficients, AnovaTable, R-Squared, predictor function f
+ ⍝⍕ Model←Y[f]|transform|YName regress X|Xn|Database
+ ⍝⍎ report Height regress ShoeSize            ⍝ Simple Regression
+ ⍝⍎ report Weight regress Height ShoeSize     ⍝ Multiple Regression
+ ⍝⍎ report Height regress ShoeSize (Sex eq 'M') ⍝ Indicator Variable
+ ⍝⍎ report Height poly regress ShoeSize        ⍝ Quadratic regresion
+ ⍝⍎ report Weight 3 poly regress ShoeSize      ⍝ Polynomail regresion (cubic)
+ ⍝⍎ report Y ln regress X                       ⍝ Log transform
+ ⍝⍎ report transform regress DataBase           ⍝ User-defined transformation
      ⍺←'' ⋄ ⎕IO←0 ⋄ ⎕ML←1
      _←⎕EX'#.∆NS'
      FN←⊃3=⎕NC'⍺⍺'                       ⍝ Is left operand a function?
@@ -15,6 +28,7 @@
     ⍝FN⍱DB:Int leastSquares ⍺⍺,⍉↑,⊆X     ⍝ Old method:  Y regress X
      ~FN:⍺⍺(Int regressInd 1)X
      FN∧~DB:⍺ ⍺⍺{U←3 ⍺⍺ 4                ⍝ Test operand
+
          U=4:⍺(Int regressPoly)⍵         ⍝ Polynomial (⊥)
          U∊0 1:⍺(Int regressBin)⍵        ⍝ Binary regression (= or ≠)
          ⍺(⍺⍺ vst Int)⍵                  ⍝ Variance stabilizing transformation

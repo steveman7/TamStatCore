@@ -1,27 +1,34 @@
  logNormal←{                                ⍝ Scalar,Arithmetic⍝⍝⍝⍝⍝⍝
- ⍝⍟ Copyright (C) 2018 2023 by Stephen M. Mansour
- ⍝∇ Lognormal Distribution
- ⍝∊ Continuous Distribution Function
- ⍝⍺ X: T50 median
- ⍝⍺ U: S sigma
- ⍝⍵ Value  V>0
- ⍝← Density
- ⍝⍕ S ← X U logNormal V
- ⍝⍎ 0.11222 ← 1.2 1.5 logNormal 2.3
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+  ⍝∇ Lognormal Distribution; Reliability Model
+  ⍝∊ Distribution Function; Continuous
+  ⍝⍺ T50   T  Median
+  ⍝⍺ Sigma S  Shape Parameter
+  ⍝⍺_ C Cs ['d'=Probability, 'p'=Cumulative Prob, 'q'=Inverse Distribution, 'r'=random]
+  ⍝⍵ Time      T  Lifetime or Interarrival Times
+  ⍝⍥ Op        oD
+  ⍝⍵⍵ Rel      fR
+  ⍝← Result    S  Density, Probability or Critical Value
+  ⍝⍕ Result ← T50 Sigma logNormal [op [rel]] Time
+  ⍝⍎ 0.010442 0.0030712 0.0015958 0.0007678←100 2.5 logNormal 10 50 100 200 ⍝ PDF f(t)
+  ⍝⍎ 0.17852 0.39079 0.5 0.60921←100 2.5 logNormal prob ≤ 10 50 100 200 ⍝ CDF; F(t)
+  ⍝⍎ 0.82148 0.60921 0.5 0.39079←100 2.5 logNormal prob > 10 50 100 200 ⍝ Reliability Function R(t) = 1-F(t)
      ⍵≡'Type':'Continuous'
-     T50 s c←3↑⍺ ⋄ ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⎕DIV←1 ⍝ Set system variables
-     ⍵≡'Mean':T50×*0.5×s*2                ⍝ Theoretical values
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⎕DIV←1                  ⍝ Set system variables
+     (T50 s)c←getParameters ⍺
+     ⍵≡'Mean':T50×*0.5×s*2                   ⍝ Theoretical values
      ⍵≡'Variance':T50×*(s*2)×¯1+*s*2
      ⍵≡'Median':T50
      ⍵≡'Mode':T50÷*s*2
      ⍵≡'Skewness':{(⍵+2)×(⍵-1)*÷2}*s*2
      ⍵≡'Kurtosis':¯6+1 2 3+.×*4 3 2×s*2
-     str←'pdqr'[1 0 ¯1 ¯2⍳c],'lnorm(⍵,⍵,⍵)'
-    ⍝ #.R_Available:+#.∆r.x str ⍵ m s
-     rAv:+##.∆r.x str ⍵(⍟T50)s      ⍝
-     U←s÷⍨⍟(⍵÷T50)⌈÷⌊/⍳0                  ⍝ ln(t/T50)÷s
-     c=0:(*-0.5×U*2)÷s×⍵×sqrt○2           ⍝ Density
-     c=1:normal prob<U                    ⍝ Cumulative Distribution
-     c=¯1:T50×*s×normal critVal>⍵         ⍝ Inverse
-     c=¯2:T50×*s×normal randomVariable ⍵  ⍝ Random variable
+    ⍝str←'pdqr'[1 0 ¯1 ¯2⍳c],'lnorm(⍵,⍵,⍵)'
+     str←c,'lnorm(⍵,⍵,⍵)'
+     rAv:+##.∆r.x str ⍵(⍟T50)s               ⍝
+     U←s÷⍨⍟(⍵÷T50)⌈÷⌊/⍳0                     ⍝ ln(t/T50)÷s
+     c='d':(*-0.5×U*2)÷s×⍵×sqrt○2            ⍝ Density
+     c='p':normal prob<U                     ⍝ Cumulative Distribution
+     c='q':T50×*s×normal critVal>⍵           ⍝ Inverse
+     c='r':T50×*s×normal randomVariable ⍵    ⍝ Random variable
+     'Nonce Error'
  }

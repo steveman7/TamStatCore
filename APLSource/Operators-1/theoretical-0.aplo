@@ -1,14 +1,16 @@
  theoretical←{
  ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
- ⍝∇ Calculate parameter for a theoretical distribution
+ ⍝∇ Calculate parameter  for a theoretical distribution
  ⍝∊ Operators
- ⍝⍺ [L]: Parameter List
- ⍝⍺⍺ fD: Distribution Function
- ⍝⍵⍵ fS: Summary function
- ⍝⍵ X:   Dummy value unless fS requires a left argument
- ⍝← L fD theoretical ''
- ⍝⍕  2.1 ← 7 .3 binomial thoretical mean ''
- ⍝⍕  0.9295 ← 13 5 52 hyperGeometric theoretical sdev ''
+ ⍝⍺ [Parms←0&nbsp.1] Xv Parameter List for Distribution
+ ⍝⍺⍺ fD fD
+ ⍝⍵⍵ fS fS
+ ⍝⍵  Dummy X   Dummy value unless fS requires a left argument
+ ⍝←  Value X   Result of summary function applied to a population with distribution fD
+ ⍝⍕  Value←[Parms|_0_1]fD theoretical fS Dummy
+ ⍝⍎  2.1 ← 7 .3 binomial thoretical mean ''
+ ⍝⍎  0.9295 ← 13 5 52 hyperGeometric theoretical sdev ''
+ ⍝⍎  0.6745 ← normal theoretical quartile 3
      ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←0 1
      (2=⎕NC'⍺⍺')∧⍵≠0:⍵ ⍵⍵ ⍺⍺               ⍝ If variable left arg, apply fn
      2=⎕NC'⍺⍺':↑⍵⍵ ⍺⍺
@@ -23,7 +25,7 @@
      d=4.7:⍺ ⍺⍺'Variance'                  ⍝ Variance
     ⍝ 4.7=d*2:(⍺ ⍺⍺'Variance')*÷2           ⍝ Standard Deviation
      4.7=d*2:⍺⍺{z←⍵ ⍺⍺'Variance'
-         z=⎕NULL:z ⋄ sqrt z}⍺
+         sqrt z}⍺
        ⍝d=3:⍺ ⍺⍺ criticalValue≤0.5            ⍝ Median
      d=3:⍺ ⍺⍺'Median'
      d=2:⍺ ⍺⍺'Mode'                        ⍝ Mode

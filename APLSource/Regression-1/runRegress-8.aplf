@@ -13,19 +13,27 @@
      XBAR←mean¨W                                      ⍝ Means for each X
      DF←N-k+int                                       ⍝ Degrees of Freedom
      MSE←SSE÷DF                                       ⍝ Mean Square Error
-     S←MSE*÷2                                        ⍝ Standard error for regression
+     S←MSE*÷2                                         ⍝ Standard error for regression
      SB←(MSE×0 0⍉C)*÷2                                ⍝ Standard Error for coeffs
      SSR←SST-SSE                                      ⍝ Regression sum of squares
      ns←'Regression'buildAnovaTable SSR SSE,k DF,⍪2 0 ⍝ Create ANOVA table
+     ns.AnovaTable←ns.AnovaTable{2≠⍴⍵:⍺               ⍝ If multple reg or no dups, exit
+         0∧.=PE←+⌿↑{(2+.*⍨⍵-mean ⍵),¯1+≢⍵}⌸/⌽⍵:⍺      ⍝ Calculate Pure Error SS,DF
+         ERR←⍉(⍺[2;1 2]-PE),⍪PE                       ⍝ Split Error into LOF, PE
+         P←ERR[;1]fDist prob>F←÷/⍣2⊢ERR               ⍝ Calculate F and P
+         Z←'Lack of Fit' 'Pure Error',(⊢,÷/)ERR       ⍝ Insert Labels
+         ⍺[⍳3;]⍪(Z,2 2⍴F P 0 0)⍪⍺[3;]}⍵               ⍝ Insert LOF into ANOVA Table
      T←B÷SB                                           ⍝ Test statistic
      P←2×DF tDist probability>|T                      ⍝ p-Value
      YX←y,⍉1↓X
-     H←(⍉X)+.×C+.×X                                   ⍝ Hat Matrix
-     R←E÷S÷sqrt 1-0 0⍉H                              ⍝ Studentized Residuals
+     Hii←0 0⍉H←(⍉X)+.×C+.×X                           ⍝ Hat Matrix
+     R←E÷S×sqrt 1-Hii                                 ⍝ Studentized Residuals
+     CooksD←(R*2)÷(≢B)÷(⊢÷1∘-)Hii                     ⍝ Cook's Distance
+     PRESS←sumSquares E÷1-Hii                         ⍝ PRESS Statistic
      VIF←0 0⍉⌹XX←corr int↓↓X                          ⍝ Variance inflation factor
      ConditionNumber←(⌈/÷⌊/)eigenValues XX            ⍝ Condition Number
-     PR←'B,T,P,N,XBAR,SSX,DF,S,MSE,SB,E,YHAT,YX,C,VIF,R,H' ⍝ Put additional
-     PR,←',ConditionNumber'
+     PR←'B,T,P,N,XBAR,SSX,DF,S,MSE,SB,E,YHAT'         ⍝ Put additional
+     PR,←',YX,C,VIF,R,H,ConditionNumber,CooksD,PRESS' ⍝
      _←'ns'⎕NS toNestedVector PR                      ⍝  properties into namespace
      ns
  }

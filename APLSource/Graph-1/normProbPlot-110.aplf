@@ -2,11 +2,12 @@
  ⍝⍟ Copyright (C) 2022 by Stephen M. Mansour
  ⍝∇ Generate Normal Probability Plot
  ⍝∊ Graphics
- ⍝⍺ Symbol list (Optional)
- ⍝⍵ Data
- ⍝← CmL Character Matrix or Namespace
- ⍝⍕ normProbPlot  Xv
- ⍝⍎ normProbPlot D.Height
+ ⍝⍺ [Symbols] Cv Symbols
+ ⍝⍵ Data Xv Data Values
+ ⍝← Graphic W ScatterPlot  Character Matrix or Namespace
+ ⍝⍕ Graphic←[Symbols] normProbPlot Data
+ ⍝⍎ normProbPlot show Height      ⍝ Simple Normal probability Plot
+ ⍝⍎ Sex normProbPlot show Height  ⍝ Differentiate by Sex
      ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←'*'
      X←⍵[⍋⍵]  ⍝ Sort the data
      N←≢X     ⍝

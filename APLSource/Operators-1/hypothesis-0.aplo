@@ -2,15 +2,13 @@
  ⍝⍟ Copyright (c) 2018 by Stephen M. Mansour
  ⍝∇ Perform a hypothesis test
  ⍝∊ Operators
- ⍝⍺ Y: Sample Data
- ⍝⍺⍺ fS: Summary Function: e.g. mean, proportion, var
- ⍝⍵⍵ fR: Relational Function
- ⍝⍵ X:   Hypothesized Value
- ⍝⍵ Xv:  Sample2Data
- ⍝← NameSpace containing the following variables
- ⍝  DegreesOfFreedom  Estimate  P  SampleSize  StandardDeviation
- ⍝  StandardError  TestStatistic  Type
- ⍝⍕ Interval ← Yv fS hypothesis  fR X|Xv
+ ⍝⍺ Sample1  Xv Sample Data
+ ⍝⍺⍺ fS  fS mean, proportion, var, sdev
+ ⍝⍵⍵ fR  fR Relational Function
+ ⍝⍵ Value  Xs   Hypothesized Value
+ ⍝⍵ Sample2 Xv  Sample2Data
+ ⍝← Model   W   Contains the following  DegreesOfFreedom  Estimate  P-Value  SampleSize  StandardDeviation    StandardError  TestStatistic  Type
+ ⍝⍕ Model ← Sample1 fS hypothesis  fR Value|Sample2
  ⍝⍎ Height mean hypothesis = 68               ⍝ One sample t-test
  ⍝⍎ (Sex eq 'F') proportion hypothesis > 0.5  ⍝ One sample proportion
  ⍝⍎ MaleHeight mean hypothesis > FemaleHeight ⍝ Two-sample t test
@@ -34,12 +32,6 @@
          ns._Paired←1 ⋄ ns}⍵
      x1 x2←⍺ ⍵
      s←↑(⍴⍴x2)∨9=⎕NC'x2'                      ⍝ One or two samples?
-    ⍝ corrHo←{ ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Ho:⍴=0
-⍝         tails←2*0=↑⍺ ⋄ r←↑corr/↑⍵            ⍝ Sample correlation
-⍝         n←≢↑↑⍵                               ⍝ Sample size
-⍝         t←(r-x2)÷se←sqrt(1-r*2)÷df←n-2       ⍝ Test statistic
-⍝         p←tails×df tDist prob>t              ⍝ p-Value
-⍝         r n ⍬ se t p df}                     ⍝
      f←{
          i=3:⍺ meanHo ⍵                       ⍝ Determine
          i=¯1:⍺ proportionHo ⍵                ⍝   type

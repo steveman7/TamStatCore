@@ -1,16 +1,24 @@
  sum←{
    ⍝⍟ Copyright (c) 2018, by Stephen Mansur
      ⍝∇ Calculate sample sum of a data set or frequency distribution
-     ⍝∊ Summary Function
-     ⍝⍵ Numeric Vector: Data Set; 2-col Numeric Matrix:  Frequency Dist
-     ⍝← Numeric Scalar
-     ⍝⍕ Ys ← sum Xv|Xm|NS
+     ⍝∊ Summary Function; Measure of Quantity
+     ⍝⍺_ Confidence Level
+     ⍝⍵ DataSet Xv Sample of Population Data
+     ⍝⍵ FrequencyDistribution Nm  2-column matrix: Values Counts
+     ⍝⍵ SummaryData W Namespace containing count, mean, sdev
+     ⍝← Total Xs Sum of data in right argument
+     ⍝⍕ Ys ← sum Xv|Xm|W
      ⍝⍎ 19 ← sum 2 8 5 1 3
-     9=⎕NC'⍵':⍵.(count×mean) ⍝ Namespace
-     ⍵≡'Type':'Quantity'     ⍝ Measure of quantity
-     w←(∧/⎕NULL≠⍪⍵)⌿⍵
-     1≥⍴⍴w:+⌿w               ⍝ Raw Data
-    ⍝2=⍴⍴w:+.×/↓⍉w           ⍝ Frequency Distribution
-     isFrequency w:+.×/↓⍉w   ⍝ Frequency Distribution
-     'Rank Error'
+     ⎕ML←1 ⋄ ⎕IO←0 ⋄ ⍺←0
+     ⍵≡'Type':'Quantity'           ⍝ Measure of quantity
+     ⊃⍺ between 0 1:⍺ confTotal ⍵  ⍝ 1st Left arg∊(0,1) confint
+    ⍝⍺←count ⍵
+     C N←¯2↑⍺                      ⍝ C = 0, then point est
+     9=⎕NC'⍵':N×⍵.mean             ⍝ Namespace
+     w←(∧/⎕NULL≠⍪⍵)⌿⍵              ⍝ Any nulls?
+     M←count w                     ⍝ Sample Size
+     N←N+M×N=0                     ⍝ If N=0, replace with sample size
+     1≥⍴⍴w:(N÷M)×+⌿w               ⍝ Raw Data
+     isFrequency w:(N÷M)×+.×/↓⍉w   ⍝ Frequency Distribution
+     'Rank Error'                  ⍝ Error Message
  }

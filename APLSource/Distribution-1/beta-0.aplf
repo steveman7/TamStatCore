@@ -1,15 +1,24 @@
  beta←{
- ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
- ⍝∇ Beta Distribution
- ⍝∊ Continuous Distribution Function
- ⍝⍺ Shape Parameter
- ⍝⍺ Scale Parameter
- ⍝⍺ [0=Density, 1=Distribution, ¯1=Inverse Distribution, ¯2=random]
- ⍝⍵ Value 0≤X≤1
- ⍝← Density
+  ⍝⍟ Copyright (c) by Stephen M. Mansour
+  ⍝∇ Beta Distribution; random behavior of percentages and proportions
+  ⍝∊ Distribution Function; Continuous
+  ⍝⍺ A  T  Shape Parameter 1
+  ⍝⍺ B  T  Shape Parameter 2
+  ⍝⍺_ C Cs ['d'=Probability, 'p'=Cumulative Prob, 'q'=Inverse Distribution, 'r'=random]
+  ⍝⍥ [op] oD
+  ⍝⍵⍵ [rel]  fR  Only for prob or critVal operators
+  ⍝⍵ X   T   Probability, criticalValue or sampleSize
+  ⍝← Result   S  Density, Probability or Critical Value
+  ⍝⍕ Result ← A B beta [op [rel]] X
+  ⍝⍎ 0.84375 ← 2 2 beta prob < .75
+  ⍝⍎ 0.2063 ← 1 3 beta critVal < 0.5
+  ⍝⍎ 0.54 1.26 1.5 1.26 0.54←2 2 beta 0.1 0.3 0.5 0.7 0.9
+  ⍝⍎ 1 1 1←1 1 beta 0.3 0.5 0.7  ⍝ 0 1 rectangular distribution
+  ⍝⍎ 0.0005 0.0405 0.3125 1.2005 3.2805←5 1 beta 0.1 0.3 0.5 0.7 0.9
      x←⍵ ⋄ ⎕ML←3 ⋄ ⎕IO←0                   ⍝ System variables
      x≡'Type':'Continuous'
-     a b c←3↑⍺
+    ⍝a b c←3↑⍺
+     (a b)c←getParameters ⍺
      x≡'Mean':a÷a+b                        ⍝ a=Shape; b=Scale
      x≡'Variance':(a×b)÷(a+b+1)×(a+b)*2
      x≡'Mode':(a-1)÷a+b-2
@@ -17,7 +26,10 @@
          ×/2(-/⍵)z,⍵*¯0.5}b a
      x≡'Kurtosis':a{z←(2*⍨⍺-⍵)×(1 2÷.×⍺+⍵+2 1)÷⍺×⍵
          6×(z-1)÷⍺+⍵+3}b
-     str←'pdqr'[1 0 ¯1 ¯2⍳c],'beta(⍵,⍵,⍵)' ⍝ Build string for R
+    ⍝str←'pdqr'[1 0 ¯1 ¯2⍳c],'beta(⍵,⍵,⍵)' ⍝ Build string for R
+     2=≡a b:(↑,¨/⍺)∇¨⍵                       ⍝ Left argument
+     str←c,'beta(⍵,⍵,⍵)'                   ⍝ Build string for R
+   ⍝ 2=≡⍺:(↑,¨/⍺)∇¨⍵                       ⍝ Left argument
      rAv:+##.∆r.x str ⍵ a b                ⍝ If requested use R
      I←a b∘{a b←⍺                          ⍝ Incomplete Beta Function
          HyperG←{a b z←⍵                   ⍝ Hypergeometric Function
@@ -41,10 +53,11 @@
          z                                 ⍝ Use secant alg to solve G(x)=0
      }
      B←÷b×(a-1)!a+b-1                      ⍝ Beta Function
-     c=0:(÷B)×{
+     c='d':(÷B)×{
          pr←1≠×/×⍵∘.-0 1                   ⍝ x∊[0,1]?
          pr×(⍵*a-1)×(1-⍵)*b-1}x            ⍝ Density
-     c=1:(I¨0⌈1⌊x)÷B                       ⍝ Cumulative Distribution
-     c=¯1:9○Finv¨B×x                       ⍝ Inverse Distribution
-     a b(16808⌶)'Beta'⍵                 ⍝ Random Variable
+     c='p':(I¨0⌈1⌊x)÷B                       ⍝ Cumulative Distribution
+     c='q':9○Finv¨B×x                       ⍝ Inverse Distribution
+     c='r':a b(16808⌶)'Beta'⍵                 ⍝ Random Variable
+     'Nonce Error'
  }

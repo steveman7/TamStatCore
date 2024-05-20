@@ -8,11 +8,12 @@
              (5⊃u.Value).Value}n p              ⍝ Obtain values
          C=1:0 1 ⋄ C=0:p p                      ⍝ Extreme cases
          p∊0 1:{1-⌽⍵}⍣p⊢0,-(⍟1-⍺)÷n             ⍝ If p = 0 or 1 use "rule of 3"
-        ⍝ 10∨.>n×p,1-p:⍺{n x←×\⍵ ⋄ x←x⌊n-x         ⍝ If fewer than 10 successes or failures
-         10∨.>n×p,1-p:C{n x←×\⍵ ⋄ x←x⌊n-x         ⍝ If fewer than 10 successes or failures
+        ⍝ 10∨.>n×p,1-p:⍺{n x←×\⍵ ⋄ x←x⌊n-x      ⍝ If fewer than 10 successes or failures
+         (N=0)∧10∨.>n×p,1-p:C{n x←×\⍵ ⋄ x←x⌊n-x ⍝ If fewer than 10 successes or failures
              g1←(0.5×1+⍺)-{n ⍵ binomial prob<x} ⍝ Lower bound
              g2←(0.5×1-⍺)-{n ⍵ binomial prob≤x} ⍝ Upper bound
-             cb←(g1 SecAlg,g2 SecAlg)4/0.5      ⍝  (Clopper-Pearson Interval?)
+             cb←g1 SecAlg∊U,g1¨U←0.4 0.6
+             cb,g2 SecAlg∊U,g2¨U                ⍝  (Clopper-Pearson Interval?)
              0.5>↑⌽⍵:cb ⋄ 1-⌽cb}n p             ⍝ Use exact formula
          v←p-p*2                                ⍝ Variance
          me←C N n{C N n←⍺                       ⍝ Margin of Error

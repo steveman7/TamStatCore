@@ -1,18 +1,23 @@
- percentile←{⎕ML←3 ⋄ ⎕IO←0
-    ⍝ #.R_Available:+#.∆r.x'quantile(⍵,⍵)'⍵(⍺÷100)
-     ∨/⍺ outside 0 100:⎕SIGNAL 11 ⍝ Domain error
-     P←⍺÷100
-     isFrequency ⍵:P{(x p)←↓⍉⍵[⍋⍵;]       ⍝ Frequency Dist?
+ percentile←{
+ ⍝⍟ Copyright (c) 2018, by Stephen Mansour
+ ⍝∇ Find the Nth Percentile of a DataSet
+ ⍝∊ Summary Function; Measure of Position
+ ⍝⍺ N        Iv  Percentile (0<N<100)
+ ⍝⍵ RawData  Xv  Sample or Population Data
+ ⍝⍵ FreqDist Xm2 Values followed by Counts or Probabilities
+ ⍝← Value    Zs  Numeric Scalar
+ ⍝⍕ Result ← N percentile RawData|FreqDist
+ ⍝⍎ 44.5 ← 30 percentile 32 58 57 96 76 87 21 58 90 5
+ ⍝⍎ 44.5 81.5 ← 30 70 percentile 32 58 57 96 76 87 21 58 90 5
+     ∨/~⍺ between 0 100:⎕SIGNAL 11  ⍝ Domain error
+     P←⍺÷100 ⋄ ⎕ML←3 ⋄ ⎕IO←0
+ ⍝ #.R_Available:+#.∆r.x'quantile(⍵,⍵)'⍵ P
+     9=⎕NC'⍵':⍵.(mean sdev)normal critVal>P
+     isFrequency ⍵:P{(x p)←↓⍉⍵[⍋⍵;] ⍝ Frequency Dist?
          p∨.<0:'Domain Error'
-         i←+/⍺∘.≥c←(+\p)÷+/p            ⍝ Cum probs
-         x[i⌊¯1+≢x]
-     }⍵
-     ⍝n←≢x←x[⍋x←,⍵]                   ⍝ Sort, get shape
-     ⍝n←≢x←(,⍵)[⍋,⍵]
-     n←≢x←⍵[⍋⍵]
-     (n×P){i←⌊⍺
-         i≠⍺:⍵[i]                     ⍝ If not integer, Round up
-         0.5+.×⍵[i-0 1]}¨⊂x               ⍝ Else average
-
-
+         i←+/⍺∘.≥c←(+\p)÷+/p        ⍝ Cum probs
+         x[i⌊¯1+≢x]}⍵
+     n←≢x←⍵[⍋⍵]                     ⍝ Sort, get shape
+     (n×P){i←⌊⍺ ⋄ i≠⍺:⍵[i]          ⍝ If not integer, Round up
+         0.5+.×⍵[i-0 1]}¨⊂x         ⍝ Else average
  }

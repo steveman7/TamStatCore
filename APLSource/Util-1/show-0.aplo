@@ -2,4 +2,4 @@
      Z←(0J1,⍺)⍺⍺ ⍵
      9≠⎕NC'Z':Z
      9=Z.⎕NC'ExtOut':Z   ⍝ Michael Baas - Extended output
-     Z.Output}
+     ⍕Z.Output}

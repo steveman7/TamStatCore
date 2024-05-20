@@ -11,18 +11,17 @@
  ⍝⍵ A partular value of the exponential random variable
      ⎕ML←3 ⋄ ⎕IO←0                       ⍝ Set system variables
      ⍵≡'Type':'Continuous'               ⍝
-     s c←2↑⍺ ⋄ pi←○1                     ⍝ Scale Parameters
+     pi←○1                     ⍝ Scale Parameters
+     s c←getParameters ⍺
      ⍵≡'Mean':s×sqrt pi÷2                ⍝ Calculate theoretical values
      ⍵≡'Median':s×sqrt 2×⍟2              ⍝     "         "          "
      ⍵≡'Mode':s                          ⍝     "         "          "
      ⍵≡'Variance':(s*2)×0.5×4-pi
      ⍵≡'Skewness':2×(sqrt pi)×(pi-3)÷(4-pi)*3÷2
      ⍵≡'Kurtosis':-(pi⊥6 ¯24 16)÷(4-pi)*2
-     str←'pdqr'[1 0 ¯1 ¯2⍳c],'weibull(⍵,⍵,⍵)'
-     ⍝#.R_Available:+#.∆r.x str ⍵ m k
-     ⍝rAv:+##.∆r.x str ⍵ m k
-     c=0:0⌈(⍵÷s*2)×*-0.5×(⍵÷s)*2          ⍝ Density
-     c=1:(⍵≥0)×1-*-0.5×(⍵÷s)*2            ⍝ Distribution
-     c=¯1:s×sqrt-2×⍟1-⍵                   ⍝ Inverse
+     c='d':0⌈(⍵÷s*2)×*-0.5×(⍵÷s)*2          ⍝ Density
+     c='p':(⍵≥0)×1-*-0.5×(⍵÷s)*2            ⍝ Distribution
+     c='q':s×sqrt-2×⍟1-⍵                   ⍝ Inverse
+     1<≢s:(s,¨'r')∇¨⍵
      (s×sqrt 2)×(-⍟?⍵⍴0)÷2                ⍝ Random Variable
  }

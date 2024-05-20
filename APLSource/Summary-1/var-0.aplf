@@ -1,30 +1,36 @@
  var←{
  ⍝⍟ Copyright 2017 by Stephen M. Mansour
- ⍝∇ Variance
- ⍝∊ Summary Function
- ⍝⍺ 1=population, 0=sample ¯1=determine from input
- ⍝⍵ vector = raw data
- ⍝⍵ matrix = frequency or distribution
- ⍝← variance if numeric, unalikeability if character
-     ⍵≡'Type':'Spread'              ⍝ Spread function
-     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←¯1           ⍝ Set system variables
-     9=⎕NC'⍵':⍵.var                 ⍝ If namespace, extract variance
-   ⍝ b←↑(2=⍴⍴w)∧(2=≡w)∨0≡↑0⍴w←1/⍵   ⍝ Frequency?
+ ⍝∇ Variance or Unalikeability
+ ⍝∊ Summary Function; Measure of Spread
+ ⍝⍺_ 0j1 = Show calculations
+ ⍝⍺ [Population]  Bs 1=population, 0=sample, Omitted: Determine from data
+ ⍝⍵ RawData     Xv  Sample or Population Data
+ ⍝⍵ Categorical Ca  Categorical Data
+ ⍝⍵ FreqDist    Xm2 Values followed by Counts or Probabilities
+ ⍝⍵ SummaryData W   Namespace containing count, mean, sdev
+ ⍝← Result      Ss  Variance or unalikeability if character
+ ⍝⍕ Result ← [0|1] var RawData|Categorical|FreqDist|SummaryData
+ ⍝⍎ 7.7 ← var 2 8 5 1 3              ⍝ Raw Data
+ ⍝⍎ 0.84848 ← var 4 2 matrix 0 20 1 30 2 40 3 10 ⍝ Frequency Distribution
+ ⍝⍎ 1.84 ← var 4 2 matrix 0 0.2 1 0.3 2 0.4 3 0.1 ⍝ Relative Frequency
+ ⍝⍎ 0.59375 ← var 'NY,NY,PA,NY,PA,NJ,PA,PA'  ⍝ Unalikeability (See Kader and Perry 2007)
+     ⍵≡'Type':'Spread'               ⍝ Spread function
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←¯1            ⍝ Set system variables
+     (↑⍺~0J1)between 0 1:⍺ confVar ⍵ ⍝ If 0<⍺<1:Conf Int
+     9=⎕NC'⍵':⍵.var×1-(⍺=1)÷⍵.count  ⍝ If namespace, extract variance
      b←isFrequency⊢w←1/⍵
-     b←↑b∧(2=≡w)∨0≡↑0⍴w             ⍝
-     w←toNestedVector⍣(~b)⊢w        ⍝ Nest it?
-     varChar←{⍺:1-+/2*⍨(⊢÷+/)⍵[;1]  ⍝ Variability for Categorial Variables
-         (+/,∘.≢⍨⍵)÷(≢⍵)*2}         ⍝   (Kader and Perry 2007)
-     0J1∊⍺:(⍺~0J1)showCov w         ⍝ Display form?
-     0≠↑0⍴↑w:b varChar w            ⍝ Character variability
-    ⍝ b:↑⍺{n←+/⍵ ⋄                  ⍝ Matrix form
+     b←↑b∧(2=≡w)∨0≡↑0⍴w              ⍝
+     w←toNestedVector⍣(~b)⊢w         ⍝ Nest it?
+     varChar←{⍺:1-+/2*⍨(⊢÷+/)⍵[;1]   ⍝ Variability for Categorial Variables
+         (+/,∘.≢⍨⍵)÷(≢⍵)*2}          ⍝   (Kader and Perry 2007)
+     0J1∊⍺:(⍺~0J1)showCov w          ⍝ Display form?
+     0≠↑0⍴↑w:b varChar w             ⍝ Character variability
      b:↑⍺{(⍺⍺=0)∧1≥n←+/⍵:⎕NULL
          n≠1:+/((⍵+.×⍺*2)-n÷⍨2*⍨⍵+.×⍺)÷n-⍺⍺≠1 ⍝ Frequency
-         (⍵+.×⍺*2)-(⍵+.×⍺)*2}/↓⍉w   ⍝ Probability
+         (⍵+.×⍺*2)-(⍵+.×⍺)*2}/↓⍉w    ⍝ Probability
      w←w~⎕NULL
-     rAv∧1=⍴⍴⍵:⍺{z←##.∆r.x'var(⍵)'⍵ ⍝ Do R calculation?
+     rAv∧1=⍴⍴⍵:⍺{z←##.∆r.x'var(⍵)'⍵  ⍝ Do R calculation?
          ⍺=1:z×÷/¯1 0+≢⍵ ⋄ z}w
-    ⍝ 1≥n←≢w:0                      ⍝ 0 for n≤1
-     (0≥⍺)∧1≥n←≢w:⎕NULL             ⍝
-     (n-⍺≤0)÷⍨(w+.*2)-n÷⍨(+/w)*2    ⍝ unweighted variance
+     (0≥⍺)∧1≥n←≢w:⎕NULL              ⍝
+     (n-⍺≤0)÷⍨(w+.*2)-n÷⍨(+/w)*2     ⍝ unweighted variance
  }

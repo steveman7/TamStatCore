@@ -24,21 +24,17 @@
          ⍵.Intercept ⍺⍺ ⍵.Database EX}⍵               ⍝ If simple namespace, assemble expression
      NM W NL←{y←↑⍵                                    ⍝ Get data and name list
          9=⎕NC'y':1,y{⍺.(⍎⍵)⍵}↑⌽⍵                     ⍝ If NS, get variable names
-         2=⍴⍴⍵:0,(↓⍉⊃⍵)(1↓,'< B>,G<9>'⎕FMT⍳↑⌽⍴⍵)       ⍝ IF matrix, columns are variables
+         2=⍴⍴⍵:0,(↓⍉⊃⍵)(1↓,'< B>,G<9>'⎕FMT⍳↑⌽⍴⍵)      ⍝ IF matrix, columns are variables
          0,⍵(1↓,'< B>,G<9>'⎕FMT⍳⍴⍵)}⍵                 ⍝ If data, use B0, B1 ... Bn
-    ⍝ (⍺≢1)∧⍺≢0:⍺ regressW W
-    ⍝ rAv:int regressR W                               ⍝ Use R if requested
+    ⍝ W←(~∨/W∊¨⎕NULL)/¨W                               ⍝ Remove ⎕nulls
+     W←removeNulls W
      rAv:⍺ regressR W
-    ⍝ns←int runRegress W                              ⍝ Run the LeastSquaresion
      ns←⍺{(⍺≢1)∧⍺≢0:⍺ regressW ⍵
          int runRegress ⍵}W
-    ⍝ ns←int{rAv:⍺ regressR ⍵ ⋄ ⍺ runRegress ⍵}W       ⍝ Run the regression
      NL←{')('≡2↑¯1⌽⍵:1↓¯1↓⍵ ⋄ ⍵}¨((' '≠NL)∨≠\NL∊'()')⊂NL ⍝ Parse Name List
      CC←(int/⊂'Intercept'),1↓NL                       ⍝ Coefficient List
-    ⍝d←(⊃CC),' ',('2F10.2,2F10.5'⎕FMT ns.(B,SB,⍪T)),'  '∘fmtP⍤0⊢ns.P ⍝ coefficients
      d←(⊃CC),' ',('2F12.4,2F10.5'⎕FMT ns.(B,SB,⍪T)),'  '∘fmtP⍤0⊢ns.P ⍝ coefficients
      H←,¨'Variable' 'Coeff' 'SE' 'T' 'P'              ⍝ Append Headers
-    ⍝d←d⍪⍨∊((1+⌈/≢¨CC),4/-10)↑¨H                      ⍝    to data
      d←d⍪⍨∊((1+⌈/≢¨CC),2/-12 10)↑¨H                   ⍝    to data
      ns.Coeff←H⍪CC,ns.(B,SB,T,⍪P)                     ⍝ Coefficient table
      ns.Type←'Regress'                                ⍝ Object type is "Regress"

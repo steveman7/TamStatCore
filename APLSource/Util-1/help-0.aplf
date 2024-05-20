@@ -1,0 +1,24 @@
+ {Z}←help NAME;⎕IO;⎕ML;NS;B;I;D;path;DUI;ns
+ :If DUI←9=#.⎕NC'Boot.ms'
+     ns←⎕THIS
+     ⎕SHADOW'Help'   ⍝ avoid pollution by leaving behind a global name
+     Help←#.Help
+ :Else
+     ns←##
+ :EndIf
+ Z←⎕NS''
+ :With ns
+     ⎕IO←0 ⋄ ⎕ML←3
+     NS←' '~⍨¨↓⎕NL 9           ⍝ Get all namespaces
+     B←NAME∘{
+         FN←⍎⍵,'.⎕NL 3 4'
+         (⊂⍺)∊toNestedVector FN
+     }¨NS
+     path←↑B/NS
+     D←1 Help.DOCFN path,'.',NAME
+ :EndWith
+ :If DUI
+     Z.data←D
+     Z.Type←'Html'
+     Z.popup←1
+ :EndIf

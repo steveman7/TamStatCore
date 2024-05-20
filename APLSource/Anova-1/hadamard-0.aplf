@@ -1,17 +1,17 @@
  hadamard←{
  ⍝∇ Generate  hadamard matrix
  ⍝∊ ANOVA
- ⍝⍺ Symbols, defaults to 1, ¯1
- ⍝⍵ Degree (integer)
- ⍝←  ⍵×⍵ matrix of symbols
+ ⍝⍺ [Symbols←1,¯1] Xv  2-item vector
+ ⍝⍵ Degree         Ns  Number
+ ⍝← Matrix         Xm  Degree x Degree matrix of symbols
+ ⍝⍕  Matrix←[Symbols] hadamard Degree
  ⍝⍎  hadamard 3
  ⍝⍎  1 0 hadamard 5
+ ⍝⍎  hadamard show 4
      ⎕IO←0 ⋄ ⍺←1 ¯1
      ~0J1∊⍺:⍺[{(⍵,~⍵)⍪⍵,⍵}⍣⍵⊢⍪0]
      Z←'+-'∇ ⍵
-     TC←standardOrder ⍵↑'abcdefghijklmn'
+     TC←standardOrder ⍵↑⎕C ⎕A
      EFF←standardOrder ⍵↑⎕A
      ⍕(' ',TC),EFF⍪Z
-
-
  }

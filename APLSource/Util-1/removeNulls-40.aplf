@@ -1,0 +1,13 @@
+ removeNulls←{
+⍝ Remove Nulls from left and right arguments and adjust sizes for all vectors
+⍝ ⍺ Vector or vector of vectors
+⍝ ⍵ Vector or vector of vectors
+     ⍺←⎕NULL ⋄ ⎕IO←0 ⋄ ⎕ML←1    ⍝ Default left arg
+     9=⎕NC'⍵':⍺ ∇ ⍵⍎¨↓⎕NL 2     ⍝ If namespace extract variables
+     NULL←(0=≡⍺)⊃⎕NULL ⍺        ⍝ User may specify item
+     f←NULL∘{(∧/⍺≠⍵)/¨⍵}        ⍝ Test and remove nulls and corresponding items
+     0=≡⍺:⊆⍣¯1⊢f⊆,⍵             ⍝ Monadic form; unnest if simple
+     A W←⊆¨⍺ ⍵                  ⍝ Enclose if necessary
+     A W←(1 ¯1×A,⍥≢W)↑¨⊂f A,W   ⍝ Remove nulls
+     ⍺ ⍵{⊃⍣(1=≡⍺)⊢⍵}¨A W        ⍝ Unnest if necessary
+ }

@@ -7,7 +7,7 @@
      DIR←'E:\TamStat\TamStatScript\'  ⍝ Default directory
  :EndIf
  :If 0=⍴NS~' '
-     NS←'Operators,Distribution,Graph,Summary,Relational,Regression,Util,Arithmetic,API'
+     NS←'Operators,Distribution,Graph,Summary,Relational,Regression,Util,Arithmetic,API,GUI,Help'
  :EndIf
  NS←toNestedVector NS
  STR←{DIR,⍵,' -target=#.TamStat.',⍵}¨NS

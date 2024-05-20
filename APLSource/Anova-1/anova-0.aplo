@@ -1,44 +1,47 @@
  anova←{
  ⍝⍟ Copyright (C) 2018, 2023 by Stephen M. Mansour
  ⍝∇ Perform ANalysis Of VAriance (ANOVA)
- ⍝∊ ANOVA
- ⍝⍺ Number of levels (2 or 3)
- ⍝⍺ Number of factors
- ⍝⍺⍺ * for 2k or 3k design
- ⍝⍺⍺ Number of factors
- ⍝⍺⍺ Name list of factors:
- ⍝⍺⍺ *  if 2k or 3k design
- ⍝⍵ X:  Response (simple or partitioned array
- ⍝⍵ NS: Database                            `
- ⍝⍵ [A1: Factor 1]
- ⍝⍵ [A2: Factor 2]
- ⍝← NS:   Namespace containing the following variables
- ⍝        AnovaTable  RSq  RSqAdj  S  Type
- ⍝⍕ NS ← oneWay|factor|factorial2k anova X [Av1 [Av2]]
- ⍝⍎ report oneWay anova D.Environment D.Party     ⍝ One-way ANOVA
- ⍝⍎ report oneWay anova Group1 Group2 Group3
- ⍝⍎ report N factor anova Array
- ⍝⍎ report factorial2k anova Matrix
- ⍝⍎ report 'ABC' factorial2k anova Matrix
- ⍝⍎ report 'ABC' 'DEF' factorial2k anova Matrix
- ⍝⍎ report anova D 'Environment Party'     ⍝ One-way ANOVA using factor name
- ⍝⍎ report anova oneWay stats¨(N1 S1 X1)...(Nn Sn Xn)
- ⍝⍎ report 2 factor anova 2 3 ⍴1.3 2.7 3.5 1.4 3.2 3.9
+ ⍝∊ Operator
+ ⍝⍺ [Fixed]       Is Number of fixed factors;  Fixed∊{0,1,2,3}
+ ⍝⍺ [Random←0]    Is Number of random factors  Random∊{0,1,2}
+ ⍝⍺ [LS]          Cm N×N matrix
+ ⍝⍺ [Alias]       Cv Source(s) of variation conflated with error.
+ ⍝⍺⍺ design f       oneWay, blocked, latinSquare, factor, factorial2k, nested
+ ⍝⍵ Database      W  Contains exactly one Numeric variable and one or more character variables
+ ⍝⍵ Response      X  Partitioned Vector, Simple Vector, Matrix or Array, or Summary Namespace
+ ⍝⍵ Levels        Cv For one-way Anova
+ ⍝⍵ Factors       Cn For multi-factor Anova
+ ⍝← NS:   Namespace containing the following variables:    AnovaTable  RSq  RSqAdj  S  Type
+ ⍝⍕ Model ← oneWay|blocked|nested|[LS]latinSquare|[Fixed [Random]]factor|[Alias]factorial2k anova DataBase|Response Levels|Factors]]
+ ⍝⍎ report oneWay anova Environment Party         ⍝ One-way ANOVA with Grouping Variable
+ ⍝⍎ report oneWay anova Group1 Group2 Group3      ⍝ One-way Anova with Partioned Vector
+ ⍝⍎ report N factor anova Array                   ⍝ Factorial Design
+ ⍝⍎ report factorial2k anova Matrix               ⍝ 2*k factorial design
+ ⍝⍎ report 'ABC' factorial2k anova Matrix         ⍝ 1/2 Fractional Factorial Design
+ ⍝⍎ report 'ABC' 'DEF' factorial2k anova Matrix   ⍝ 1/4 Fractional Factorial Design
+ ⍝⍎ report oneWay anova 'Height Party' selectFrom DB ⍝ Uses all variables
+ ⍝⍎ report oneWay anova DB 'Environment Party'     ⍝ One-way ANOVA using factor name
+ ⍝⍎ report oneWay anova stats¨(5 10 3)(5 12 2)(6 11 4)   ⍝ One-Way anova with summary data
+ ⍝⍎ report 2 factor anova 2 3 ⍴1.3 2.7 3.5 1.4 3.2 3.9   ⍝ Executable Example
  ⍝⍎ anova MPG AUTO GAS                     ⍝ Two-way ANOVA
      ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←⍬                   ⍝ Set system variables
-     NL X←{isNamespace 1⊃,⍵:'a'⍵
-         isNamespace 0⊃,⍵:(' 'toNestedVector 1⊃⍵)(⍵[0]⍎1⊃⍵)
-       ⍝  (2≤⍴⍴⍵):⍬ ⍵ ⋄ ((1↓⎕D)↑⍨⍴⍵)⍵}⍵
+    ⍝NL X←{isNamespace 1⊃,⍵:'a'⍵
+     NL X←{isNamespace 1⊃2↑(,⍵),0:'a'⍵
+        ⍝ isNamespace 0⊃,⍵:(' 'toNestedVector 1⊃⍵)(⍵[0]⍎1⊃⍵)
+         isNamespace↑⍵:{1=≢⍵:⍵.(⊢{⍺ ⍵}⍎¨)variables ⍵
+             (' 'toNestedVector 1⊃⍵)(⍵[0]⍎1⊃⍵)}⍵
          (2≤⍴⍴⍵):⍬(⊃⍵)                  ⍝ If not a vector and nested, disclose
-         (,2)≡⍴⍵:((1↓⎕D)↑⍨⍴⍵)⍵
-        ⍝ 1=≢∪≢¨⍵:⍬(⊃⍵)                ⍝ Balanced anova
+         (,2)≡⍴⍵:((1↓⎕D)↑⍨⍴⍵)⍵          ⍝ Balanced anova
          ((1↓⎕D)↑⍨⍴⍵)⍵}⍵                ⍝ One factor unbalanced
      TBL←⍺ ⍺⍺ X ⋄ EFF←TBL[;0]
      EFF←EFF{NS←↑⍵ ⋄
-         isNamespace 1⊃,⍵:⍺
+      ⍝  isNamespace 1⊃,⍵:⍺
+         isNamespace 1⊃(,⍵),0:⍺
+         2=≢⍺:⍺
          ⍝(2<≢⍵):⍺
          (9=⎕NC'NS')⍲'A'≡⍥,↑⍺:⍺
-         NMS←{1↓(⍵≠' ')⊂⍵}1⊃⍵
+        ⍝ NMS←{1↓(⍵≠' ')⊂⍵}1⊃⍵
+         NMS←{1=≢⍵:variables ⍵ ⋄ {1↓(⍵≠' ')⊂⍵}1⊃⍵}⍵
         ⍝Z←{∊NMS[⍵]}¨⎕A∘⍳¨⍺~E←⊂'Error'
          S←(2=≡NMS)/'*'
          Z←{↑{⍺,'*',⍵}/NMS[⍵]}¨⎕A∘⍳¨⍺~E←⊂'Error'

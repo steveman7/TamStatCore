@@ -1,0 +1,27 @@
+ pctRank←{
+ ⍝⍟ Copyright (c) 2018, by Stephen Mansour
+ ⍝∇ Inverse of percentile
+ ⍝∊ Summary Function; Measure of Position
+ ⍝⍺ Value    Xv  ValueQuartile (0=min,2=Median,4=max),omitted = All quartiles
+ ⍝⍵ RawData  Xv  Sample or Population Data
+ ⍝⍵ FreqDist Xm2 Values followed by Counts or Probabilities
+ ⍝← Percent  Iv  Numeric Scalar
+ ⍝⍕ Percent ← Value pctRank RawData|FreqDist
+ ⍝⍎ 30 ← 44.5 pctRank 32 58 57 96 76 87 21 58 90 5  ⍝ First Quartile (Q1)
+ ⍝⍎ 30 70 ← 44.5 81.5 pctRank 32 58 57 96 76 87 21 58 90 5  ⍝ Third Quartile (Q3)
+ ⍝ #.R_Available:+#.∆r.x'quantile(⍵,⍵)'⍵(⍺÷100)
+   ⍝ Written by Steve Mansour
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⎕DIV←1
+     isFrequency ⍵:⍺{(x p)←↓⍉⍵  ⍝ Values, probs
+         x,←(↑⌽x)--/¯2↑x        ⍝ Include upper bound
+         x+←0.5×-/2↑x           ⍝ Midpoints to lower bounds
+         p←(0,p)÷+/p            ⍝ probabilities
+         a←(⌈/x)⌊(⌊/x)⌈⍺        ⍝ Bound values
+         j←¯1++/a∘.≥x            ⍝ Find poisitions
+         c←+\p
+         r←(a-x[j])÷-/(x,⌈/x)[j∘.+1 0]
+         ⌊0.5+100×c[j]+r×p[j]
+     }⍵
+     1<⍴⍴⍵:'Rank Error'
+     r←(+/⍺∘.≥⍵)              ⍝ Rank
+     ⌊0.5+100×r÷≢⍵}

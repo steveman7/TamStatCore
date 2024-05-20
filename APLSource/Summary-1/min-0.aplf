@@ -1,28 +1,28 @@
  min←{
      ⍝⍟ Copyright (c) 2018, by Stephen Mansur
      ⍝∇ Find minimum of a data set or frequency distribution
-     ⍝∊ Summary Function
-     ⍝⍵ Numeric Vector: Data Set; 2-col Numeric Matrix:  Frequency Dist
-     ⍝← Numeric Scalar
-     ⍝⍕ Zs ← min Xv    ⍝ Monadic
-     ⍝⍕ Zs← X min Y    ⍝ Dyadic - smaller of two values
+     ⍝∊ Summary Function; Measure of Position
+     ⍝⍺ [X]         Xv  Sample or Population Data
+     ⍝⍵ Y           Yv  Sample or Population Data
+     ⍝⍵ FreqDist    Xm2 Values followed by Counts or Probabilities
+     ⍝⍵ SummaryData W   Namespace containing count, mean, sdev
+     ⍝← Result      Zs  Numeric Scalar
+     ⍝⍕ Result ←  min Y|Freqdist|SummaryData    ⍝ Monadic
+     ⍝⍕ Result ←  X min Y        ⍝ Dyadic - smaller of two values
      ⍝⍎ 1 ← min 2 8 5 1 3
-     ⍝⍎ 3.5 ← min 2 8 5 1 3 4
-     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←⍬     ⍝ Set system variables
-   ⍝  ⍺≢⍬:⍺⌊⍵                 ⍝ Dyadic Version
+     ⍝⍎ 2 1 3 ← 5 2 3 min 2 1 4
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←⍬         ⍝ Set system variables
      ⍺≢⍬:⍺{~⎕NULL∊⍺,⍵:⍺⌊⍵
-         b←∧/⎕NULL≠yx←⍺,⍪⍵  ⍝ Dyadic version
+         b←∧/⎕NULL≠yx←⍺,⍪⍵       ⍝ Dyadic version
          (⎕NULL@((~b)/⍳⍴b))b\⌊/b⌿yx}⍵ ⍝
-     9=⎕NC'⍵':{n←⍵.count     ⍝ Get count
+     9=⎕NC'⍵':{n←⍵.count         ⍝ Get count
          z←normal criticalValue>n÷n+1 ⍝ Estimate z-score
-         ⍵.mean-z×⍵.sdev}⍵   ⍝ Estimate min
-    ⍝ m←↑⌊⌿⍵                  ⍝ Get minimum
+         ⍵.mean-z×⍵.sdev}⍵       ⍝ Estimate min
      b←∧/⎕NULL≠⍪⍵
-     m←↑⌊⌿b⌿⍵                ⍝ Exclude nuls 1=⍴⍴⍵:m                 ⍝ If data Set, done
-     1=⍴⍴⍵:m                          ⍝ If data Set, done
+     m←↑⌊⌿b⌿⍵                    ⍝ Exclude nuls 1=⍴⍴⍵:m                 ⍝ If data Set, done
+     1=⍴⍴⍵:m                     ⍝ If data Set, done
      ~isFrequency ⍵:'Rank Error'
-    ⍝ i←∪2-/⍵[⍋⍵;0]           ⍝ Else get interval
-     i←∪2-/{⍵[⍋⍵;0]}b⌿⍵               ⍝ Else get interval
-     1<≢i:m                  ⍝ If irregular, done
-     m+⌈i÷2                  ⍝ Else get lower boundary
+     i←∪2-/{⍵[⍋⍵;0]}b⌿⍵          ⍝ Else get interval
+     1<≢i:m                      ⍝ If irregular, done
+     m+⌈i÷2                      ⍝ Else get lower boundary
  }

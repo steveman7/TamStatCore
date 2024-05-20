@@ -2,12 +2,14 @@
  ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
  ⍝∇ Generate Bar Chart
  ⍝∊ Graphics
- ⍝⍺ Groups
- ⍝⍵ Xv: Numeric Vector
- ⍝← Cm Character Matrrix
- ⍝⍕ barChart Xv
- ⍝⍎ barChart D.State                     ⍝ Simple bar chart
- ⍝⍎ D.Party barChart D.State50           ⍝ Grouped bar chart
+ ⍝⍺ Bins Is Bins=1: don't range data; Bins>1: number of bins; Bins<0: bin with
+ ⍝⍵ Data1 Cv Character Vector or Matrix
+ ⍝⍵ Data2 Cv Character Vector or Matrix
+ ⍝← Graphic W Bar Chart Graph
+ ⍝⍕ Graphic←[Bins|_0] barChart Data1 [Data2]
+ ⍝⍎ barChart State                       ⍝ Simple bar chart
+ ⍝⍎ 6 barChart Height                    ⍝ Range data (6 bins)
+ ⍝⍎ barChart Party State                 ⍝ Grouped bar chart
      ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←0                 ⍝ Set system variables
      Bins←(↑⍺~0J1)                       ⍝ Bins
      f1←{G N←↓⍉⍵                         ⍝ Categories, Names for simple bar chart

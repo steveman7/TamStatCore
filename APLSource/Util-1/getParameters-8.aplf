@@ -1,0 +1,10 @@
+ getParameters←{
+⍝∇ Extract parameters and operator for a distribution
+⍝⍵ Parameters
+⍝← List of Parameters
+⍝← Operator
+     op←⍬⍴¯1↑⍵
+     ~op∊'dpqr':⍵'d'
+     2=≢⍵:⍵
+     (¯1↓⍵)op
+ }

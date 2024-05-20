@@ -2,12 +2,13 @@
  ⍝⍟ Copyright (C) 2018  by Stephen M. Mansour
  ⍝∇ Generate Histogram
  ⍝∊ Graphics
- ⍝⍺ Number of bins, 0=Let system Decide, 1=don't range data
- ⍝⍵ Xv: Numeric Vector
- ⍝← CmL Character Matrrix
- ⍝⍕ [W] histogram Xv
- ⍝⍎ histogram D.Weight
- ⍝⍎ 5 histogram D.Height
+ ⍝⍺ Bins Is Number of bins, 0=Let system decide, 1=don't range data
+ ⍝⍵ Data Xv Numeric Vector
+ ⍝← Graphic W Histogram Graphic
+ ⍝⍕ Graphic←[Bins] histogram Xv
+ ⍝⍎ histogram Weight                      ⍝ Simple Histogram
+ ⍝⍎ 5 histogram Height                    ⍝ Display 5 bins
+ ⍝⍎ ¯20 histogram Weight                  ⍝ Bin Width = 20
      ⍺←0 ⋄ ⎕IO←0 ⋄ ⎕ML←3                  ⍝ Set system variables
      a←↑⍺~0J1
      G N←a{⍺=0:↓⍉frequency⍣(1=↑⍴⍴⍵)⊣⍵     ⍝ Midpoints, Frequencies

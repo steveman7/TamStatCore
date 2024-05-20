@@ -1,10 +1,11 @@
  median←{
      ⍝⍟ Copyright (c) 2017, 2023 by Stephen Mansur
-     ⍝∇ Calculate median of a data set or frequency distribution
-     ⍝∊ Summary Function
-     ⍝⍵ Numeric Vector: Data Set; 2-col Numeric Matrix:  Frequency Dist
-     ⍝← Numeric Scalar
-     ⍝⍕ Ys ← median Xv
+     ⍝∇ Find the middle value of a series of numbers
+     ⍝∊ Summary Function; Measure of Center
+     ⍝⍵ RawData  Xv   Sample or Population Data
+     ⍝⍵ FreqDist Xm2  Values followed by Counts or Probabilities
+     ⍝← Middle   Xs   Middle or average of two middle values
+     ⍝⍕ Middle ← median RawData|FreqDist
      ⍝⍎ 3 ← median 2 8 5 1 3
      ⍝⍎ 3.5 ← median 2 8 5 1 3 4
      ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←⍬ ⋄ 0∊⍴⍵:0          ⍝ Set up variables
@@ -16,7 +17,15 @@
          odd n:(c↑d)('(',d[c],')')((-c)↑d) ⍝ If odd, show middle value
          (c↑d)('|')(c↓d)                   ⍝ If even, put bar between values
      }
+     confMed←{C N←⍺ ⋄ n←≢d←⍵[⍋⍵]           ⍝ Sort the data
+         cp←N{⍺=0:⍵ 0.5 binomial prob≤⍳⍵+1 ⍝ Cumulative probabilities
+             (⌊⍺÷2)⍵ ⍺ hyperGeometric prob≤⍳⍵+1}n
+         p←{⍵,1-⍵}(1-C)÷2                  ⍝ Upper lower probs
+         d[0 1+{⍵/⍳⍴⍵}2≠/≠⌿p∘.<cp]}        ⍝ Get conf int
+
      0J1∊⍺:showMedian ⍵~⎕NULL              ⍝ Show operator
+     ⍝1=×↑⍺:⍺ confMed ⍵
+     ↑⍺ between 0 1:⍺ confMed ⍵
     ⍝2=⍴⍴⍵:{(x p)←↓⍉⍵[⍋⍵;]                 ⍝ Frequency Dist?
      isFrequency ⍵:{(x p)←↓⍉⍵[⍋⍵;]         ⍝ Frequency Dist?
          p∨.<0:'Domain Error'              ⍝ Validate probabilities

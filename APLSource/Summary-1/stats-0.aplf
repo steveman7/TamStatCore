@@ -1,18 +1,19 @@
  stats←{
-     ⍝⍟ Copyright (c) 2018, by Stephen Mansur
+     ⍝⍟ Copyright (c) 2018, by Stephen Mansour
      ⍝∇ Create summary stats object (count,mean,sdev)
      ⍝∊ Summary Functions
-     ⍝⍵ Numeric 2- vector:   Count, Events|Prob
-     ⍝⍵       Events if integer, prob if between 0 and 1
-     ⍝⍵ Numeric 3-Vector:    count, mean, sdev
-     ⍝⍵ Numeric n-Vector:    Data set
-     ⍝⍵ Namespace:           Stats object
+     ⍝⍺ Name Cv
+     ⍝⍵ Vector2 Nv    Numeric 2- vector:   Count, Events|Prob   (Events if integer, prob if between 0 and 1)
+     ⍝⍵ Vector3 Nv    count, mean, sdev
+     ⍝⍵ VectorN Nv    Data set
+     ⍝⍵ Namespace W   Stats object
      ⍝← Stats object
      ⍝⍕ NS ← ['Name'] stats  Count Events|(Mean Sdev)
-     ⍝⍎ stats 1000 646
-     ⍝⍎ stats 30 10.5 2.7
-     ⍝⍎ stats 'Height' 30 68 3.2
-     ⍝⍎ stats Height
+     ⍝⍎ stats 1000 646        ⍝ N=1000, Sucesses=626
+     ⍝⍎ stats 1000 0.4        ⍝ N=1000, P=0.4
+     ⍝⍎ stats 30 10.5 2.7     ⍝ N=30, mean=10.5 sdev=2.7
+     ⍝⍎ 'Height' stats 30 68 3.2
+     ⍝⍎ stats Height          ⍝ Raw Data
      ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←''                   ⍝ Set system variables
     ⍝ 326≡⎕DR ⍵:∇{∆←⍺⍺ 1↓⍵ ⋄ ∆.Name←↑⍵ ⋄ ∆}⍵ ⍝ Insert name if 1st item Char
      b←0=≢⍺

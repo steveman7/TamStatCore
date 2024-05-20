@@ -1,6 +1,10 @@
  pieChart←{
-     ⍝⍺  0=count, ¯1=sort, 1=frequency, 100=percent
-     ⍝⍵  Data or frequency distribution
+ ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+ ⍝∇ Generate Bar Chart
+ ⍝∊ Graphics
+ ⍝⍵ Data  Cv Character Vector or Matrix
+ ⍝⍕ Graphic←[Style] barChart Data
+ ⍝⍎ Graphic←pieChart State                          ⍝ Simple pie chart
      ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←0                             ⍝ Set System variables
      FR←(↑⍺~0J1){1=⍴⍴⍵:⍺ frequency ⍵ ⋄ ⍵}⍵                     ⍝ Get frequency from raw data
      Output←{0::'Error!'

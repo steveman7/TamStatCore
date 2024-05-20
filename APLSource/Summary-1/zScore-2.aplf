@@ -1,1 +1,12 @@
- zScore←{⍺←⍵ ⋄ (⍺-mean ⍵)÷sdev ⍵}
+ zScore←{
+ ⍝⍟ Copyright (c) 2024, by Stephen Mansour
+ ⍝∇ Find the Z-Score of a data item
+ ⍝∊ Summary Function; Measure of Position
+ ⍝⍺ Value    Xv
+ ⍝⍵ RawData  Yv  Sample or Population Data
+ ⍝⍵ FreqDist Xm2 Values followed by Counts or Probabilities
+ ⍝← Z        Zv  (X - mean) ÷ sdev
+ ⍝⍕ Z ← Value zScore RawData|FreqDist
+ ⍝⍎ ¯0.42331 ← 45 zScore 32 58 57 96 76 87 21 58 90 5
+ ⍝⍎ ¯0.42331 0.71638 ← 45 80 zScore 32 58 57 96 76 87 21 58 90 5
+     ⍺←⍵ ⋄ (⍺-mean ⍵)÷sdev ⍵}

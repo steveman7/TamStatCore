@@ -1,9 +1,8 @@
  toNestedVector←{⎕ML←3 ⋄ ⎕IO←0
-     0=↑0⍴∊⍵:⍵
+     0=↑0⍴∊⍵:⍵                          ⍝ If numeric, leave alone
      2=≡⍵:deleteExcessBlanks¨,⍵         ⍝ Already nested vector
-     ⍺←','
+     ⍺←','                              ⍝ Default delimiter
      2=⍴⍴⍵:deleteExcessBlanks¨↓⍵        ⍝ Matrix                                                         ←
-    ⍝ ⍺∊⍵:deleteExcessBlanks¨(⍺≠⍵)⊂,⍵    ⍝ Delimited list
-     ⍺∊⍵:deleteExcessBlanks¨(⍺≠⍵)⊆⍵    ⍝ Delimited list
-     ⊂deleteExcessBlanks ⍵              ⍝
+     ⍺∊⍵:deleteExcessBlanks¨(⍺≠⍵)⊆⍵     ⍝ Delimited list
+     ⊂deleteExcessBlanks ⍵              ⍝ Else make a scalar
  }

@@ -1,11 +1,13 @@
  mode←{
-     ⍝⍟: Copyright (c) 2017, by Stephen Mansur
-     ⍝∇: Calculate mode of a data set or frequency distribution
-     ⍝∊ Summary Function
-     ⍝⍺: 0 - find first mode; 1 - find all modes
-     ⍝⍵: Numeric Vector: Data Set; 2-col Numeric Matrix:  Frequency Dist
-     ⍝⍵: Character vector
-     ⍝←  Numeric Scalar or Vector; character vector or nested vector
+     ⍝⍟ Copyright (c) 2017, by Stephen Mansur
+     ⍝∇ Find the most frequently occuring value(s).
+     ⍝∊ Summary Function; Measure of Center
+     ⍝⍺ 0 - find first mode; 1 - find all modes
+     ⍝⍵ RawData  Xv   Sample or Population Data
+     ⍝⍵ CharData Ca   Comma Delimited, Nested or Matrix
+     ⍝⍵ FreqDist Xm2  Values followed by Counts or Probabilities
+     ⍝← MostFreq Xv   Most frequently occuring value(s).
+     ⍝⍕ Z ← [_0|1] mode RawData|CharData|FreqDist
      ⍝⍎ 2 ← mode 2 5 1 2 2 3      ⍝ Most frequent value
      ⍝⍎ 3 ← 0 mode 2 3 3 5 5 7    ⍝ First most frequent value
      ⍝⍎ 3 5 ← 1 mode 2 3 3 5 5 7  ⍝ Bimodal

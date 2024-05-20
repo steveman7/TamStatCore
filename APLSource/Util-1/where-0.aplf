@@ -1,10 +1,15 @@
  where←{
-⍝⍺  A list of variable names or a namespace
-⍝⍵  A selection expression
-⍝←  selected items
-⍝⍎  D.Height where D.Sex eq 'M'
-⍝⍎  D.State D.Party where D.Age between 25 40
-⍝⍎  D where D.State in 'PA,NY,NJ'
+⍝⍟ Copyright (c) 2024 by Stephen Mansour
+⍝∇ Select rows from a database.  See also "selectFrom".
+⍝∊ Database Function
+⍝⍺ Database     W  Namespace containing Variables
+⍝⍺ Column       Xv Single Variable in a Database
+⍝⍵ Condition    Bv 1=Include row; 0=Don't include row
+⍝← IncludedRows Xv If NameList refers to a single column in the Database
+⍝⍕ IncludedRows←where Condition
+⍝⍎ D.Height where D.Sex eq 'M'
+⍝⍎ D.State D.Party where D.Age between 25 40
+⍝⍎ D where D.State in 'PA,NY,NJ'
      ⎕IO←0 ⋄ ⎕ML←3
      9=⎕NC'⍺':⍺{v←↓⍺.⎕NL 2  ⍝ Variables
          _←⍎⍕v'←⍺.(⍵∘/¨'v')'

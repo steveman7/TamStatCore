@@ -14,8 +14,9 @@
          ⍺<2:W                        ⍝ ⍺ = 1 or ¯1 done
          N←+/(K-≢W)↑W[;1]             ⍝ Frequency of "Other"
          (K↑W)⍪'Other'N}
-     z←⍺ f{(⍺≤0)∨2=≡⍵:⍺⍺ ⍵
-     ⍝    ⍺⍺ ⍺×⌊0.5+⍵÷⍺}d              ⍝  If numeric, range the data
+     z←⍺ f{
+         (⍺≤0)∨2=≡⍵:⍺⍺ ⍵              ⍝ If chacter or
+         ⍺=1:⍺⍺ ⍵                     ⍝ If bin width =1 done
          ⍺⍺(⍺÷2)+⍺×⌊⍵÷⍺}d             ⍝  If numeric, range the data
      z←z[⍋⊃z[;0];]                    ⍝ Sort result
      c:⍺ g(-n=0)↓z⍪⎕NULL n            ⍝ Done if nominal

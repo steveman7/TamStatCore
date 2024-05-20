@@ -2,6 +2,7 @@
  ⍝⍺⍺  Distribution Function
  ⍝⍵   Data from Distribution
  ⍝←   Parameter Estimates
+ ⍝⍕  Sv←fD parameters Xv
  ⍝⍎  2 1←normal parameters 1 2 3
  ⍝⍎  0.5←exponential parameters 1 2 3
      0::'Nonce Error'

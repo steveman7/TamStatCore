@@ -1,0 +1,10 @@
+ makeContingencyTable←{
+⍝∇ Create a contingency table
+⍝⍺ RowNames;ColumnNames
+⍝⍵ Data
+⍝← Contingency Table
+⍝⍕ 'RowName1,..,RowNameM;ColName1,...ColNameN' makeContigencyTable X
+     RN CN←toNestedVector¨';'toNestedVector ⍺
+     Body←(≢¨RN CN)⍴⍵
+     ('*',CN)⍪RN,Body
+ }

@@ -2,12 +2,12 @@
  ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
  ⍝∇ Generate Dot Plot
  ⍝∊ Graphics
- ⍝⍺ Width (Default 1)
- ⍝⍵ Xv: Numeric Vector
- ⍝← Am Character Matrrix
- ⍝⍕ [W] dotPlot Xv
- ⍝⍎ dotPlot D.Height
- ⍝⍎ 10 dotPlot D.Weight
+ ⍝⍺ [Width←1] Ns Width
+ ⍝⍵ Data Xv Numeric Vector
+ ⍝← Graphic W Dot Plot
+ ⍝⍕ Graphic←[Width] dotPlot Xv
+ ⍝⍎ dotPlot Height
+ ⍝⍎ 10 dotPlot Weight
      ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←1     ⍝ Set system variables
      a←↑(⍺,1)~0J1            ⍝ Show variable option
      i n←↓⍉a frequency ⍵     ⍝ Get frequenciews

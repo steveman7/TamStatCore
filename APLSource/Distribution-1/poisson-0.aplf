@@ -1,27 +1,32 @@
- poisson←{                                ⍝ Scalar,Arithmetic⍝⍝⍝⍝⍝⍝
-     ⍝⍟ Copyright (c) by Stephen M. Mansour
+ poisson←{
+     ⍝⍟ Copyright (c) 2024 by Stephen M. Mansour
      ⍝∇ Poisson Distribution
-     ⍝∊ Discrete Distribution Function
-     ⍝⍺ Y: Lambda - Mean Rate
-     ⍝⍵ N: - Number of items in a particular interval
-     ⍝← Probability of exactly X successes in an interval
-     ⍝⍕ Syntax:  Y poisson N
+     ⍝∊ Distribution Function; Discrete
+     ⍝⍺ Lambda S Mean Rate
+     ⍝⍺ P  P  Probability of success
+     ⍝⍺_ C Cs ['d'=Probability, 'p'=Cumulative Prob, 'q'=Inverse Distribution, 'r'=random]
+     ⍝⍵ N   N Number of items in a particular interval
+     ⍝← P   P Probability of exactly X successes in that interval
+     ⍝⍕ Syntax:  Lambda poisson N
      ⍝⍎ 0.104444863 ← 5  poisson 7
      x←⍵ ⋄ ⎕ML←3 ⋄ ⎕IO←0                  ⍝ Set system variables
-     x≡'Type':'Discrete' ⋄ m c←2↑⍺        ⍝ Get parameter
+     x≡'Type':'Discrete'                  ⍝ Get parameter
+     m c←getParameters ⍺
      (⊂x)∊'Mean' 'Variance':m             ⍝ Obtain theoretical values
      x≡'Median':⌊m+1 0.02-.÷3 m           ⍝   "       "           "
      x≡'Mode':y⊃⍨</m ∇ y←(⌈¯1+m),⌊m       ⍝   "       "           "
      x≡'Skewness':m*-÷2                   ⍝   "       "           "
      x≡'Kurtosis':÷m                      ⍝   "       "           "
-     str←'pdqr'[1 0 ¯1 ¯2⍳c],'pois(⍵,⍵)'  ⍝ Build R Expression
+    ⍝str←'pdqr'[1 0 ¯1 ¯2⍳c],'pois(⍵,⍵)'  ⍝ Build R Expression
+     str←c,'pois(⍵,⍵)'                    ⍝ Build R Expression
      rAv:+##.∆r.x str ⍵ m                 ⍝ Call R if requested
-     c=0:m{p←(*-⍺)×(⍺*⍵)÷!⍵⌈0             ⍝ Probability (X=x)
+     1<≢m:(m,¨c)∇¨⍵
+     c='d':m{p←(*-⍺)×(⍺*⍵)÷!⍵⌈0           ⍝ Probability (X=x)
          p×(⍵=⌊⍵)∧⍵≥0}x                   ⍝ p=0 unless natural number
-     c=1:(x≥0)×(⊂⌊0⌈x)⌷1{⍺>⌈/x:+\⍵        ⍝ Cumulative Pr(X≤x)
+     c='p':(x≥0)×(⊂⌊0⌈x)⌷1{⍺>⌈/x:+\⍵      ⍝ Cumulative Pr(X≤x)
          (⍺+1)∇ ⍵,⍵[⍺-1]×m÷⍺},*-m         ⍝ Factor = Pr(x+1)÷Pr(x)
-     c=¯1:+/x∘.>1{(+/⍵)≥⌈/x:+\⍵           ⍝ Inverse probability
+     c='q':+/x∘.>1{(+/⍵)≥⌈/x:+\⍵          ⍝ Inverse probability
          (⍺+1)∇ ⍵,⍵[⍺-1]×m÷⍺},*-m         ⍝ Factor = Pr(x+1)÷Pr(x)
-     c=¯2:x⍴m{t←⍺ ¯2 exponential⌈⍵×⍺+2×⍺*÷2 ⍝ Poisson Random Variable
+     c='r':x⍴m{t←⍺'r'exponential⌈⍵×⍺+2×⍺*÷2 ⍝ Poisson Random Variable
          t0←+/(+\t)∘.>1+⍳⍵ ⋄ +⌿t0∘.=⍳⍵}×/x  ⍝
  }

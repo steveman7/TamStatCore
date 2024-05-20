@@ -9,7 +9,8 @@
      ⍝⍕ Syntax:  N kolmogorov X
      ⍝⍎ 0.975 ← 10 kolmogorov prob ≤ .409
      'Type'≡x←⍵:'Continuous'
-     M N C←3↑⍺ ⋄ ⎕ML←3 ⋄ ⎕IO←0                   ⍝ Set system variable
+    ⍝ M N C←3↑⍺ ⋄ ⎕ML←3 ⋄ ⎕IO←0                   ⍝ Set system variable
+     N C←getParameters ⍺ ⋄ ⎕ML←3 ⋄ ⎕IO←0
     ⍝ N∨.<0 1:∆SigErr'All parameters must be positive'
      f←{=/⍺:÷/(N+N 0×⍵)!2×N←↑⍺
          ÷!/+\⍺}
@@ -26,8 +27,8 @@
 ⍝     str←'pdqr'[1 0 ¯1 ¯2⍳C],'wilcox(⍵,⍵,⍵)'     ⍝ Build R Expression
 ⍝    rAv:+##.∆r.x str ⍵ M N                      ⍝ Use R if requested
      1<≢⍵:⍺∘∇¨⍵                                  ⍝ Allow array arguments
-     C=0:(-/N g¨⍵(+,-)h)÷2×h←0.00001             ⍝ Probability (X=x)
-     C=1:÷/(N+N 0×⍵)!2×N                          ⍝ Cumulative Probability X≤x
-     C=¯1:(⍵-N∘g)SecAlg D,⍵-N g¨D←1 0.7÷sqrt N   ⍝ Critical Values (Inverse)
-     C=¯2:'Nonce Error'                          ⍝ Random Variables
+     C='d':(-/N g¨⍵(+,-)h)÷2×h←0.00001             ⍝ Probability (X=x)
+     C='p':÷/(N+N 0×⍵)!2×N                          ⍝ Cumulative Probability X≤x
+     C='q':(⍵-N∘g)SecAlg D,⍵-N g¨D←1 0.7÷sqrt N   ⍝ Critical Values (Inverse)
+     C='r':'Nonce Error'                          ⍝ Random Variables
  }

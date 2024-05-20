@@ -20,10 +20,8 @@
      B1←(int~1),B                       ⍝ Coefficients
      (2=≢B1)∧1<≢,⍵:⊃⍺∘∇¨⍵               ⍝ Simple regression multiple inputs
      1<⍴⍴⍵:⊃⍺∘∇¨↓⍵                      ⍝ Multiple regression multiple input
-   ⍝ A=0:B1+.×⍉int,⍤(2<≢B1)⊢⍵           ⍝ Function
      Y←B1+.×⍉int,⍤(2<≢B1)⊢⍵             ⍝ Function
      A=0:Y
      d←(S*2)×(A-1)+x+.×C+.×x←(int~0),⍵  ⍝ Calculate standard error(s)
      t←DF tDist criticalValue<0.5×1-CL  ⍝ Critical value of t-distribution
-     ⍝(f ⍵)(-,+)t×d*÷2}
      Y(-,+)t×d*÷2}

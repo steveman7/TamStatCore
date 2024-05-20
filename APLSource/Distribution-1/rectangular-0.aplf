@@ -1,31 +1,37 @@
  rectangular←{
- ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
- ⍝∇ Rectangular (Continuous Uniform) Distribution
- ⍝∊ Continuous Distribution Function
- ⍝⍺ A: Lower Bound (Default 0)
- ⍝⍺ B: Upper Bound (Default 1)
- ⍝⍵ X; Value         X∊[A,B]
- ⍝← S: Density
- ⍝⍕ S ← A B rectangular X
- ⍝⍎ 0 1 1 1 0 ←  rectangular ¯0.5 0 0.5 1 1.5    ⍝ U(0,1)
- ⍝⍝ 0 0.5 0.5 0.5 0 ← 2 4 rectangular 1 2 3 4 5  ⍝ U(2,4)
+  ⍝⍟ Copyright (c) by Stephen M. Mansour
+  ⍝∇ Rectangular Distribution; Continuous Uniform Distribution
+  ⍝∊ Distribution Function; Continuous
+  ⍝⍺ [A←0] X  Lower Bound
+  ⍝⍺ [B←1] X  Upper Bound  (A≤B)
+  ⍝⍺_ C Cs ['d'=Probability, 'p'=Cumulative Prob, 'q'=Inverse Distribution, 'r'=random]
+  ⍝⍥ [op] oD
+  ⍝⍵⍵ [rel]  fR  Only for prob or critVal operators
+  ⍝⍵ X   T   Probability, criticalValue or sampleSize
+  ⍝← Result   S  Density, Probability or Critical Value
+  ⍝⍕ Result ← [A|_0 B|_1] rectangular [op [rel]] X
+  ⍝⍎ 0.25←0 20 rectangular prob < 5               ⍝ Cumulative Prob
+  ⍝⍎ 0 1 1 1 0 ←  rectangular ¯0.5 0 0.5 1 1.5    ⍝ U(0,1)
+  ⍝⍎ 0 0.5 0.5 0.5 0 ← 2 4 rectangular 1 2 3 4 5  ⍝ U(2,4)
      ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←0 1 0                ⍝ Default is U(0,1)
      ⍵≡'Type':'Continuous'
-     a b c←{3=⍴⍵:⍵ ⋄ 1=⍴⍵:0,⍵,0             ⍝ Obtain parameters
-         (≤/⍵)⌽0,⍵},⍺
-     a b←{⍵[⍋⍵]}a b                         ⍝ Sort lower to upper
+     ab c←getParameters ⍺
+     a b←{2=≢⍵:⍵ ⋄ 0 ⍵}ab
+    ⍝ a b←{⍵[⍋⍵]}a b                         ⍝ Sort lower to upper
      ⍵≡'Mean':(a+b)÷2                       ⍝ Calculate theoretical values
      ⍵≡'Variance':(2*⍨b-a)÷12               ⍝     "         "         "
      ⍵≡'Mode':⍳0                            ⍝     "         "         "
      ⍵≡'Skewness':0                         ⍝     "         "         "
      ⍵≡'Kurtosis':-6÷5                      ⍝     "         "         "
-     str←'pdqr '[1 0 ¯1 ¯2⍳c],'unif(⍵,⍵,⍵)' ⍝ Build R expression
+     str←c,'unif(⍵,⍵,⍵)' ⍝ Build R expression
      rAv:+##.∆r.x str ⍵ a b                 ⍝ Use R if requested
      p←1≠×/×⍵∘.-a b                         ⍝ Is X∊[a,b] ?
-     c=0:p÷b-a                              ⍝ Density
-     c=1:0⌈1⌊(⍵-a)÷b-a                      ⍝ Cumulative Distribution
-     c=¯1:a+⍵×b-a                           ⍝ Inverse
-     c=¯2:a+(b-a)×?⍵⍴0                      ⍝ random Variable
+     c='d':p÷b-a                              ⍝ Density
+     c='p':0⌈1⌊(⍵-a)÷b-a                      ⍝ Cumulative Distribution
+     c='q':a+⍵×b-a                           ⍝ Inverse
+     1≠≡a b:(↑,/¨a b'r')∇¨⍵                ⍝ Multiple random vars
+     c='r':a+(b-a)×?⍵⍴0                      ⍝ random Variable
+
 ⍝ c=¯3:                                     ⍝ GoodnessOfFit
 ⍝b←1≠×/×⍵-a
 ⍝     b÷d--/a                               ⍝ Density or probability

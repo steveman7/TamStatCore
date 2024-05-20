@@ -1,9 +1,12 @@
  splitBy←{
- ⍝∊ Written by Steve Mansour
- ⍝⍺ Any Vector or vector representation
- ⍝⍵ Any Vector or vector representation whose length is the same as ⍺
- ⍝⍵ If ⍵ is not Boolean, create Boolean in relation to first element
- ⍝⍕ V splitBy Bv|Av|s
+ ⍝⍟ Copyright (c) 2018, by Stephen Mansour
+ ⍝∊ Selection Function
+ ⍝∇ Split a variable into two groups.
+ ⍝⍺ Variable Xv Any Vector or vector representation
+ ⍝⍵ BinaryVector    Bv Any Vector or vector representation whose length is the same as ⍺
+ ⍝⍵ SelectionVector Ev If ⍵ is not Boolean, create Boolean in relation to first element
+ ⍝← Result Ev 2-item vector
+ ⍝⍕ Result←Vector splitBy BinaryVector|SelectionVector
  ⍝⍎  Male Female ← Height splitBy Sex eq 'M'
  ⍝⍎  Female Male ← Height splitBy Sex eq 'F'
  ⍝⍎  X Y ← Height splitBy Sex

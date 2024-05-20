@@ -1,20 +1,22 @@
  criticalValue←{
- ⍝⍟ Copyright (c) 2018 by Stephen M. Mansour
- ⍝∇ Calculate a critical value of a distribution
- ⍝∊ Operators
- ⍝⍺ [Parameters]:   Distribution parameters (default 0 1)
- ⍝⍺⍺ fD:  Distribution function
- ⍝⍵⍵ fR:  Relational function
- ⍝⍵  P:    Probability or area 0<P<1
- ⍝← X:     Value
- ⍝⍕ X ←  [Parms|0 1] fD criticalValue fR P
- ⍝⍎ ¯1.645 ← normal criticalValue > 0.05         ⍝ Lower tail standard normal
- ⍝⍎ 15.086 ← 5 chiSquare criticalValue > 0.01    ⍝ Upper tail chi-Square
- ⍝⍎ 2.1788 ← 12 tDist criticalValue outside 0.95 ⍝ 2-tail Student t
+ ⍝⍟ Copyright (c) 2018, 2024 by Stephen M. Mansour
+ ⍝∇ Boundary for a specified proportion of values; Inverse of Probability Operator
+ ⍝∊ Operator
+ ⍝⍺ [Parms]        Xv   Distribution parameters (default 0 1)
+ ⍝⍺⍺ fD            fD
+ ⍝⍵⍵ fR            fR
+ ⍝⍵  Prob          P   Probability
+ ⍝←  Value         X
+ ⍝⍕ X ←  [Parms|_0_1] fD criticalValue fR P
+ ⍝⍎ 1.645 ← normal criticalValue > .95           ⍝ Lower tail standard normal (greater than 95% of all values)
+ ⍝⍎ 15.086 ← 5 chiSquare criticalValue < 0.01    ⍝ Upper tail chi-Square (less than 1% of all values)
+ ⍝⍎ ¯2.1788 2.1788 ← 12 tDist criticalValue outside 0.95 ⍝ 2-tail Student t
+ ⍝⍎  9.0135 ← 5 3 fDist critVal < 0.05           ⍝ F Critical value less than 5% of all values
      ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←0 1                       ⍝ Default parameters (0,1)
      1<|≡⍵:⍺∘∇ pervasive ⍵                       ⍝ Allow nested input
      ~'P'check ⍵:⎕SIGNAL 11                      ⍝ Must be probability
-     a←⍺,¯1                                      ⍝ Append ¯1 for inverse
+    ⍝a←⍺,¯1                                      ⍝ Append ¯1 for inverse
+     a←⍺'q'
      b←0 1 ⍵⍵ 1 0                                ⍝ Test relation
      b←b∨1≡2 ⍵⍵ 1 3                              ⍝ If between, same as ≠
      p←b{≠/⍺:|⍵-↑⍺ ⋄ w←⍪⍣(×↑⍴⍴⍵)⊢⍵

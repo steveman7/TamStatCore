@@ -1,2 +1,14 @@
- down←{0=⎕NC'⍺':⍉⍺⍺⍤1⊢⍉⍵
+ down←{
+ ⍝⍟ Copyright (C) 2024 by Stephen M. Mansour
+ ⍝∇ Apply a summary function to the columns of a matrix
+ ⍝∊ Operator
+ ⍝⍺ N X Optional left argument to summary function
+ ⍝⍺⍺ fS fS Any Summary Function
+ ⍝⍵  Xm Xm  numeric matrix
+ ⍝← Zv  Zv  Vector whose length is number of columns in right argument
+ ⍝⍕ Zv ← [N] fS down Xm
+ ⍝⍎ 5 7 9 ← sum down  2 3 matrix 1 2 3 4 5 6
+ ⍝⍎ 2.5 3.5 4.5 ← mean down  2 3 matrix 1 2 3 4 5 6
+ ⍝⍎ 2 5 3←max down  2 3 matrix 1 5 3 2 4 3
+     0=⎕NC'⍺':⍉⍺⍺⍤1⊢⍉⍵
      ⍉⍺ ⍺⍺⍤1⊢⍉⍵}

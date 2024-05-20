@@ -1,17 +1,29 @@
  probability←{
- ⍝⍟ Copyright (c) 2018 by Stephen M. Mansour
+ ⍝⍟ Copyright (c) 2018, 2020 by Stephen M. Mansour
  ⍝∇ Calculate probability of a distribution or from a contingency table
- ⍝∊ Operators
- ⍝⍺ [Parameters]:   Distribution parameters (default 0 1)
- ⍝⍺⍺ fD:  Distribution function  or logical function
- ⍝⍵⍵ fR:  Relational function, e.g.   eq, ne, gt, lt, ge, le, in, between Table or independent
- ⍝⍵  X:    Value
- ⍝← P:    Probability 0≤P≤1
- ⍝⍕ P ←  [Parms|0 1] fD probability fR X
+ ⍝∊ Operator
+ ⍝⍺ [Parameters]   Xv   Distribution parameters (default 0 1)
+ ⍝⍺  EventA        Cv   Name of Event A
+ ⍝⍺  ProbA         Ps   Probability of Event A
+ ⍝⍺⍺ fD            fD
+ ⍝⍺⍺ fL            fL
+ ⍝⍵⍵ fR            fR  or independent
+ ⍝⍵⍵ Table         Xm  Contingency Table
+ ⍝⍵  Value         X   Critical Value
+ ⍝⍵  EventB        Cv  Name of Event B
+ ⍝⍵  ProbB         Ps  Probability of Event B
+ ⍝←  Probability   P
+ ⍝⍕ P ←  [Parms|_0_1]EventA|ProbA (fD|fL probability fR|Table|independent) X|EventB|ProbB
  ⍝⍎ 0.1640625 ← 7 0.5    binomial probability = 2
  ⍝⍎ 0.76193 ← 5.2 poisson probability > 3
  ⍝⍎ 0.89435 ← normal probability < 1.25
  ⍝⍎ 0.58885 ← 68 3 normal probability between 66 71
+ ⍝⍎ Table←frequency Sex Party               ⍝ Create Contingency Table
+ ⍝⍎ 0.3158←'M' (∧ prob Table)'R'   ⍝ Multipication rule:  Probability Male and Republican
+ ⍝⍎ 0.44737←'F' (∨ prob Table)'D'   ⍝ Addition rule:       Probability Female or Democrat
+ ⍝⍎ 0.41379←'R' (| prob Table)'M'   ⍝ Conditional rule     Probability Republican given Male
+ ⍝⍎ 0.1←.2 (∧ prob independent) .5            ⍝ P(A and B) independent
+ ⍝⍎ 0.6←.2 (∨ prob independent) .5            ⍝ P(A and B) independent
      ⍺←0 1 ⋄ ⎕ML←3 ⋄ ⎕IO←0                  ⍝ Default parameters (0,1)
      2=⎕NC'⍺⍺':(⍺⍺ _discreteprob ⍵⍵)⍵
      2=⎕NC'⍵⍵':⍺(⍺⍺ _prob ⍵⍵)⍵              ⍝ If variable right operand calculate
@@ -21,20 +33,23 @@
      c←(⍺ ⍺⍺'Type')≡'Continuous'            ⍝ Is distribution continuous?
      b←1 0 1 ⍵⍵ 0 1 1                       ⍝ Test relation
      b←,b×2≠⍴⍴b                             ⍝ If outside or between, make all 0's
-     fc←⍺⍺{a←⍺,1                            ⍝ Continuous
+    ⍝fc←⍺⍺{a←⍺,1                            ⍝ Continuous
+     fc←⍺⍺{a←⍺'p'                           ⍝ Continuous
          2>≡⍵:|b[0]-(a ⍺⍺ ⍵)×≠/2↑b          ⍝ Simple case
          |b[0]-(a∘⍺⍺¨⍵)×≠/2↑b}              ⍝
      fd←⍺⍺{e←(↑b)≠1↓b                       ⍝ Discrete
          d←⌊⍵+(⍵≠⌊⍵)∨∧/e                    ⍝ round up or down
-         a←⍺,↑e                             ⍝ cumulative?
+        ⍝a←⍺,↑e                             ⍝ cumulative?
+         a←⍺('dp'[↑e])
          =/2↑b:|b[0]-a ⍺⍺ ⍵                 ⍝ P(X=x) or P(X≠x)
          2>≡⍵:|b[0]-a ⍺⍺ d-↑e               ⍝ P(X<x) , P(X≤x) etc.
          |b[0]-a∘⍺⍺¨d-↑e}                   ⍝ Nested case
      fk←⍺⍺{                                 ⍝ Character
          |b[0]-⍺ ⍺⍺ ⍵}
      fi←⍺⍺{+/⍺ ⍺⍺ ⍵}                        ⍝ Pr(X∊x1,...,xn)
-     fb←⍺⍺{a←⍺,1                            ⍝ Pr(X∊(a,b))
-         2=≢⍵:|-/a ⍺⍺ ⍵                     ⍝ If 2 values, include both
+    ⍝fb←⍺⍺{a←⍺,1                            ⍝ Pr(X∊(a,b))
+     fb←⍺⍺{a←⍺'p'                          ⍝ Pr(X∊(a,b))
+         2=≢⍵:|-/a ⍺⍺ ⍵                      ⍝ If 2 values, include both
          1=≢⍵:1-2×1-a ⍺⍺ ⍵                  ⍝ If 1 value include negative
          ¯2-/a ⍺⍺ ⍵}
      f←⍵⍵{a b c←⍺                           ⍝ General probability

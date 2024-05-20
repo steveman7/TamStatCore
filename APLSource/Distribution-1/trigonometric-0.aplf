@@ -3,15 +3,16 @@
      ⍵≡'Type':'Continuous'  ⍝ Continuous Distribution
      ⍺←0
      c←↑⌽⍺                   ⍝ Parameters
+     a c←getParameters 0
      ⍵≡'Mean':0             ⍝ Mean attribute
      ⍵≡'Variance':○÷3       ⍝ Variance attribute
      f←{(1+2○⍵)÷○2}
      F←{0.5+(⍵+1○⍵)÷○2}
      I←{⍵{⍵-⍺(f÷F-⊣)⍵}⍣=0.5+0.25××⍵-0.5}
 
-     c=0:f ⍵                ⍝ Density
-     c=1:F ⍵
-     c=¯1:I ⍵               ⍝
-     c=¯2:I?⍵⍴0            ⍝ random Variable
-     c=3:'Not yet imple⍵mented'                  ⍝ GoodnessOfFit
+     c='d':f ⍵                ⍝ Density
+     c='p':F ⍵
+     c='q':I ⍵               ⍝
+     c='r':I?⍵⍴0            ⍝ random Variable
+     c='g':'Not yet imple⍵mented'                  ⍝ GoodnessOfFit
  }

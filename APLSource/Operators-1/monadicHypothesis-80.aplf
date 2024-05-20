@@ -15,7 +15,8 @@
          pv←(v+.×n-1)÷df←+/n,-2                 ⍝ Pooled variance
          se←sqrt pv+.÷n                         ⍝ Standard Error
          t←m-.÷se                               ⍝ Test Statistic
-         t←r{⍺=0:|⍵ ⋄ ⍵×⍺}t                     ⍝ Test Statistic
+        ⍝t←r{⍺=0:|⍵ ⋄ ⍵×⍺}t                     ⍝ Test Statistic
+         t←|⍣(r=0)⊢t
          p←df tDist probability>t               ⍝ p-Value
          m n(v*0.5),se t(p×tails)df}
      f←{(r s)←⍺

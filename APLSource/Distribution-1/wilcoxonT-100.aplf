@@ -1,15 +1,15 @@
  wilcoxonT←{                                ⍝ Scalar,Arithmetic
      ⍝⍟ Copyright (c) 2021 by Stephen M. Mansour
      ⍝∇ Wilcoxon T distribution
-     ⍝
-     ⍝∊ Discrete Distribution Function
-     ⍝⍺ N - Sample Size
-     ⍝⍵ R - Value of statistic
-     ⍝← Probabilit
-     ⍝⍕ Syntax:  M wilcoxonT
-     ⍝⍎ 0.0079 0.031746 ← 5 5 wilcoxonT 2 3
+     ⍝∊ Distribution Function; Discrete
+     ⍝⍺ N N Sample Size
+     ⍝⍵ R N Value of statistic
+     ⍝← P P Probability
+     ⍝⍕ P ← N wilcoxonT R
+     ⍝⍎ 0.0079 0.031746 ←  5 wilcoxonT 2 3
      'Type'≡x←⍵:'Discrete'
-     N C←2↑⍺ ⋄ ⎕ML←3 ⋄ ⎕IO←0                   ⍝ Set system variables
+     ⎕ML←3 ⋄ ⎕IO←0                         ⍝ Set system variables
+     N C←getParameters ⍺
     ⍝ M N∨.<0 1:∆SigErr'All parameters must be positive'
 
      x≡'Mean':0.25×N×N+1                              ⍝ Theoretical Values
@@ -42,15 +42,17 @@
      RF⍪←28 ¯1 92 102 117 130 407
      RF⍪←29 ¯1 100 111 127 141 436
      RF⍪←30 ¯1 109 120 137 152 466
+
      x≡'Mode':'Nonce Error'                           ⍝    "           "
      x≡'Skewness':'Nonce Error'                    ⍝    "           "
      x≡'Kurtosis':'Nonce Error'                    ⍝    "           "
 ⍝    str←'pdqr'[1 0 ¯1 ¯2⍳c],'hyper(⍵,⍵,⍵,⍵)'    ⍝ Build R Expression
 ⍝    rAv:+##.∆r.x str ⍵ m(N-m)n                  ⍝ Use R if requested
-     1<≢⍵:⍺∘∇¨⍵                                  ⍝ Allow array arguments
-     C=0:-/N(RF tableInverse)⍵-0 1              ⍝ Probability (X=x)
-     C=1:N(RF tableInverse)⍵                     ⍝ Cumulative Probability X≤x
+     1≠≢N:(N,¨C)∇¨⍵                                  ⍝ Allow array arguments
+     RF←TableJ
+     C='d':-/N(RF tableInverse)⍵-0 1              ⍝ Probability (X=x)
+     C='p':N(RF tableInverse)⍵                     ⍝ Cumulative Probability X≤x
     ⍝ C=¯1:N(RF tableLookup)⍵                    ⍝ Critical Values (Inverse)
-     C=¯1:⌊N(RF tableLookup)⍵                    ⍝ Critical Values (Inverse
-     C=¯2:(?⍵ N⍴2)+.×1+⍳N                          ⍝ Random Variables
+     C='q':⌊N(RF tableLookup)⍵                    ⍝ Critical Values (Inverse
+     C='r':(?(⍵,N)⍴2)+.×1+⍳N                          ⍝ Random Variables
  }

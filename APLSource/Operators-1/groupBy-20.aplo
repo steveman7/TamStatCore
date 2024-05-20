@@ -1,8 +1,11 @@
  groupBy←{
+⍝⍟ Copyright (c) 2018, by Stephen Mansour
+⍝∇ Group a variable
 ⍝⍺  Numeric Field
 ⍝⍺⍺ Summary function(s)
 ⍝⍵  Grouping field (may be character or numeric)
-⍝←  Matrix [Key|[...[KeyM]]|Value1|[...[ValueN]]]
+⍝←  Matrix Em [Key|[...[KeyM]]|Value1|[...[ValueN]]]
+⍝⍕  Matrix←
 ⍝⍎       Height mean groupBy State
 ⍝⍕  PA  69.57142857
 ⍝⍕  NJ  70
@@ -18,7 +21,6 @@
 ⍝⍕  NJ  M  71.75       72   74
 ⍝⍕  PA  F  65          65   65
 ⍝⍕      Height groupBy Sex
-
 ⍝⍕    M 40 71.5  2.87
 ⍝⍕    F 11 65.09 3.11
      ⎕ML←1 ⋄ ⎕IO←0

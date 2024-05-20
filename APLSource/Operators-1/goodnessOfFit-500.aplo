@@ -1,18 +1,27 @@
- goodnessOfFit←{ ⍝⍟ Copyright (c) 2018, 2022 by Stephen M. Mansour
+ goodnessOfFit←{
+ ⍝⍟ Copyright (c) 2018, 2022 by Stephen M. Mansour
  ⍝∇ Determine whether a sample fits a particular distribution
+ ⍝∇ Discrete Distributions use ChiSquare Test.
+ ⍝∇ Coninuous Distributions use Kolmogorov Test.
+ ⍝∇ Non-specified Parameters use Lillefors Test.
+ ⍝∇ Two Samples use Smirnov Test.
  ⍝∊ Operators
- ⍝⍺  N    [Number of ca
- ⍝⍺⍺ fD:  Distribution function or Numeric Variable:
- ⍝⍵⍵ fR:  Relational function = > <
- ⍝⍵  Xv:  Numeric variable
- ⍝⍵  Av:  Categorical variable
- ⍝⍵  W:   2-column (possibly nested) matrix (Frequency Distribution)
- ⍝←  NS:   Namespace containing the following variables
- ⍝         DegreesOfFreedom  Factors  P  Table  TestStatistic  Type
- ⍝⍕ NS ← fD goodnessOfFit = Av|Xv|W
- ⍝⍎ normal goodnessOfFit = D.Height
- ⍝⍎ uniform goodnessOfFit = D.State
- ⍝⍎ poisson goodnessOfFit = D.Family
+ ⍝⍺  [Categories] N    [Number of categories]
+ ⍝⍺⍺ fD         fD  Distribution function
+ ⍝⍺⍺ RelFreq    Cm  (Relative) frequency distribution
+ ⍝⍺⍺ DataSet    Xv  Numeric Data
+ ⍝⍵⍵ fR         fR
+ ⍝⍵  NumData    Xv   Numeric variable
+ ⍝⍵  CharData   Cv   Categorical variable
+ ⍝⍵  FreqDist   Nm   Frequency Distribution [Values Counts]
+ ⍝←  NameSpace  W    Namespace containing the following variables:   DegreesOfFreedom  Factors  P  Table  TestStatistic  Type
+ ⍝⍕ NameSpace ← fD|RelFreq|DataSet goodnessOfFit fR NumData|CharData|FreqDist
+ ⍝⍎ report normal goodnessOfFit = Height        ⍝ Lillefors Test
+ ⍝⍎ report exponential goodnessOfFit = Family   ⍝ Lillefors Test
+ ⍝⍎ report uniform goodnessOfFit = Family       ⍝ ChiSquare Test
+ ⍝⍎ report poisson goodnessOfFit = Family       ⍝ Poisson Test
+ ⍝⍎ report 68 3 normal goodnessOfFit < Height   ⍝ Kolmogorov Test
+ ⍝⍎ report Weight goodnessOfFit > 2 × Height    ⍝ Smirnov Test
      ⍺←⍬ ⋄ ⎕ML←3 ⋄ ⎕IO←0                            ⍝ Set system variables
   ⍝   c←'Continuous'≡⍺⍺'Type'                       ⍝ Is distribution continuous?
      rAv∧2=⎕NC'⍺⍺':⍺⍺ goodnessOfFitR ⍵              ⍝ If requested use R
@@ -21,7 +30,7 @@
      g←⍺⍺{A C←⍺⍺{11::1 ⋄ ⍵('Continuous'≡⍺⍺'Type')}⍺ ⍝ Decide which type of
        ⍝  C:A ⍺⍺ npgof ⍵⍵ ⍵                         ⍝ Goodness-of-fit test
          C∧1=⍴⍴⍵:A ⍺⍺ npgof ⍵⍵ ⍵                    ⍝ Goodness-of-fit test
-         C∧2=⍴⍴⍵:A ⍺⍺ x2gof ⍵                    ⍝ Do chi-square if grouped data
+         C∧2=⍴⍴⍵:A ⍺⍺ x2gof ⍵                       ⍝ Do chi-square if grouped data
          2=⎕NC'⍺⍺':⍺⍺{1=⍴⍴⍺⍺:⍺⍺ smirnovGOF ⍵⍵ ⍵     ⍝ If left operand vector, smirnov
              (↓⍉⍺⍺)mgof ⍵ 0}⍵⍵ ⍵                    ⍝ If matrix; multinomial
          p≠⌈p←1 ⍺⍺ 1:⍺ pgof ⍵ ⋄ ⍺ mgof ⍵ p}⍵⍵       ⍝ Determine distribution

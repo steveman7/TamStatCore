@@ -1,8 +1,8 @@
  tolerant←{
      ⎕IO←0 ⋄ ⎕ML←3
-     mon←{b←⍵≠⎕NULL        ⍝ Monadic Case
+     mon←{b←⍵≠⎕NULL       ⍝ Monadic Case
          z←⍺⍺ b/⍵         ⍝ Remove nulls
-         1=≢⍺⍺ 1 2 3 4:z    ⍝ If summary function, done
+         1=≢⍺⍺ 1 2 3 4:z  ⍝ If summary function, done
          z←b\z            ⍝ Expand result
          ((~b)/z)←⎕NULL   ⍝ Fill with nulls
          (⍴⍵)⍴z}          ⍝ Done

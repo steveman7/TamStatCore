@@ -1,18 +1,16 @@
  oneWay←{
-⍝∇ One-Way Anova  (may be unbalanced)
-⍝⍵ nested vector of vectors
-⍝⍵ vector of namespaces
-⍝⍵ matrix
-⍝⍎ oneWay D.Height D.Party
-⍝⍎ oneway D 'Height Party'
-⍝ X←7 7 15 11 9 , 12 17 12 18 18,14 18 18 19 19,19 25 22 19 23, 7 10 11 15 11
+     ⍝∇ One-Way Anova  (may be unbalanced)
+     ⍝⍵ nested vector of vectors
+     ⍝⍵ vector of namespaces
+     ⍝⍵ matrix
+     ⍝⍎ oneWay D.Height D.Party
+     ⍝⍎ oneway D 'Height Party'
+     ⍝ X←7 7 15 11 9 , 12 17 12 18 18,14 18 18 19 19,19 25 22 19 23, 7 10 11 15 11
      ⎕IO←0 ⋄ ⎕ML←1 ⋄ ⍺←,'A'  ⍝
      W←1⊃,⍵
      9=⎕NC'W':anovaSummary ⍵  ⍝ If vector of namespaces
      A←{0=≢⍵:,'A' ⋄ ⍵}⍺
      W←↓⍣(2=⊃⍴⍴⍵)⊢⍵           ⍝ If matrix make vector of vectors
-    ⍝ W←{2=⍴⍴⍵:↓⍵ ⋄ 2<≢⍵:⍵
-⍝         ,0 1↓↑{⍺ ⍵}⌸/⌽⍵}⍵
      W←{2<≢⍵:⍵
          ,0 1↓↑{⍺ ⍵}⌸/⌽⍵}W
      YN←(2*⍨+/Y)÷≢,Y←∊W
@@ -21,10 +19,5 @@
      SS←-⍨\SSA SST-YN
      DF←-⍨\¯1+≢¨W Y
      A'Error',SS,DF,⍪2 0
-    ⍝ A'Error',-⍨⍀SS,⍪DF
-    ⍝ MS←SS÷DF
-    ⍝ F←÷/MS
-    ⍝ P←DF fDist prob>F
-   ⍝  Z←A'Error',-⍨⍀SS,⍪DF
-   ⍝  A'Error',SS,DF,⍉↑MS F P
+
  }

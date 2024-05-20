@@ -7,15 +7,12 @@
  ⍝⍵ Xv:  Sample data
  ⍝⍵ Xm:  2-column matrix: [midpoints|frequencies]
  ⍝⍵ NS: Namespace containing count, mean, sdev
- ⍝← Sample
- ⍝⍕ Interval ← [.95|P] fS confInt X[A]|Cm|NS
- ⍝⍎ mean confInt Height
- ⍝⍎ mean confInt Height Sex
+ ⍝← Vector of Sample Statistics
+ ⍝⍕ Sample ← N fS bootstrap Xv|Xm|NS
+ ⍝⍎ 100 mean bootstrap normal randomVariable 10
+ ⍝⍎ 100 median bootstrap 1 exponential randomVariable 25
  ⍝⍎ 67.581 69.419 ← mean confInt stats 49 68.5 3.2
-⍝⍺ Number of iterations
-⍝⍺⍺ Summary Function
-⍝⍵ Sample
-⍝← Vector of sample statistics
-     ⍺←1000
-     n←≢⍵
-     ⍺⍺⍤1⊢⍵[?⍺ n⍴n]}
+     ⍺←1000         ⍝ Default =  1000 iterations
+     n←≢⍵           ⍝ Original Sample Size
+     ⍺⍺⍤1⊢⍵[?⍺ n⍴n] ⍝ Resample with replacement; apply summary fn
+ }

@@ -1,18 +1,21 @@
  triangular←{
- ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
- ⍝∇ Triangular Distribution
- ⍝∊ Continuous Distribution Function
- ⍝⍺ A: Lower Bound
- ⍝⍵ M: Mode
- ⍝⍺ B: Upper Bound
- ⍝⍵ X; Value         X∊[A,B]
- ⍝← S: Density
- ⍝⍕ S ← A M B triangular X
- ⍝⍎ 0.33333333 ← 2 4 5 triangular 3
+ ⍝⍟ Copyright (c) 2024 by Stephen M. Mansour
+ ⍝∇ Triangular Distribution; subjective description of a population with limited smaple data
+ ⍝∊ Distribution; Discrete
+ ⍝⍺ Lower    X Lower Bound
+ ⍝⍺ Middle   X Mode     (Lower≤Middle≤Upper)
+ ⍝⍺ Upper    X Upper Bound
+ ⍝⍺_ C Cs ['d'=Probability, 'p'=Cumulative Prob, 'q'=Inverse Distribution, 'r'=random]
+ ⍝⍵ Value    X  Critical Value, Probability or Sample Size
+ ⍝← Result   X  Density, Probability or Critical Value
+ ⍝⍕ Result← Lower Middle Upper triangular [op [rel]] Value
+ ⍝⍎ 0.16667 ← 2 4 5 triangular prob < 3         ⍝ Cumulative Probability
+ ⍝⍎ 0.33333 ← 2 4 5 triangular 3                ⍝ Density
      ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⎕DIV←1                     ⍝ Set system variables
      ⍵≡'Type':'Continuous'                      ⍝ Continuous Distribution
-     a m b c←4↑⍺                                ⍝ Parameters
-     a m b←{⍵[⍋⍵]}a m b                         ⍝ Sort them
+   ⍝  a m b c←4↑⍺                                ⍝ Parameters
+     (a m b)c←getParameters ⍺
+   ⍝  a m b←{⍵[⍋⍵]}a m b                         ⍝ Sort them
      ⍵≡'Mean':(a+b+m)÷3                         ⍝ Calculate theoretical value
      ⍵≡'Variance':{18÷⍨(⍵+.*2)-⍵+.×1⌽⍵}a b m    ⍝     "          "        "
      ⍵≡'Mode':m                                 ⍝     "          "        "
@@ -20,13 +23,14 @@
      ⍵≡'Skewness':{z←×/(2×⍵)-(1⌽⍵)+2⌽⍵          ⍝     "          "        "
          z÷←((⍵+.*2)-⍵+.×1⌽⍵)*1.5
          z×(2*0.5)÷5}a m b
-     c=0:0⌈{⍵≤m:2×(⍵-a)÷(b-a)×m-a               ⍝ Density
+     c='d':0⌈{⍵≤m:2×(⍵-a)÷(b-a)×m-a               ⍝ Density
          2×(b-⍵)÷(b-a)×b-m}¨⍵                   ⍝
-     c=1:{⍵≤m:(2*⍨⍵-a)÷(b-a)×m-a                ⍝ Distribution
+     1≠≡a m b:(↑,¨/a m b)∇¨⍵
+     c='p':{⍵≤m:(2*⍨⍵-a)÷(b-a)×m-a                ⍝ Distribution
          (m b÷.-a)+(-/2*⍨b-m ⍵)÷b×.-a m}¨a⌈b⌊⍵  ⍝
-     c=¯1:{⍵≤(m-a)÷b-a:a+0.5*⍨⍵×(m-a)×b-a       ⍝ Inverse
+     c='q':{⍵≤(m-a)÷b-a:a+0.5*⍨⍵×(m-a)×b-a       ⍝ Inverse
          b-0.5*⍨(1-⍵)×(b-a)×b-m}¨⍵              ⍝
-     c=¯2:{u←?d←⍵⍴0                             ⍝ random Variable
+     c='r':⍵⍴{u←?d←(×/⍵)⍴0                       ⍝ random Variable
          j←~i←u<(m-a)÷b-a                       ⍝
          (i/d)←a+0.5*⍨(i/u)×(m-a)×b-a           ⍝
          (j/d)←b-0.5*⍨(1-j/u)×(b-a)×b-m ⋄ d}⍵   ⍝

@@ -1,9 +1,13 @@
  count←{
- ⍝∇ Summary Function
+ ⍝∇ Sample or Population Size
+ ⍝∊ Summary Function; Measure of Quantity
  ⍝⍟ Copyright 2017 by Steve Mansour
- ⍝⍵ Vector, Matrix or Namespace
- ⍝← Number of items
- ⍝⍕  Is ← count Xv
+ ⍝⍵ NumData     Xv   Sample or Population Data
+ ⍝⍵ CharData    Ca   Comma Delimited, Nested or Matrix
+ ⍝⍵ FreqDist    Xm2  Values followed by Counts or Probabilities
+ ⍝⍵ SummaryData W    Namespace containing count, mean, sdev
+ ⍝← Size        Ns   Number of items
+ ⍝⍕  Ns ← count Xv|Cv|Cm|W
  ⍝⍎  5 ← count 2 5 1 3 2
      ⎕IO←0 ⋄ ⎕ML←3
      9=⎕NC'⍵':⍵.count          ⍝ If namespace, extract count variable

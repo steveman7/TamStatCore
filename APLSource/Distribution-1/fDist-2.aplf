@@ -1,35 +1,37 @@
  fDist←{                      ⍝ F  Distribution
- ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
- ⍝∇ F Distribution
- ⍝∊ Continuous Distribution Function
- ⍝⍺ M:  Numerator Degrees of Freedom
- ⍝⍺ N:  Denominator Degrees of Freedom
- ⍝⍺ [Phi]: Non-Central Parameter C≥0      (Optional)
- ⍝⍺ [0=Density, 1=Cumulative Distribution, ¯1=Inverse Distribution, ¯2=random]
- ⍝⍵ T:  Value  T≥0
- ⍝← S:  Density
- ⍝⍕ S ← M N fDist T
- ⍝⍎ 0.17229 ← 5 3 fDist 1.8
+  ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
+  ⍝∇ Density of F Distribution; Special case of Gamma Distribution
+  ⍝∊ Distribution Function; Continuous
+  ⍝⍺ DF1     I Numerator Degrees of Freedom   (0=Infinite)
+  ⍝⍺ DF2     I Denominator Degrees of Freedom (0=Infinite)
+  ⍝⍺ [Phi←0] S Non-Central Parameter
+  ⍝⍺_ C Cs ['d'=Probability, 'p'=Cumulative Prob, 'q'=Inverse Distribution, 'r'=random]
+  ⍝⍥ [operator] oD
+  ⍝⍵⍵ [rel]  fR  Only for prob or critVal operators
+  ⍝⍵ Value  S Test Statistic, probability or Sample Size
+  ⍝← Result   S  Density, Probability or Critical Value
+  ⍝⍕ Result ← DF1 DF2 [Phi|_0] fDist [operator [rel]] Value
+  ⍝⍎ 3.4903 ← 3 12 fDist critVal < .05 ⍝ Value from F-Table
+  ⍝⍎ 0.3459 ←   3 12 fDist prob > 4  ⍝  P-Value
+  ⍝⍎ 0.17229 ← 5 3 fDist 1.8   ⍝ Density
      w←⍵ ⋄ ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⎕FR←1287 ⋄ ⎕DIV←0        ⍝ Set system variables
      w≡'Type':'Continuous'                    ⍝
-     2=≡⍺:(↑,¨/⍺)∇¨⍵                          ⍝ Left argument pervasive
-     df←2↑⍺ ⋄ ⍝c←↑2↓⍺                         ⍝
-     Phi2 c←{2=≢⍵:⍵*2 1 ⋄ 0=≢⍵:0 ⋄ ⍵∊0 1 ¯1 ¯2:0 ⍵ ⋄ ⍵ 0}2↓⍺
-     w≡'Mean':{⍵>2:⍵÷⍵-2 ⋄ ⎕NULL
-         'df in denominator must be > 2'}df[1]
-     w≡'Variance':{⍵>4:2×(⍵*2)×(⍺+⍵-2)÷⍺×(2*⍨⍵-2)×⍵-4 ⋄ ⎕NULL
-         'df in denominator must be > 4'}/df
+     df c←getParameters ⍺
+     ⍝Phi2 c←{2=≢⍵:⍵*2 1 ⋄ 0=≢⍵:0 ⋄ ⍵∊0 1 ¯1 ¯2:0 ⍵ ⋄ ⍵ 0}2↓⍺
+     w≡'Mean':⎕NULL@{2≥1⊃df}{⍵÷1⌈⍵-2}1⊃df
+     w≡'Variance':⎕NULL@{4≥1⊃df}↑{2×(⍵*2)×(⍺+⍵-2)÷⍺×(2*⍨⍵-2)×1⌈⍵-4}/df
      w≡'Mode':(df+¯2 2)×.÷df
-     w≡'Skewness':↑{⍵>6:(¯2+⍵+2×⍺)×((8×⍵-4)*÷2)÷(⍵-6)×(⍺×⍺+⍵-2)*÷2
-         ⎕NULL}/df
+     w≡'Skewness':⎕NULL@{6≥1⊃df}↑{(¯2+⍵+2×⍺)×((8×⍵-4)*÷2)÷(⍵-6)×(⍺×⍺+⍵-2)*÷2}/1 7⌈df
      w≡'Kurtosis':⎕NULL
-     str←'pdqr'[1 0 ¯1 ¯2⍳c],'f(⍵,⍵,⍵,⍵)'   ⍝ Build R expression
-     rAv:+##.∆r.x str ⍵,df,Phi2             ⍝ Use R if requested
+     2=≡df:⍵ ∇⍨¨↑c,¨⍨¨,¨/(⌈/≢¨df)⍴¨df           ⍝ Left argument pervasive
+     Phi2←×⍨↑⌽3↑df,0
+     str←c,'f(⍵,⍵,⍵,⍵)'                         ⍝ Build R expression
+     rAv:+##.∆r.x str ⍵,df,Phi2                 ⍝ Use R if requested
      R←df[0]÷df[0]+Phi2
-  ⍝   df[0]←(2*⍨df[0]+Phi2)÷df[0]+2×Phi2        ⍝ Adjust numerator df?
-     df[0]←{⍵=0:⍵ ⋄ (2*⍨⍵+Phi2)÷⍵+2×Phi2}df[0]        ⍝ Adjust numerator df?
+     df[0]←{⍵=0:⍵ ⋄ (2*⍨⍵+Phi2)÷⍵+2×Phi2}df[0]  ⍝ Adjust numerator df?
+     df←2↑df                                    ⍝ Remove Noncentral parameter
      FDEN←{MN←254⌊⍺+(172<⍺)×2|⍺                 ⍝ Density
-         M←↑MN ⋄ H←÷2                            ⍝ (Adjust DF to prevent domain error -
+         M←↑MN ⋄ H←÷2                           ⍝ (Adjust DF to prevent domain error -
          Z←H×M×!/¯1+H×+\⌽MN                     ⍝ may cause slight inaccuracy)
          Z←Z×÷/MN*M×H
          Z←Z×⍵*H×M-2
@@ -37,15 +39,13 @@
      FApprox←{0∧.=⍺:1  ⍝ Abramowitz & Stegun p. 947 Eq. 26.6.11 & 26.6.12
          0=↑⍺:⍺[1]÷⍺[1]chiSquare criticalValue>⍵
          (⍺[0]chiSquare criticalValue<⍵)÷⍺[0]}
-     c=0:df FDEN 0.001⌈w                    ⍝ Density
-   ⍝  c=1:{0⌈##.Koko.Distrib.Fratio_P ⍵,df}¨w×R
-     c=1:{
+     c='d':df FDEN 0.001⌈w                       ⍝ Density
+     c='p':{
          df[0]=0:df[1]chiSquare prob>df[1]÷⍵
          df[1]=0:df[0]chiSquare prob<⍵×df[0]
-         0⌈##.KokoStats.Distrib.Fratio_P ⍵,df}¨w×R
-   ⍝  c=¯1:R÷⍨{##.Koko.Distrib.Fratio_Fa ⍵,df}¨1-w
-     c=¯1:R÷⍨{0∊df:df FApprox ⍵ ⋄
-         ##.KokoStats.Distrib.Fratio_Fa ⍵,df}¨1-w
-     X←df chiSquare randomVariable¨w        ⍝ F Distribution is ratio of
-     ↑÷/X÷df                                ⍝ two chi-Square distributions
+         0⌈##.Koko.Distrib.Fratio_P ⍵,df}¨w×R
+     c='q':R÷⍨{0∊df:df FApprox ⍵ ⋄
+         ##.Koko.Distrib.Fratio_Fa ⍵,df}¨1-w
+     X←df chiSquare randomVariable¨w          ⍝ F Distribution is ratio of
+     ↑÷/X÷df                                  ⍝ two chi-Square distributions
  }

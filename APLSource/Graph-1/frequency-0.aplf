@@ -2,18 +2,15 @@
     ⍝∇  Obtain frequencies from a variable
     ⍝⍟  Copyright 2018 by Stephen Mansour
     ⍝∊  Graphical Function
-    ⍝⍺  Integer ≥ 0
-    ⍝⍺  If ⍺ = 0, let system decide number of bins
-    ⍝⍺  If ⍺ = 1, don't range data if numeric; sort by frequency if character
-    ⍝⍺  If ⍺ > 1, (maximum) number of bins
-    ⍝⍺  If ⍺ < 0, bin width
-    ⍝⍵  Simple Vector
-    ⍝⍵  [Grouping Vector] (optional)
-    ⍝←  Two-column matrix [Values, Frequencies]
-    ⍝←  or Contingency Table
-    ⍝⍎  frequency 2 1 2 3 4 2 3
-    ⍝⍎  frequency 'Joe,Bob,Joe,Steve,Bob,Joe'
-    ⍝⍎  frequency SEX PARTY
+    ⍝⍺  Bins Is Bins=1: don't range data; Bins>1: number of bins; Bins<0: bin with
+    ⍝⍵  Data Xv Simple Vector
+    ⍝←  Table    Em Two-column matrix [Values, Frequencies] or Contingency Table
+    ⍝⍕  Table←[Bins] frequency Vector
+    ⍝⍎  1 frequency 2 1 2 3 4 2 3             ⍝ Frequency Table with numeric data
+    ⍝⍎  5 frequency Height                    ⍝ Frequency Table with 5 bins
+    ⍝⍎  ¯20 frequency Weight                  ⍝ Bin width = 20 lbs
+    ⍝⍎  frequency 'Joe,Bob,Joe,Steve,Bob,Joe' ⍝ Frequency table with character data
+    ⍝⍎  frequency Sex Party                   ⍝ Contingency Table
      ⎕ML←3 ⋄ ⎕IO←0                            ⍝ Set system variables
      (2=⍴⍴⍵)∧80≠⎕DR ⍵:⍵
      w←{(⎕DR ⍵)∊80 160:toNestedVector ⍵       ⍝ Convert right argument

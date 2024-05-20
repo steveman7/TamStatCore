@@ -36,4 +36,5 @@
          TBL←'Xi' 'Zi' 'S(Zi)' 'F(Zi)' 'T+' 'T-'
          TBL⍪←X,Z,S,F,U,⍪V
          'exponential'(mean ⍵)P T2 ⍬ TBL}
-     ×0 1 ⍺⍺ 1:fnorm ⍵ ⋄ fexp ⍵}
+    ⍝ ×0 1 ⍺⍺ 1:fnorm ⍵ ⋄ fexp ⍵}
+     ×⊃0 1 ⍺⍺ 1:fnorm ⍵ ⋄ fexp ⍵}

@@ -1,15 +1,16 @@
  factorial2k←{
 ⍝∇  Generate a 2K factorial design
-⍝⍺  Alias
-⍝⍵  Vector or matrix of values in standard order
-⍝⍵  [Rows=TreatmentCombinations x Cols=Replicates]
-⍝←  Namespace
+⍝⍺  [Alias←'I'] Cv Effects equivalent to Identity I
+⍝⍵  V   Xv List of observed values in standard order
+⍝⍵  M   Xm Rows=TreatmentCombinations in standard order;  Columns=Replicates
+⍝←  EFF Xm Rows=Effects; Columns: EffectName EffectValues DegreesOfFreedom DenominatorIndex
+⍝⍕  EFF←[Alias] factorial2k V|M
 ⍝⍎  factorial2k 4 3⍴28 25 27 36 32 32 18 19 23 31 30 29
 ⍝⍎  factorial2k 8 2⍴¯3 ¯1 ¯1 0 ¯1 0 1 1 0 1 2 1 2 3 6 5
 ⍝⍎  'ABC' factorial2k 4 2⍴1037 1052 669 650 633 601 729 860
-⍝⍎  'ABD' 'ACE' factorial2k  6 9 35 50 18 22 40 63
-     ⍺←'I' ⋄ ⎕IO←0 ⋄ ⎕ML←1       ⍝ Determine
-     f←{I←⍋⍵[;0]⍳¨'='           ⍝ Sort by main effects, interactions
+⍝⍎  'ABD=ACE' factorial2k  6 9 35 50 18 22 40 63
+     ⍺←'I' ⋄ ⎕IO←0 ⋄ ⎕ML←1     ⍝ Determine
+     f←{I←⍋⍵[;0]⍳¨'='          ⍝ Sort by main effects, interactions
          EFF SS DF←↓⍉⍵[I;]
          J←{¯1↓⍵/⍵}≢SS
          ⍉↑EFF SS DF J}
@@ -24,9 +25,7 @@
      J←⍋{(≢,⊢)⍵↑⍨⍵⍳'+'}¨SO     ⍝ Sort by main effects, then alphabetically
      N←≢,⍵                     ⍝ Sample Size
      SST←(sumSquares,⍵)-(2*⍨sum,⍵)÷N ⍝ Total sum of squares
-   ⍝ 2=⍴⍴⍵:f(1⌽1,(SO,⍪SS)[J;])⍪'Error'(SST-+/SS)(N-1+≢SO) ⍝ If Replicates, calc SSE
      R>1:f(1⌽1,(SO,⍪SS)[J;])⍪'Error'(SST-+/SS)(N-1+≢SO) ⍝ If Replicates, calc SSE
-   ⍝  Error←(1+8<≢SO)<≢¨SO
      ⍺≢'I':(SO,SS,1,1↓C,⍪EFF)[J;]
      Error←(1+8<≢SO)<SO⍳¨'+'
      (Error/SO)←⊂'Error'       ⍝ Count as sampling error

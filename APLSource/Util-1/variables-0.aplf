@@ -1,8 +1,8 @@
  variables←{
  ⍝⍟ Copyright (C) 2018 by Stephen M. Mansour
  ⍝∇ List variables in a namespace
- ⍝∊ Utils
- ⍝⍺ B:  0=List top level variables, 1=list all variables
+ ⍝∊ Utility Function
+ ⍝⍺ B:  0=List top level variables, 1=list all variables, 2=Numeric Variables, 3=Character Variables
  ⍝⍵ NS:  Namespace
  ⍝← C:  List of variable names
  ⍝⍕ C ←  variables [#|NS]            ⍝ All variables in root
@@ -10,15 +10,15 @@
  ⍝⍎ A B C.U C.V C.W ← 1 variables #  ⍝ 3 addt'l vars in C
  ⍝⍎ U V W ← 1 variables C            ⍝ List only vars in C
  ⍝⍎ variables D                      ⍝
-  ⍝   0::'Domain Error'               ⍝
+  ⍝   0::'Domain Error'              ⍝
      ⍺←0 ⋄ ⎕IO←0 ⋄ ⎕ML←3             ⍝ Default is top-level
      NS←{''≡⍵~' ':# ⋄ 2=⎕NC'⍵':⍎⍵ ⋄ ⍵}⍵ ⍝ Get namespace
      V DB←toNestedVector∘NS.⎕NL¨2 9  ⍝ Find vars, ns
      V←('_'≠↑¨V)/V                   ⍝ remove meta-variables
-     ⍝DB←DB~⊂'TamStat'
+     ⍺=2:V/⍨{0=↑0⍴∊NS⍎⍵}¨V           ⍝ List only Numeric Variables
+     ⍺=3:V/⍨{0≠↑0⍴∊NS⍎⍵}¨V           ⍝ List only Character Variables
      DB←DB~'TamStat' '_meta'         ⍝ Exclude TamStat namespace
      (⍺=0)∨0=≢DB:V,{'[',⍵,']'}¨DB    ⍝ If 0 or no ns, list vars
-    ⍝ VV←∇∘⍎¨'#.'∘,¨DB                ⍝ Else apply to each namespace
-     VV←∇∘⍎¨'⍵.'∘,¨DB
+     VV←∇∘⍎¨'⍵.'∘,¨DB                ⍝ Else apply to each namespace
      V,↑,/DB{⍺∘,¨'.',¨⍵}¨VV          ⍝ Append to list
  }
