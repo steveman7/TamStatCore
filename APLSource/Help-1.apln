@@ -217,7 +217,7 @@
      ⍝ ((Z='∆')/Z)←'@'
       C←{⍵,(⍵='&')/'amp'}Prefix
       Z←DEB ss Z'∆'C
-      :If 9=⎕nc '#.TamStat.Test' 
+      :If 0=⎕nc '#.Boot.ms' 
           'H'⎕WC'htmlrenderer'('html'Z)
       :EndIf
     ⍝  R←Z ⎕NPUT'C:\Users\Stephen\Documents\TamStat\Help.htm' 1
