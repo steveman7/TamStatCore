@@ -1,0 +1,103 @@
+Student,Sex,State,EyeColor,Family,Height,ShoeSize,Weight,SATScore,OwnCar,Religion,Major,Party,Voting,PresidentialJobApproval,Terrorism,Environment,Immigration,Deficit,GunControl,Trade,Class,Term
+1,M,MA,Blue,2,70,11,149,1780,No,Catholic,Accounting,Republican,Trump,4,5,1,5,4,2,4,STAT251,FA17
+2,F,PA,Blue,1,61,7,106,1100,Yes,Catholic,Other,Democrat,Clinton,3,4,4,3,3,3,4,STAT251,FA17
+3,M,PA,Brown,1,71,9.5,165,1800,Yes,Catholic,Finance,Democrat,Clinton,1,5,5,3,5,4,5,STAT251,FA17
+4,F,NY,Brown,1,64,6,118,1500,No,Catholic,Marketing,Republican,Trump,5,5,0,0,0,0,0,STAT251,FA17
+5,F,PA,Green,2,63,7,125,1560,Yes,Protestant,Accounting,Republican,Trump,3,5,2,4,4,3,4,STAT251,FA17
+6,M,NJ,Blue,1,67,9,150,1500,Yes,Catholic,Marketing,Republican,Trump,3,5,4,4,4,5,4,STAT251,FA17
+7,M,NJ,Brown,2,69,9,158,1600,No,Catholic,Accounting,Republican,Trump,5,5,5,5,5,5,5,STAT251,FA17
+8,M,PA,Green,2,75,13,190,1900,No,Catholic,Finance,Independent,Did not vote,3,4,5,3,4,3,3,STAT251,FA17
+9,M,NJ,Blue,2,68,10.5,150,1690,Yes,Catholic,Accounting,Republican,Did not vote,4,4,4,4,4,3,4,STAT251,FA17
+10,M,NY,Blue,2,73,10.5,165,1850,No,Catholic,Accounting,Republican,Did not vote,3,5,3,4,3,3,3,STAT251,FA17
+11,M,NY,Brown,1,67,10,149,1540,No,Catholic,Other,Independent,Trump,3,5,4,4,5,3,5,STAT251,FA17
+12,M,NY,Brown,1,72,10.5,186,1760,No,Catholic,Business Administration,Republican,Trump,2,5,4,4,5,1,4,STAT251,FA17
+13,F,NY,Brown,1,65,8,130,1400,Yes,Catholic,Accounting,Democrat,Did not vote,2,4,3,4,4,4,3,STAT251,FA17
+14,F,NY,Blue,1,66,8,168,1850,Yes,None,Accounting,Independent,Trump,3,5,5,4,5,3,5,STAT251,FA17
+15,M,NJ,Brown,3,72,11.5,162,1500,No,Catholic,Marketing,Democrat,Did not vote,1,5,5,3,3,4,3,STAT251,FA17
+16,M,CT,Brown,3,74,12,165,1740,Yes,Catholic,Finance,Republican,Did not vote,2,4,4,3,3,3,3,STAT251,FA17
+17,M,CT,Brown,1,72,12,183,1710,Yes,Catholic,Accounting,Democrat,Clinton,1,4,4,5,5,3,4,STAT251,FA17
+18,M,NJ,Brown,0,73,11.5,185,2000,Yes,Catholic,Accounting,Republican,Did not vote,3,4,3,4,5,3,5,STAT251,FA17
+19,M,MD,Green,0,73,11,154,1850,Yes,Catholic,Accounting,Republican,Trump,5,5,3,5,4,1,5,STAT251,FA17
+20,M,PA,Other,6,76,13,185,1940,No,Catholic,Biology,Republican,Trump,4,5,4,4,4,5,4,MATH205 ,FA17
+21,M,NJ,Hazel,1,68,10.5,145,1100,Yes,Catholic,Computer/Information Science,Democrat,Clinton,1,4,5,4,4,5,3,MATH205 ,FA17
+22,M,PA,Brown,1,67,9,140,1850,No,Catholic,Biology,Republican,Did not vote,2,4,4,4,4,3,4,MATH205 ,FA17
+23,F,NY,Hazel,3,69,9,150,1150,Yes,Catholic,Other,Democrat,Did not vote,1,5,4,4,4,5,4,MATH205 ,FA17
+24,F,PA,Brown,1,62,6,118,1450,Yes,Other,Computer/Information Science,Democrat,Clinton,2,5,5,3,4,3,3,MATH205 ,FA17
+25,F,PA,Blue,1,64,9,130,1800,Yes,Atheist/Agnostic,Social Sciences,Democrat,Clinton,1,5,5,4,4,5,3,MATH205 ,FA17
+26,F,PA,Blue,1,62,8.5,130,1600,Yes,Catholic,Other,Republican,Trump,3,5,4,2,2,3,3,MATH205 ,FA17
+27,M,NJ,Blue,1,71,11,135,600,No,Catholic,Computer/Information Science,Republican,Trump,5,5,4,4,4,1,4,MATH205 ,FA17
+28,M,NJ,Brown,4,69,9.5,150,1700,No,Catholic,Computer/Information Science,Democrat,Did not vote,2,4,4,4,4,4,4,MATH205 ,FA17
+29,M,NY,Brown,1,70,12,200,1640,No,Catholic,Biology,Republican,Did not vote,2,4,3,5,5,5,5,MATH205 ,FA17
+30,M,PA,Brown,1,67,8,145,1300,Yes,Catholic,Biology,Republican,Trump,2,4,5,3,4,3,5,MATH205 ,FA17
+31,M,NJ,Hazel,3,73,10.5,150,1590,No,Catholic,Computer/Information Science,Independent,Clinton,1,4,5,4,3,4,3,MATH205 ,FA17
+32,M,PA,Brown,2,72,12,166.5,1910,Yes,Catholic,Other,Republican,Did not vote,3,4,3,2,3,2,3,MATH205 ,FA17
+33,M,PA,Hazel,2,71,12,200,2000,Yes,Other,Other,Republican,Trump,4,5,4,5,5,2,4,MATH205 ,FA17
+34,M,NJ,Brown,1,72,10.5,150,1600,Yes,Catholic,Computer/Information Science,Republican,Did not vote,3,5,4,4,3,3,3,MATH205 ,FA17
+35,F,PA,Green,3,67,7,115,1750,Yes,Catholic,Computer/Information Science,Republican,Trump,4,5,4,2,3,4,4,MATH205 ,FA17
+36,M,NY,Blue,2,75,14,205,1600,Yes,Catholic,Finance,Republican,Trump,4,4,4,5,5,2,4,STAT252,SP17
+37,M,NY,Brown,1,75,11.5,157,1825,Yes,Catholic,Finance,Independent,Did not vote,2,5,5,4,4,4,4,STAT252,SP17
+38,M,CT,Green,0,75,14,195,1790,Yes,Catholic,Finance,Republican,Did not vote,4,4,4,4,4,4,4,STAT252,SP17
+39,F,PA,Blue,3,63,8,190,1910,Yes,Catholic,Accounting,Republican,Trump,5,5,4,5,5,4,4,STAT252,SP17
+40,F,PA,Green,2,63.5,8.5,138,1920,Yes,Catholic,Finance,Democrat,Clinton,1,5,5,5,5,5,5,STAT252,SP17
+41,F,PA,Hazel,2,66,10,155,1200,Yes,Other,Other,Democrat,Clinton,3,4,4,3,4,3,4,STAT252,SP17
+42,M,PA,Blue,1,71.5,11,160,1200,Yes,Protestant,Marketing,Republican,Trump,4,4,5,4,4,5,4,STAT252,SP17
+43,M,NJ,Brown,2,68,10,145,1960,Yes,Catholic,Business Administration,Democrat,Clinton,2,5,4,3,4,4,4,STAT252,SP17
+44,M,NJ,Brown,2,68,9.5,140,1930,Yes,Catholic,Business Administration,Democrat,Clinton,1,5,4,4,4,5,4,STAT252,SP17
+45,F,CT,Brown,5,63,7,110,1750,Yes,Catholic,Accounting,Democrat,Clinton,5,1,1,1,1,1,1,STAT252,SP17
+46,M,PA,Hazel,1,73,12,205,1800,No,Catholic,Business Administration,Republican,Trump,3,4,4,4,4,4,4,STAT252,SP17
+47,F,NY,Brown,3,65,8,125,1200,No,Other,Accounting,Democrat,Did not vote,3,5,5,4,5,5,4,STAT252,SP17
+48,M,PA,Blue,1,70,9,180,1350,Yes,Catholic,Marketing,Republican,Trump,4,5,4,4,4,3,4,STAT252,SP17
+49,M,NY,Brown,0,69,10,177,0,Yes,Other,Other,Independent,Did not vote,2,3,5,5,4,3,4,STAT252,SP17
+50,M,PA,Brown,1,69,11,122,1290,No,Catholic,Biology,Republican,Did not vote,4,4,4,4,5,2,3,MATH205 ,SP18
+51,M,NY,Hazel,2,69,11,155,1750,No,Catholic,Other,Democrat,Did not vote,2,5,5,5,5,5,5,MATH205 ,SP18
+52,M,PA,Brown,0,70,9.5,146,1900,Yes,None,Computer/Information Science,Democrat,Did not vote,3,3,5,4,3,2,4,MATH205 ,SP18
+53,M,NJ,Blue,2,68,9.5,133,1090,Yes,Catholic,Other,Republican,Trump,3,5,4,4,4,2,4,MATH205 ,SP18
+54,M,PA,Hazel,3,70,10.5,152,1950,No,Catholic,Biology,Republican,Did not vote,2,5,5,4,4,2,1,MATH205 ,SP18
+55,F,PA,Brown,2,64,8,120,2000,No,Catholic,Biology,Republican,Trump,4,4,4,4,4,4,4,MATH205 ,SP18
+56,F,NY,Brown,1,62,8.5,130,1620,No,Other,Professional Studies,Independent,Did not vote,2,5,4,5,3,5,3,MATH205 ,SP18
+57,M,PA,Blue,2,68,9.5,115,1500,Yes,Atheist/Agnostic,Biology,Democrat,Did not vote,1,5,3,2,4,3,3,MATH205 ,SP18
+58,F,PA,Green,2,64,9.5,160,1830,No,Atheist/Agnostic,Other,Democrat,Clinton,1,4,4,5,4,5,5,MATH205 ,SP18
+59,F,PA,Brown,2,68,11,148,2100,No,Catholic,Other,Democrat,Did not vote,1,4,5,5,4,5,5,MATH205 ,SP18
+60,F,NY,Brown,1,61,6,125,1100,Yes,Catholic,Professional Studies,Independent,Did not vote,2,5,3,5,2,5,2,STAT251,FA18
+61,M,PA,Blue,1,74,12,195,1150,No,Protestant,Professional Studies,Republican,Did not vote,3,3,3,3,3,3,3,STAT251,FA18
+62,M,NJ,Brown,1,69,10.5,175,1210,Yes,Catholic,Professional Studies,Independent,Did not vote,3,4,5,3,4,4,3,STAT251,FA18
+63,M,NJ,Other,1,70,9.5,156,1300,Yes,Catholic,Professional Studies,Republican,Trump,4,4,4,5,4,1,4,STAT251,FA18
+64,M,NY,Blue,0,70,9.5,140,1300,Yes,Catholic,Other,Republican,Did not vote,4,5,4,4,3,3,4,STAT251,FA18
+65,M,NJ,Blue,2,68,11,200,1050,Yes,Catholic,Other,Independent,Did not vote,3,3,3,3,3,3,3,STAT251,FA18
+66,M,PA,Hazel,2,73,13,175,1210,Yes,Catholic,Other,Republican,Trump,3,5,5,3,3,3,3,STAT251,FA18
+67,M,PA,Blue,2,75,13,180,1370,No,Catholic,Other,Independent,Did not vote,3,4,5,4,3,5,4,STAT251,FA18
+68,M,NY,Brown,1,71,11,165,1150,No,Catholic,Other,Independent,Did not vote,3,5,4,4,3,5,3,STAT251,FA18
+69,M,NJ,Blue,1,70,11,180,28,Yes,Atheist/Agnostic,Other,Independent,Did not vote,3,4,5,4,5,3,4,STAT251,FA18
+70,M,PA,Hazel,1,72,10.5,178,1300,No,Catholic,Other,Republican,Did not vote,3,4,4,4,4,4,3,STAT251,FA18
+71,F,NY,Brown,3,65,7,128,1260,No,Catholic,Other,Republican,Did not vote,5,5,5,5,4,5,4,STAT251,FA18
+72,M,NY,Blue,1,74,13,180,2000,No,Catholic,Other,Democrat,Trump,4,5,5,4,3,4,3,STAT251,FA18
+73,M,PA,Blue,1,70,10,157, ,Yes,Other,Other,Independent,Did not vote,3,5,5,3,3,3,3,STAT251,FA18
+74,M,NY,Hazel,1,67,9.5,148,1500,Yes,Catholic,Professional Studies,Republican,Trump,5,4,4,4,5,3,4,STAT251,FA18
+75,M,PA,Blue,2,68,9.5,116,1560,Yes,None,Other,Democrat,Did not vote,2,5,4,3,4,3,2,STAT251,FA18
+76,M,NY,Blue,3,74,12.5,210,1650,Yes,Catholic,Professional Studies,Republican,Trump,5,5,4,5,4,5,4,STAT251,FA18
+77,F,PA,Blue,2,65,8.5,130,1380,Yes,Catholic,Other,Republican,Did not vote,5,5,5,5,5,5,5,STAT251,FA18
+78,M,NJ,Brown,1,72,14,218,1250,Yes,Catholic,Other,Republican,Did not vote,3,5,4,3,3,4,4,STAT251,FA18
+79,F,NY,Brown,1,62,7.5,115,1492,Yes,Catholic,Professional Studies,Democrat,Did not vote,1,4,4,2,4,5,3,STAT251,FA18
+80,M,NJ,Brown,2,65,9.5,175,1150,Yes,Catholic,Other,Democrat,Did not vote,3,4,5,4,3,5,3,STAT251,FA18
+81,M,PA,Brown,1,71,12,165,1200,Yes,None,Professional Studies,Republican,Trump,4,4,4,4,4,4,4,STAT252,SP19
+82,M,NJ,Brown,2,74,12,155,1250,Yes,Catholic,Professional Studies,Republican,Did not vote,4,5,4,4,4,3,4,STAT252,SP19
+83,M,NJ,Brown,1,69,11,175,1280,Yes,Catholic,Other,Independent,Did not vote,3,4,5,4,3,4,4,STAT252,SP19
+84,M,NY,Blue,3,82,10.5,175,1600,No,Catholic,Other,Independent,Did not vote,3,3,3,3,3,3,3,STAT252,SP19
+85,M,PA,Hazel,2,72,13,175,1210,Yes,Catholic,Professional Studies,Republican,Trump,3,2,4,3,4,3,4,STAT252,SP19
+86,M,MA,Blue,2,71,11,165,1175,Yes,Catholic,Professional Studies,Independent,Clinton,2,3,4,4,3,4,4,STAT252,SP19
+87,F,NJ,Brown,2,68,8.5,128,1350,Yes,Catholic,Professional Studies,Independent,Did not vote,1,5,5,4,4,4,2,STAT252,SP19
+88,M,NJ,Blue,3,70,10.5,170,1100,Yes,Other,Other,Republican,Did not vote,4,4,4,4,4,3,4,STAT252,SP19
+89,M,NJ,Brown,2,67,10.5,146,1100,Yes,Catholic,Other,Independent,Did not vote,2,3,5,4,4,4,4,STAT252,SP19
+90,M,PA,Hazel,1,72,11,195,1300,Yes,Catholic,Other,Republican,Did not vote,4,5,5,4,3,4,4,STAT252,SP19
+91,M,NY,Green,1,75,14,210,1255,Yes,Catholic,Professional Studies,Republican,Did not vote,4,5,4,5,3,4,3,STAT252,SP19
+92,M,NY,Brown,3,74,12,160,1240,No,Catholic,Professional Studies,Republican,Trump,4,5,4,5,5,2,5,STAT252,SP19
+93,M,NJ,Blue,3,77,13,160,1100,No,Catholic,Professional Studies,Independent,Clinton,2,3,4,3,5,3,5,STAT252,SP19
+94,F,PA,Hazel,2,65,8,145,1360,Yes,Catholic,Other,Independent,Trump,3,5,5,4,5,5,5,STAT252,SP19
+95,M,PA,Green,5,70,10,158,1680,No,Catholic,Professional Studies,Republican,Did not vote,4,4,4,4,3,4,5,STAT252,SP19
+96,M,MA,Blue,1,70,11.5,180,1170,Yes,None,Other,Democrat,Did not vote,1,5,4,3,3,4,3,STAT252,SP19
+97,F,PA,Blue,2,65,8.5,120,1160,Yes,Catholic,Other,Republican,Did not vote,5,5,5,5,5,5,5,STAT252,SP19
+98,M,NJ,Brown,1,72,14,223,1260,Yes,Catholic,Other,Republican,Did not vote,3,4,4,3,3,3,3,STAT252,SP19
+99,M,NJ,Brown,3,72,11.5,166,1000,No,Other,Other,Democrat,Did not vote,1,4,4,4,4,4,4,STAT252,SP19
+100,M,NJ,Brown,2,70,10.5,170,1180,Yes,Catholic,Other,Republican,Did not vote,4,5,4,4,4,5,4,STAT252,SP19
+101,F,NY,Brown,1,62,7.5,120,1420,Yes,Catholic,Professional Studies,Independent,Did not vote,1,4,5,3,3,5,2,STAT252,SP19
+102,M,NJ,Brown,2,66,9.5,178,1240,Yes,Catholic,Other,Democrat,Did not vote,2,5,5,4,4,5,3,STAT252,SP19

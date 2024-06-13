@@ -56,7 +56,7 @@
      TINV←{↑¨(⍺∘TDIST)INV¨⍵}                        ⍝ Critical Value
      c='d':m{⍺=1:÷○(1+⍵)*2 ⋄ ⍺ TDEN ⍵}w               ⍝ Density
      c='p':m{##.Koko.Distrib.Student_P ⍵,⌊⍺}¨w
-     c='q':m{⍵<0.5:-##.Koko.Distrib.Student_Ta ⍵,⌊⍺
+     c='q':m{⍵<0.5:-##.Koko.Distrib.Student_Tad ⍵,⌊⍺
          ##.Koko.Distrib.Student_Tp ⍵,⌊⍺}¨w
      Y←normal randomVariable w                      ⍝ Normal Random Variable
      Z←m chiSquare randomVariable w                 ⍝ Chi Square random Variable

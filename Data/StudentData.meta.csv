@@ -1,0 +1,37 @@
+Code,Value
+Columns.Car,Do you own a car?
+Columns.Eyes,Eye Color
+Columns.Family,How many siblings do you have?
+Columns.Hand,Which hand is your preferred hand?
+Columns.HealthCare,"Individuals should be required to purchase health insurance or face a fine. (Strongly Disagree = 1, Disagree = 2, Neutral = 3, Agree = 4, Strongly Agree = 5)"
+Columns.Height,Height in inches
+Columns.Major,What is your Major?
+Columns.Marriage,"Marriage should only be permitted between one man and one woman. (Strongly Disagree = 1, Disagree = 2, Neutral = 3, Agree = 4, Strongly Agree = 5)"
+Columns.Party,"What political party do you belong to?  (If you belng to the Green or Libertarian Party, choose Independent.)"
+Columns.Pot,"Marijuana should be legalized (Strongly Disagree = 1, Disagree = 2, Neutral = 3, Agree = 4, Strongly Agree = 5)"
+Columns.Sex,Sex (M/F)
+Columns.ShoeSize,Shoesize
+Columns.State,Home State
+Columns.Student,Counter
+Columns.Weight,Weight in pounds
+FileInfo.Acronym,SD
+FileInfo.Author,Stephen Mansour
+FileInfo.Description,Data collected from students of the 2016 Semester
+FileInfo.EMail,stephen.mansour@scranton.edu
+FileInfo.Weight,stephen.mansour@scranton.edu
+FileInfo.faIcon,fas fa-graduation-cap
+Scale.Car,Boolean
+Scale.Eyes,Nominal
+Scale.Family,Ratio
+Scale.Hand,Nominal
+Scale.HealthCare,Ordinal
+Scale.Height,Ratio
+Scale.Major,Nominal
+Scale.Marriage,Ordinal
+Scale.Party,Nominal
+Scale.Pot,Ordinal
+Scale.Sex,Nominal
+Scale.ShoeSize,Interval
+Scale.State,Nominal
+Scale.Student,Key
+Scale.Weight,Ratio

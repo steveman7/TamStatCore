@@ -1,6 +1,6 @@
  regressInd←{
 ⍝∇ Regress using indicator  variables
-⍝ First item or CM is Indicator Variable;
+⍝
 ⍝⍺  Y or Name
 ⍝⍺⍺ Int
 ⍝⍵  C X1 .. Xn   or Database
@@ -8,12 +8,18 @@
 ⍝⍵⍵ 0=Character vectors are ignored
 ⍝←
      ⎕ML←1 ⋄ ⎕IO←0          ⍝ Default values
-     DB←9=⎕NC'⍵'           ⍝ Is right argument a database?
+     DB←9=⎕NC'⍵'            ⍝ Is right argument a database?
      W←DB{⍺:⍵⍎¨variables ⍵  ⍝ Obtain data values
-         ↑¨⊆⍵}⍵            ⍝
+         ↑¨⊆⍵}⍵             ⍝
      B←{0≢⊃0⍴⍵}¨W           ⍝ Find character fields
     ⍝B[0]≥←∨/B,DB           ⍝ Use 1st numeric field as Ind?
-     NS←(⍵⍵∧∨/B){⍺:⊃makeIndicator¨⍵ ⋄ ⎕NS''}B/W
+     Y←⍺{0=⊃0⍴⍺:⍺ ⋄ ⍵⍎⍺}⍵   ⍝ Response Variable
+   ⍝  U←Y∘{{⊃⍵[⍋⍵[;1];0]}⍺{(⊂⍺),⍥,(+/÷≢)⍵}⌸⍨⍵}¨B/W  ⍝ Make Minimum mean base case
+     U←Y∘{M←⍺{⍺,⍥⊂(+/÷≢)⍵}⌸⍨⍵
+         ⊃⊃M[⍋M[;1];0]}¨B/W
+
+    ⍝ NS←(⍵⍵∧∨/B){⍺:⊃makeIndicator¨⍵ ⋄ ⎕NS''}B/W
+     NS←(⍵⍵∧∨/B){⍺:⊃U makeIndicator¨⍵ ⋄ ⎕NS''}B/W ⍝ Put indicator variables into namespace
      X←{⊃⍣(1=≢⍵)⊢⍵}(~B)/W
      NMS←DB B{DB B←⍺
          DB:(~B)/variables ⍵

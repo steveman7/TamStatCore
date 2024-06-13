@@ -32,7 +32,8 @@
          P←0,P,0                                  ⍝ Surround with zero probabilities
          P←P{⍺↑⍨↑(⍵≥≢⍺)/⍵}5 10 20 25 50           ⍝ Number of discrete values
          Bounds←¯1,¯2+N←≢P                        ⍝ Limits for TrackBar
-         b←2 5∊⍨2⊥0 1 0 ⍵⍵ 0 0 1                  ⍝ ≤ or > ?
+        ⍝b←2 5∊⍨2⊥0 1 0 ⍵⍵ 0 0 1                  ⍝ ≤ or > ?
+         b←2 5∊⍨2⊥,0 1 0 ⍵⍵ 0 0 1                 ⍝ ≤ or > ?
          Thumb←b⊃(⌈,⌊)Bounds[1]⌊⍵                 ⍝ Set thumb
          Shading←(¯1+⍳N)⍵⍵ ⍵                      ⍝ 1=Shade, 0=Clear
          FS←'I',⍕⌊0.5+100÷N                       ⍝ Format String
@@ -43,7 +44,8 @@
          ⎕NS VarNames                             ⍝ Put into namespace
      }⍵⍵ ⍵    ⍝ Is distribution discrete?
      rel←∨/1 0 1 ⍵⍵ 0 1 1                         ⍝ Test relation
-     w←rel{⍺:⍵ ⋄ ¯2↑(-⍵),⍵}⍎⍕⍵                    ⍝ Append negative for outside?
+    ⍝w←rel{⍺:⍵ ⋄ ¯2↑(-⍵),⍵}⍎⍕⍵                  ⍝ Append negative for outside?
+     w←rel{⍺≡1:⍵ ⋄ ¯2↑(-⍵),⍵}⍎⍕⍵                  ⍝ Append negative for outside?
      inf←1                                        ⍝
      lb ub←⍺ ⍺⍺ criticalValue>|0 1-0.001×inf      ⍝
      lb ub←(↑,↑∘⌽)L←ScaleDist lb ub               ⍝ Update lower and upper bounds
