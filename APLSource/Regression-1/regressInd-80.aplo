@@ -15,8 +15,10 @@
     ⍝B[0]≥←∨/B,DB           ⍝ Use 1st numeric field as Ind?
      Y←⍺{0=⊃0⍴⍺:⍺ ⋄ ⍵⍎⍺}⍵   ⍝ Response Variable
    ⍝  U←Y∘{{⊃⍵[⍋⍵[;1];0]}⍺{(⊂⍺),⍥,(+/÷≢)⍵}⌸⍨⍵}¨B/W  ⍝ Make Minimum mean base case
-     U←Y∘{M←⍺{⍺,⍥⊂(+/÷≢)⍵}⌸⍨⍵
-         ⊃⊃M[⍋M[;1];0]}¨B/W
+     U←Y∘{0::''
+         M←⍺{⍺,⍥⊂(+/÷≢)⍵}⌸⍨⍵
+
+         ↑⊃M[⍋M[;1];0]}¨B/W
 
     ⍝ NS←(⍵⍵∧∨/B){⍺:⊃makeIndicator¨⍵ ⋄ ⎕NS''}B/W
      NS←(⍵⍵∧∨/B){⍺:⊃U makeIndicator¨⍵ ⋄ ⎕NS''}B/W ⍝ Put indicator variables into namespace

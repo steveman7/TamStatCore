@@ -26,7 +26,7 @@
      B←↑=⍥{⎕NULL≠⍵}/W ⋄ GP←(B⍴⍨≢A)/A             ⍝ Remove Nulls
      YX←B∘/¨W
      Output←GP{⍝0::'Error!'
-         M←⊃(¯5 ¯10+⍴G)Scale¨⍵                   ⍝ Scale
+         M←⊃(¯5 ¯10+⍴G)Scale¨⍵~¨⎕NULL                     ⍝ Scale
          I←↓⍉⊃M[;2]
         ⍝I←¯1+↓⍉⊃M[;2]
          G[I]←↑¨⍺                                ⍝ Insert * for each pair

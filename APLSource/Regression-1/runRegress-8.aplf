@@ -30,7 +30,9 @@
      R←E÷S×sqrt 1-Hii                                 ⍝ Studentized Residuals
      CooksD←(R*2)÷(≢B)÷(⊢÷1∘-)Hii                     ⍝ Cook's Distance
      PRESS←sumSquares E÷1-Hii                         ⍝ PRESS Statistic
-     VIF←0 0⍉⌹XX←corr int↓↓X                          ⍝ Variance inflation factor
+     ⍝VIF←0 0⍉⌹XX←corr int↓↓X                         ⍝ Variance inflation factor
+     XX←corr int↓↓X
+     VIF←{0::⌊/⍳0 ⋄ 0 0⍉⌹⍵}XX                         ⍝ Variance inflation factor
      ConditionNumber←(⌈/÷⌊/)eigenValues XX            ⍝ Condition Number
      PR←'B,T,P,N,XBAR,SSX,DF,S,MSE,SB,E,YHAT'         ⍝ Put additional
      PR,←',YX,C,VIF,R,H,ConditionNumber,CooksD,PRESS' ⍝

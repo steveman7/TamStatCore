@@ -17,7 +17,7 @@
    ⍝ B←~⍣(⍺≡¯1)⊢B          ⍝ If left arg = ¯1, flip it
      ⍺≡1:⊃B                ⍝ If left arg = 1, make boolean vector
      _←⍎⍕(↓U)'←B'          ⍝ Else assign to names in char field
-   ⍝  _←⎕EX'#.∆NS'                 ⍝ Clear namespace
+    ⍝ _←⎕EX'#.∆NS'                 ⍝ Clear namespace
      _←'#.∆NS'⎕NS(↓U)~⊂(≢⍉U)↑⍺  ⍝ Put into namespace
      #.∆NS
  }

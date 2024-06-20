@@ -4,7 +4,7 @@
      ⎕IO←0 ⋄ ⎕ML←3
      ⍺←'E:\TamStat\TamStatScript\'  ⍝ Default directory
      x←{0≠≢⍵~' ':⍵
-         'Operators,Anova,NonParametric,Arithmetic,Distribution,Graph,Summary,Relational,Regression,Util,UserInterface,Koko,API,GUI'}⍵
+         'Operators,Anova,NonParametric,Arithmetic,Distribution,Graph,Summary,Relational,Regression,Util,UserInterface,KokoStats,API,GUI'}⍵
        ⍝ ⎕SE.SALT.Save'#.TamStat.Operators G:/TamStat/Operators'
      ⊃⍺∘{str←'#.TamStat.',⍵,' ',⍺,⍵
          ⎕SE.SALT.Save str}¨toNestedVector x

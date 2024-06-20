@@ -26,10 +26,10 @@
      rAv:+##.∆r.x str ⍵ m                         ⍝ If requested, use R
      p←(m÷2),2                                    ⍝ Paramters for gamma distribution
      c='d':p gamma 0.001⌈w                          ⍝ Chi-Square special case of gamma
-     c='p':{⍵≤0:0 ⋄
-         m=1:1-2×normal prob>⍵*÷2                 ⍝ 1 df
-         ##.Koko.Distrib.ChiSq_P ⍵ m}¨⍵  ⍝
-     c='q':{##.Koko.Distrib.ChiSq_Xa ⍵ m}¨1-⍵
+     c='p':m{⍵≤0:0 ⋄
+         ⍺=1:1-2×normal prob>⍵*÷2                 ⍝ 1 df
+         ##.Koko.Distrib.ChiSq_P ⍵ ⍺}¨⍵  ⍝
+     c='q':m{##.Koko.Distrib.ChiSq_Xa ⍵ ⍺}¨1-⍵
 ⍝ c=1:p{m>250:normal prob<(⍵-m)÷(2×m)*÷2
 ⍝         si←(⍺≡⌊⍺)∨15≥↑⍺                       ⍝ If small and integer
 ⍝         si:⍺ gamma prob<0⌈⍵                   ⍝ Use gamma

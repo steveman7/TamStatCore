@@ -8,7 +8,8 @@
      ⍝⍵ X   I Number of successes
      ⍝← Q   Q Probability of X successes
      ⍝⍕ Syntax:  Q ← N [P|_0.5] binomial X
-     ⍝⍎ 0.3125 ← 5 0.5 binomial 3         ⍝ Probability of exactly 3 heads in 5 tosses
+     ⍝⍎ 0.27344 ← 7 0.5 binomial 3        ⍝ Probability of exactly 3 heads in 7 coint tosses
+     ⍝⍎ 0.003215 ← 5 (÷6) binomial 4      ⍝ Probability of exactly 4 sixes in a toss of 5 dice.
      ⍺←1 0.5 ⋄ x←⍵ ⋄ ⎕ML←3 ⋄ ⎕IO←0        ⍝ Set system variables
      x≡'Type':'Discrete'                  ⍝
      (n p)c←getParameters ⍺               ⍝

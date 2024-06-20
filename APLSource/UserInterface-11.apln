@@ -691,7 +691,7 @@
      ⍺,Event←'Select'
      ⍺.EventArg←NM
      ⍺.GridValues←NM ⍺.put↑ob.(SelItems/Items)
-     NS←anova `API ⍺
+     NS←anovaAPI ⍺
      d.Values←NS.GridValues
      d.CellTypes←' TQEFN'⍳NS.GridTypes
      1
@@ -3225,7 +3225,8 @@
          pr∧~b:⍵
         ⍝ pr∧b:⍵{⍵:¯1 1×⍺ ⋄ V[3;1],⍺}0=+/V[3 4;1]
          pr∧b:⊂⍕⍵{1=≢⍵:⍺ ⋄ ⍵[0],⍺}⍎⍕V[3;1]
-         V[2;1]∊'>' '≥':⍺ ⍺⍺ probability≤⍵
+         V[2;1]∊'>' '≥':⍺ ⍺⍺ probability≤⍵   
+⍝         2+
          V[2;1]∊'<' '≤':⍺ ⍺⍺ probability≥⍵
          ⍝'≠'=↑V[2;1]:2×⍺ ⍺⍺ probability>⍵
          V[2;1]∊(,'≠')'≠' 'between':2×⍺ ⍺⍺ probability>⍵

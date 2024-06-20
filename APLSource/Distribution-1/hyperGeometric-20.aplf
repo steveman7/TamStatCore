@@ -30,15 +30,18 @@
      str←c,'hyper(⍵,⍵,⍵,⍵)' ⍝ Build R Expression
      rAv:+##.∆r.x str ⍵ m(N-m)n               ⍝ Use R if requested
      1≠≡m n N:(↑,¨/m n N c)∇¨⍵
-     c='d':{p←((⍵!m)×(n-⍵)!N-m)÷n!N             ⍝ Probability (X=x)
+     ⍝c='d':{p←((⍵!m)×(n-⍵)!N-m)÷n!N             ⍝ Probability (X=x)
+     c='d':{p←{↑(!/-⍨/⍵)×÷/!⌿⍵}⍵ m,⍪n N
          p×(⍵=⌈⍵)∧⍵≥0}⍵                       ⍝
      c='p':(x≥0)×(⊂⌊0⌈x)⌷1{⍺>⌈/x:+\⍵            ⍝ Cumulative Probability X≤x
          11::+\m n N hyperGeometric⍳1+⌈/x     ⍝ Use brute force if ÷0
          y←(m n×.-⍺-1)÷⍺×⍺+N-m+n              ⍝ y=P(x+1)÷P(x)
          (⍺+1)∇ ⍵,⍵[⍺-1]×y},÷/n!⌽-\N m        ⍝
-     c='q':+/x∘.≥1{(+/⍵)>⌈/x:+\⍵               ⍝ Critical Value???
+    ⍝c='q':+/x∘.≥1{(+/⍵)>⌈/x:+\⍵             ⍝ Critical Value???
+     c='q':1+x⍸⍨1{(+/⍵)>⌈/x:+\⍵               ⍝ Critical Value???
+         11::+\m n N hyperGeometric⍳m⌊n     ⍝ Use brute force if ÷0
          y←(m n×.-⍺-1)÷⍺×⍺+N-m+n              ⍝ y=P(x+1)÷P(x)
-         11::+\m n N hyperGeometric⍳m⌊n       ⍝ Use brute force if ÷0
+         ⍝  11::+\m n N hyperGeometric⍳m⌊n    ⍝ Use brute force if ÷0
          (⍺+1)∇ ⍵,⍵[⍺-1]×y},÷/n!⌽-\N m        ⍝
      c='r':{m+.>n?N}¨⍳⍵                       ⍝ Random Variables
      'Nonce Error'
