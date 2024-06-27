@@ -10,11 +10,11 @@
  ⍝⍵  DataBase W  Contains Predictor and Response Variables
  ⍝← Model W Contains Coefficients, AnovaTable, R-Squared, predictor function f
  ⍝⍕ Model←Y[f]|transform|YName regress X|Xn|Database
- ⍝⍎ report Height regress ShoeSize            ⍝ Simple Regression
- ⍝⍎ report Weight regress Height ShoeSize     ⍝ Multiple Regression
+ ⍝⍎ report Height regress ShoeSize              ⍝ Simple Regression
+ ⍝⍎ report Weight regress Height ShoeSize       ⍝ Multiple Regression
  ⍝⍎ report Height regress ShoeSize (Sex eq 'M') ⍝ Indicator Variable
- ⍝⍎ report Height poly regress ShoeSize        ⍝ Quadratic regresion
- ⍝⍎ report Weight 3 poly regress ShoeSize      ⍝ Polynomail regresion (cubic)
+ ⍝⍎ report Height quad regress ShoeSize         ⍝ Quadratic regression
+ ⍝⍎ report Weight cubic regress ShoeSize        ⍝ Cubic regression
  ⍝⍎ report Y ln regress X                       ⍝ Log transform
  ⍝⍎ report transform regress DataBase           ⍝ User-defined transformation
      ⍺←'' ⋄ ⎕IO←0 ⋄ ⎕ML←1
@@ -24,23 +24,22 @@
      Int X←{(1=≡⍵)∨~(⊂⊃⍵)∊0 1:1 ⍵ ⋄ 2=≢⍵:⍵
          (⊃⍵)(1↓⍵)}⍵                     ⍝ Include intercept?
      2=⍴⍴X:Int leastSquares ⍺⍺,X         ⍝ Matrix right argument?
-                                         ⍝ Any character fields?
-    ⍝FN⍱DB:Int leastSquares ⍺⍺,⍉↑,⊆X     ⍝ Old method:  Y regress X
      ~FN:⍺⍺(Int regressInd 1)X
      FN∧~DB:⍺ ⍺⍺{U←3 ⍺⍺ 4                ⍝ Test operand
-
          U=4:⍺(Int regressPoly)⍵         ⍝ Polynomial (⊥)
+         U=5:⍺(⍺⍺ 1)(Int regressPoly)⍵  ⍝ Cubic/Quadratic
          U∊0 1:⍺(Int regressBin)⍵        ⍝ Binary regression (= or ≠)
          ⍺(⍺⍺ vst Int)⍵                  ⍝ Variance stabilizing transformation
      }X
      DB∧~FN:⍺⍺(Int regressInd 1)⍵        ⍝ Don't Ignore Character Fields
-     FN∧⍺≢'':⍺ ⍺⍺{U←2 ⍺⍺ 4               ⍝ Treat char fields as
-         U=4:⍺(Int regressPoly)⍵
-         U∊0 1:⍺(Int regressBin)⍵
+     FN∧⍺≢'':⍺ ⍺⍺{
+         X←⍵.(⍎⍕(' '~⍨¨↓⎕NL 2)~⊂⍺)          ⍝ Unpack predictor variables
+         (⍵⍎⍺)(⍺⍺ regress)X            ⍝ Apply regress
+       ⍝  U←2 ⍺⍺ 4               ⍝ Treat char fields as
+⍝         U=4:⍺(Int regressPoly)⍵
+⍝         U=5:⍺(⍺⍺ 1)(Int regressPoly)⍵  ⍝ Cubic/Quadratic
+⍝         U∊0 1:⍺(Int regressBin)⍵
      }⍵
-
-        ⍝ ⍺(Int regressInd U)⍵}⍵          ⍝  Indicator Variables
-
      FN∧⍺≡'':⍺⍺{NS←⍺⍺ ⍵                  ⍝ If user operand, apply transformation
          V←⊆variables NS                 ⍝ Get variable names
          V←⍕'Y',V~,¨'Y' 'Int'            ⍝ Put response variable first

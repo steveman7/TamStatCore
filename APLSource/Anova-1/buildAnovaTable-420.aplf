@@ -8,17 +8,17 @@
      ⍝⍝⍝⍝⍝⍝⍝⍝⍝ Calculate the table ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
      ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⎕DIV←1 ⋄ ⍺←⍬          ⍝ Set system variables
      80 160 320∊⍨⎕DR↑⍵:⍵[;0]∇ ⍵[;1 2]      ⍝ If 1st item character
-     formatAnova←{T←⍵                      ⍝ Format anova table
-         T[;4]←{⍵⌈0.000009××⍵}T[;4]        ⍝
-         D←0⌈5-⌈10⍟⌈⌿T[;0],0.000001        ⍝ Decimal Places for SS
-         FW←16 6 16 10 10                  ⍝ Field Widths
-         SSF←'C',(×D)⊃'I16'('F16.',⍕D)     ⍝ SS format
-         H←∊(-FW)↑¨⍺                       ⍝ Headers
-         U←(,1,[0.5]FW-1)/10⍴' -'          ⍝ Underlines
-         FS←SSF,',I6,B',SSF,',BF10.2,'     ⍝ Format String
-         FS,←'BO0.000009⍞<0.00001⍞F10.5'   ⍝ P-Value format
-         T←H⍪U⍪FS ⎕FMT T                   ⍝ Format it
-         ¯1(↓{⍺⍪U⍪⍵}↑)T}                   ⍝ Include total line
+    ⍝ formatAnova←{T←⍵                      ⍝ Format anova table
+⍝         T[;4]←{⍵⌈0.000009××⍵}T[;4]        ⍝
+⍝         D←0⌈5-⌈10⍟⌈⌿T[;0],0.000001        ⍝ Decimal Places for SS
+⍝         FW←16 6 16 10 10                  ⍝ Field Widths
+⍝         SSF←'C',(×D)⊃'I16'('F16.',⍕D)     ⍝ SS format
+⍝         H←∊(-FW)↑¨⍺                       ⍝ Headers
+⍝         U←(,1,[0.5]FW-1)/10⍴' -'          ⍝ Underlines
+⍝         FS←SSF,',I6,B',SSF,',BF10.2,'     ⍝ Format String
+⍝         FS,←'BO0.000009⍞<0.00001⍞F10.5'   ⍝ P-Value format
+⍝         T←H⍪U⍪FS ⎕FMT T                   ⍝ Format it
+⍝         ¯1(↓{⍺⍪U⍪⍵}↑)T}                   ⍝ Include total line
      ⍝⍝⍝⍝⍝⍝ Format Row Heading ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
      formatRowHeader←{
          NMS←,¨'A',(2<≢⍵)/'B' 'AB'         ⍝ Default Names

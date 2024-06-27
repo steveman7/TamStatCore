@@ -21,7 +21,7 @@
          0∧.=PE←+⌿↑{(2+.*⍨⍵-mean ⍵),¯1+≢⍵}⌸/⌽⍵:⍺      ⍝ Calculate Pure Error SS,DF
          ERR←⍉(⍺[2;1 2]-PE),⍪PE                       ⍝ Split Error into LOF, PE
          P←ERR[;1]fDist prob>F←÷/⍣2⊢ERR               ⍝ Calculate F and P
-         Z←'Lack of Fit' 'Pure Error',(⊢,÷/)ERR       ⍝ Insert Labels
+         Z←'  Lack of Fit' '  Pure Error',(⊢,÷/)ERR   ⍝ Insert Labels
          ⍺[⍳3;]⍪(Z,2 2⍴F P 0 0)⍪⍺[3;]}⍵               ⍝ Insert LOF into ANOVA Table
      T←B÷SB                                           ⍝ Test statistic
      P←2×DF tDist probability>|T                      ⍝ p-Value

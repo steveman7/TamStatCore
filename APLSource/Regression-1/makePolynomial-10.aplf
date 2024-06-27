@@ -5,9 +5,7 @@
 ⍝← Indictor variable(s)
      ⎕IO←0 ⋄ ⎕ML←1 ⋄ ⍺←2          ⍝ Default is quadratic
      I←(1=≢⍺)∧(0∘<∧⌊=⊢)⊃⍺         ⍝ Is left argument integer?
-    ⍝ W←{(~∨/⍵∊¨⎕NULL)/¨⍵}I↓⍺ ⍵    ⍝ Remove Nulls
      X←(⊢-+/÷≢)¨I↓⍺ ⍵             ⍝ Center the data
-    ⍝ X←(⊢-+/÷≢)¨W                 ⍝ Center the data
      K←I⊃2 ⍺                      ⍝ Degree of polynomial
      XX←(,⍉X∘.*1+⍳K),×pairwise X  ⍝ Generate variables
      NMS←,⌽⍉I↓'YX'∘.,K↑1↓⎕D       ⍝ Generate Names

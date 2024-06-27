@@ -1,0 +1,5 @@
+ quadratic←{⍝ Generate quadratic central model
+     ⍵≡4:5
+     ⍵≡1:2
+     (⍵-mean ⍵)∘.*1 2
+ }

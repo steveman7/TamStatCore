@@ -4,36 +4,44 @@
 ⍝⍺⍺ Int
 ⍝⍵  X1 [X2]
 ⍝←
-     ⎕ML←1 ⋄ ⎕IO←0 ⋄ ⎕PP←5
-     Y Deg←2↑(⊆⍺),2
-   ⍝ W←{(~∨/⍵∊¨⎕NULL)/¨⍵}Y,⍥⊆⍵        ⍝ Remove Nulls
-     Y W←Y removeNulls ⍵
-     NS←Deg makePolynomial{2=≢⊆⍵:⊃⍺⍺/⍵
-      ⍝   ⍺ ⍺⍺ ⍵}⍵
-         ⍺ ⍺⍺ ⍵}W
-     NS.Y←Y
-   ⍝ NS.Y←⊃W
-     NMS←variables NS
-     Z←⍺⍺ leastSquares NS,⊂⍕NMS(⊢,⊣~⊢)⊂,'Y'
-     M←mean¨⊆⍵
-     Z.g←Deg M{⍵≡'Type':'Linear'
-         ⍺←0                                ⍝ Default
-         CL A←2↑⍺                           ⍝ Action, Conf Level
+     ⎕ML←1 ⋄ ⎕IO←0 ⋄ ⎕PP←5                              ⍝
+     Y Deg←2↑(⊆⍺),2                                     ⍝ Separate Y and degree
+     (Deg=3)∧2=|≡⍵:Y{X Knots←⍵                          ⍝ Cubic Spline?
+         Y X←⍺ removeNulls X
+         Z←leastSquares Y,(X∘.*1 2 3),(0⌈X∘.-Knots)*3
+         V←'X' 'X*2' 'X*3',⊆{'(0⌈X-',(⍕⍵),')*3'}¨Knots
+         Z.Equation←⊃⌽V{Z.Equation←(⍵ ⎕R ⍺)Z.Equation}¨1↓Z.VariableNames
+         Z._Report←(Z._Report⌈⍥⍴⍉⍪Z.Equation)↑Z._Report ⍝ Expand report to fit equation
+         Z._Report[2;⍳⍴Z.Equation]←Z.Equation           ⍝ Insert polynomial equation
+         Z.g←Knots{⍵≡'Type':'Linear'                    ⍝ Build polynomial function
+             ⍺←0 ⋄ CL A←2↑⍺                             ⍝ Action, Conf Level
+             Knots←⍺⍺
+             X←(⍵∘.*1 2 3),(0⌈⍵∘.-Knots)*3
+             A=0:f X
+             ⍺ f X}
+         Z}⍵
+     Y W←Y removeNulls ⍵                                ⍝
+     NS←Deg makePolynomial{2=≢⊆⍵:⊃⍺⍺/⍵                  ⍝
+         ⍺ ⍺⍺ ⍵}W                                       ⍝
+     NS.Y←Y                                             ⍝
+     NMS←variables NS                                   ⍝
+     Z←⍺⍺ leastSquares NS,⊂⍕NMS(⊢,⊣~⊢)⊂,'Y'             ⍝
+     M←mean¨⊆⍵                                          ⍝ Center the data
+     Z.g←Deg M{⍵≡'Type':'Linear'                        ⍝ Build polynomial function
+         ⍺←0                                            ⍝ Default
+         CL A←2↑⍺                                       ⍝ Action, Conf Level
          D M←⍺⍺
          X←D{1=≢M:⍵∘.*(~⎕IO)+⍳⍺
              ∊(×/⍵)pairwise↓⍵∘.*1 2}⍵-M
          A=0:f X
          ⍺ f X}
      rAv:Z
-     V←⊆M{'X',(⍕⍵),'-',⍕⍺}¨1+⍳⍴M            ⍝ Variable names
-     E←V∘.{⍵=1:⍺ ⋄ '(',⍺,')*',⍕⍵}1+⍳Deg   ⍝ Expression Names
-     XY←'×'pairwise'(',¨V,¨,')'
-    ⍝E←XY{0=≢⍺:,⍵ ⋄ ⊃⍺ pairwise↓⍵}E
-     E←XY{0=≢⍺:,⍵ ⋄ ⍕¨⍵[0;],⍺,⍵[1;]}E
+     V←⊆M{'X',(⍕⍵),'-',⍕⍺}¨1+⍳⍴M                        ⍝ Variable names
+     E←V∘.{⍵=1:⍺ ⋄ '(',⍺,')*',⍕⍵}1+⍳Deg                 ⍝ Expression Names
+     XY←'×'pairwise'(',¨V,¨,')'                         ⍝
+     E←XY{0=≢⍺:,⍵ ⋄ ⍕¨⍵[0;],⍺,⍵[1;]}E                   ⍝
      Z.Equation←⊃⌽E{Z.Equation←(⍵ ⎕R ⍺)Z.Equation}¨1↓Z.VariableNames
-    ⍝Z.(_Report←Equation{D←↓⍵ ⋄ (2⊃D)←⍺ ⋄ ↑D}_Report)
-    ⍝Z.(_Report←Equation{D←↓⍵ ⋄ (2⊃D)←⍺ ⋄ ⊃D}_Report) ⍝ Note Z.⎕ML = 3; Z.⎕IO=0
-     Z._Report←(Z._Report⌈⍥⍴⍉⍪Z.Equation)↑Z._Report ⍝ Expand report to fit equation
-     Z._Report[2;⍳⍴Z.Equation]←Z.Equation           ⍝ Insert polynomial equation
+     Z._Report←(Z._Report⌈⍥⍴⍉⍪Z.Equation)↑Z._Report     ⍝ Expand report to fit equation
+     Z._Report[2;⍳⍴Z.Equation]←Z.Equation               ⍝ Insert polynomial equation
      Z
  }

@@ -140,9 +140,16 @@
      V[;2 3 4 5]←I⍀⍉⊃D.(B SB T(P⌈0.00001))     ⍝ Populate coefficient table
      f.syntax.d.Values←V                       ⍝
      f.p.Values[0;0 1 2]←D.(S RSq RSqAdj)     ⍝ Regression outputs
-     A←1 1↓D.AnovaTable                        ⍝ Remove row, column headers
+   ⍝ A←1 1↓D.AnovaTable                        ⍝ Remove row, column headers 
+     A←1↓D.AnovaTable
      A[0;4]⌈←0.00001                           ⍝ Force positive p-value(s)
-     f.ANOVA.a.Values[;1+⍳5]←A                 ⍝ Populate ANOVA table
+       A[0;4]⌈←0.00001                           ⍝ Force positive p-value(s)
+   ⍝  B←A≠⍥≡f.ANOVA.a.Values                    ⍝ Equal Rows?  
+   ⍝  H←'Total' 'Regression' 'Error' 
+   ⍝  H,←B/'   Lack of Fit'  '  Pure Error'   
+   ⍝  f.ANOVA.a.Values←(1⌽H),A           
+   ⍝f.ANOVA.a.Values[;1+⍳5]←A                 ⍝ Populate ANOVA table     
+     f.ANOVA.a.Values←A
      f.xg.eq.Text←D.Equation
      1}
 
@@ -3225,8 +3232,7 @@
          pr∧~b:⍵
         ⍝ pr∧b:⍵{⍵:¯1 1×⍺ ⋄ V[3;1],⍺}0=+/V[3 4;1]
          pr∧b:⊂⍕⍵{1=≢⍵:⍺ ⋄ ⍵[0],⍺}⍎⍕V[3;1]
-         V[2;1]∊'>' '≥':⍺ ⍺⍺ probability≤⍵   
-⍝         2+
+         V[2;1]∊'>' '≥':⍺ ⍺⍺ probability≤⍵
          V[2;1]∊'<' '≤':⍺ ⍺⍺ probability≥⍵
          ⍝'≠'=↑V[2;1]:2×⍺ ⍺⍺ probability>⍵
          V[2;1]∊(,'≠')'≠' 'between':2×⍺ ⍺⍺ probability>⍵
