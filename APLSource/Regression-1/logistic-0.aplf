@@ -1,23 +1,39 @@
  logistic←{
+⍝∊ R Febrianti, et al 2021 J. Phys: Conf Series 1725 012014
 ⍝∇ Calculate logistic regression model
-⍝⍺ Sample Sizes (Optional Vector)
-⍝⍵ Response Variable (Boolean or Number of Successes)
-⍝⍵ Predictor Variable
+⍝⍺ Y - Response Variable (Boolean)
+⍝⍺ X - Predictor Variable
+⍝⍵ Intercept (Guess)
+⍝⍵ Slope  (Guess)
 ⍝← Coefficients
 ⍝← Function
-⍝⍎ NS←N logistic C X
-⍝⍎ NS←logistic B X
-     ⎕IO←0 ⋄ ⎕ML←1 ⋄ ⍺←1       ⍝ Initialize
-     X C N←⍺{⍺≢1:(⌽⍵),⊂⍺       ⍝ C is Successes
-         Y X←⍵                 ⍝ N is Sample Sizes
-         ↓⍉X{⍺,(+/⍵),≢⍵}⌸Y}⍵   ⍝ X is Predictor Variable
-     P←C÷N                     ⍝ Proportion Failing
-     PS←ln P÷1-P               ⍝ Transformed logistic response
-     W←N×P×1-P                 ⍝ Weights (inverse variance)
-     M←2 2⍴1 2 1/W+.×1,X,⍪X*2  ⍝ Create 2x2 matrix
-     V←(W+.×PS),+/W×X×PS       ⍝ Vector
-     NS←⎕NS''
-     NS.B←V⌹M                  ⍝ Int, Slope Parameters
-     NS.f←NS.B∘{÷1+*-⍵⊥⌽⍺}     ⍝ Function
-     NS
+⍝⍎ NS←(Y,⍪X) logistic Intercept Slope
+
+     ⎕IO←0 ⋄ ⎕ML←1             ⍝ Initialize
+     Y X←↓⍉⍺                   ⍝ Response, predictor variables
+    ⍝ Y←⍺[;0]  ⋄ X←0 1↓⍺
+     Beta←⊃⊆⍵
+     Pi←÷1+*-(⍪X)⊥⌽Beta
+     ⍝Pi←÷1+*-X+.×Beta
+   ⍝  U←(+/Y-Pi)(+/X×Y-Pi)
+     A←+/Pi×1-Pi
+     B←+/X×Pi×1-Pi
+     C←+/(X*2)×Pi×1-Pi
+   ⍝  IB←-⌹2 2⍴A B B C
+     JB←2 2⍴A B B C
+   ⍝  ⎕←B←⍵-IB+.×U
+   ⍝  B
+     W←(∘.=⍨⍳≢Y)×⍤1⊢Pi×1-Pi
+     XX←1,⍪X
+     WX←(sqrt W)+.×XX
+     JBINV←⌹JB
+     H←0 0⍉WX+.×JBINV+.×⍉WX
+     Xi←H×(Pi-0.5)÷Pi×1-Pi
+     bB←JBINV+.×(⍉XX)+.×W+.×Xi
+  ⍝  UB←U-JB+.×bB
+     UU←(Y+H÷2)-Pi×1+H
+     UB←(+/UU)(UU+.×X)
+     Beta+←bB+JBINV+.×UB
+     Beta JBINV H Pi
+
  }

@@ -1,0 +1,15 @@
+ regressPlot←{
+ ⍝Create a Regression Plot
+     ⎕ML←3 ⋄ ⎕IO←0
+     A B←(⌊/,⌈/),⍺[;1]
+     XF←A to B,(B-A)÷80       ⍝ Fitted X
+     YF←XF{0::⍵.f ⍺ ⋄ ⍵.g ⍺}⍵ ⍝ Fitted Y
+     YCI←XF{0::⍵.f confInt ⍺
+         ⍵.g confInt ⍺}⍵
+⍝    D←⍺⍪YF,⍪XF
+     D←⍺⍪(,YF,YCI),⍪3/XF
+     S←(⌽D(-,⊢)⍥≢⍺)/'*.'
+    ⍝ Plot←S scatterPlot show↓⍉D
+     scatterPlot show↓⍉D
+     ⍕⍪Plot'* = Data          . = Fitted'
+ }

@@ -1,6 +1,6 @@
  runRegress←{
      ⎕IO←0 ⋄ ⎕ML←3
-     int←⍺ ⋄ W←⍵
+     int←↑⍺ ⋄ W←⍵
      X←(~int)↓1⍪1↓⊃⍉W                                 ⍝ Predictor Variables
      N←≢y←↑W                                          ⍝ Sample Size
      C←⌹X+.×⍉X                                        ⍝ Covariance Matrix

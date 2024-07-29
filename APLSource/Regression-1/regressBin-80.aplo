@@ -4,13 +4,40 @@
 ⍝⍺  Y or Name  of Binary Responses
 ⍝⍺⍺ Int
 ⍝⍵  C X1 .. Xn   or Database
-     ⎕ML←1 ⋄ ⎕IO←0          ⍝ Default values
-     DB←9=⎕NC'⍵'            ⍝ Is right argument a database?
+     ⎕ML←1 ⋄ ⎕IO←0                  ⍝ Default values
+     DB←9=⎕NC'⍵'                    ⍝ Is right argument a database?
+     2∧.=(≡,≢,≢∘⊃∘⌽)⍵:⍺{        ⍝ If initial guess included
+         Y←⍺
+        ⍝ B←⊃⌽⍵ ⋄ X←Int,⍪⍉⊃¯1↓⍵     ⍝ Separate X from guess
+         X B←⍵ ⋄ ⎕PP←5
+         B JBI H Pi←(Y,⍪X)logistic⍣≡B ⍝ MLE estimatation of parameters
+         DF←⍺-⍥≢B
+         S←sqrt DF÷⍨sumSquares Y-Pi
+         NS←⎕NS''
+         NS.f←B DF S JBI 1 linear
+         NS.g←{⍵≡'Type':'Linear'
+             ⍺←0 ⋄ CL A←2↑⍺
+             A=0:÷1+*-f ⍵
+             ÷1+*-⍺ f ⍵}
+         SE←sqrt 0 0⍉JBI
+         Z←B÷SE
+         P←2×normal prob>|Z
+         Coeff←'*' 'Int' 'X','Coeff' 'SE' 'Z' 'P'⍪B,SE,Z,⍪P
+         Freq←frequency show ⍺
+         OddsRatio←*B[1]
+         LogLikelihood←(⍺+.×⍟Pi÷1-Pi)++/⍟1-Pi ⍝ Log Likelihood
+         Expr←⍕'Y←÷1+exp -',B[0],'+(',B[1],'× X) + E'
+         V←2 2⍴'Odds Ratio:'OddsRatio'Log Likelihood:'LogLikelihood
+         NS._Report←⍕⍪'The regression equation is:' ' 'Expr' 'Freq' 'Coeff' 'V
+         NS.Type←'Regress'
+         _←'NS'⎕NS'B' 'Freq' 'OddsRatio' 'LogLikelihood' 'Coeff' 'Expr'
+         NS
+     }⍵
      D←DB{⍺:⍵⍎¨variables ⍵  ⍝ Obtain data values
          ↑¨⊆⍵}⍵             ⍝
      B←{0≢⊃0⍴⍵}¨D           ⍝ Find character fields
      NS←(∨/B){⍺:⊃makeIndicator¨⍵ ⋄ ⎕NS''}B/D
-     X←{⊃⍣(1=≢⍵)⊢⍵}(~B)/D
+     0>≡X:(⍺,⍪X)indicator≡
      NMS←DB B{DB B←⍺
          DB:(~B)/variables ⍵
          'X',¨(B+.=0)↑1↓⎕D}⍵

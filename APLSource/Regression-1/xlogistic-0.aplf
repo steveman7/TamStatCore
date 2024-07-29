@@ -1,0 +1,23 @@
+ xlogistic←{
+⍝∇ Calculate logistic regression model
+⍝⍺ Sample Sizes (Optional Vector)
+⍝⍵ Response Variable (Boolean or Number of Successes)
+⍝⍵ Predictor Variable
+⍝← Coefficients
+⍝← Function
+⍝⍎ NS←N logistic C X
+⍝⍎ NS←logistic B X
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄ ⍺←1       ⍝ Initialize
+     X C N←⍺{⍺≢1:(⌽⍵),⊂⍺       ⍝ C is Successes
+         Y X←⍵                 ⍝ N is Sample Sizes
+         ↓⍉X{⍺,(+/⍵),≢⍵}⌸Y}⍵   ⍝ X is Predictor Variable
+     P←C÷N                     ⍝ Proportion Failing
+     PS←ln P÷1-P               ⍝ Transformed logistic response
+     W←N×P×1-P                 ⍝ Weights (inverse variance)
+     M←2 2⍴1 2 1/W+.×1,X,⍪X*2  ⍝ Create 2x2 matrix
+     V←(W+.×PS),+/W×X×PS       ⍝ Vector
+     NS←⎕NS''
+     NS.B←V⌹M                  ⍝ Int, Slope Parameters
+     NS.f←NS.B∘{÷1+*-⍵⊥⌽⍺}     ⍝ Function
+     NS
+ }

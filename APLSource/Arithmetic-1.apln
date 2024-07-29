@@ -47,6 +47,10 @@
       *⍵}
 
 
+∇ logit
+
+∇
+
     ∇ Z←infinity
       Z←sqrt⌊/⍳0
     ∇

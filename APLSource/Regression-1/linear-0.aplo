@@ -6,7 +6,7 @@
 ⍝⍺:  Variant 0=function 1=conf  2=pred
 ⍝⍺⍺: Coefficients
 ⍝⍺⍺: Degrees of Freedom
-⍝⍺⍺: Mean Square Error
+⍝⍺⍺: Standard Error
 ⍝⍺⍺: Covariance Matrix
 ⍝⍺⍺: Include intercept?
 ⍝⍵:  Array

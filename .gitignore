@@ -2,3 +2,5 @@ aplcore
 .acre/
 dist/
 Assets/Runtime/LocallyDerived/
+APLSource/Test-1.apln
+APLSource/UserInterface-11.apln

@@ -58,8 +58,8 @@
      Shading←¯2 0 2 ⍵⍵ 1                          ⍝ Shade area of interest
      Thumb←w                                      ⍝ Thump position
      ⎕PP←5                                        ⍝ 5 significant digits
-     Label←1↓,¯12↑[1]⍕⍪{⍵×1E¯9<|⍵}lb+(ub-lb)×0.125×⍳9 ⍝ Tick marks
-     Label←⍺{2>≡⍺:1↓,¯12↑[1]⍕⍪{⍵×1E¯9<|⍵}lb+(ub-lb)×0.125×⍳9
+    ⍝Label←1↓,¯12↑[1]⍕⍪{⍵×1E¯9<|⍵}lb+(ub-lb)×0.125×⍳9 ⍝ Tick marks
+     Label←⍺{2>≡⍺:1↓,¯12↑[1]⍕⍪{⍵×1E¯9<|⍵}lb+(ub-lb)×0.125×⍳9  ⍝ Tick marks
          ¯12↑[1]⍕⍺[;,1]}⍵
 
      Type←'Graph' ⋄ Style←'Curve'                 ⍝ Continuous
