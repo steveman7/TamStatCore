@@ -10,26 +10,18 @@
      B←(⌹XW+.×⍉X)+.×XW+.×y
      BB←X×⍤1 sqrt W
      z←y×sqrt W
-    ⍝ SSE←(z+.×z)-B+.×BB+.×z
      SST←z+.×z
      SSR←B+.×BB+.×z
      SSE←SST-SSR
      k←≢BB ⋄ DF←N-k
      C←⌹XW+.×⍉X
      V←÷W                                               ⍝ Covariance Matrix
-    ⍝ k←(¯1×int)+≢BB←C+.×Xy←X+.×y                       ⍝ Estimate coefficients
-⍝     SSE←(y+.*2)-BB+.×Xy                               ⍝ Error Sum of Squares
      E←y-YHAT←B+.×X                                   ⍝ Residuals
-⍝     ss←{(⍵+.*2)-⍺×N÷⍨(+/⍵)*2}                        ⍝ SumSquares function
-⍝     SST←int ss y                                     ⍝ Total sum of Squares
-⍝     SSX←1↓int ss X                                   ⍝ Why is this here?
      SSX←1↓1{(⍵+.*2)-⍺×N÷⍨(+/⍵)*2}X             ⍝??
      XBAR←⍵+.×¨⊂⍺÷+/⍺                                    ⍝ Means for each X
-⍝     DF←N-k+int                                       ⍝ Degrees of Freedom
      MSE←SSE÷DF                                       ⍝ Mean Square Error
-     S←MSE*÷2                                        ⍝ Standard error for regression
-     SB←(MSE×0 0⍉C)*÷2                                ⍝ Standard Error for coeffs
-⍝     SSR←SST-SSE                                      ⍝ Regression sum of squares
+     S←(leastSquares ⍵).S                             ⍝ Get S from non-weighted model.
+     SB←sqrt 0 0⍉(S*2)×⌹BB+.×⍉BB                    ⍝ Montgomery p. 237 and 362
      ns←'Regression'buildAnovaTable SSR SSE,k DF,⍪2 0 ⍝ Create ANOVA table
      T←B÷SB                                           ⍝ Test statistic
      P←2×DF tDist probability>|T                      ⍝ p-Value

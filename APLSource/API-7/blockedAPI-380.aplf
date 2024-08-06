@@ -1,0 +1,12 @@
+ blockedAPI NS;FLD;⎕IO;⎕ML                             
+ ⎕IO←0 ⋄ ⎕ML←3                     ⍝ Build grid        
+                                                       
+ FLD←'LeftArg' 'Factor3'                               
+ NS.Grid.Attributes←FLD NS.changeAttributes'T'         
+ NS.Grid.Values←(FLD,'Lb',¨FLD)NS.put' '               
+ FLD←'Factor1' 'Factor2'                               
+ NS.Grid.Attributes←FLD NS.changeAttributes'N'         
+ NS.Grid.Values←FLD NS.put 3                           
+ NS.Grid.Values←('Lb'∘,¨FLD)NS.put'Treatments' 'Blocks'
+ NS.Table←4 4⍴'*' 'A1' 'A2' 'A3','B1' 'B2' 'B3'⍪3 3⍴0  
+ NS.CellTypes←'A','A'⍪3 3⍴'X'                          

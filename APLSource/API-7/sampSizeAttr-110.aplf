@@ -1,0 +1,31 @@
+ sampSizeAttr←{                                               
+     NS←⍵                                                     
+     A←⎕NS''                                                  
+     A.Items←'mean' 'proportion' 'variance' 'sdev' 'sum'      
+     NS.Grid.Attributes←'Parameter'NS.changeAttributes A      
+     A.Items←'F'              ⍝ Numeric field (Floating Point)
+     NS.Grid.Attributes←'Sample'NS.changeAttributes A         
+     A←⎕NS''                                                  
+     A.validate←{(⍵=⌊⍵)∧⍵>0}                                  
+     A.ErrorMsg←'Must be a postive integer'                   
+     A.FormatString←'I6'                                      
+     A.ReadOnly←1                                             
+     NS.Grid.Attributes←'SampleSize'NS.changeAttributes A     
+     A.ReadOnly←0                                             
+     NS.Grid.Attributes←'PopSize'NS.changeAttributes A        
+     A.validate←{0=+/×⍵-0 1}  ⍝                               
+     A.ErrorMsg←'Negative values not permitted.'              
+     A.FormatString←'F9.5'                                    
+     A.ReadOnly←0                                             
+     NS.Grid.Attributes←'MOE'NS.changeAttributes A            
+     A.validate←{0=+/×⍵-0 1}                                  
+     A.ErrorMsg←'Must be between 0 and 1.'                    
+     A.FormatString←'F9.5'                                    
+     NS.Grid.Attributes←'Sdev'NS.changeAttributes A           
+     A.validate←{0=+/×⍵-0 1}  ⍝                               
+     A.ErrorMsg←'Must be between 0 and 1'                     
+     A.FormatString←'F7.2'                                    
+     A.Decimals←2                                             
+     NS.Grid.Attributes←'Conf'NS.changeAttributes A           
+     NS                                                       
+ }                                                            

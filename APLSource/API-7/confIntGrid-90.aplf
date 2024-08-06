@@ -1,0 +1,38 @@
+ confIntGrid←{                                                      
+          ⍝∊ Written by Steve Mansour 2019                          
+          ⍝∇ Build a Grid Object for Hypothesis wizard              
+          ⍝⍵ Empty Namespace                                        
+          ⍝← Namespace containing the following:                    
+          ⍝←  GridNames:   Cell name, e.g. 'Parameter' 'SampSize'   
+          ⍝←  GridValues:  Cell vallue, e.g. 'mean' 30              
+          ⍝←  GridTypes:   Cell type, e.g. 'Txt'  'Int'             
+          ⍝←  'mean' ← NS.get 'Parameter'                           
+          ⍝←  GridValues ← 'SampSize' NS.put 30                     
+     ⎕IO←0 ⋄ ⎕ML←3                                                  
+     f←⊂∘toNestedVector                                             
+     ⍵.Grid←⎕NS''                                                   
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Values ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝  
+     G←f'ConfLevel,.80,.90,.95,.99'                                 
+     G,←f'Parameter,mean, , , ,'                                    
+     G,←f'Operator,confInt,Sample Size,Mean,Std Dev'                
+     G,←f'Sample,stats,30,0,0'                                      
+     G,←f'--, , , , '                                               
+     I←⍸{↑↑⎕VFI ⍵}¨⊃G       ⍝ Find indices of numeric cells         
+     ⍵.Grid.Values←⍎¨@I⊃G    ⍝ Replace text with numerical values   
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Names ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝        
+     G←f'          ,Level1,Level2,Level3,Level4'                    
+     G,←f'         ,Parameter'                                      
+     G,←f'        ,Operator,LbSampSize,LbMean,LbSdev'               
+     G,←f'LbSample,Sample,SampSize,Mean,Sdev'                       
+     G,←f'LbSample2,Sample2,SampSize2  ,Mean2 ,Sdev2'               
+     ⍵.Grid.Names←⊃G                                                
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Types ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝     
+     ⍵.Grid.Attributes←⎕NS¨5 5⍴⊂''                                  
+     ⍵.Grid.Attributes.Type←⊃'TPPPP' 'TDTTT' 'TTTTT' 'TENFF' 'DTTTT'
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Events ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝     
+     ⍵.get←{1<≡⍵:∇¨⍵ ⋄ ⍺←Grid.Values ⋄ (⍸Grid.Names∊⊂⍵)⊃⍺}          
+     ⍵.put←{w←⊆⍣(80=⎕DR ⍵)⊢⍵ ⋄ (w@(⍸Grid.Names∊⊆⍺))Grid.Values}     
+     ⍵.rectifyStats←rectifyStats                                    
+          ⍝⍵.changeType←{(⍵@(⍸GridNames∊⊆⍺))GridTypes}              
+     ⍵.changeAttributes←changeAttributes                            
+     ⍵}                                                             

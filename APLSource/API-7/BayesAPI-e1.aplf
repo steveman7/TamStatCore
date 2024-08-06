@@ -1,0 +1,28 @@
+ Z←BayesAPI NS;⎕IO;⎕ML;D;x;y;q                                               
+          ⍝∇ ns-based API for Bayes                                          
+          ⍝∊ Written by Steve Mansour                                        
+          ⍝⍵ nsIn Namespace containing the following variables               
+          ⍝   EventList:     Character Vector of Vectors                     
+          ⍝   Prior:         Numeric Vector or probabilities {0≤⍵≤1}  {1=+/⍵}
+          ⍝   Conditional:   {0≤⍵≤1}                                         
+          ⍝← nsOut Namespace contain nsIn plus the following:                
+          ⍝   Joint:         ⍵>0  (If proportion 0<⍵<1)                      
+          ⍝   Marginal:      Numeric Scalar     {0≤⍵≤1}                      
+          ⍝   Posterior:     Numeric Vector     {0≤⍵≤1}  {1=+/⍵}             
+ ⎕IO←0 ⋄ ⎕ML←3                                                               
+ NS.ReturnCode←0 ⋄ NS.ErrorMessage←''                                        
+ :If NS.Event≡'Run'                                                          
+     D←NS.Events bayes,y←NS.(Prior Conditional)                              
+     NS.Joint←D[;3]                                                          
+     NS.Marginal←+/NS.Joint                                                  
+     NS.Posterior←D[;4]                                                      
+     x←{⍺,',',⍵}/NS.Events                                                   
+     q←''''                                                                  
+     x←(q ⎕R(2/q))↑x                                                         
+     x←q,x,q,' bayes show '                                                  
+     x,←↓{'(',⍵,')'}⊃y                                                       
+     NS.Expr←⍕x                                                              
+ :Else                                                                       
+     NS.ReturnCode←1 ⋄ NS.ErrorMessage←'Illegal Event'                       
+ :EndIf                                                                      
+ Z←NS                                                                        

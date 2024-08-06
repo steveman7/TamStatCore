@@ -1,0 +1,9 @@
+ oneWayAPI NS;FLD;⎕IO;⎕ML;A                              
+ ⎕IO←0 ⋄ ⎕ML←3                                           
+ FLD←'LeftArg' 'Factor2' 'Factor3'                       
+ NS.ColTitles2←'Group' 'N' 'Mean' 'Std Dev'              
+ NS.Grid.Attributes←FLD NS.changeAttributes'T'           
+ NS.Grid.Values←(FLD,'Lb'∘,¨FLD)NS.put' '                
+ NS.Grid.Values←'LbFactor1' 'Factor1'NS.put'Treatments' 3
+ NS.Table←⊃{(,⍵)5,2⍴0}¨'ABC'                             
+ NS.CellTypes←3 4⍴'ANXF'                                 

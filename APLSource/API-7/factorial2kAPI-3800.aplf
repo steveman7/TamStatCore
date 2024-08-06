@@ -1,0 +1,16 @@
+ factorial2kAPI NS;FLD;FF;⎕IO;⎕ML                          
+ ⎕IO←0 ⋄ ⎕ML←3                                             
+ FLD←'LeftArg' 'Factor3' 'Var'                             
+ NS.ColTitles2←' '                                         
+ NS.Grid.Attributes←FLD NS.changeAttributes'ATT'           
+ NS.Grid.Values←(FLD,'Lb'∘,¨FLD)NS.put' '                  
+ NS.Grid.Values←'LbLeftArg'NS.put'Alias (Optional)'        
+ NS.Grid.Values←'Var'NS.put'stats'                         
+     ⍝ NS.Grid.Values←'LeftArg'NS.put'I'                   
+ NS.Grid.Values←'LeftArg'NS.put''                          
+ FF←'Factor1' 'Factor2'                                    
+ NS.Grid.Attributes←FF NS.changeAttributes'N'              
+ NS.Grid.Values←('Lb'∘,¨FF)NS.put'Factors (K)' 'Replicates'
+ NS.Grid.Values←FF NS.put 3 1                              
+ NS.Table←(⍪standardOrder'abc'),0                          
+ NS.CellTypes←(⍴NS.Table)⍴'AX'                             

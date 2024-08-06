@@ -1,0 +1,21 @@
+ coordVenn←{                                                      
+      ⍝∇ Coordinates for circles for Venn Diagram                 
+      ⍝⍵ 0                                                        
+      ⍝← S0 (Sample Space - Box around circles)                   
+      ⍝← SA (Left crescent without AB)                            
+      ⍝← SB (right crescent without AB)                           
+      ⍝← SAB (intersection)                                       
+     ⎕ML←3 ⋄ ⎕IO←0                    ⍝ Set system variables      
+     T←(⍳361)×○÷180                   ⍝ Length of arc along circle
+     A←1 2∘.○¯60↓60↓T                                             
+     B←⌽A ⋄ B[1;]←1-B[1;]                                         
+     C←1 2∘.○⌽120↑¯60⌽T                                           
+     D←⌽C ⋄ D[1;]←1-D[1;]                                         
+     close←{⍵⍪⍵[0;]}                                              
+     SA←close 225+200×⍉A,D                                        
+     SAB←close 225+200×241 2⍴⍉C,D                                 
+     SB←close 225+200×⍉B,C                                        
+     S0←close⍉(225+200×A),⍉(225+210×4 2⍴¯1 0.5 ¯1 ¯1 1 ¯1 1 0.5)  
+     S1←close⍉(225+200×B),⍉(225+210×4 2⍴1 0.5 1 2 ¯1 2 ¯1 0.5)    
+     (S0 S1)SA SB SAB                                             
+ }                                                                

@@ -37,22 +37,30 @@
          ↑¨⊆⍵}⍵             ⍝
      B←{0≢⊃0⍴⍵}¨D           ⍝ Find character fields
      NS←(∨/B){⍺:⊃makeIndicator¨⍵ ⋄ ⎕NS''}B/D
-     0>≡X:(⍺,⍪X)indicator≡
-     NMS←DB B{DB B←⍺
-         DB:(~B)/variables ⍵
-         'X',¨(B+.=0)↑1↓⎕D}⍵
-     _←⍎⍕NMS'←X'            ⍝ Else assign to names in char field
-     _←'NS'⎕NS NMS
-     Z←⍺ ⍺⍺ DB{Y INT DB←⍺
-         NMS←variables ⍵
-         DB:INT leastSquares NS,⊂⍕NMS(⊢,⊣~⊢)⊂Y
-         NS.Y←Y
-         INT leastSquares NS(⍕'Y',NMS)}NS
+    ⍝ 0>≡X:(⍺,⍪X)indicator≡
+⍝     NMS←DB B{DB B←⍺
+⍝         DB:(~B)/variables ⍵
+⍝         'X',¨(B+.=0)↑1↓⎕D}⍵
+⍝     _←⍎⍕NMS'←X'            ⍝ Else assign to names in char field
+⍝     _←'NS'⎕NS NMS
+   ⍝  Z←⍺ ⍺⍺ DB{Y INT DB←⍺
+⍝         NMS←variables ⍵
+⍝         DB:INT leastSquares NS,⊂⍕NMS(⊢,⊣~⊢)⊂Y
+⍝         NS.Y←Y
+⍝         INT leastSquares NS(⍕'Y',NMS)}NS
+     Z←⍺⍺ leastSquares ⍺ ⍵
      W←{÷⍵×1-⍵}Z.YHAT
      Y←⍺(DB{⍺⍺:⍵⍎⍺ ⋄ ⍺})⍵
-     ~DB:W leastSquares Y,⍥⊆X
-     V←(variables ⍵)~⊂⍺
-     W leastSquares ⍵(⍕⍺ V)
+     W leastSquares Y,⍥⊆⍵
+
+⍝     ~DB:W leastSquares Y,⍥⊆X
+     Z.g←{⍵≡'Type':'Linear'
+
+     }
+
+  ⍝
+⍝     V←(variables ⍵)~⊂⍺
+⍝     W leastSquares ⍵(⍕⍺ V)
 
 
 

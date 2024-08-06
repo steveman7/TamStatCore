@@ -1,0 +1,43 @@
+ DistAPI←{                                                                           
+     ⍝∇ Run distribution function                                                    
+     ⍝∊   Written by Steve Mansour                                                   
+     ⍝⍵:  Namespace containing the following:                                        
+     ⍝     DistFn, Operator, Field3, Value, Parameters                               
+     ⍝←    Expression, Result, ReturnCode, Message, ChartSpecs                       
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ns←⍵                                                            
+     ns.Field3←{6::'0' ⋄ ⍵.Field3}ns                                                 
+     fc←{op←⍵.Operator ⋄ f←⍎⍵.DistFn ⋄ p←⍺                                           
+         op≡'randomVariable':{ns←histogram ⍵.Result                                  
+             ns.Curve←⍵.Value 1×⍤1⊢ns.YX ⋄ ns}⍵                                      
+         g←⍎⍵.Field3                                                                 
+         (⊂op)∊'prob' 'probability':p f coords g ⍵.Value                             
+         op≡'criticalValue':p f{b←2 ⍵⍵ 1 3            ⍝ Test relation                
+             ∧/0 1∊b:⍺ ⍺⍺ coords(~⍵⍵)⍵                ⍝ If <, ≤, ≥, >, flip the logic
+             ∧/b:⍺ ⍺⍺ coords outside ⍵                ⍝ If ≠ shade tails             
+             ⍺ ⍺⍺ coords between ⍵}g ⍵.Result         ⍝ Else shade middle            
+         (⊂⍵.Field3)∊'mean' 'median' 'mode':{c←⍵.DistType≡'Continuous'               
+             c:p f coords≤⍵.Result                                                   
+             p f coords=⍵.Result}⍵                                                   
+         ⍵.Field3≡'skewness':{L←p f theoretical mean 0                               
+             L,←p f theoretical median 0                                             
+             p f coords between sort L}⍵                                             
+         ⍵.Field3≡'kurtosis':p f coords outside p f critVal outside 0.95             
+         ⍵.Field3≡'iqr':p f coords include{p f theoretical quartile ⍵}¨1 3           
+         ~(⊂⍵.Field3)∊'sdev' 'variance':''            ⍝ Anything else, get out       
+         m←p f theoretical mean 0                                                    
+            ⍝  p f coords between+\m ⍵.Result}                                       
+         p f coords between+\m,⍵.Result*0.5*⍵.Field3≡'variance'}                     
+     b←⍵.DistFn≡'multinomial'                                                        
+     pf←⍕b{⍺∧0=↑0⍴↑⍵:,'(',(⍉⍵[;0 1]),')'              ⍝ Multinomial and numeric      
+         ⍺:(1⌽'''''',1↓∊',',¨⍵[;0])('(',⍵[;1],')')    ⍝ Multinomial and character    
+         ⍵[;1]}⍵.Parameters                           ⍝ Other                        
+     str←pf,⍵.(DistFn Operator Field3 Value)          ⍝ Collect Inputs               
+     p←{0=≢pf:0 1 ⋄ ⍎⍵}pf                                                            
+     ⍵.Expression←deleteExcessBlanks,⍕str             ⍝ Build Distribution Expression
+     ⍵.Result←{0::0 ⋄ ⍎⍵.Expression}⍵                                                
+     ⍵.Message←''                                                                    
+     ⍵.DistType←⍎'0 ',⍵.DistFn,'''Type'''                                            
+     ⍵.ChartSpecs←p fc ⍵                                                             
+     ⍵.ReturnCode←0                                                                  
+     ⍵                                                                               
+ }                                                                                   

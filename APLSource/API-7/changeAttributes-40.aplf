@@ -1,0 +1,34 @@
+ changeAttributes←{                                                     
+      ⍝⍺ Name or list of Names                                          
+      ⍝⍵ Scalar, Vector of Types, Namespace or  Vector of Namespaces    
+      ⍝← Modified Matrix of Attributes                                  
+     ⎕IO←0 ⋄ ⎕ML←3                                                      
+     f←{A←⎕NS'' ⋄ A.Type←⍵                                              
+         ⍵='F':{⍵.validate←{⍵≥0}                                        
+             ⍵.ErrorMsg←'Cannot be negative'                            
+             ⍵.FormatString←'F10.5' ⋄ ⍵}A                               
+         ⍵='P':{⍵.validate←{1≠×/×⍵-0 1}                                 
+             ⍵.ErrorMsg←'Must be between 0 and 1 inclusive'             
+             ⍵.Decimals←4 ⋄ ⍵}A                                         
+         ⍵='Q':{⍵.validate←{0=+/×⍵-0 1}                                 
+             ⍵.ErrorMsg←'Must be between 0 and 1 exclusive'             
+             ⍵.Decimals←4 ⋄ ⍵}A                                         
+         ⍵='N':{⍵.validate←{(⍵>0)∧⍵=⌊⍵}                                 
+             ⍵.ErrorMsg←'Must be positive integer'                      
+             ⍵.FormatString←'I6' ⋄ ⍵}A                                  
+         ⍵='I':{⍵.validate←{(⍵≥0)∧⍵=⌊⍵}                                 
+             ⍵.ErrorMsg←'Must be integer'                               
+             ⍵.FormatString←'I6' ⋄ ⍵}A                                  
+         ⍵='E':{⍵.validate←{0::0 ⋄ ↑⍴⍴⍴UserSpace⍎⍵}                     
+             ⍵.ErrorMsg←'Syntax Error' ⋄                                
+             ⍵.Items←(⊂'stats'),1 variables UserSpace ⋄ ⍵}A             
+         ⍵='D':{⍵.validate←{1}                                          
+             ⍵.ErrorMsg←'Syntax Error' ⋄                                
+             ⍵.Items←1 variables UserSpace ⋄ ⍵}A                        
+         ⍵='T':{⍵.validate←{1} ⋄ ⍵}A                                    
+         {⍵.validate←{1}                                                
+             ⍵.FormatString←'M<->F12.5' ⋄ ⍵}A}                          
+     i←⍸Grid.Names∊⊆⍺                       ⍝ Get index of left argument
+     2=⎕NC'⍵':((f¨⍵)@i)Grid.Attributes      ⍝ If right arg              
+     2=≡⍺:↑⍺ ∇¨⍵ ⋄ a←(↑i)⌷Grid.Attributes                               
+     _←'a'⎕NS ⍵ ⋄ Grid.Attributes}                                      

@@ -1,0 +1,44 @@
+ Z←sampleSizeAPI NS;⎕IO;⎕ML;I;L;P;X;A                                                  
+       ⍝∇ ns-based API for SampleSize                                                  
+       ⍝∊ Written by Steve Mansour                                                     
+       ⍝⍵ nsIn Namespace containing the following variables                            
+       ⍝   Parameter:   mean, proportion, sdev, var                                    
+       ⍝   Confidence:    0<⍵<1 (Default .95)                                          
+       ⍝   MarginOfError: ⍵>0                                                          
+       ⍝   Estimate:      ⍵>0  (If proportion 0<⍵<1)                                   
+       ⍝   UserSpace:     Default #                                                    
+       ⍝   Expression:    Character Vector                                             
+       ⍝⍵    Parameter Levels Var GroupBy Var2                                         
+       ⍝← nsOut Namespace contain nsIn plus the following:                             
+       ⍝←  SampleSize:                                                                 
+ ⎕IO←0 ⋄ ⎕ML←3                                                                         
+ NS.ReturnCode←0 ⋄ NS.ErrorMessage←''                                                  
+ :Select NS.Event                                                                      
+ :Case 'Init'                                                                          
+     NS←sampleSizeGrid NS                                                              
+     NS←sampSizeAttr NS    ⍝ Assign attributes                                         
+ :Case 'Select'                                                                        
+     P←NS.get'Parameter'                                                               
+     I←'mean' 'proportion' 'sdev' 'variance' 'var' 'sum'⍳⊂P                            
+     L←'Estimated ',I⊃'Std Dev' 'Proportion' 'Std Dev' 'Variance' 'Variance' 'Variance'
+     NS.Grid.Values←'LbSdev'NS.put L                                                   
+     A←⎕NS''                                                                           
+     :If I=1 ⋄ ⍝ NS.Grid.Values←'MOE' 'Sdev'NS.put 0.03 0.5                            
+         A.Type←'P' ⋄ A.validate←{0=+/×⍵-0 1}                                          
+         A.ReadOnly←0                                                                  
+         A.ErrorMsg←'Must be between 0 and 1'                                          
+     :Else ⋄                                                                           
+         A.Type←'F' ⋄ A.validate←{⍵>0}                                                 
+         A.ReadOnly←0                                                                  
+         A.ErrorMsg←'Must be greater than 0'                                           
+     :EndIf                                                                            
+     NS.Grid.Attributes←'MOE' 'Sdev'NS.changeAttributes A                              
+ :Case 'Run'                                                                           
+     X←NS.get'Conf' 'Parameter' 'Op' 'MOE' 'Sdev' 'PopSize'                            
+     NS.Expr←deleteExcessBlanks⍕X                                                      
+     NS.SampleSize←NS.UserSpace⍎NS.Expr                                                
+     NS.Grid.Values←'SampleSize'NS.put NS.SampleSize                                   
+ :Else                                                                                 
+     NS.ReturnCode←1 ⋄ NS.ErrorMessage←'Illegal Event'                                 
+ :EndSelect                                                                            
+ Z←NS                                                                                  

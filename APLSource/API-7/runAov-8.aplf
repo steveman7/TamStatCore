@@ -1,0 +1,60 @@
+ Z←runAov NS;C;Exp;alpha;q;M;V;∆;MODEL;⎕PP;fn;TwoWay        
+ ⎕IO←0 ⋄ ⎕ML←3 ⋄ q←'''' ⋄ ⎕PP←5                             
+      ⍝:Trap 0                                              
+ alpha←NS.get'Sig'                                          
+ :If 'stats'≡NS.get'Var'      ⍝  Stats or data              
+     C←NS.get'Factor2'                                      
+     :If ''≡C ⋄ :OrIf C<2     ⍝ One-way Anova               
+         Exp←{z←'('q,(↑⍵),q                                 
+             z,←'stats'(1↓⍵)')' ⋄ z}¨↓NS.Table              
+                 ⍝Exp←⍕alpha'report anova'Exp               
+         Exp←⍕alpha'report oneWay anova'Exp                 
+         NS.Expr←deleteExcessBlanks Exp                     
+         NS←alpha buildAnovaConfInt NS                      
+         NS.Output←NS.UserSpace exErr NS.Expr               
+     :Else                                                  
+             ⍝ NS.Output←alpha report anova NS.Table        
+         NS.Output←alpha report 2 factor anova 1 1↓NS.Table 
+         M←{80=⎕DR ⍵:q,⍵,q ⋄ ⍕⍵}¨1 1↓NS.Table               
+             ⍝ Exp←alpha'report anova'(⍴M)'⍴'(,M)           
+         Exp←alpha'report 2 factor anova'(⍴M)'⍴'(,M)        
+         NS.Expr←deleteExcessBlanks Exp                     
+     :EndIf                                                 
+ :Else                                                      
+     V←NS.get'Var' 'Factor1' 'Factor2' ⍝ Get Variable Names 
+     TwoWay←×≢' '~⍨2⊃V                                      
+     fn←TwoWay⊃'oneWay' '2 factor'                          
+     :If '.'∊↑V                                             
+         (∆ V)←↓⍉⊃{(⍵≠'.')⊂⍵}¨V            ⍝ Strip NameSpace
+         ∆←{0=≢⍵~' ':'#' ⋄ ⍵}↑∆                             
+                ⍝ Exp←'anova'∆ q V q                        
+         Exp←fn'anova'∆ q V q                               
+     :Else                                                  
+         Exp←fn'anova'V                                     
+     :EndIf                                                 
+     :If ~TwoWay     ⍝ One-way Anova                        
+         NS←alpha buildAnovaConfInt NS                      
+     :EndIf                                                 
+     NS.Expr←deleteExcessBlanks⍕alpha'report'Exp            
+     MODEL←NS.UserSpace⍎⍕Exp                                
+                                                            
+          ⍝:If 9=⎕NC'MODEL'                                 
+     :Trap 0                                                
+         NS.Means←MODEL.Means                               
+     :Else ⋄ NS.Means←NS.Table                              
+     :EndTrap                                               
+     NS.Output←NS.UserSpace⍎NS.Expr                         
+     :If ~TwoWay                    ⍝ One-Way Anova         
+         NS.Table←⍕¨1↓NS.Means                              
+         NS.ColTitles2←NS.Means[0;]                         
+         NS.CellTypes←(⍴NS.Table)⍴'T'                       
+     :Else                                                  
+         NS.Table←⍕¨NS.Means                                
+         NS.ColTitles2←' '                                  
+         NS.CellTypes←(⍴NS.Means)⍴'T'                       
+     :EndIf                                                 
+ :EndIf                                                     
+      ⍝:Else                                                
+     ⍝     NS.Output←'Error'                                
+     ⍝ :EndTrap                                             
+ Z←NS                                                       

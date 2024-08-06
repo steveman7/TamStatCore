@@ -1,0 +1,8 @@
+ setProbs←{                                                     
+     ⎕IO←0 ⋄ ⎕ML←3                                              
+     normProbs←{(⊂0.5 0.25×⍵-1)normal prob between¨2,/¯0.5+⍳⍵+1}
+     p←⍺{⍺≡'uniform':⍴∘÷⍨≢⍵                                     
+         ⍺≡'normal':normProbs≢⍵                                 
+         (≢⍵)↑⍵[;2]}⍵                                           
+     ⍉(p@2)⍉⍵                                                   
+ }                                                              

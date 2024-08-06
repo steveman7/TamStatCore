@@ -1,0 +1,36 @@
+ Z←getConfGrid NS;Sample;Sample2;⎕IO;⎕ML;US;RA;XEQ;LV;XP;H;K;Parm                      
+      ⍝∊ Written by Steve Mansour  2019                                                
+      ⍝⍵ Get expression from Hypothesis Grid                                           
+      ⍝⍵ Namespace with grid                                                           
+ ⎕IO←0 ⋄ ⎕ML←3                                                                         
+ Parm←NS.get'Parameter'                                                                
+ :If 'stats'≡NS.get'Sample'                                                            
+         ⍝ Sample←1⌽')(',(-Parm≡'proportion')↓NS.get'Sample' 'SampSize' 'Mean' 'Sdev'  
+     Sample←1⌽')(',1 1(Parm≢'proportion')1/NS.get'Sample' 'SampSize' 'Mean' 'Sdev'     
+ :Else                                                                                 
+     Sample←1⌽')(',NS.get'Sample'                                                      
+ :EndIf                                                                                
+ :If 'stats'≡NS.get'Sample2'                                                           
+     Sample2←1⌽')(',1 1(Parm≢'proportion')1/NS.get'Sample2' 'SampSize2' 'Mean2' 'Sdev2'
+ :Else                                                                                 
+     Sample2←{⍵∧.=' ':⍵ ⋄ 1⌽')(',⍵}NS.get'Sample2'                                     
+ :EndIf                                                                                
+ :Select NS.get'LbSample2'                                                             
+ :Case ' - Sample2'                                                                    
+     RA←Sample Sample2                                                                 
+ :Case 'GroupBy'                                                                       
+     RA←Sample Sample2                                                                 
+ :Case 'splitBy'                                                                       
+     RA←Sample'splitBy'Sample2                                                         
+ :Else                                                                                 
+     RA←Sample                                                                         
+ :EndSelect                                                                            
+ US←{2=⎕NC'⍵':⍎⍵ ⋄ ⍵}NS.UserSpace                                                      
+ LV←NS.get'Level1' 'Level2' 'Level3' 'Level4'                                          
+ K←US⍎⍕(0J1,LV~0)Parm'confInt'RA   ⍝ Generate NS output                                
+ NS.ResultsLabels←¯1↓↓(1+K.Output[0;]⍳')')↑[1]K.Output                                 
+ 'NS'⎕NS'K.Output' 'K.PointEstimate' 'K.Results'  ⍝ Copy results                       
+ XEQ←(LV~0)Parm'confInt show'RA                                                        
+ NS.Expr←deleteExcessBlanks⍕XEQ      ⍝ Construct expression                            
+ NS.ReturnCode←0                                                                       
+ Z←NS                                                                                  

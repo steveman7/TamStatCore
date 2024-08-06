@@ -1,0 +1,53 @@
+ StatTableAPI←{                                                                                                   
+      ⍝∊ Written by Steve Mansour 2018                                                                            
+     ⍝∇ Create Namespace to generate stat table as per GitHub Issue #37                                           
+     ⍝⍺⍺ Distribution function expression                                                                         
+     ⍝⍺ Left argument (defaults to right argument): rows of table                                                 
+     ⍝⍵ Namespace with the following variables:                                                                   
+     ⍝⍵ Dist       - Distribution Name                                                                            
+     ⍝⍵ Operator   - Operator name                                                                                
+     ⍝⍵ Relation   -  e.g. >, ≥, <                                                                                
+     ⍝⍵ Rows                                                                                                      
+     ⍝⍵ Cols                                                                                                      
+     ⍝← Expression                                                                                                
+     ⍝← RowTitles                                                                                                 
+     ⍝← ColTitles                                                                                                 
+     ⍝← Table                                                                                                     
+     ⍝← ChartSpecs                                                                                                
+     ⎕IO←0 ⋄ ⎕ML←3                              ⍝ Set System Variables                                            
+     DistFn Operator Field3 row col←⍵.(Dist Operator Relation Rows Columns)           ⍝ Unpack right argument     
+     fb←{(dist op rel row col)←⍵.(Dist Operator Relation Rows Columns)                ⍝ Binomial setup            
+         ex←'{⍺ ⍵ binomial prob ',rel,'⍳ ⍺+1}'  ⍝   Generate expression                                           
+         ex←'⍉⊃,⌿(',row,')∘.',ex,col            ⍝   Create simple matrix                                          
+         r←{⍵,[0.5]⍳⍵+1}¨⍎row                   ⍝   Generate row titles                                           
+         r←↓'P<n=>I4,<, >,P<x=>LI4'⎕FMT↑⍪/r     ⍝   n and x                                                       
+         c←⍕¨⍎col                               ⍝   Col Titles p                                                  
+         ex r c}                                ⍝   Data, rows, cols                                              
+     fx←{(dist op rel row col)←⍵.(Dist Operator Relation Rows Columns)                ⍝ General Distribution setup
+         b←1=≢⍎⍕col                             ⍝   Are columns prob?                                             
+         row←'(',row,')'                        ⍝   Group row expression                                          
+         fn←dist op rel                         ⍝   Create function expression                                    
+         fn←fn,(dist≡'normal')/'+'              ⍝   If normal, add + to expression                                
+         s2←(⊂,rel)∊,¨'between' 'outside','=≠'  ⍝   Two-sided                                                     
+         fn←fn,⍨(s2∧op≡'criticalValue')/'⌈/'    ⍝     and critical Value?                                         
+         fn←b{dist≢'fDist':'(',⍵,')'            ⍝   If not F-dist group function expression                       
+             ⍺:⍕'{⍵ ⍺ '⍵ col'}'                 ⍝   Else if prob, use d.f. for both num and den                   
+             ⍕'{⍵ ⍺ '⍵ 0.05 '}'}fn              ⍝   Else use p=0.05 and unique d.f. for num/den                   
+         r c←⍕¨¨⍎¨(⍵.(Rows Columns))[0,1-b]     ⍝   Get row, column names                                         
+            ⍝  b:r c,⍨⊂⍕'∘.'fn'⍨'row                 ⍝   Build expression for fDist                               
+         b:r c,⍨⊂⍕fn'table'row                ⍝                                                                   
+            ⍝  ex←⍕row'∘.'fn col                      ⍝   Build general expression                                
+         ex←⍕row fn'table'col                ⍝   Build general expression                                         
+         ex r c}                                ⍝   Data, rows, cols                                              
+     (Expression RowTitles ColTitles)←fb{       ⍝ Determine whether to use binomial                               
+         'binomial'≡⍵.Dist:⍺⍺ ⍵ ⋄ ⍵⍵ ⍵}fx ⍵     ⍝   or general setup                                              
+     i←'normal' 'tDist' 'chiSquare' 'fDist' 'poisson' 'binomial'⍳⊂DistFn                                          
+     Parameters←0,⍪i⊃,¨(0 1)5 5(5 9)5(5 0.2)    ⍝ Parameter lists for graphic display                             
+     Value←i⊃1 0.1 0.1 0.1 2 2                  ⍝ Values for graphic display                                      
+     g←⎕NS''                                    ⍝ Create namespace for graphics                                   
+     _←'g'⎕NS'DistFn' 'Operator' 'Field3' 'Value' 'Parameters' ⍝ Population with inputs                           
+     Table←⍎Expression                          ⍝ Calculate values for table                                      
+     ChartSpecs←{⍵.ChartSpecs}DistAPI g         ⍝ Create chart specifications                                     
+     NS←⎕NS''                                   ⍝ Output namespace                                                
+     _←'NS'⎕NS'Expression' 'RowTitles' 'ColTitles' 'Table' 'ChartSpecs'  ⍝ Populate output ns                     
+     NS}                                                                                                          

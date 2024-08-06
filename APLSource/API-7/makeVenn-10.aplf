@@ -1,0 +1,46 @@
+ Z←NA makeVenn NS;fL;BB;Conj;AB;ME;TXT;LT;Mon;I;YX;PCT;⎕ML;⎕IO                     
+      ⍝⍟ Copyright (C) 2020 by Stephen M. Mansour                                  
+      ⍝∇ Build Venn Diagram for Probability Wizard                                 
+ ⎕ML←3 ⋄ ⎕IO←0                                   ⍝ Set system variables            
+ fL←⍎{∧/⍵∊'01':'{',⍵,'}¨' ⋄ I←'∩∪~|'⍳↑⍵          ⍝ Logical function                
+     (I>3)∨2=≢⍵:⍵ ⋄ '∧∨>∧'[I]}Conj←,NS.get'Conj'                                   
+ BB←0 1 0 1 fL 0 0 1 1   ⍝ 0, A, B, AB           ⍝ Apply                           
+ :If '|'=↑Conj ⋄ BB←¯1 ¯1 0 1 ⋄ :EndIf           ⍝ Conditional Prob                
+ AB←NS.get'SetA' 'SetB'                          ⍝ Get Sets                        
+ :If 'independent'≡NS.get'RtOp' ⋄ AB←'AB' ⋄ ME←0                                   
+      ⍝:ElseIf 0=≢(↑AB)~' ' ⋄ ME←0                                                 
+ :ElseIf '[None]'≡↑AB ⋄ ME←0                                                       
+ :Else                                                                             
+     ME←{0∊⍵:1 ⋄ 0=⍵⌷NS.Table}+⌿⊃⍸NS.Table∊,¨AB  ⍝ Mutually Exclusive?             
+     BB[3]>←ME ⋄ :EndIf                          ⍝ Grey out A∩B?                   
+ :If 0=↑↑0⍴AB ⋄ AB←,¨'AB' ⋄ :EndIf                                                 
+ TXT←ME{⍺:'  X  ' ⋄ Z←↑{⍺,'∩',⍵}/⍵ ⋄ 6>≢Z:Z                                        
+     ⊃'⌹'(≠⊂⊢)('∩'⎕R'⌹ ∩ ⌹')Z}AB                                                   
+ NS.Venn←BB,⍪' ',AB,⊂TXT                                                           
+ LT←LogicTable                                                                     
+ Mon←NA≡NS.get'SetA'                                                               
+ I←↑LT[;⍳2](⍳⍥↓),¨(Mon⊃'DM')Conj                                                   
+ :If I≥≢LT ⋄ I←LT[;1]⍳⊂,Conj ⋄ :EndIf                                              
+ TXT←⊂⍕LT[I;1 2]                                                                   
+ TXT,←⊂('∆'⎕R(⍕0⊃AB))('B'⎕R(⍕1⊃AB))('A'⎕R'∆')↑LT[I;3]                              
+ TXT,←⊂'Complement'                                                                
+ TXT←(⌈/≢¨TXT)↑¨TXT                              ⍝ Make widths the same            
+ YX←coordVenn 0                                  ⍝ Generate circle coordinates     
+ :If Mon                                         ⍝ If Monadic, suppress SetA       
+     NS.Venn←(2 2⊤'0⊢~1'⍳↑Conj),⍪' ',AB[1]                                         
+     NS.Venn,←((↑YX),YX[1])(2↓YX)                ⍝ Append to Venn                  
+ :Else ⋄ NS.Venn,←YX ⋄ :EndIf                                                      
+ AB←AB[0],',',AB[1]                                                                
+ :If ME ⋄ TXT,←⊂⍕AB,' Mutually Exclusive'                                          
+ :ElseIf 'independent'≡NS.get'RtOp'                                                
+     TXT,←⊂⍕AB,' Independent' ⋄ :EndIf                                             
+ PCT←↓{'K2Q<%>F10.2'⎕FMT ⍵,1-⍵}NS.Result                                           
+ NS.VennText←TXT,¨(⍴TXT)↑' ',PCT                                                   
+ :If '|'≡↑NS.get'Conj'                           ⍝ Blank out coordinates for sample
+     NS.Venn[0;2]←⊂2⍴⊂1 2⍴0                      ⍝ space if conditional            
+ :EndIf                                                                            
+ :If 5<⌈/{↑⍴⍉⍵}¨NS.Venn[;1] ⋄ :AndIf 4≤≢NS.Venn  ⍝ If long names                   
+     NS.VennText,←'A: ' 'B: ',¨NS.Venn[1 2;1]    ⍝ Remove from graph and put       
+     NS.Venn[1 2 3;1]←'A' 'B',ME⌷'A∩B' ' X '     ⍝ into supporting text.           
+ :EndIf                                                                            
+ Z←NS                                                                              

@@ -1,0 +1,126 @@
+ Z←anovaAPI NS;A;B;C;D;FF;G;H;R;N;V;f;Prev;FLD;⎕IO;⎕ML                                    
+          ⍝∇ ns-based API for Anova - Last updated 6/25                                   
+          ⍝⍵ nsIn Namespace containing the following variables                            
+          ⍝⍵   Event 'Init'                                                               
+          ⍝⍵   Event 'Select'  : Select parameter, Sample or Sample2                      
+          ⍝← nsOut  Namespace containing  DataStat Report                                 
+          ⍝← Output Results Expr                                                          
+          ⍝   Parameter:   mean, proportion, sdev, var                                    
+          ⍝   Data:  1 or 2-item nested vector:    Expression or stats                    
+          ⍝   Values:  1×3 or 2×3 numeric matrix                                          
+          ⍝   UserSpace:   Ref or                                                         
+          ⍝⍵    Parameter Levels Var GroupBy Var2                                         
+          ⍝← nsOut Namespace contain nsIn plus the following:                             
+          ⍝←    Labels  2-item nested vector                                              
+          ⍝←    Values  1x3 or 2x3 numeric matrix                                         
+          ⍝←     Protect 2×3 boolean matrix 1=protect, 0=editable                         
+ ⎕IO←0 ⋄ ⎕ML←3                                                                            
+ :Select NS.Event                                                                         
+ :Case 'Init'                                                                             
+     NS←anovaGrid NS                                                                      
+     A←⎕NS''                    ⍝ Build grid                                              
+     A.Type←'D' ⋄ A.Items←'F' ⋄ A.TopItem←'stats'                                         
+     NS.Grid.Attributes←'Var'NS.changeAttributes A                                        
+     A←⎕NS''                                                                              
+     A.Type←'Q' ⋄ A.Decimals←3                                                            
+     NS.Grid.Attributes←'Sig'NS.changeAttributes A                                        
+     A←⎕NS''                                                                              
+     A.Type←'D' ⋄ A.Items←'oneWay' 'blocked' 'factor' 'latinSquare' 'factorial2k' 'nested'
+     NS.Grid.Attributes←'Design'NS.changeAttributes A                                     
+     NS.Table←⊃{(,⍵)5,2⍴0}¨'ABC'                                                          
+     NS.CellTypes←3 4⍴'ANXF'                                                              
+     NS.UserSpace←#                                                                       
+     NS.ColTitles2←'Group' 'N' 'Mean' 'Std Dev'                                           
+     NS.ReturnCode←0                                                                      
+ :Case 'Select'                                                                           
+     FF←'Factor1' 'Factor2'                                                               
+     R C←NS.get FF                                                                        
+     :Select NS.EventArg                                                                  
+     :Case 'Design'                                                                       
+         :Select NS.get'Design'                                                           
+         :Case 'oneWay' ⋄ oneWayAPI NS                                                    
+         :Case 'blocked' ⋄ blockedAPI NS                                                  
+         :CaseList 'factor' 'nested' ⋄ factorAPI NS                                       
+         :Case 'latinSquare' ⋄ latinSquareAPI NS                                          
+         :Case 'factorial2k' ⋄ factorial2kAPI NS                                          
+         :EndSelect                                                                       
+     :Case 'Var'                                                                          
+         :If 'stats'≡NS.get'Var'                                                          
+             NS.Grid.Attributes←FF NS.changeAttributes'N'                                 
+             NS.Grid.Values←FF NS.put 3 ''                                                
+             NS.Grid.Values←('Lb'∘,¨FF)NS.put'Treatments' 'Blocks(Optional)'              
+         :Else                                                                            
+             A←⎕NS''                                                                      
+             A.Type←'D' ⋄ A.Items←'A'                                                     
+             NS.Grid.Attributes←FF NS.changeAttributes A                                  
+             NS.Grid.Values←FF NS.put⊂''                                                  
+             NS.Grid.Values←('Lb'∘,¨FF)NS.put FF,¨'' '(Optional)'                         
+         :EndIf                                                                           
+     :Case 'Factor1'                                                                      
+         :If 0=↑0⍴R                                                                       
+                 ⍝:If C∧.=' ' ⋄ :OrIf (⊂C)∊0 1     ⍝ One way Anova                        
+             :Select D←NS.get'Design'                                                     
+             :Case 'oneWay'                                                               
+                 NS.Table←R resizeTable NS.Table                                          
+                 NS.CellTypes←R 4⍴'ANXF'                                                  
+             :Case 'latinSquare'                                                          
+                 NS.Table←R D resizeTable NS.Table                                        
+                 NS.CellTypes←(⍴NS.Table)⍴'AX'                                            
+             :Case 'factorial2k'                                                          
+                 NS.Table←R C D resizeTable NS.Table                                      
+                 NS.CellTypes←(⍴NS.Table)⍴1 C/'AX'                                        
+             :Else                           ⍝ Two Way Anova                              
+                      ⍝H←⍕¨1+⍳R                                                           
+                 H←'A',¨⍕¨1+⍳R                                                            
+                 NS.Table←NS.Table[0;]⍪H,R↑1 1↓NS.Table                                   
+                 NS.CellTypes←'A','A'⍪R C⍴'X'                                             
+             :EndSelect                                                                   
+         :Else                                                                            
+             V←NS.get'Var'                                                                
+             G←(NS.UserSpace⍎R){⍺,(count,mean,sdev)⍵}⌸NS.UserSpace⍎V                      
+             NS.Table←G                                                                   
+             NS.CellTypes←(⍴NS.Table)⍴'T'                                                 
+         :EndIf                                                                           
+     :Case 'Factor2'                                                                      
+         Prev←0≠↑0⍴↑NS.Table[0;1]     ⍝ Previous state 0=1-factor, 1=2-factor             
+            ⍝ ⍝ :If C∧.=' ' ⋄ :OrIf (⊂C)∊0 1         ⍝ One Way Anova                      
+         :Select D←NS.get'Design'                                                         
+         :Case 'oneWay'                                                                   
+             NS.Table←⊃{(,⍵)5 0 1}¨⎕A[⍳R]                                                 
+             NS.CellTypes←3 4⍴'ANXF'                                                      
+             NS.ColTitles2←'Group' 'N' 'Mean' 'Std Dev'                                   
+         :Case 'factorial2k'                                                              
+             NS.Table←R C D resizeTable NS.Table                                          
+               ⍝   NS.CellTypes←R(C+1)⍴1(C+1)/'AF'                                        
+             NS.CellTypes←(2*R)(C+1)⍴1 C/'AF'  ⍝ Fix bug in factorial2k                   
+         :Else                            ⍝ Two Way Anova                                 
+             :If 0=↑0⍴R                                                                   
+                 :If Prev ⋄ NS.Table←R C resizeTable NS.Table                             
+                 :Else ⋄ H←,¨'*',⎕A[⍳C]                                                   
+                     NS.Table←H⍪(1+⍳R),R C⍴⎕NULL                                          
+                 :EndIf                                                                   
+                    ⍝  NS.CellTypes←'T','T'⍪R C⍴'X'                                       
+                 NS.CellTypes←'A','A'⍪R C⍴'X'                                             
+                 NS.ColTitles2←' '                                                        
+             :Else                                                                        
+                 NS.CellTypes←(⍴NS.Table)⍴'T'                                             
+                 NS.ColTitles2←' '                                                        
+             :EndIf                                                                       
+         :EndSelect                                                                       
+     :Case 'LbFactor1'                                                                    
+         :If 'Factor 1'≡NS.get'LbFactor1'                                                 
+             NS.Grid.Values←'LbFactor2'NS.put'Factor 2'                                   
+             B←'stats'≡NS.get'Var'                                                        
+                ⍝  NS.Grid.Values←'Factor2'NS.put B⊃'[Select]' 3                          
+             NS.Grid.Values←'Factor2'NS.put B⊃'' 3                                        
+         :Else                                                                            
+             NS.Grid.Values←'LbFactor2'NS.put' '                                          
+         :EndIf                                                                           
+     :EndSelect                                                                           
+ :Case 'Run'                                                                              
+     NS←runAnova NS                                                                       
+ :Case ''   ⍝ If empty,no-op                                                              
+                                                                                          
+ :EndSelect                                                                               
+                                                                                          
+ Z←NS                                                                                     

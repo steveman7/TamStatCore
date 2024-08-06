@@ -1,0 +1,47 @@
+ Z←regressAPI NS;V;I;LB;S1;S2;PA;LB;LN;SN;H;H0;YX;TY;L2;_;⎕IO;⎕ML;Items;FMT;A
+          ⍝∇ ns-based API for Regression - Last updated 6/27/2024
+          ⍝⍵ NS Namespace containing the following variables
+          ⍝⍵  NS.Event   'Init' 'Select' or 'Run'
+          ⍝⍵  NS.UserSpace
+          ⍝←  NS.Grid  Contains Names, Values and Attributes
+          ⍝←  NS.Output  Character Matrix
+ ⎕IO←0 ⋄ ⎕ML←3
+ :Select NS.Event
+ :Case 'Init'
+     NS.⎕ML←3 ⋄ NS.⎕IO←0     ⍝ Initialize settings
+     NS.UserSpace←#
+     NS←regressGrid NS    ⍝ Build grid
+     NS←regressAttr NS    ⍝ Assign attributes
+     NS.ReturnCode←0
+ :Case 'Select'
+     :If NS.EventArg≡'Tx'
+         A←⎕NS''
+         :Select NS.get'Tx'
+         :Case 'cubic'
+             A.Type←'A'
+             NS.Grid.Attributes←'Knots'NS.changeAttributes A
+             NS.Grid.Values←'LbKnots'NS.put'Knots (Optional)'
+         :Case '≠'
+             A.Type←'A'
+             NS.Grid.Attributes←'Knots'NS.changeAttributes A
+             NS.Grid.Values←'LbKnots'NS.put'Guess (Int,Slope)'
+         :Else
+             NS.Grid.Values←'LbKnots' 'Knots'NS.put' '
+             A.Type←'T'
+             NS.Grid.Attributes←'Knots'NS.changeAttributes A
+
+         :EndSelect
+     :EndIf
+ :Case 'Run'
+     V←NS.Grid.Values[;1]                              ⍝
+     V[¯1+≢V]←{2>≢⍵:⍵ ⋄ 1⌽')(',⍵}¨(//⎕VFI⍕↑⌽V)         ⍝ Parenthesize Knots
+     NS.Expr←deleteExcessBlanks⍕V[0],('report ⊢ ',1⊃V),'←',2↓V~⊂'[None]'
+     NS.Output←NS.UserSpace⍎NS.Expr      ⍝ Run hypothesis operator and display output
+     YX←NS.UserSpace⍎(NS.get,'Y'),',⍪',NS.get,'X'
+         ⍝ YX←NS.UserSpace⍎⍕',⍪' pairwise NS.get∘,¨ 'YX'
+        ⍝  NS.Plot←YX regressPlot NS.UserSpace⍎NS.get 'Model'
+ :Case ''                    ⍝ If empty,no-op
+ :Else
+     NS.Grid.Values←NS.rectifyStats NS.Event
+ :EndSelect
+ Z←NS

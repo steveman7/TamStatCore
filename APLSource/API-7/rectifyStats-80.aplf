@@ -1,0 +1,42 @@
+ rectifyStats←{                                                                                
+      ⍝∊ Written by Steve Mansour 2020                                                         
+      ⍝∇ Rectify Statistics by synching up                                                     
+      ⍝     Proportion and Events with SampleSize                                              
+      ⍝     or Variance with Sdev                                                              
+      ⍝⍺ Value                                                                                 
+      ⍝⍵ Variable Name:   'Sample' 'Mean' 'Var' 'Sdev' 'Sample2' 'Mean2' 'Var2' 'Sdev2'        
+      ⍝← GridValues updated                                                                    
+      ⍝  Grid.Values ←  45  NS.rectifyStats 'Mean'                                             
+      ⍝  Grid.Values ←  'D.Height' NS.rectifyStats 'Sample'                                    
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⎕DIV←1                     ⍝                                              
+     ⍺←get ⍵                                    ⍝ If not specified,   use value in grid        
+     S←('2'=↑⌽⍵)/'2'                            ⍝ Append 2 if Sample 2                         
+     (⍵≡'Sample2')∧~∨/'Sample'⍷get'LbSample2':Grid.Values ⍝If 2nd item is not Sample 2, get out
+         ⍝N Q X←↑∘get¨C←'SampSize' 'Mean' 'Sdev',¨⊂S   ⍝ Get Statistics                        
+     C←'SampSize' 'Mean' 'Sdev',¨⊂S             ⍝ Get Statistics                               
+     N Q X←{0::0 ⋄ ⍎⍕get ⍵}¨C                                                                  
+     f←{0::30/0 ⋄ K←UserSpace⍎⍵ ⋄ 0≡↑0⍴K:K ⋄ 30/0} ⍝                                           
+     ⍝⍝⍝ Mean ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝             
+          ⍝M←'mean'≡P←get'Parameter'                  ⍝                                        
+     M←∨/'mean'⍷P←get'Parameter'                  ⍝                                            
+     M∧⍵≡'Sample',S:C put(count,mean,sdev)f ⍺    ⍝ If Sample put in all 3 stats                
+     M:Grid.Values                               ⍝ If mean don't need to rectify               
+      ⍝⍝⍝ Proportion ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝           
+     B←P≡'proportion'                           ⍝ Proportion                                   
+     B∧(⍵≡'Sample',S):C put(count,mean,sum)f ⍺  ⍝ If sample put in all 3 stats                 
+     B∧(⍵≡'Mean',S)∨X=0:('Sdev',S)put⌊0.5+N×Q   ⍝ Update Events                                
+     B:('Mean',S)put X÷N                        ⍝ Update proportion                            
+      ⍝⍝⍝ Median ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝          
+        ⍝  M←'median'≡P                               ⍝ If median                              
+     M←∨/'median'⍷P←get'Parameter'                                                             
+     M0←get'Sample2'                                                                           
+     M0←⍺{0::0 ⋄ 0=↑0⍴⍺:⍵ ⋄ median #⍎get'Sample'}M0                                            
+     g←M0∘{+/¯1 1∘.=×⍺-⍵}                                                                      
+     M∧⍵≡'Sample',S:C put(count,g)f ⍺           ⍝ If Sample put in - and +                     
+     M:Grid.Values                                                                             
+      ⍝⍝⍝ Variance  or Std Dev ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝           
+     ⍵≡'Sample',S:C put(count,var,sdev)f ⍺      ⍝ If sample, put in all 3 stats                
+     ⍵≡'Mean',S:('Sdev',S)put Q*÷2              ⍝ Update Std Dev                               
+     ⍵≡'Sdev',S:('Mean',S)put X*2               ⍝ Update Variance                              
+     Grid.Values                                                                               
+ }                                                                                             

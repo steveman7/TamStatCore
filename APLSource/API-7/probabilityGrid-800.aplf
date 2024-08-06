@@ -1,0 +1,42 @@
+ probabilityGrid←{                                                
+          ⍝∊ Written by Steve Mansour 2020                        
+          ⍝∇ Build a Grid Object for Probability wizard           
+          ⍝⍵ Empty Namespace                                      
+          ⍝← Namespace containing the following:                  
+          ⍝←  Grid.Names:   Cell name, e.g. 'Parameter' 'SampSize'
+          ⍝←  Grid.Values:  Cell vallue, e.g. 'mean' 30           
+          ⍝←  Grid.Types:   Cell type, e.g. 'Txt'  'Int'          
+          ⍝←  'mean' ← NS.get 'Parameter'                         
+          ⍝←  Grid.Values ← 'SampSize' NS.put 30                  
+     ⎕IO←0 ⋄ ⎕ML←3                                                
+     ⍵.Grid←⎕NS''                                                 
+     f←⊂∘toNestedVector                                           
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Values ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     G←f'Rows,frequency,2'                                        
+     G,←f'Columns,frequency,3'                                    
+     G,←f'Set A,A1,(Optional)'                                    
+     G,←f'Conjunction,∧,and'                                      
+     G,←f'Operator,probability'                                   
+     G,←f'Right Operand,Table'                                    
+     G,←f'Set B,B1'                                               
+     I←⍸{↑↑⎕VFI ⍵}¨⊃G         ⍝ Find indices of numeric cells     
+     ⍵.Grid.Values←⍎¨@I⊃G     ⍝ Replace text with numerical values
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Names ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝      
+     G←f'LbRows,RowVar,Rows'                                      
+     G,←f'LbCols,ColVar,Cols'                                     
+     G,←f'LbSetA,SetA,DescA'                                      
+     G,←f'LbConj,Conj,DescConj'                                   
+     G,←f'LbOp,Op,DescOp'                                         
+     G,←f'LbRtOp,RtOp,DescRtOp'                                   
+     G,←f'LbSetB,SetB,DescB'                                      
+     ⍵.Grid.Names←⊃G                                              
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Types ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝   
+     ⍵.Grid.Attributes←⎕NS¨7 3⍴⊂''                                
+     G←'TEN' 'TEN' 'TDT' 'TDD' 'TTT' 'TDT' 'TDT'                  
+     ⍵.Grid.Attributes.Type←⊃G                                    
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Events ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝   
+     ⍵.get←{1<≡⍵:∇¨⍵ ⋄ ⍺←Grid.Values ⋄ (⍸Grid.Names∊⊂⍵)⊃⍺}        
+     ⍵.put←{w←⊆⍣(0=80|⎕DR ⍵)⊢⍵ ⋄ (w@(⍸Grid.Names∊⊆⍺))Grid.Values} 
+     ⍵.changeType←{(⍵@(⍸Grid.Names∊⊆⍺))Grid.Attributes.Type}      
+     ⍵.changeAttributes←changeAttributes                          
+     ⍵}                                                           

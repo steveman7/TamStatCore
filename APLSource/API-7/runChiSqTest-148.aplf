@@ -1,0 +1,61 @@
+ Z←runChiSqTest NS;Sample;Sample2;⎕IO;⎕ML;V;P;q;m;ex;PR;US;RA;XEQ;LV;XP;H;GP;M;T;R;C;addParen;RepopulateTable      
+      ⍝∊ Written by Steve Mansour  7/25/2019                                                                       
+      ⍝⍵ Get expression from Hypothesis Grid                                                                       
+      ⍝⍵ Namespace with grid                                                                                       
+ ⎕IO←0 ⋄ ⎕ML←3 ⋄ RepopulateTable←0               ⍝                                                                 
+ q←{'''',⍵,''''}                                 ⍝                                                                 
+ :Select NS.get'Op'                              ⍝                                                                 
+ :Case 'goodnessOfFit'                           ⍝                                                                 
+     V←NS.get'Sig' 'Dist' 'Op' 'Var'             ⍝                                                                 
+     (2⊃V),←'='                                                                                                    
+     :If 'frequency'≢3⊃V                         ⍝                                                                 
+     :AndIf V[1]∊'normal' 'poisson'              ⍝                                                                 
+         ex←deleteExcessBlanks⍕1↓V               ⍝                                                                 
+         RepopulateTable←1                                                                                         
+     :Else                                                                                                         
+         P←NS.Table                                                                                                
+         P[;0]←,¨⍣(0≠↑0⍴↑P)⊣P[;0]                ⍝ Separate one-character vectors                                  
+         addParen←{str←deleteExcessBlanks ⍵                                                                        
+             ' '∊str:'(',str,')' ⋄ ⍵}                                                                              
+         V[1 3]←addParen¨V[1 3]                                                                                    
+             ⍝ V[3]←P{('frequency'≢↑⍵)∧⍺[;1]∧.=0:⊂(-NS get'Cols')'frequency',⍵   ⍝ Use frequency data when explicit
+         V[3]←P{OBS←↑¨⍺[;1]                                                                                        
+             ('frequency'≢↑⍵)∧0∧.=OBS:⊂(-NS get'Cols')'frequency',⍵   ⍝ Use frequency data when explicit           
+                ⍝  0=↑0⍴↑⍺:⊂⍕,'(',⍺[;0],')(',⍺[;1],')' ⍝ Numeric data?                                             
+             0=↑0⍴↑⍺:⊂⍕,'(',⍺[;0],')(',OBS,')' ⍝ Numeric data?                                                     
+             GP←toDelimitedList ⍺[;0]                                                                              
+                 ⍝ ⊂⍕(q GP)' (',⍺[;1],')'}V[3]                                                                     
+             ⊂⍕(q GP)' (',OBS,')'}V[3]                                                                             
+         :If 'multinomial'≡1⊃V                   ⍝ Multinomial goodness of fit?                                    
+             GP←toDelimitedList P[;0]            ⍝                                                                 
+             ex←(q,GP),∊,/1⌽')(',⊂⍉P[;1 2]                                                                         
+             ex←deleteExcessBlanks⍕V[1 2]ex                                                                        
+         :Else                                                                                                     
+             ex←deleteExcessBlanks⍕1↓V           ⍝                                                                 
+         :EndIf ⋄                                                                                                  
+     :EndIf                                                                                                        
+ :Case 'independent'                                                                                               
+         ⍝ V←NS.Grid.Values[;1]                                                                                    
+     V←NS.get'Sig' 'Dist' 'Op' 'Var'                                                                               
+     :If 'frequency'eq NS.get'Var'                                                                                 
+         R C←1+NS.get'Rows' 'Cols'               ⍝ Get shape                                                       
+         T←q¨@{80=⎕DR¨⍵}NS.Table                 ⍝ Put quotes around headers                                       
+         (1 1↓T)←↑¨1 1↓T                         ⍝ Change empties to 0's                                           
+         ex←'independent'R C'⍴',,T                                                                                 
+     :Else                                                                                                         
+             ⍝ ex←V[0]'report',1↓V                    ⍝                                                            
+         ex←1↓V                                  ⍝                                                                 
+     :EndIf                                                                                                        
+     ex←deleteExcessBlanks⍕ex                                                                                      
+ :EndSelect                                                                                                        
+ NS.Expr←⍕V[0]'report'ex                                                                                           
+ M←NS.UserSpace exErr ex                                                                                           
+ :If 9=⎕NC'M'                                                                                                      
+     NS.Output←V[0]report M                                                                                        
+     NS.Conclusion←M.P<NS.get'Sig'                                                                                 
+     :If RepopulateTable                                                                                           
+         NS.Table←1↓¯1↓M.Table[;0 1 4]                                                                             
+     :EndIf                                                                                                        
+ :Else ⋄ NS.Output←M                                                                                               
+ :EndIf                                                                                                            
+ Z←NS                                                                                                              

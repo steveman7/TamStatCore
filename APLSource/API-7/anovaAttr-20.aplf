@@ -1,0 +1,26 @@
+ anovaAttr←{                                                            
+      ⍝ Assign attributes to hypothesis fields                          
+     NS←⍵                                                               
+     A←⎕NS''                                                            
+     NS.LbFactor1List←'Treatments' 'Factor 1'                           
+     NS.LbFactor2List←'Blocks' 'Factor 2'                               
+     NS.VarList←⊂'summary'                                              
+     NS.Table←⊃{(,⍵)5 0 1}¨'ABC'                                        
+     NS.Table←⊃{(,⍵)5,2/⎕NULL}¨'ABC'                                    
+     NS.CellTypes←'TNXF'                                                
+     NS.UserSpace←#                                                     
+     NS.ColTitles2←'Group' 'N' 'Mean' 'Std Dev'                         
+     NS.ReturnCode←0                                                    
+     NS.FactorList←'Treatment' 'Factor 1'                               
+     NS.Factor2List←' ' 'Factor2'                                       
+     A.Items←'normal' 'multinomial' 'uniform'                           
+     NS.Grid.Attributes←'Dist'NS.changeAttributes A                     
+     A.Items←'goodnessOfFit' 'independent'                              
+     NS.Grid.Attributes←'Op'NS.changeAttributes A                       
+     A←⎕NS'' ⋄ A.Items←'F'              ⍝ Numeric field (Floating Point)
+     NS.Grid.Attributes←'Var'NS.changeAttributes A                      
+     A←⎕NS'' ⋄ A.validate←{(⍵=⌊⍵)∧⍵>0}                                  
+     A.ErrorMsg←'Must be a postive integer'                             
+     A.FormatString←'I6'                                                
+     NS.Grid.Attributes←'Cols'NS.changeAttributes A                     
+     NS}                                                                

@@ -1,0 +1,41 @@
+ sampleSizeGrid←{                                                  
+          ⍝∊ Written by Steve Mansour 2019                         
+          ⍝∇ Build a Grid Object for Hypothesis wizard             
+          ⍝⍵ Empty Namespace                                       
+          ⍝← Namespace containing the following:                   
+          ⍝←  GridNames:   Cell name, e.g. 'Parameter' 'SampSize'  
+          ⍝←  GridValues:  Cell vallue, e.g. 'mean' 30             
+          ⍝←  GridTypes:   Cell type, e.g. 'Txt'  'Int'            
+          ⍝←  'mean' ← NS.get 'Parameter'                          
+          ⍝←  GridValues ← 'SampSize' NS.put 30                    
+     ⎕IO←0 ⋄ ⎕ML←3                                                 
+     f←⊂∘toNestedVector                                            
+     ⍵.Grid←⎕NS''                                                  
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Values ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ 
+     G←f'Confidence,0.95'                                          
+     G,←f'Parameter,proportion'                                    
+     G,←f'Operator,sampleSize'                                     
+     G,←f'Margin of Error,0.03'                                    
+     G,←f'Estimated Proportion,0.5'                                
+     G,←f'Population Size(0=Infinite),'                            
+     G,←f'Sample Size,1068'                                        
+     I←⍸{↑↑⎕VFI ⍵}¨⊃G        ⍝ Find indices of numeric cells       
+     ⍵.Grid.Values←⍎¨@I⊃G     ⍝ Replace text with numerical values 
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Names ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝       
+     G←f'LbConf,Conf'                                              
+     G,←f'LbParameter,Parameter'                                   
+     G,←f'LbOp,Op'                                                 
+     G,←f'LbMOE,MOE'                                               
+     G,←f'LbSdev,Sdev'                                             
+     G,←f'LbPopSize,PopSize'                                       
+     G,←f'LbSampleSize,SampleSize'                                 
+     ⍵.Grid.Names←⊃G                                               
+         ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Attributes ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     ⍵.Grid.Attributes←⎕NS¨7 2⍴⊂''                                 
+     G←⊃'TP' 'TD' 'TT' 'TP' 'TP' 'TN' 'TN'                         
+     ⍵.Grid.Attributes.Type←⊃G                                     
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Events ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝    
+     ⍵.get←{1<≡⍵:∇¨⍵ ⋄ ⍺←Grid.Values ⋄ (⍸Grid.Names∊⊂⍵)⊃⍺}         
+     ⍵.put←{w←⊆⍣(80=⎕DR ⍵)⊢⍵ ⋄ (w@(⍸Grid.Names∊⊆⍺))Grid.Values}    
+     ⍵.changeAttributes←changeAttributes                           
+     ⍵}                                                            

@@ -1,0 +1,12 @@
+ latinSquareAPI NS;FLD;P;⎕ML;⎕IO              
+ ⎕ML←3 ⋄ ⎕IO←0                                
+ FLD←'LeftArg' 'Factor2' 'Factor3'            
+ NS.Grid.Attributes←FLD NS.changeAttributes'T'
+ NS.Grid.Values←(FLD,'Lb'∘,¨FLD)NS.put' '     
+ FLD←'Factor1'                                
+ NS.Grid.Attributes←FLD NS.changeAttributes'N'
+ NS.Grid.Values←FLD NS.put P←3                
+ NS.Grid.Values←'LbFactor1'NS.put'Treatments' 
+     ⍝ NS.Table←,[1 2]⍉⊃((⍳P)⌽P P⍴P↑⎕A)(⊂⍬)   
+ NS.Table←,[1 2]⍉⊃((⍳P)⌽P P⍴P↑⎕A)0            
+ NS.CellTypes←(⍴NS.Table)⍴'AX'                

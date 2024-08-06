@@ -1,0 +1,32 @@
+ hypothesisAttr←{                                                                                
+      ⍝ Assign attributes to hypothesis fields                                                   
+     NS←⍵                                                                                        
+     A←⎕NS''                                                                                     
+          ⍝A.Items←'mean' 'proportion' 'var' 'sdev' 'median'                                     
+     A.Items←'mean' 'proportion' 'var' 'sdev' 'median' 'mean paired' 'mean eqVar' 'median paired'
+     NS.Grid.Attributes←'Parameter'NS.changeAttributes A                                         
+     A.Items←'Hypothesized Value' 'Sample 2' 'splitBy'                                           
+     NS.Grid.Attributes←'LbSample2'NS.changeAttributes A                                         
+     A.Items←'F' ⋄ A.TopItem←'stats' ⍝ Numeric field (Floating Point)                            
+     NS.Grid.Attributes←'Sample'NS.changeAttributes A                                            
+     A.Items←,¨'<≤=≠≥>' ⋄ A.TopItem←''                                                           
+     NS.Grid.Attributes←'Relation'NS.changeAttributes A                                          
+     A←⎕NS''                                                                                     
+     A.validate←{(⍵=⌊⍵)∧⍵>0}                                                                     
+     A.ErrorMsg←'Must be a postive integer'                                                      
+     A.FormatString←'I6'                                                                         
+     NS.Grid.Attributes←'SampSize' 'SampSize2'NS.changeAttributes A                              
+     A.validate←{⍵≥0}                                                                            
+     A.ErrorMsg←'Negative values not permitted.'                                                 
+     A.FormatString←'F9.5'     ⍝ Set format String                                               
+     A.Decimals←5              ⍝ Free format                                                     
+     NS.Grid.Attributes←'Sdev' 'Sdev2'NS.changeAttributes A                                      
+     A.validate←{1}                                                                              
+     A.FormatString←'F12.5'                                                                      
+     NS.Grid.Attributes←'Mean' 'Mean2'NS.changeAttributes A                                      
+     A.validate←{0=+/×⍵-0 1}  ⍝ Boolean                                                          
+     A.ErrorMsg←'Must be between 0 and 100%'                                                     
+     A.Decimals←2                                                                                
+     NS.Grid.Attributes←'Significance'NS.changeAttributes A                                      
+     NS                                                                                          
+ }                                                                                               

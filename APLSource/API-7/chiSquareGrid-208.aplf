@@ -1,0 +1,38 @@
+ chiSquareGrid←{                                                   
+          ⍝∊ Written by Steve Mansour 2019                         
+          ⍝∇ Build a Grid Object for ChiSquare wizard              
+          ⍝⍵ Empty Namespace                                       
+          ⍝← Namespace containing the following:                   
+          ⍝←  Grid.Names:   Cell name, e.g. 'Parameter' 'SampSize' 
+          ⍝←  Grid.Values:  Cell vallue, e.g. 'mean' 30            
+          ⍝←  Grid.Types:   Cell type, e.g. 'Txt'  'Int'           
+          ⍝←  'mean' ← NS.get 'Parameter'                          
+          ⍝←  Grid.Values ← 'SampSize' NS.put 30                   
+     ⎕IO←0 ⋄ ⎕ML←3                                                 
+     ⍵.Grid←⎕NS''                                                  
+     f←⊂∘toNestedVector                                            
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Values ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ 
+     G←f'Significance,0.05,Categories,Type'                        
+     G,←f'Distribution,uniform, , '                                
+     G,←f'Operator,goodnessOfFit,Categories,Type'                  
+     G,←f'Variable,frequency,4,Char'                               
+     I←⍸{↑↑⎕VFI ⍵}¨⊃G        ⍝ Find indices of numeric cells       
+     ⍵.Grid.Values←⍎¨@I⊃G     ⍝ Replace text with numerical values 
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Names ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝       
+     G←f'LbSig,Sig,LbRows,LbVarType'                               
+     G,←f'LbDist,Dist,Rows,RowType'                                
+     G,←f'LbOp,Op, '                                               
+     G,←f'LbVar,Var,Cols,VarType'                                  
+     ⍵.Grid.Names←⊃G                                               
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Types ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝    
+     ⍵.Grid.Attributes←⎕NS¨4 4⍴⊂''                                 
+     G←⊃'TQTT' 'TDTT' 'TDTT' 'TEND'                                
+     ⍵.Grid.Attributes.Type←⊃G                                     
+          ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Events ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝    
+     ⍵.get←{1<≡⍵:∇¨⍵ ⋄ ⍺←Grid.Values ⋄ (⍸Grid.Names∊⊂⍵)⊃⍺}         
+     ⍵.put←{w←⊆⍣(80=⎕DR ⍵)⊢⍵ ⋄ (w@(⍸Grid.Names∊⊆⍺))Grid.Values}    
+     ⍵.changeType←{(⍵@(⍸Grid.Names∊⊆⍺))Grid.Attributes.Type}       
+     ⍵.normProbs←{P←(⊂0.5 0.25×⍵-1)normal prob between¨2,/¯0.5+⍳⍵+1
+         P+(1⌽1 1↑⍨≢P)×0.5×1-+/P}                                  
+     ⍵.changeAttributes←changeAttributes                           
+     ⍵}                                                            

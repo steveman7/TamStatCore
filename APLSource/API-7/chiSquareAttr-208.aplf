@@ -1,0 +1,20 @@
+ chiSquareAttr←{                                             
+      ⍝ Assign attributes to hypothesis fields               
+     NS←⍵                                                    
+     A←⎕NS''                                                 
+        ⍝  A.Items←'normal' 'multinomial' 'uniform' 'poisson'
+     A.Items←'multinomial' 'uniform' 'poisson'               
+     NS.Grid.Attributes←'Dist'NS.changeAttributes A          
+     A.Items←'goodnessOfFit' 'independent'                   
+     NS.Grid.Attributes←'Op'NS.changeAttributes A            
+     A.Items←'Char' 'Num'                                    
+     NS.Grid.Attributes←'VarType'NS.changeAttributes A       
+     A←⎕NS'' ⋄ A.Items←'A' ⋄ A.TopItem←'frequency'           
+     NS.Grid.Attributes←'Var'NS.changeAttributes A           
+     A←⎕NS'' ⋄ A.validate←{(⍵=⌊⍵)∧⍵>0}                       
+     A.ErrorMsg←'Must be a postive integer'                  
+     A.FormatString←'I6'                                     
+     NS.Grid.Attributes←'Cols'NS.changeAttributes A          
+     A←⎕NS'' ⋄ A.Decimals←3    ⍝ Force 3 decimal places      
+     NS.Grid.Attributes←'Sig'NS.changeAttributes A           
+     NS}                                                     

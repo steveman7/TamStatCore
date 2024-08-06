@@ -1,0 +1,31 @@
+ probabilityAttr←{                                     
+      ⍝ Assign attributes to hypothesis fields         
+      ⍝⍺ Left argument is [None]                       
+      ⍝⍵ Namespace                                     
+     NS←⍵                                              
+     A←⎕NS''                                           
+     LT←{⍵⌿⍨⍵[;0]∊⊂,'D'}LogicTable                     
+     A.Items←LT[;1]                                    
+     NS.Grid.Attributes←'Conj'NS.changeAttributes A    
+     A←⎕NS''                                           
+     A.Items←LT[;2]                                    
+     NS.Grid.Attributes←'DescConj'NS.changeAttributes A
+     A←⎕NS'' ⋄ A.Items←'A' ⋄ A.TopItem←'frequency'     
+     NS.Grid.Attributes←'RowVar'NS.changeAttributes A  
+     A←⎕NS'' ⋄ A.Items←'A' ⋄ A.TopItem←'frequency'     
+     NS.Grid.Attributes←'ColVar'NS.changeAttributes A  
+     A←⎕NS'' ⋄ A.Items←'A1' 'A2' 'B1' 'B2' 'B3'        
+     NS.Grid.Attributes←'SetB'NS.changeAttributes A    
+     A.TopItem←⍺                                       
+     NS.Grid.Attributes←'SetA'NS.changeAttributes A    
+     A←⎕NS'' ⋄ A.validate←{(⍵=⌊⍵)∧⍵>0}                 
+     A.ErrorMsg←'Must be a postive integer'            
+     A.FormatString←'I6'                               
+     NS.Grid.Attributes←'Rows'NS.changeAttributes A    
+     A.ErrorMsg←'Must be a postive integer'            
+     A.FormatString←'I6'                               
+     NS.Grid.Attributes←'Cols'NS.changeAttributes A    
+     A←⎕NS''                                           
+     A.Items←'Table' 'independent'                     
+     NS.Grid.Attributes←'RtOp'NS.changeAttributes A    
+     NS}                                               

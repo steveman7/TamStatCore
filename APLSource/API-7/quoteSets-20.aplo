@@ -1,0 +1,15 @@
+ quoteSets←{                                                          
+ ⍝⍺ Right Operand                                                     
+ ⍝⍵ Sets                                                              
+     ⎕IO←0 ⋄ ⎕ML←3                                                    
+    ⍝ ⍺≡'independent':⍵       ⍝If independent, exit                   
+     ⍺≡'independent':⍎⍕⍵      ⍝ Independent, ensure numeric, then exit
+     q←{'''',⍵,''''}                                                  
+     ch←{80 160 320∨.=⎕DR∊⍵}                                          
+     num←{↑↑⎕VFI ⍵}                                                   
+     ~num ⍵:q ⍵               ⍝If char, quote                         
+     RO←⍺⍺.UserSpace⍎⍺        ⍝Evaluate right arg                     
+     H←⎕DR∊{2≠⍴⍴⍵:⍵           ⍝Get headings                           
+         ⍺[;0],⍥(1∘↓)⍺[0;]}RO ⍝                                       
+     ch H:q ⍵ ⋄ ⍵             ⍝If all char, quote                     
+ }                                                                    

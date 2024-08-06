@@ -1,0 +1,11 @@
+ factorAPI NS;FLD;FF;⎕IO;⎕ML                      
+ ⎕IO←0 ⋄ ⎕ML←3                                    
+ FLD←'LeftArg' 'Factor2' 'Factor3'                
+     ⍝ NS.Grid.Attributes←'Var'NS.changeAttributes
+ NS.Grid.Attributes←FLD NS.changeAttributes'N'    
+ NS.Grid.Values←(FLD,'Lb'∘,¨FLD)NS.put' '         
+ FF←'Factor'∘,¨'123'                              
+ NS.Grid.Values←('Lb'∘,¨FF)NS.put FF              
+ NS.Grid.Values←'LeftArg'NS.put 2                 
+ NS.Grid.Values←FF NS.put' '                      
+ NS.Table←⊃0 0⍴0                                  

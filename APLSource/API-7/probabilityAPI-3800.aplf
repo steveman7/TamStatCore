@@ -1,0 +1,125 @@
+ Z←probabilityAPI NS;A;B;C;D;H;I;J;K;R;V;W;N;X;TY;RO;NA;f;Expr;LT;P;q;Sets;Conj;⎕IO;⎕ML
+          ⍝∇ ns-based API for Probabiltiy - Last updated 9/22/2020                     
+          ⍝⍵ NS Namespace containing the following variables                           
+          ⍝⍵   Event 'Init'                                                            
+          ⍝⍵   Event 'Select'  : Select parameter, Sample or Sample2                   
+          ⍝⍵   Event 'Run'  Signficance Data Parameter Relational HypothesizedValue    
+          ⍝← Z  Namespace containing modifications                                     
+ ⎕IO←0 ⋄ ⎕ML←3 ⋄ NA←'[None]'                                                           
+ :Select NS.Event                                                                      
+ :Case 'Init'                               ⍝ Initialize                               
+     NS←probabilityGrid NS                  ⍝ Build grid                               
+     NS←NA probabilityAttr NS                  ⍝ Set attributes                        
+     NS.Table←('*','A',¨'12'),('B',¨'123')⍪2 3⍴0     ⍝ Default table                   
+     NS.UserSpace←#                                                                    
+     NS.CellTypes←'TAA','A'⍪2 3⍴'X'                                                    
+     NS.ReturnCode←0                                                                   
+ :Case 'Select'                                                                        
+     :Select NS.EventArg                                                               
+     :Case 'Rows'                                                                      
+         NS.Table←(NS.get'Rows')0 resizeTable NS.Table                                 
+         NS.CellTypes←'A','A'⍪(¯1+⍴NS.Table)⍴'I'                                       
+     :Case 'Cols'                           ⍝                                          
+         NS.Table←0(NS.get'Cols')resizeTable NS.Table                                  
+         NS.CellTypes←'A','A'⍪(¯1+⍴NS.Table)⍴'I'                                       
+     :CaseList 'RowVar' 'ColVar' 'Var'                                                 
+         V←(NS.get'RowVar' 'ColVar')~⊂'frequency'  ⍝ Get Row/Col Vars                  
+         :If 0≠≢V ⋄ NS.Table←frequency NS.UserSpace⍎⍕V                                 
+             NS.Table[;0]←⍕¨NS.Table[;0]                                               
+             NS.CellTypes←(⍴NS.Table)⍴'T'                                              
+             NS.Grid.Attributes←'Rows' 'Cols'NS.changeAttributes'T'                    
+                                                                                       
+             :If '*'≡↑↑NS.Table                                                        
+                 NS.Table[0;]←⍕¨NS.Table[0;]                                           
+                 NS.(Grid.Values←'Rows' 'Cols'put ¯1+⍴Table)                           
+             :Else ⋄ NS.(Grid.Values←'Rows'put≢Table) ⋄ :EndIf                         
+         :Else ⋄                                                                       
+             :If NS.EventArg≢'Var'   ⍝ Reset?                                          
+                 NS.Table←('*','A',¨'12'),('B',¨'123')⍪2 3⍴0     ⍝ Default table       
+                 NS.CellTypes←'A','A'⍪(¯1+⍴NS.Table)⍴'N'                               
+                 NS.(Grid.Values←'Rows' 'Cols'put 2 3)                                 
+                 NS.Grid.Attributes←'Rows' 'Cols'NS.changeAttributes'N'                
+             :EndIf                                                                    
+         :EndIf                                                                        
+         A←NS.(Grid.Attributes∘get¨'SetA' 'SetB')                                      
+         :If '*'≡↑↑NS.Table                                                            
+             NS.Grid.Values←'SetA' 'SetB'NS.put NS.Table[(1 0)(0 1)]                   
+             A.Items←⊂NS.Table[;0],⍥(1∘↓)NS.Table[0;]                                  
+         :Else                                                                         
+                 ⍝ NS.(Grid.Values←'SetA' 'SetB'put' ',⊂↑Table)                        
+             NS.Grid.Values←'SetA' 'SetB'NS.put' ',⊂↑NS.Table                          
+             A.Items←⊂NS.Table[;0]                                                     
+         :EndIf                                                                        
+         NS.Grid.Attributes←'SetA'NS.changeAttributes↑A                                
+         NS.Grid.Attributes←'SetB'NS.changeAttributes 1⊃A                              
+     :CaseList 'Conj' 'DescConj'                                                       
+         J←'Conj'≢NS.EventArg                                                          
+         Conj←NS.(get EventArg)                                                        
+         V←,(NA≡NS.get'SetA')⊃'DM'    ⍝ Valence                                        
+         K←,V{1=≢⍵:⍵                             ⍝ Look up in conjunction              
+             (⍵[;0]∊⊂,⍺)⌿⍵}(LogicTable[;J+1]∊⊂,Conj)⌿LogicTable   ⍝ Database           
+         NS.Grid.Values←'Conj' 'DescConj'NS.put K[1 2]                                 
+         :If ∧/('D'=↑K),NA≡NS.get'SetA'                                                
+             NS.Grid.Values←'SetA'NS.put↑NS.Table[1;0] ⋄ :EndIf                        
+     :CaseList 'SetA' 'SetB'                                                           
+         A←⎕NS''                                                                       
+         :If '*'≡↑↑NS.Table                                                            
+             A.Items←⍕¨↑,/{1↓,1↑⍵}¨(⍉{⍺ ⍵}⊢)NS.Table                                   
+         :Else                                                                         
+             A.Items←⍕¨NS.Table[;0]                                                    
+         :EndIf                                                                        
+         NS.Grid.Attributes←NS.EventArg NS.changeAttributes A                          
+         A←⎕NS''                                                                       
+         LT←NS{⍵⌿⍨⍵[;0]∊⊂,(NA≡⍺.get'SetA')⊃'DM'}LogicTable                             
+         A.Items←LT[;1]                                                                
+         NS.Grid.Attributes←'Conj'NS.changeAttributes A                                
+         A.Items←LT[;2]                                                                
+         NS.Grid.Attributes←'DescConj'NS.changeAttributes A                            
+         :If ~(,NS.get'Conj')∊LT[;1]                                                   
+             NS.Grid.Values←'Conj' 'DescConj'NS.put LT[0;1 2]                          
+         :EndIf                                                                        
+     :Case 'RtOp'                                                                      
+         TY←('independent'≡NS.get'RtOp')⊃'DP'                                          
+         NS.Grid.Attributes←'SetA' 'SetB'NS.changeAttributes TY                        
+         NS.Grid.Values←'SetA'NS.put(TY='D')⊃0.5,⊂'A'                                  
+         NS.Grid.Values←'SetB'NS.put(TY='D')⊃0.5,⊂'B'                                  
+         A←⎕NS''                                                                       
+         :If TY='P'                                                                    
+             NS.Grid.Values←'Rows' 'Cols'NS.put 2                                      
+             NS.Table←3 3⍴'*' 'B' '~B' 'A' 0.25 0.25 '~A' 0.25 0.25                    
+         :Else                                                                         
+             A←⎕NS''                                                                   
+             A.Items←,¨'AB','~A' '~B'                                                  
+             NS.Grid.Values←'SetA' 'SetB'NS.put,¨'AB'                                  
+             NS.Grid.Attributes←'SetB'NS.changeAttributes A                            
+             A.Items←' ',A.Items                                                       
+             NS.Grid.Attributes←'SetA'NS.changeAttributes A                            
+         :EndIf                                                                        
+     :EndSelect                                                                        
+ :Case 'Run'                                                                           
+     q←{(0=↑0⍴⍵)∨⍵∧.=' ':⍵ ⋄ '''',(⍕⍵),''''}                                           
+     Sets←NS.get'SetA' 'SetB'                                                          
+     Conj←{2=≢⍵:1⌽')(',⍵ ⋄ ⍵}NS.get'Conj'                                              
+     RO←q{D←⍵.get'RtOp' ⋄ D≢'Table':D                                                  
+         RC←⍵.get'RowVar' 'ColVar'                                                     
+         B←~RC∊⊂'frequency'                                                            
+         ∨/B:⍕B/RC                                                                     
+         1⌽')(',⍕(⍴⍵.Table)'⍴',,⍺⍺¨⍵.Table}NS                                          
+          ⍝:If RO≢'independent'                                                        
+     ⍝         Sets←quoteSets¨Sets                                                     
+     ⍝     :EndIf                                                                      
+     Sets←RO∘(NS quoteSets)¨Sets                                                       
+         ⍝Expr←⍕(q 0⊃Sets),'(',Conj,' probability ',RO,')',q 1⊃Sets                    
+     Expr←⍕({⍵/⍨⍵≢NA}0⊃Sets),'(',Conj,' probability ',RO,')',1⊃Sets                    
+     P←NS.UserSpace⍎Expr                                                               
+     NS.Expr←Expr                                                                      
+     NS.Result←P                                                                       
+     :If 'independent'≡NS.get'RtOp'                                                    
+         NS.Table[1 2;1 2]←↑{⍺(1-⍺)∘.×⍵,1-⍵}/Sets                                      
+     :EndIf                                                                            
+     NS.Table←,¨@{0=80|⎕DR¨⍵}NS.Table                                                  
+     NS←NA makeVenn NS ⍝ Venn Diagram Events, Labels, Text                             
+ :Case ''           ⍝ If empty,no-op                                                   
+ :Else                                                                                 
+ :EndSelect                                                                            
+ Z←NS                                                                                  

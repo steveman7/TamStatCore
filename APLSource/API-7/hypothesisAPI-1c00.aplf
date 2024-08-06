@@ -1,0 +1,23 @@
+ Z←hypothesisAPI NS;V;I;LB;S1;S2;PA;LB;LN;SN;H;H0;TY;L2;_;⎕IO;⎕ML;Items;FMT;A
+          ⍝∇ ns-based API for Hypothesis - Last updated 6/25                 
+          ⍝⍵ NS Namespace containing the following variables                 
+          ⍝⍵  NS.Event   'Init' 'Select' or 'Run'                            
+          ⍝⍵  NS.UserSpace                                                   
+          ⍝←  NS.Grid  Contains Names, Values and Attributes                 
+          ⍝←  NS.Output  Character Matrix                                    
+ ⎕IO←0 ⋄ ⎕ML←3                                                               
+ :Select NS.Event                                                            
+ :Case 'Init'                                                                
+     NS.⎕ML←3 ⋄ NS.⎕IO←0     ⍝ Initialize settings                           
+     NS←hypothesisGrid NS    ⍝ Build grid                                    
+     NS←hypothesisAttr NS    ⍝ Assign attributes                             
+     NS.ReturnCode←0                                                         
+ :Case 'Select'                                                              
+     NS←hypothesisChange NS  ⍝ Change a cell in the grid (Uses NS.EventArg)  
+ :Case 'Run'                                                                 
+     NS←getHypoGrid NS       ⍝ Run hypothesis operator and display output    
+ :Case ''                    ⍝ If empty,no-op                                
+ :Else                                                                       
+     NS.Grid.Values←NS.rectifyStats NS.Event                                 
+ :EndSelect                                                                  
+ Z←NS                                                                        

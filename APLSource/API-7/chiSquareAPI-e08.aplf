@@ -1,0 +1,141 @@
+ Z←chiSquareAPI NS;A;B;C;D;H;I;R;V;W;N;X;TY;f;⎕IO;⎕ML                                     
+          ⍝∇ ns-based API for ChiSquareTests - Last updated 6/25                          
+          ⍝⍵ nsIn Namespace containing the following variables                            
+          ⍝⍵   Event 'Init'                                                               
+          ⍝⍵   Event 'Select'  : Select parameter, Sample or Sample2                      
+          ⍝⍵   Event 'Update'  : Update Events, Proportion, Variance or Standard Deviation
+          ⍝⍵   Event 'Run'  Signficance Data Parameter Relational HypothesizedValue       
+          ⍝← nsOut  Namespace containing  DataStat Report                                 
+          ⍝← Output Results Expr                                                          
+          ⍝   Parameter:   mean, proportion, sdev, var                                    
+          ⍝   Data:  1 or 2-item nested vector:    Expression or stats                    
+          ⍝   Values:  1×3 or 2×3 numeric matrix                                          
+          ⍝   UserSpace:   Ref or                                                         
+          ⍝⍵    Parameter Levels Var GroupBy Var2                                         
+          ⍝← nsOut Namespace contain nsIn plus the following:                             
+          ⍝←    Labels  2-item nested vector                                              
+          ⍝←    Values  1x3 or 2x3 numeric matrix                                         
+          ⍝←    Protect 2×3 boolean matrix 1=protect, 0=editable                          
+ ⎕IO←0 ⋄ ⎕ML←3                                                                            
+ :Select NS.Event                                                                         
+ :Case 'Init'                                                                             
+     NS←chiSquareGrid NS                             ⍝ Build grid                         
+     NS←chiSquareAttr NS                                                                  
+         ⍝ NS.Table←⊃{(,⍵)0 0.25}¨'ABCD'                                                  
+     NS.Table←⊃{(,⍵)⍬ 0.25}¨'ABCD'                                                        
+     NS.UserSpace←#                                                                       
+     NS.ColTitles2←'Group' 'Observed' 'Proportion/Expected'                               
+     NS.ColTypes←'ANT'                                                                    
+     NS.CellTypes←4 3⍴'ANT'                                                               
+     NS.ReturnCode←0                                                                      
+ :Case 'Select'                                                                           
+     :Select NS.EventArg                                                                  
+     :Case 'Op'                                                                           
+         :If 'goodnessOfFit'≡NS.get'Op'                                                   
+             A←⎕NS'' ⋄ A.Type←'D'                                                         
+               ⍝   A.Items←'normal' 'multinomial' 'uniform' 'poisson'                     
+             A.Items←'multinomial' 'uniform' 'poisson'                                    
+             NS.Grid.Attributes←'Dist'NS.changeAttributes A                               
+             NS.Grid.Values←'LbDist' 'Dist'NS.put'Distribution' 'uniform'                 
+             NS.Grid.Values←'LbRows' 'LbRowType' 'Rows' 'RowType'NS.put⊂''                
+             NS.Grid.Attributes.Type←'Rows' 'RowType'NS.changeType'T'                     
+             NS.Grid.Values←'LbVar' 'Cols' 'VarType'NS.put'Variable' 4 'Char'             
+             NS.Grid.Values←'Var'NS.put'frequency'                                        
+             NS.Grid.Attributes.Type←'Dist'NS.changeType'D'                               
+                 ⍝ NS.Table←⊃{(,⍵)0 0.25}¨'ABCD'                                          
+             NS.Table←⊃{(,⍵)⍬ ⍬}¨'ABCD'                                                   
+             NS.ColTitles2←'Group' 'Observed' 'Proportion/Expected'                       
+                 ⍝ NS.ColTypes←'ANT'                                                      
+             NS.CellTypes←4 3⍴'ANT'                                                       
+         :Else                            ⍝ independent                                   
+             NS.Grid.Values←'LbRows'NS.put'Categories'                                    
+             NS.Grid.Values←'LbDist'NS.put'Variable 1'                                    
+             NS.Grid.Values←'Dist' 'Rows' 'RowType'NS.put'frequency' 2 'Char'             
+             A←⎕NS''                                                                      
+             A.Type←'E' ⋄ A.Items←'A' ⋄ A.TopItem←'frequency'                             
+             NS.Grid.Attributes←'Dist'NS.changeAttributes A                               
+             NS.Grid.Attributes←'Var'NS.changeAttributes A                                
+             NS.Grid.Values←'LbVar'NS.put'Variable 2'                                     
+             NS.Grid.Values←'Var' 'Cols' 'VarType'NS.put'frequency' 2 'Char'              
+             NS.Grid.Attributes.Type←'Rows' 'RowType' 'Cols' 'VarType'NS.changeType'NTNT' 
+                  ⍝ NS.Table←(,¨'*','A1' 'A2'),(,¨'B1' 'B2')⍪2 2⍴⎕NULL                    
+                ⍝  NS.Table←(,¨'*','A1' 'A2'),(,¨'B1' 'B2')⍪2 2⍴0                         
+             NS.Table←(,¨'*' 'A1' 'A2'),('B1' 'B2')⍪2 2⍴⊂⍬                                
+             NS.ColTitles2←''                                                             
+             NS.CellTypes←'A','A'⍪(⍴NS.Table)⍴'I'                                         
+                 ⍝ NS.CellTypes←'A','A'⍪(⍴NS.Table)⍴'N'                                   
+         :EndIf                                                                           
+     :Case 'Dist'                                                                         
+         :If 'goodnessOfFit'≡NS.get'Op'                                                   
+             NS.Grid.Attributes.Type←'VarType'NS.changeType'D'                            
+             C←NS.get'Cols'                                                               
+             NS←C populateData NS                                                         
+             :Select NS.get'Dist'                                                         
+             :Case 'uniform' ⋄ NS.CellTypes←'ANT' ⋄ NS.ColTypes←'ANT'                     
+             :Case 'multinomial' ⋄ NS.CellTypes←'ANQ'                                     
+             :Case 'normal' ⋄ NS.CellTypes←'XNT'                                          
+                 NS.Grid.Values←'VarType'NS.put'Num'                                      
+                 NS.Grid.Attributes.Type←'VarType'NS.changeType'T'                        
+             :EndSelect                                                                   
+             NS.CellTypes←(⍴NS.Table)⍴NS.CellTypes                                        
+         :Else                                                                            
+             TY←('frequency'≡NS.get'Dist')⊃'TN'                                           
+             NS.Grid.Attributes.Type←'Rows'NS.changeType TY                               
+             NS.CellTypes←'A','A'⍪(¯1+⍴NS.Table)⍴'I'                                      
+             C←('Char'≢NS.get'RowType')×NS.get'Rows'   ⍝  Fix bug                         
+             NS←C populateData NS                      ⍝                                  
+         :EndIf                                                                           
+     :Case 'Rows'                                                                         
+         NS.Table←(NS.get'Rows')0 resizeTable NS.Table                                    
+         NS.CellTypes←'A','A'⍪(¯1+⍴NS.Table)⍴'I'                                          
+     :Case 'Cols'                                        ⍝                                
+         :If 'goodnessOfFit'≡NS.get'Op'                                                   
+             R←≢NS.Table                                                                  
+             :If 0≢↑0⍴↑NS.Table ⋄ R←⎕A[,R] ⋄ :EndIf                                       
+             NS.Table←(NS.get'Cols')resizeTable NS.Table                                  
+             V←NS.get'Dist' 'Var' 'VarType'                                               
+             :If ∧/V≢¨'multinomial' 'frequency' 'Char'                                    
+                 X←⍎NS.UserSpace exErr 1⊃V               ⍝ Get data set                   
+                    ⍝  W←(range X)÷¯1+N←NS.get'Cols'                                      
+                 W←NS.get'Cols'                                                           
+                 D←W frequency X                                                          
+                 :If 'normal'≡↑V                                                          
+                     NS.Table←D,NS.normProbs≢D           ⍝ Get normal probabilties        
+                     NS.CellTypes←'XNT'                                                   
+                 :Else ⋄ NS.Table←D,÷≢D ⋄ :EndIf         ⍝ Get uniform probabilities      
+             :Else                                                                        
+                 D←≢NS.Table                                                              
+                 :If 'normal'≢↑V ⋄ NS.Table[;2]←÷D ⋄ :Else  ⍝ If uniform                  
+                     NS.Table[;2]←NS.normProbs D ⋄                                        
+                     NS.CellTypes←'XNT'                                                   
+                 :EndIf                                                                   
+             :EndIf                                                                       
+             NS.CellTypes←(⍴NS.Table)⍴NS.CellTypes                                        
+         :Else                                                                            
+             NS.Table←0(NS.get'Cols')resizeTable NS.Table                                 
+             NS.CellTypes←'A','A'⍪(¯1+⍴NS.Table)⍴'I'                                      
+         :EndIf                                                                           
+     :CaseList 'VarType' 'RowType'                                                        
+         f←{=/⍺:⍵ ⋄ </⍺:(≢⍵)↑⎕A ⋄ ⍳⍴⍵}                   ⍝ Convert numeric/char headings  
+         :If 'goodnessOfFit'≡NS.get'Op'                                                   
+             C←' '≡↑↑0⍴NS.Table[;0]                      ⍝ Old Var Type                   
+             C,←'Char'≡NS.get'VarType'                   ⍝ New Var Type                   
+             NS.Table[;0]←C f NS.Table[;0]                                                
+             NS.CellTypes[;0]←C[1]⊃'XA'                  ⍝ Change 1st col type?           
+         :Else                                                                            
+             (R C)←NS.get'RowType' 'VarType'                                              
+             B←R C↑1 1↓NS.Table                                                           
+             NS.Table[;0]←'*',⍕¨1+⍳R                                                      
+             NS.Table[0;]←'*',C↑⎕A                                                        
+         :EndIf                                                                           
+     :Case 'Var'                                                                          
+         C←('Char'≢NS.get'VarType')×NS.get'Cols'                                          
+         NS←C populateData NS                                                             
+     :EndSelect                                                                           
+ :Case 'Run'                                                                              
+     NS←runChiSqTest NS                                                                   
+ :Case ''                                           ⍝ If empty,no-op                      
+ :Else                                                                                    
+         ⍝ NS.Grid.Values←NS.rectifyStats NS.Event                                        
+ :EndSelect                                                                               
+ Z←NS                                                                                     

@@ -1,0 +1,17 @@
+ regressAttr←{                                                                                                    
+     ⎕IO←0 ⋄ ⎕ML←3                                                                                                
+     NS←⍵                                                                                                         
+     A←⎕NS''                                                                                                      
+     A.Items←'[None]' 'quadratic' 'cubic' 'sqrt' 'ln' '÷' '×' '≠'                                                 
+     NS.Grid.Attributes←'Tx'NS.changeAttributes A                                                                 
+     A←⎕NS''                                                                                                      
+     A.FormatString←'F5.3'                                                                                        
+     NS.Grid.Attributes←'Sig'NS.changeAttributes A                                                                
+     A←⎕NS''                                                                                                      
+     A.Items←'F'              ⍝ Numeric field (Floating Point)                                                    
+     NS.Grid.Attributes←(,'X')NS.changeAttributes A                                                               
+     NS.Grid.Attributes←(,'Y')NS.changeAttributes A                                                               
+     A←⎕NS''                                                                                                      
+     A.callBack←{⎕IO←0 ⋄ A←⎕NS'' ⋄ A.Type←'TA'['cubic'≡⍵.get'Tx'] ⋄ ⍵.Grid.Attributes←'Knots'⍵.changeAttributes A}
+     NS.Grid.Attributes←'Tx'NS.changeAttributes A                                                                 
+     NS}                                                                                                          

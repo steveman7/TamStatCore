@@ -1,0 +1,29 @@
+ confIntAttr←{                                                                  
+     NS←⍵                                                                       
+     A←⎕NS''                                                                    
+     A.Items←'mean' 'proportion' 'var' 'sdev' 'median'                          
+     NS.Grid.Attributes←'Parameter'NS.changeAttributes A                        
+     A.Items←'--' ' - Sample2' 'splitBy'                                        
+     NS.Grid.Attributes←'LbSample2'NS.changeAttributes A                        
+         ⍝A.Items←'F' ⋄ A.TopItem←'stats' ⍝ Numeric field (Floating Point)      
+     A.Items←'f' ⋄ A.TopItem←'stats' ⍝ Numeric field (Floating Point)           
+     NS.Grid.Attributes←'Sample'NS.changeAttributes A                           
+     A←⎕NS''                                                                    
+     A.validate←{(⍵=⌊⍵)∧⍵>0}                                                    
+     A.ErrorMsg←'Must be a postive integer'                                     
+     A.FormatString←'I6'                                                        
+     NS.Grid.Attributes←'SampSize' 'SampSize2'NS.changeAttributes A             
+     A.validate←{⍵≥0}                                                           
+     A.ErrorMsg←'Negative values not permitted.'                                
+     A.FormatString←'F9.5'                                                      
+     A.Decimals←0                                                               
+     NS.Grid.Attributes←'Sdev' 'Sdev2'NS.changeAttributes A                     
+     A.validate←{1}                                                             
+     A.FormatString←'F12.5'                                                     
+     NS.Grid.Attributes←'Mean' 'Mean2'NS.changeAttributes A                     
+     A←⎕NS''                                                                    
+     A.Decimals←2                                                               
+     A.FormatString←'F5.2'                                                      
+     NS.Grid.Attributes←'Level1' 'Level2' 'Level3' 'Level4'NS.changeAttributes A
+     NS                                                                         
+ }                                                                              

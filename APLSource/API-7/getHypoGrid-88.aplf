@@ -1,0 +1,33 @@
+ Z←getHypoGrid NS;Sample;Sample2;⎕IO;⎕ML;US;xeq;H;Parm;P                       
+      ⍝∊ Written by Steve Mansour  2019                                        
+      ⍝⍵ Get expression from Hypothesis Grid                                   
+      ⍝⍵ Namespace with grid                                                   
+ ⎕IO←0 ⋄ ⎕ML←3                                                                 
+ Parm←NS.get'Parameter'                                                        
+ :If 'stats'≡NS.get'Sample'                                                    
+     Sample←1⌽')(',(-Parm≡'proportion')↓NS.get'Sample' 'SampSize' 'Mean' 'Sdev'
+ :Else                                                                         
+     Sample←1⌽')(',NS.get'Sample'                                              
+ :EndIf                                                                        
+ :If 'stats'≡NS.get'Sample2'                                                   
+     Sample2←(-Parm≡'proportion')↓NS.get'Sample2' 'SampSize2' 'Mean2' 'Sdev2'  
+ :ElseIf 'splitBy'≡NS.get'LbSample2'                                           
+     Sample2←Sample,NS.get'LbSample2' 'Sample2'                                
+     Sample←' '                                                                
+ :Else                                                                         
+     Sample2←NS.get'Sample2'                                                   
+ :EndIf                                                                        
+ xeq←Sample Parm'hypothesis'(NS.get'Relation')Sample2                          
+     ⍝ :If 'mean eqVar'≡1⊃xeq ⋄ xeq[1 3]←'mean'('/',⍨3⊃xeq) ⋄ :EndIf           
+ :If 'mean eqVar'≡1⊃xeq ⋄ xeq←'mean'(xeq[2 3 0]),'(',xeq[4]')' ⋄ :EndIf        
+ US←{2=⎕NC'⍵':⍎⍵ ⋄ ⍵}NS.UserSpace                                              
+ NS.Expr←deleteExcessBlanks⍕(NS.get'Significance')'report'xeq                  
+ NS.ReturnCode←1                                                               
+ H←US{0::0 ⋄ ⍺⍎⍵}⍕xeq                                                          
+ :If 2=⎕NC'H' ⋄ NS.Output←'Error' ⋄ :Else                                      
+     NS.Output←US⍎NS.Expr ⋄ :EndIf                                             
+ 'NS'⎕NS↓'H','.',H.⎕NL 2                                                       
+ NS.SampleSize←NS.get'SampSize'                                                
+ NS.ReturnCode←0                                                               
+ NS.(Conclusion←P<get'Significance')                                           
+ Z←NS                                                                          

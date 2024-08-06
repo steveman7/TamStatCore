@@ -1,0 +1,27 @@
+ resizeTable←{                                                         
+     ⍝∇ Resize a table with row and/or column headers                  
+     ⍝⍺ Number of rows                                                 
+     ⍝⍺ [Number of columns]                                            
+     ⍝⍺ Design                                                         
+     ⍝⍵ Original 3-column table [Category Observed Proportion]         
+     ⍝  or Contingency table with row and column headings              
+     ⍝  or Latin Square Table                                          
+     ⍝    *   DEM IND REP                                              
+     ⍝    M    80 24  19                                               
+     ⍝    F    16 17  52                                               
+     ⎕IO←0 ⋄ ⎕ML←3                                                     
+         ⍝ Fill←⊂⍬                                                     
+     Fill←0                                                            
+     D←↑⌽⍺                                      ⍝ Design?              
+     f←{,[1 2]⍉⊃((⍳⍺)⌽⍺ ⍺⍴⍺↑⎕A)⍵}               ⍝ Latin Square         
+     g←{a←standardOrder ⍺↑⎕UCS 32+⎕UCS ⎕A                              
+         a,(2*⍺)⍵⍴0}                                                   
+     D≡'latinSquare':(↑⍺)f Fill                                        
+     D≡'factorial2k':↑g/2↑⍺                                            
+     1=≢⍺:⍺↑{⍵⍪⎕A[≢⍵],(¯1+↑⌽⍴⍵)⍴Fill}⍣(0⌈⍺-≢⍵)⊢⍵   ⍝ Increment         
+     A←⍺+(⍺=0)×¯1+⍴⍵                                                   
+     r c←0⌈1+A-⍴⍵                               ⍝ Rows, columns to add 
+     w←{((⊂'A',⍕≢⍵)@(⊂0,⍨≢⍵))⍵⍪Fill}⍣r⊢⍵        ⍝ Row headings     'An'
+     w←{((⊂'B',⍕≢⍉⍵)@(⊂0,1⊃⍴⍵))⍵,Fill}⍣c⊢w      ⍝ Column headings  'Bn'
+     (A+1)↑w                                                           
+ }                                                                     
