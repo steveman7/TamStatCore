@@ -27,7 +27,7 @@
      ~FN:⍺⍺(Int regressInd 1)X
      FN∧~DB:⍺ ⍺⍺{U←3 ⍺⍺ 4                ⍝ Test operand
          U=4:⍺(Int regressPoly)⍵         ⍝ Polynomial (⊥)
-         U=5:⍺(⍺⍺ 1)(Int regressPoly)⍵  ⍝ Cubic/Quadratic
+         U=5:⍺(⍺⍺ 1)(Int regressPoly)⍵   ⍝ Cubic/Quadratic
          U∊0 1:⍺(Int regressBin)⍵        ⍝ Binary regression (= or ≠)
          ⍺(⍺⍺ vst Int)⍵                  ⍝ Variance stabilizing transformation
      }X

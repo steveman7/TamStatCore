@@ -1,0 +1,4 @@
+ logit←{
+ ⍝ Logistic regression
+
+     ⍺≠⍵}

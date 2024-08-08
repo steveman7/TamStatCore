@@ -1,4 +1,4 @@
- Z←regressAPI NS;V;I;LB;S1;S2;PA;LB;LN;SN;H;H0;YX;TY;L2;_;⎕IO;⎕ML;Items;FMT;A
+ Z←regressAPI NS;V;I;LB;S1;S2;PA;LB;L;LN;SN;H;H0;YX;TY;L2;_;⎕IO;⎕ML;Items;FMT;A
           ⍝∇ ns-based API for Regression - Last updated 6/27/2024
           ⍝⍵ NS Namespace containing the following variables
           ⍝⍵  NS.Event   'Init' 'Select' or 'Run'
@@ -21,7 +21,7 @@
              A.Type←'A'
              NS.Grid.Attributes←'Knots'NS.changeAttributes A
              NS.Grid.Values←'LbKnots'NS.put'Knots (Optional)'
-         :Case '≠'
+         :CaseList 'logit' '≠'
              A.Type←'A'
              NS.Grid.Attributes←'Knots'NS.changeAttributes A
              NS.Grid.Values←'LbKnots'NS.put'Guess (Int,Slope)'
@@ -34,14 +34,28 @@
      :EndIf
  :Case 'Run'
      V←NS.Grid.Values[;1]                              ⍝
-     V[¯1+≢V]←{2>≢⍵:⍵ ⋄ 1⌽')(',⍵}¨(//⎕VFI⍕↑⌽V)         ⍝ Parenthesize Knots
+     V[¯1+≢V]←{2>≢⍵:⍵ ⋄ 1⌽')(',⍵}¨(//⎕VFI(','⎕R' ')('-'⎕R'¯')⍕↑⌽V)   ⍝ Parenthesize Knots
      NS.Expr←deleteExcessBlanks⍕V[0],('report ⊢ ',1⊃V),'←',2↓V~⊂'[None]'
      NS.Output←NS.UserSpace⍎NS.Expr      ⍝ Run hypothesis operator and display output
-     YX←NS.UserSpace⍎(NS.get,'Y'),',⍪',NS.get,'X'
+     NS.YX←NS.UserSpace⍎(NS.get,'Y'),',⍪',NS.get,'X'
+     NS.MODEL←NS.UserSpace⍎NS.get'Model'
+     L←0=NS.MODEL.⎕NC'g'          ⍝ Linear?
+     NS.XHat←L{LU←(⌊/,⌈/)⍵ ⋄ ⍺:LU
+         LU[0]to LU[1],0.01×|-/LU}NS.YX[;1]
+     NS.YHat←L{⍺:⍵.(MODEL.f XHat) ⋄ ⍵.(MODEL.g XHat)}NS
+
+     NS.CB←L{C←1-⍵.get'Sig'
+         ⍺:C ⍵.MODEL.f confInt ⍵.XHat    ⍝ Confidence Intervals
+         C ⍵.MODEL.g confInt ⍵.XHat}NS
+
+
+
+     ⍝NS.YHAT←NS.MODEL.g NS.YX[;1]
+⍝     NS.CB←(NS.get 'Sig') NS.MODEL.g confInt NS.YX[;1]
          ⍝ YX←NS.UserSpace⍎⍕',⍪' pairwise NS.get∘,¨ 'YX'
         ⍝  NS.Plot←YX regressPlot NS.UserSpace⍎NS.get 'Model'
  :Case ''                    ⍝ If empty,no-op
- :Else
-     NS.Grid.Values←NS.rectifyStats NS.Event
+ ⍝:Else
+⍝     NS.Grid.Values←NS.rectifyStats NS.Event
  :EndSelect
  Z←NS
