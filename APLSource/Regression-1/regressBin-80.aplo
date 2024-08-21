@@ -10,7 +10,8 @@
          Y←⍺
         ⍝ B←⊃⌽⍵ ⋄ X←Int,⍪⍉⊃¯1↓⍵     ⍝ Separate X from guess
          X B←⍵ ⋄ ⎕PP←5
-         B JBI H Pi←(Y,⍪X)logistic⍣≡B ⍝ MLE estimatation of parameters
+        ⍝ B JBI H Pi←(Y,⍪X)logistic⍣≡B ⍝ MLE estimatation of parameters
+         B JBI H Pi←(Y,⍪X)logistic⍣100⊢B ⍝ MLE estimatation of parameters
          DF←⍺-⍥≢B
          S←sqrt DF÷⍨sumSquares Y-Pi
          NS←⎕NS''

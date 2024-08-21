@@ -30,14 +30,10 @@
          EU←⊃I≥⊂⍴G                                ⍝ Check for Index Error
          EL←⊃I<0
          I←0⌈I⌊⊂¯1+⍴G                             ⍝ Keep indices within bounds
-        ⍝I←¯1+↓⍉⊃M[;2]
-         A←⍺ ⋄ (EU[;0]/A)←'∧' ⋄ (EU[;1]/A)←'>'
+         A←(≢EU)⍴⍺ ⋄ (EU[;0]/A)←'∧' ⋄ (EU[;1]/A)←'>'
          (EL[;0]/A)←'∨' ⋄ (EL[;1]/A)←'<'
-        ⍝ G[I]←↑¨⍺                                ⍝ Insert * for each pair
          G[I]←↑¨A
-        ⍝K←2=≢¨⍺
          K←2=≢¨A
-        ⍝ G[(⊂0 1)+K/I]←↑∘⌽¨K/⍺
          G[(⊂0 1)+K/I]←↑∘⌽¨K/A
          T←M[;0]                                 ⍝ Tick Size
          FS←{⍵≥1:'I10'                           ⍝ Format string
@@ -47,9 +43,7 @@
          B←25⍴1 4/1 0                            ⍝ Expand
          YI←(B⍀(0⊃FS)⎕FMT 0⊃S),'│┤'[B]           ⍝ Build Y-axis
          XI←(1 81⍴1 9/'┬─')⍪' ',,(1⊃FS)⎕FMT 1⊃S  ⍝ Build X-axis
-        ⍝  XI[0;⍳11]←YI[0;⍳10],'┼'                 ⍝ Insert tick marks
          XI[0;⍳10]←¯10↑'└'                        ⍝ Insert tick marks
-        ⍝ (⊖1↓YI,G,' ')⍪87↑⍤1⊢XI                  ⍝ Assemble plot
          (⊖G,⍨YI⍪' ')⍪87↑⍤1⊢' ',XI              ⍝ Assemble plot
      }YX
      Type←'Graph'

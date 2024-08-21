@@ -35,9 +35,11 @@
  :Case 'Run'
      V←NS.Grid.Values[;1]                              ⍝
      V[¯1+≢V]←{2>≢⍵:⍵ ⋄ 1⌽')(',⍵}¨(//⎕VFI(','⎕R' ')('-'⎕R'¯')⍕↑⌽V)   ⍝ Parenthesize Knots
+     V[2]←⊂{' '∊⍵:'(',⍵,')' ⋄ ⍵}2⊃V
      NS.Expr←deleteExcessBlanks⍕V[0],('report ⊢ ',1⊃V),'←',2↓V~⊂'[None]'
      NS.Output←NS.UserSpace⍎NS.Expr      ⍝ Run hypothesis operator and display output
-     NS.YX←NS.UserSpace⍎(NS.get,'Y'),',⍪',NS.get,'X'
+    ⍝NS.YX←NS.UserSpace⍎(NS.get,'Y'),',⍪',NS.get,'X'
+     NS.YX←NS.UserSpace⍎(2⊃V),',⍪',NS.get,'X'
      NS.MODEL←NS.UserSpace⍎NS.get'Model'
      L←0=NS.MODEL.⎕NC'g'          ⍝ Linear?
      NS.XHat←L{LU←(⌊/,⌈/)⍵ ⋄ ⍺:LU

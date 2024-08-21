@@ -17,7 +17,7 @@
      SB←(MSE×0 0⍉C)*÷2                                ⍝ Standard Error for coeffs
      SSR←SST-SSE                                      ⍝ Regression sum of squares
      ns←'Regression'buildAnovaTable SSR SSE,k DF,⍪2 0 ⍝ Create ANOVA table
-     ns.AnovaTable←ns.AnovaTable{2≠⍴⍵:⍺               ⍝ If multple reg or no dups, exit
+     ns.AnovaTable←ns.AnovaTable{11::⍺ ⋄ 2≠⍴⍵:⍺       ⍝ If multple reg or no dups, exit
          0∧.=PE←+⌿↑{(2+.*⍨⍵-mean ⍵),¯1+≢⍵}⌸/⌽⍵:⍺      ⍝ Calculate Pure Error SS,DF
          ERR←⍉(⍺[2;1 2]-PE),⍪PE                       ⍝ Split Error into LOF, PE
          P←ERR[;1]fDist prob>F←÷/⍣2⊢ERR               ⍝ Calculate F and P
