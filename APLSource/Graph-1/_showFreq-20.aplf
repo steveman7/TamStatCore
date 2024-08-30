@@ -32,10 +32,9 @@
      Z←D⍪Z[⍳L;]⍪D⍪Z[,L;]              ⍝
      H←b⊃('From' 'To')(⊂'Category')   ⍝
      H,←'Frequency' 'Cum Freq' 'Percent' 'Cum Pct'
-         ⍝ Z⍪⍨∊¯10↑¨H                       ⍝ Affix header
      Z←Z⍪⍨∊¯10↑¨H                       ⍝ Affix header
     ⍝ 9=⎕NC'##.Graph':Z                ⍝ If Desktop version, exit
-     0=#.⎕NC'Boot':Z                ⍝ If Desktop version, exit
+     0=#.⎕NC'Boot':Z                   ⍝ If Desktop version, exit
      a←⎕NS''
      ns←⎕NS''
      ns.data←H⍪data

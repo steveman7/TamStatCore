@@ -25,7 +25,7 @@
          P←2×normal prob>|Z
          Coeff←'*' 'Int' 'X','Coeff' 'SE' 'Z' 'P'⍪B,SE,Z,⍪P
          ⍝Freq←frequency show ⍺
-         Freq←0J1 frequency ⍺
+         Freq←⍕(⊂'Total')@(⊂3 0)⊢'Value' 'Count'⍪(⊖⍪+⌿)frequency ⍺
          OddsRatio←*B[1]
          LogLikelihood←(⍺+.×⍟Pi÷1-Pi)++/⍟1-Pi ⍝ Log Likelihood
          Expr←⍕'Y←÷1+exp -',B[0],'+(',B[1],'× X) + E'
