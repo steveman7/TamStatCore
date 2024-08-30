@@ -42,12 +42,13 @@
      NS.YX←NS.UserSpace⍎(2⊃V),',⍪',NS.get,'X'
      NS.MODEL←NS.UserSpace⍎NS.get'Model'
      L←0=NS.MODEL.⎕NC'g'          ⍝ Linear?
-     NS.XHat←L{LU←(⌊/,⌈/)⍵ ⋄ ⍺:LU
+     NS.XHat←L{LU←(⌊/,⌈/)⍵ ⋄ ⍝⍺:LU
          LU[0]to LU[1],0.01×|-/LU}NS.YX[;1]
      NS.YHat←L{⍺:⍵.(MODEL.f XHat) ⋄ ⍵.(MODEL.g XHat)}NS
 
      NS.CB←L{C←1-⍵.get'Sig'
          ⍺:C ⍵.MODEL.f confInt ⍵.XHat    ⍝ Confidence Intervals
+         ⍺:C ⍵.MODEL.f confInt⊃{⍺ to ⍵,0.01×|-/⍵}/⍵.XHat
          C ⍵.MODEL.g confInt ⍵.XHat}NS
 
 
