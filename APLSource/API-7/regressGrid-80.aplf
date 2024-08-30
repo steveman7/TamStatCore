@@ -1,41 +1,41 @@
- regressGrid←{                                                    
-          ⍝∊ Written by Steve Mansour 2024                        
-          ⍝∇ Build a Grid Object for simple regression wizard     
-          ⍝⍵ Empty Namespace                                      
-          ⍝← Namespace containing the following:                  
+ regressGrid←{
+          ⍝∊ Written by Steve Mansour 2024
+          ⍝∇ Build a Grid Object for simple regression wizard
+          ⍝⍵ Empty Namespace
+          ⍝← Namespace containing the following:
           ⍝←  Grid.Names:   Cell name, e.g. 'Parameter' 'SampSize'
-          ⍝←  Grid.Values:  Cell vallue, e.g. 'mean' 30           
-          ⍝←  Grid.Types:   Cell type, e.g. 'Txt'  'Int'          
-          ⍝←  'mean' ← NS.get 'Parameter'                         
-          ⍝←  GridValues ← 'SampSize' NS.put 30                   
-     ⎕IO←0 ⋄ ⎕ML←3                                                
-     f←⊂∘toNestedVector                                           
-     ⍵.Grid←⎕NS''                                                 
-     ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Values ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝     
-     G←f'Significance,0.050'                                      
-     G,←f'Model Name,MODEL'                                       
-     G,←f'Response Variable, '                                    
-     G,←f'Transformation,[None]'                                  
-     G,←f'Operation,regress'                                      
-     G,←f'Predictor Variable, '                                   
-     G,←f' , '                                                    
-     I←⍸{↑↑⎕VFI ⍵}¨⊃G         ⍝ Find indices of numeric cells     
+          ⍝←  Grid.Values:  Cell vallue, e.g. 'mean' 30
+          ⍝←  Grid.Types:   Cell type, e.g. 'Txt'  'Int'
+          ⍝←  'mean' ← NS.get 'Parameter'
+          ⍝←  GridValues ← 'SampSize' NS.put 30
+     ⎕IO←0 ⋄ ⎕ML←3
+     f←⊂∘toNestedVector
+     ⍵.Grid←⎕NS''
+     ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Values ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     G←f'Significance,0.050'
+     G,←f'Model Name,MODEL'
+     G,←f'Response Variable, '
+     G,←f'Transformation,[None]'
+     G,←f'Operation,regress'
+     G,←f'Predictor Variable, '
+     G,←f' , '
+     I←⍸{↑↑⎕VFI ⍵}¨⊃G         ⍝ Find indices of numeric cells
      ⍵.Grid.Values←⍎¨@I⊃G     ⍝ Replace text with numerical values
-     ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Names ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝           
-     G←f'LbSig,Sig'                                               
-     G,←f'LbModel,Model'                                          
-     G,←f'LbY,Y'                                                  
-     G,←f'LbTx,Tx'                                                
-     G,←f'LbOp,Op'                                                
-     G,←f'LbX,X'                                                  
-     G,←f'LbKnots,Knots'                                          
-     ⍵.Grid.Names←⊃G                                              
-      ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Types ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝       
-     G←⊃'TQ' 'TA' 'TE' 'TD' 'TT' 'TE' 'TA'                        
-     ⍵.Grid.Attributes←⎕NS¨7 2⍴⊂''                                
-     ⍵.Grid.Attributes.Type←⊃G                                    
-     ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Events ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝        
-     ⍵.get←{1<≡⍵:∇¨⍵ ⋄ (⍸Grid.Names∊⊂⍵)⊃Grid.Values}              
-     ⍵.put←{w←⊆⍣(80=⎕DR ⍵)⊢⍵ ⋄ (w@(⍸Grid.Names∊⊆⍺))Grid.Values}   
-     ⍵.changeAttributes←changeAttributes                          
-     ⍵}                                                           
+     ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Names ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     G←f'LbSig,Sig'
+     G,←f'LbModel,Model'
+     G,←f'LbY,Y'
+     G,←f'LbTx,Tx'
+     G,←f'LbOp,Op'
+     G,←f'LbX,X'
+     G,←f'LbKnots,Knots'
+     ⍵.Grid.Names←⊃G
+      ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Types ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     G←⊃'TQ' 'TA' 'TE' 'TD' 'TT' 'TE' 'TT'
+     ⍵.Grid.Attributes←⎕NS¨7 2⍴⊂''
+     ⍵.Grid.Attributes.Type←⊃G
+     ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Events ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     ⍵.get←{1<≡⍵:∇¨⍵ ⋄ (⍸Grid.Names∊⊂⍵)⊃Grid.Values}
+     ⍵.put←{w←⊆⍣(80=⎕DR ⍵)⊢⍵ ⋄ (w@(⍸Grid.Names∊⊆⍺))Grid.Values}
+     ⍵.changeAttributes←changeAttributes
+     ⍵}
