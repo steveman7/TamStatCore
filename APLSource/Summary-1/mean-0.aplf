@@ -13,7 +13,6 @@
      ⍝⍎ 1.4 ← mean 4 2 matrix 0 0.2 1 0.3 2 0.4 3 0.1 ⍝ Relative Frequency
      ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⎕DIV←1 ⋄ ⍺←0      ⍝ Set up variables
      ⍵≡'Type':'Center'                 ⍝ Measure of center
-    ⍝1=×↑⍺:⍺ confMean ⍵                ⍝ If ⍺≠0:confInt
      ↑⍺ between 0 1:⍺ confMean ⍵       ⍝ If ⍺∊(0,1)confInt
      9=⎕NC'⍵':⍵.mean                   ⍝ If namespace, get mean property
    ⍝  ~'X'check ⍵:⎕SIGNAL 11           ⍝

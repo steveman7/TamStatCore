@@ -1,0 +1,15 @@
+ boxCox←{⍝BoxCox Transformation
+ ⍝∇ Box Cox Model
+ ⍝∊ Section 3.7.1 p. 94
+ ⍝∊ Montgomery Into to Regression Analysis
+ ⍝⍺ FV Response Variable
+ ⍝⍵ FV Predictor Variable
+ ⍝← FI Lambda
+     f←{YDot←*(+/⍟⍵)÷≢⍵
+         ⍺=0:YDot×⍟⍵
+         (¯1+⍵*⍺)÷⍺×YDot*⍺-1}
+     L←¯2 ¯1 ¯0.5 0 0.5 1 2
+     YL←L f¨⊂⍺
+     M←YL{⍺ regress ⍵}¨⊂⍵
+     SSE←M.(DF×MSE)
+     L[SSE⍳⌊/SSE]}

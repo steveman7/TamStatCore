@@ -1,0 +1,21 @@
+ calcw2←{
+⍝∇ Calculate Variances/⍵^2 given Anova Table
+⍝⍵ Anova Table
+⍝← Vector of Variances
+⍝← Vector of Omega2
+     ⎕IO←0 ⋄ ⎕ML←1
+     E T←↓¯2↑⍵        ⍝ Error, Total Rows
+     DF←1↓⍵[;2]       ⍝ Degrees of Freedom
+     MS←¯2↓1↓⍵[;3]    ⍝ Mean Square Between
+     MSW←3⊃E          ⍝ Mean Square Error
+     SST←1⊃T
+     N←1+⊃⌽DF         ⍝ Sample Size
+     S2←(¯2↓DF)÷N÷MS-MSW
+     S2T←+/S2,MSW
+     S2÷S2T
+⍝         NS.Omega2←(⍵[1;1]-⍵[1;2]×⍵[2;3])÷⍵[3;1]+⍵[2;3]
+
+
+
+
+ }

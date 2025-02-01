@@ -20,15 +20,14 @@
     ⍝ 0=⎕NC'⍺':∇/⍵                            ⍝ Is left argument missing?
      ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍝x1 x2←⍺ ⍵               ⍝ Set system variables
      r←2⊥0 0 1 ⍵⍵ 0 1 0                       ⍝ Identify relation
-    ⍝ (r∊¯1 0)∨2=1 ⍵⍵ 2:⍺ ⍺⍺ _paired ⍵⍵ ⍵      ⍝ If right operand is -,⌈,⌊ use paired samples
-    ⍝ 0J1≡↑⍵:⍺ ⍺⍺ _paired ⍵⍵ 1↓⍵               ⍝ If paired samples, treat differently
      c←r<4                                    ⍝ Identify claim 0=null, 1=alternative
      R←(¯1+r⌊7-r)⊃1 ¯1 0                      ⍝ Lower, upper or two tails?
-     i←+/,⍺⍺ 1 2 6
+     i←⍺⍺{⍵:20+1 2 3 ⍺⍺ 4 6 8                 ⍝ Identify bivariate function
+         ⍺⍺ 1 2 6}'Association'≡⍺⍺'Type'      ⍝ Identity summary function
+     ⍝    +/,⍺⍺ 1 2 6}
      0=⎕NC'⍺':r c i monadicHypothesis ⍵       ⍝ Equal Variances; three or more groups
      i=12:⍵⍵ wilcoxon ⍺-⍵                     ⍝ paired median
-    ⍝ i=13:(⍺-⍵)mean hypothesis ⍵⍵ 0           ⍝ paired mean
-     i=13:⍺ ⍵⍵{ns←(⍺-⍵)mean hypothesis ⍺⍺ 0    ⍝ paired mean
+     i=13:⍺ ⍵⍵{ns←(⍺-⍵)mean hypothesis ⍺⍺ 0   ⍝ paired mean
          ns._Paired←1 ⋄ ns}⍵
      x1 x2←⍺ ⍵
      s←↑(⍴⍴x2)∨9=⎕NC'x2'                      ⍝ One or two samples?
@@ -37,13 +36,20 @@
          i=¯1:⍺ proportionHo ⍵                ⍝   type
          i=2:⍺ medianHo ⍵
          7∊i*1 2:⍺ varianceHo ⍵               ⍝       of
-         i=0:⍺ corrHo ⍵}                      ⍝         test
-     y←{9=⎕NC'⍵':⍵ ⋄ ⍵*2*(s=0)∧i≠⌊i}x2        ⍝ Square if sdev
+         i=21:⍺ corrHo ⍵                      ⍝         test
+         i=20.5:⍺ slopeHo ⍵
+         i=19:⍺ interceptHo ⍵
+         i=20:⍺ mseHo ⍵
+         i=22:⍺ covHo ⍵}
+     SD←7=i*2                                 ⍝ Is std deviation?
+    ⍝ y←{9=⎕NC'⍵':⍵ ⋄ ⍵*2*(s=0)∧i≠⌊i}x2       ⍝ Square if sdev
+     y←SD{9=⎕NC'⍵':⍵ ⋄ ⍵*2*⍺∧s=0}x2          ⍝ Square if sdev
      ns←R s f x1 y                            ⍝ Apply the test
-     ns.Estimate*←÷2*i≠⌊i                      ⍝ Adjust for sdev
+     ns.Estimate*←÷2*SD                       ⍝ Adjust for sdev
+     ns←SD{~⍺:⍵ ⋄ ⍵._Parameter←'σ' ⋄ ⍵}ns     ⍝  "      "   "
      ns._Populations←s+1                      ⍝ One or two populations?
      ns._Relation←(¯1 0 1⍳R)⊃'<≠>'            ⍝ One or two tails?
-     ns._Parameter←(¯1 0 2 3 7⍳i)⊃'p⍴ηµ',⌽,\'σ²'  ⍝ Parameter of interest
+  ⍝  ns._Parameter←(¯1 21 2 3 7⍳i)⊃'p⍴ηµ',⌽,\'σ²'  ⍝ Parameter of interest
      ns._Claim←c                              ⍝ Claim is H1 if <, > or ≠, otherwise H0
      ns._HypothesizedValue←s⊃x2 0             ⍝ Assumed value
      ns._Paired←{0::0 ⋄ ⍵._Paired}ns          ⍝ Set paired to 0 if it doesn't exist

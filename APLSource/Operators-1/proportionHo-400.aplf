@@ -20,5 +20,6 @@
      ns.DegreesOfFreedom←⍬
      ns.ParameterList←0 1
      ns.dist←normal
+     ns._Parameter←'p'
      ns
  }

@@ -13,6 +13,7 @@
      ⍝⍎ proportion STATE eq 'PA'
      ⍝⍎ proportion Height > 72
      ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←0
+     ⍵≡'Type':'Center'                 ⍝ Measure of center
      ↑⍺ between 0 1:(2↑∊⍺)confProp ⍵
      1≤⍺:0.95 ⍺ confProp ⍵
      9=⎕NC'⍵':{1≠×/×⍵-0 1:⍵ ⋄ ¯1}⍵.mean  ⍝ Get mean if summary

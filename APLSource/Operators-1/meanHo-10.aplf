@@ -18,6 +18,7 @@
      ns.P←p×tails                         ⍝ p-Value
      ns.DegreesOfFreedom←df
      ns.ParameterList←df
+     ns._Parameter←'µ'
      ns.dist←tDist
      ns
  }

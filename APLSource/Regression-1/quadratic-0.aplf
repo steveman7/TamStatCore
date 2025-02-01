@@ -1,5 +1,12 @@
  quadratic←{⍝ Generate quadratic central model
+     ⎕IO←0 ⋄ ⎕ML←3
      ⍵≡4:5
      ⍵≡1:2
      (⍵-mean ⍵)∘.*1 2
+     ⍝⍝⍝⍝⍝ New version ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+     Int←(1=⊃⍵)∧2=≡⍵
+     Y X←{(⊃⍵)(1↓⍵)}Int↓⍵
+     Y 2(Int regressPoly)X
+
+
  }

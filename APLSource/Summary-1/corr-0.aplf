@@ -1,5 +1,5 @@
  corr←{⎕IO←0 ⋄ ⎕ML←3 ⋄ ⎕DIV←1
- ⍝⍟ Copyright 2018 by Stephen M. Mansour
+ ⍝⍟ Copyright 2018, 2025 by Stephen M. Mansour
  ⍝∇ Correlation
  ⍝∊ Summary Function (Dyadic); Measure of Association
  ⍝⍺ [Y]          Yv  Raw Data
@@ -14,26 +14,26 @@
  ⍝⍕ [Y|Database] corr X|XX|NameList|Database
  ⍝⍎ Value←Y corr X                      ⍝ Produces Sample Correlation Coefficient
  ⍝⍎ Matrix←corr X1 X2 ... Xn            ⍝ Produces Correlation Matrix
- ⍝⍎ Table←Database corr 'X1 X2 ... Xn'  ⍝ Produces Correlation Table for X1 ... Xn
  ⍝⍎ Matrix←corr Database.(X1 X2 ... Xn) ⍝ Produces Correlation Matrix
  ⍝⍎ Table←corr Database                 ⍝ Produces Correlation Table for all numeric variables
+ ⍝⍎ Table←'X1 X2 ... Xn' corr Database  ⍝ Produces Correlation Table for X1 ... Xn
  ⍝⍎ Height corr Weight
  ⍝⍎ corr Height Weight ShoeSize
-    ⍝0=⎕NC'⍺':∘.∇⍨⍵                     ⍝ No left arg, make corr matrix
-     0=⎕NC'⍺':∇{9≠⎕NC'⍵':∘.⍺⍺⍨⍵         ⍝ No left arg, make corr matrix
-         ⍵ ⍺⍺⍕2 variables ⍵}⍵           ⍝  unless namespace, then make corr table
-     9=⎕NC'⍺':⍕⍺ ∇{m←⍺⍺ ⍺.(⍎⍵)          ⍝ If namespace
-         m{(⍵,⍨⊂'corr'),⍵⍪⍺}(⍵≠' ')⊂⍵}⍵ ⍝ Add labels
-     B←(2=≢⍺)∧(1=≡⍺)∧(↑⍺)between 0 1    ⍝ If 1st item prob and
-     B∧←⍵{(⍵=0)∨(⍵=⌊⍵)∧⍵>≢↑⊆⍺}↑⌽⍺       ⍝ 2nd item sample size
-     B:⍺ confCorr ⍵                     ⍝ Do conf interval
-     1∊≢¨⍺ ⍵:0
-     b←∧/⎕NULL≠⍺,⍪⍵
-     y x←b∘/¨⍺ ⍵
-     rAv:+##.∆r.x'cor(⍵,⍵)'y x
-     n←≢x
-     m←mean¨y x
-     s←sdev¨y x
-     z←+/×⌿⊃y x-m
-     z÷×/s,n-1
+     ⍵≡'Type':'Association'             ⍝ Bivariate function
+     0=⎕NC'⍺':∇{
+         0=≡⍵:⍵ ⍺⍺⍨⍕2 variables ⍵       ⍝ If namespace make corr table with labels
+         1=≡⍵:↑⍺⍺/2 toNestedVector ⍵    ⍝ If simple vector split into two
+         2=≡⍵:∘.⍺⍺⍨⍵}⍵                  ⍝ If nested vector make corr matrix
+     (9=⎕NC'⍵'):⍕⍵ ∇{m←⍺⍺ ⍺⍎⍵           ⍝ If namespace
+         m{(⍵,⍨⊂'corr'),⍵⍪⍺}(⍵≠' ')⊂⍵}⍺ ⍝ Add labels
+     C Y X←⍺{1<≢⍺:0 ⍺ ⍵                 ⍝ Confidence Level
+         ⍺,2 toNestedVector ⍵}⍵         ⍝ Dependent and Independent Vars
+     B←∧/⎕NULL≠Y,⍪X                     ⍝ Check for missing data
+     Y X←B∘/¨Y X                        ⍝ Remove incomplete data
+     rAv∧C=0:+##.∆r.x'cor(⍵,⍵)'Y X      ⍝ Let R do it
+     M←mean¨Y X ⋄ S←sdev¨Y X            ⍝ Find means and stdev's
+     R←(+/×⌿⊃Y X-M)÷×/S,¯1+≢X           ⍝ Point estimate of correlation
+     C=0:R                              ⍝ If confidence interval
+     Z←normal critVal<0.5×1-C           ⍝ Get normal distribution
+     7○(¯7○R)(-,+)Z÷sqrt ¯3+≢X          ⍝ Montgomery p. 49 (arctanh R)
  }

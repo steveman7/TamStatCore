@@ -1,0 +1,24 @@
+ mse←{
+ ⍝⍟ Copyright 2025 by Stephen M. Mansour
+ ⍝∇ Estimated mean square error
+ ⍝∊ Summary Function (Dyadic); Measure of Association
+ ⍝⍺ Y            Yv  Raw Data
+ ⍝⍵ X            Xv  Raw Data
+ ⍝← Sigma2       Zs  Mean Square Error
+ ⍝⍕ Zs ← Yv mse Xv
+ ⍝⍎ Beta1←Y mse X       ⍝ Produces Sample Slope
+ ⍝⍎ [.95] mse confInt Y X
+ ⍝⍕
+     ⎕ML←1 ⋄ ⎕IO←0 ⋄ ⍺←0           ⍝ Initialize
+     ⍵≡'Type':'Association'        ⍝ Measure of center
+     C Y X←⍺{1<≢⍺:0 ⍺ ⍵            ⍝ Confidence Level
+         ⍺,2 toNestedVector ⍵}⍵    ⍝ Dependent and Independent Vars
+     M←1⊃Y⌹1,⍪X                    ⍝ Calculate Slope
+     S←{(⍺+.×⍵)-(+/⍺)×(+/⍵)÷≢⍵}    ⍝ Calculate Sxx Sxy Syy
+     DF←¯2+≢X                      ⍝ Degrees of Freedom
+     MSE←((S⍨Y)-M×X S Y)÷DF        ⍝ Mean Square Error
+     C=0:MSE                       ⍝ If conf=0, done
+     P←0.5×1(+,-)C                 ⍝ Cumulative probs
+     X2←DF chiSquare critVal>P     ⍝ ChiSquare distribution
+     MSE×DF÷X2                     ⍝ Confidence Interval
+ }

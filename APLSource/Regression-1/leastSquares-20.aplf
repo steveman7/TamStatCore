@@ -46,13 +46,14 @@
      ns._Report←ns.AnovaTable{4=≢⍺:⍵                  ⍝ If Lack of Fit/Pure Error
          D←(1↓⍺[0;])formatAnova 1 1↓⍺                 ⍝ Reformat anova table
          H←⍕⊃(~B←D[;1]='-')\⍺[;0]                     ⍝ Reformat Source Names
-         (B⌿H)←'-' ⋄ H,D}ns._Report                   ⍝ Reassemble Formatted Anova Table
+         (B⌿H)←'-' ⋄ ⍕⍪(H,D)(¯2↑⍵)}ns._Report        ⍝ Reassemble Formatted Anova Table
      ns._Report←⍕⍪'The regression equation is:' ' 'ns.Equation' 'ns._Report' ' 'Solution' ' 'd
      ns.VariableTypes←NM{(d v)←⍵
          ⍺:{1<≢⍵:0≢↑0⍴⍵}¨⍎(1<≢v)↓'⊂',⍕'d.('v')'       ⍝ Get variable types
          (≢v)⍴0}(↑⍵)ns.VariableNames                  ⍝ 1=char, 0=numeric
      ns.Graph←regressionPlot ns                       ⍝
-     ns.⎕IO←0                                         ⍝
+     ns.⎕IO←0
+     _←ns.⎕DF ns.Equation                 ⍝
      (~0J1∊⍺):ns                                      ⍝ Generate namespace
      showRegress ns                                   ⍝
  }

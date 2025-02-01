@@ -1,0 +1,24 @@
+ intercept←{
+ ⍝⍟ Copyright 2025 by Stephen M. Mansour
+ ⍝∇ Estimated intercept using least squares
+ ⍝∊ Summary Function (Dyadic); Measure of Association
+ ⍝⍺ Y            Yv  Raw Data
+ ⍝⍵ X            Xv  Raw Data
+ ⍝← Beta0        Zs  Slope (Beta1)
+ ⍝⍕ Zs ← Yv intercept Xv
+ ⍝⍎ Beta1←Y intercept X            ⍝ Produces Sample Slope
+ ⍝⍎ [.95] slope confInt Y X
+ ⍝⍕
+     ⎕ML←1 ⋄ ⎕IO←0 ⋄ ⍺←0           ⍝ Initialize
+     ⍵≡'Type':'Association'        ⍝ Measure of center
+     C Y X←⍺{1<≢⍺:0 ⍺ ⍵            ⍝ Confidence Level
+         ⍺,2 toNestedVector ⍵}⍵   ⍝ Dependent and Independent Vars
+     B M←Y⌹1,⍪X                    ⍝ Calculate Intercept Slope
+     C=0:B                         ⍝ If conf=0, done
+     DF←¯2+≢X                      ⍝ Degrees of Freedom
+     S←{(⍺+.×⍵)-(+/⍺)×(+/⍵)÷≢⍵}    ⍝ Calculate Sxx Sxy Syy
+     MSE←((S⍨Y)-M×X S Y)÷DF        ⍝ Mean Square Error
+     T←DF tDist critVal<0.5×1-C   ⍝ Student T distribution
+     X2←2*⍨mean X                  ⍝
+     B(-,+)T×sqrt MSE×(÷≢X)+X2÷S⍨X ⍝ Confidence Interval
+ }

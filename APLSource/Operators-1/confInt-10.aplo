@@ -3,7 +3,7 @@
  ⍝∇ Calculate a confidence interval for a parameter or response variable
  ⍝∊ Operator
  ⍝⍺ [Level←0.95] Ps Confidence level - default .95
- ⍝⍺ [N]  N   Population Size (required for sum); infinite if not specified
+ ⍝⍺ [N←0]  N   Population Size (required for sum); infinite if not specified
  ⍝⍺⍺ fS  fS  Summary Function
  ⍝⍺⍺ fM  fm  Multivariate function; typically linear:  f(X) =  b0 + b1*x1 + ... + bn*xn
  ⍝⍵  Sample1   Xv Sample Data
@@ -12,7 +12,7 @@
  ⍝⍵  FreqDist Xm  2-column matrix: [midpoints|frequencies]
  ⍝⍵  SummaryDat W  Summary Data including count, mean, sdev
  ⍝← Interval:  Xv Lower and Upper Bounds
- ⍝⍕ Interval ← [.95|P][N] fS|fM confInt Sample1 [Sample2|Groups]|FreqDist|SummaryData
+ ⍝⍕ Interval ← [.95|Level][N] fS|fM confInt Sample1 [Sample2|Groups]|FreqDist|SummaryData
  ⍝⍎ mean confInt Height          ⍝ 95% Confidence Interval for Mean Height
  ⍝⍎ 0.77344 80715←0.9 proportion confInt Sex eq 'M' ⍝ 90% Confidence interval for Male Proportion
  ⍝⍎ 11.81 24.496←0.99 var confInt Height       ⍝ 99% Confidence interval Height variance
@@ -21,7 +21,9 @@
  ⍝⍎ MODEL←Height regress ShoeSize ⍝ Regression Model
  ⍝⍎ 68.378 69.274←MODEL.f confInt 10           ⍝ Estimate Height Confidence Interval for size 10 Shoe
      ⍺←0.95 ⋄ ⎕ML←3 ⋄ ⎕IO←0                    ⍝ Default conf level is 95%
-     'Linear'≡⍺⍺'Type':⍺ 1 ⍺⍺ ⍵                ⍝ If regression
+     'Linear'≡⍺⍺'Type':⍺ 1 ⍺⍺ ⍵                ⍝ If regression, conf int for y
+     'Association'≡⍺⍺'Type':⍺ ⍺⍺{1=≢⍺:⍺ ⍺⍺ ⍵   ⍝ If bivariate function
+         0.95 ⍺⍺ ⍺ ⍵}⍵                             ⍝    check left argument
      x←⊂⍣(326≠⎕DR ⍵)⊣⍵                         ⍝ Enclose if simple numeric array
      2<≢x:'No more than two right arguments permitted'
      x←{(9∊⎕NC¨'⍵')∨0 1≢11=⎕DR¨⍵:⍵             ⍝ If 2nd arg boolean
@@ -33,21 +35,8 @@
      p←stats∘{i=¯1:round(count,mean×count)⍵    ⍝ If proportion
          (count,mean,sdev)⍵}¨x                 ⍝ Convert to summary form
      0J1∊⍺:((⍺~0J1)G NL)⍺⍺ formatConfInt(i=2)⊃p x
-    ⍝C N←{1∧.>∊⍵:⍵ 0 ⋄ 2=≢⍵:⍵[⍋⍵] ⋄ 0.95,⍵}⍺   ⍝ Conf Level, Population Size
      C N←{1∧.>∊⍵:(⍵~0)0 ⋄ 2=≢⍵:⍵[⍋⍵] ⋄ 0.95,⍵}⍺   ⍝ Conf Level, Population Size
-     ⍝G∧1<≡x:⊃C∘.∇ x                            ⍝ Multiple conf levels and
      G∧1<≡x:⊃(C,¨N)∘.∇ x
-    ⍝1<≢C:⊃C ∇¨⊂x                              ⍝ Multiple conf levels?
-     1<≢C:⊃(C,¨N)∇¨⊂x                         ⍝ Multiple conf levels? ⍝     C N ⍺⍺ p x
-
-    ⍝ f←C N∘{i=0:⍺ confCorr x                   ⍝ Correlation
-⍝         i=24:⍺ confTotal ⍵                    ⍝ Total
-⍝         i=8:⍺ confMean ⍵ x                    ⍝ Mean
-⍝         i=¯1:⍺ confProp ⍵                     ⍝ Proportion
-⍝         i=21:⍺ confVar ⍵                      ⍝ Variance
-⍝         i=21*÷2:0.5*⍨⍺ confVar ⍵              ⍝ Standard Deviation
-⍝         i=9:⊃⍺∘confMed¨x                      ⍝ Median
-⍝         'illegal operand'}                    ⍝
+     1<≢C:⊃(C,¨N)∇¨⊂x                           ⍝ Multiple conf levels? ⍝     C N ⍺⍺ p x
      C N ⍺⍺ ⍵
-    ⍝ f p                                       ⍝
  }

@@ -24,14 +24,14 @@
      Int X←{(1=≡⍵)∨~(⊂⊃⍵)∊0 1:1 ⍵ ⋄ 2=≢⍵:⍵
          (⊃⍵)(1↓⍵)}⍵                     ⍝ Include intercept?
      2=⍴⍴X:Int leastSquares ⍺⍺,X         ⍝ Matrix right argument?
-     ~FN:⍺⍺(Int regressInd 1)X
+     ~FN:(,⍺⍺)(Int regressInd 1)X
      FN∧~DB:⍺ ⍺⍺{U←3 ⍺⍺ 4                ⍝ Test operand
          U=4:⍺(Int regressPoly)⍵         ⍝ Polynomial (⊥)
          U=5:⍺(⍺⍺ 1)(Int regressPoly)⍵   ⍝ Cubic/Quadratic
          U∊0 1:⍺(Int regressBin)⍵        ⍝ Binary regression (= or ≠)
          ⍺(⍺⍺ vst Int)⍵                  ⍝ Variance stabilizing transformation
      }X
-     DB∧~FN:⍺⍺(Int regressInd 1)⍵        ⍝ Don't Ignore Character Fields
+     DB∧~FN:(,⍺⍺)(Int regressInd 1)⍵        ⍝ Don't Ignore Character Fields
      FN∧⍺≢'':⍺ ⍺⍺{
          X←⍵.(⍎⍕(' '~⍨¨↓⎕NL 2)~⊂⍺)          ⍝ Unpack predictor variables
          (⍵⍎⍺)(⍺⍺ regress)X            ⍝ Apply regress

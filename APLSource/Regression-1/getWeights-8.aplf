@@ -1,0 +1,17 @@
+ getWeights←{
+⍝∇   Get weights based on inverse variance
+⍝∊  Mongtomery & Peck 3.8 Weighted Least Squares p. 100
+⍝⍺:  Grouping Parameter (See Frequency)
+⍝⍵:  Response, Predictor Variables
+⍝←:  Weights
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄ ⍺←5
+     Y X←↓⍉⍵
+     FR←⍺ frequency X
+     BP←(⌊/,⌈/)⍬
+     BP←1⌽BP,0.5×2+/FR[;0]              ⍝ Breakpoints
+     B←X between BP                   ⍝
+     XBAR←(X+.×B)÷+⌿B
+     S2←var¨(↓⍉B)/¨⊂Y
+     XBAR S2←(~S2∊⎕NULL)∘/¨XBAR S2
+     Beta←S2⌹1,⍪XBAR                  ⍝ Relation bet XBar and S2
+     ÷(⍪X)⊥⌽Beta}

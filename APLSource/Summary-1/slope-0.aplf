@@ -1,0 +1,24 @@
+ slope←{
+ ⍝⍟ Copyright 2025 by Stephen M. Mansour
+ ⍝∇ Estimated slope using least squares
+ ⍝∊ Summary Function (Dyadic); Measure of Association
+ ⍝⍺ Y            Yv  Raw Data
+ ⍝⍵ X            Xv  Raw Data
+ ⍝← Beta1        Zs  Slope (Beta1)
+ ⍝⍕ Zs ← Yv slope Xv
+ ⍝⍎ Beta1←Y slope X       ⍝ Produces Sample Slope
+ ⍝⍎ [.95] slope confInt Y X
+ ⍝⍕
+     ⎕ML←1 ⋄ ⎕IO←0 ⋄ ⍺←0           ⍝ Initialize
+     ⍵≡'Type':'Association'        ⍝ Measure of center
+     C Y X←⍺{1<≢⍺:0 ⍺ ⍵            ⍝ Confidence Level
+         ⍺,2 toNestedVector ⍵}⍵    ⍝ Dependent and Independent Vars
+     M←1⊃Y⌹1,⍪X                    ⍝ Calculate Slope
+     C=0:M                         ⍝ If conf=0, done
+     P←0.5×1-C                     ⍝ Upper tail probability
+     DF←¯2+≢X                      ⍝ Degrees of Freedom
+     S←{(⍺+.×⍵)-(+/⍺)×(+/⍵)÷≢⍵}    ⍝ Calculate Sxx Sxy Syy
+     MSE←((S⍨Y)-M×X S Y)÷DF        ⍝ Mean Square Error
+     T←DF tDist critVal<P          ⍝ Student T distribution
+     M(-,+)T×sqrt MSE÷S⍨X          ⍝ Confidence Interval
+ }

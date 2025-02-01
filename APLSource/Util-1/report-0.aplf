@@ -57,7 +57,8 @@
          (⍵._Claim⊃h),←' (Claim)'              ⍝ Indicate claim
          d←⍵.(_Populations SampleSize){
              P N←⍺
-             ∧/⍵∊'µ⍴':'t'
+             ⍝∧/⍵∊'µ⍴':'t'
+             ∨/⍵∊'µ⍴β':'t'
              ⍵≡'p':'Z' ⋄
              (⍵≡'η')∧(P=1)∧25≥↑N:'X'
              (⍵≡'η')∧(P=2)∧10≥↑N:'U'
@@ -86,8 +87,11 @@
          tb←(wi↑⍕(⌊wi÷2)↑¨h)⍪tb
          C←(⍵.P<⍺)⊃'Fail to reject H₀' 'Reject H₀'
          tb←tb⍪wi↑' Conclusion: ',C
-         d←{i←('µpση⍴',⊂'σ²')⍳⊂⍵._Parameter
-             st←i{⍺≠0:⍺⊃'XpsXr',⊂'s²' ⋄ ⍵⊃'Xd'}⍵._Paired
+         d←{⍝i←('µpση⍴',⊂'σ²' )⍳⊂⍵._Parameter
+             i←'µpση⍴β'⍳↑⍵._Parameter
+            ⍝st←i{⍺≠0:⍺⊃'XpsXr',⊂'s²' ⋄ ⍵⊃'Xd'}⍵._Paired
+             st←i{⍺≠0:⍺⊃'XpsXrb' ⋄ ⍵⊃'Xd'}⍵._Paired
+             st,←1↓⍵._Parameter
              cat←{⍕2 1⍴⍺ ⍵}
              fc←{d←((2=≢⍵)⊃' ' '₁₂'),[0.5],⍵
                  fs←(⍵≡⌊⍵)⊃'LF15.5' 'LI15'

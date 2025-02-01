@@ -1,7 +1,19 @@
  toNestedVector←{⎕ML←3 ⋄ ⎕IO←0
+ ⍝⍟ Copyright 2025 by Stephen M. Mansour
+ ⍝∇ Convert an object to a nested vector
+ ⍝∊ Summary Function (Dyadic); Measure of Association
+ ⍝⍺ [Y]          Ys  Delimiter or Number of items
+ ⍝⍵ X            Xv  Raw Data
+ ⍝← NV           Zv  Nested Vector
+ ⍝⍕ Zv ← Y slope X
+ ⍝⍎ toNestedVector 'John,Paul,George,Ringo'
+ ⍝⍎ (2 4 8)(3 6 2) ← 2 toNestedVector 2 4 8 3 6 2
+     ⍺←','                              ⍝ Default delimiter
+     2=⍺:{2=≡⍵:⍵                        ⍝ slope Y X
+         2=⍴⍴⍵:↓⍉⍣{2≠≢⍵}⍵               ⍝ slope Y,⍪X
+         (0.5×≢⍵)(↑{⍺ ⍵}↓)⍵}⍵           ⍝ slope(Y,X)
      0=↑0⍴∊⍵:⍵                          ⍝ If numeric, leave alone
      2=≡⍵:deleteExcessBlanks¨,⍵         ⍝ Already nested vector
-     ⍺←','                              ⍝ Default delimiter
      2=⍴⍴⍵:deleteExcessBlanks¨↓⍵        ⍝ Matrix                                                         ←
      ⍺∊⍵:deleteExcessBlanks¨(⍺≠⍵)⊆⍵     ⍝ Delimited list
      ⊂deleteExcessBlanks ⍵              ⍝ Else make a scalar

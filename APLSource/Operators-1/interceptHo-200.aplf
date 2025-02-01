@@ -1,0 +1,30 @@
+ interceptHo←{ ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Ho:⍴=0
+     ⎕ML←3 ⋄ ⎕IO←0
+     x1 Beta0←⍵
+     Y X←x1
+     tails←2*0=↑⍺ ⋄
+     n←≢Y                                 ⍝ Sample size
+     df←n-2
+     B←Y⌹1,⍪X                     ⍝ Sample slope/intercept
+     YHAT←(⍪X)⊥⌽B
+     MSE←df÷⍨(Y-YHAT)+.*2
+     SXX←(X+.*2)-(×⍨+/X)÷≢X          ⍝ Calculate Sxx
+     SE←sqrt MSE×+/÷n,SXX÷(mean X)*2 ⍝ Standard error
+     t←(B[0]-Beta0)÷SE               ⍝ Test statistic
+     p←tails×df tDist prob>|t        ⍝ p-Value
+     ns←⎕NS''
+     ns.Estimate←B[0]
+     ns.SampleSize←n
+     ns.StandardError←SE                  ⍝ Standard Error
+     ns.TestStatistic←t
+     ns.P←p                          ⍝ p-Value
+     ns.DegreesOfFreedom←df
+     ns.ParameterList←⍬
+     ns._Parameter←'β₀'
+     ns.dist←tDist
+     ns
+
+
+
+
+ }

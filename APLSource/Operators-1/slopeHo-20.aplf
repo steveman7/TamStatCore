@@ -1,0 +1,29 @@
+ slopeHo←{ ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Ho:⍴=0
+     ⎕ML←3 ⋄ ⎕IO←0
+     x1 Beta1←⍵
+     Y X←x1
+     tails←2*0=↑⍺ ⋄
+     n←≢Y                                 ⍝ Sample size
+     df←n-2
+     B←Y⌹1,⍪X                     ⍝ Sample slope/intercept
+     YHAT←(⍪X)⊥⌽B
+     se←sqrt df÷⍨(Y-YHAT)+.*2
+     SE←se÷(sdev X)×sqrt n-1
+     t←(B[1]-Beta1)÷SE            ⍝ Test statistic
+     p←tails×df tDist prob>|t     ⍝ p-Value
+     ns←⎕NS''
+     ns.Estimate←B[1]
+     ns.SampleSize←n
+     ns.StandardError←SE                  ⍝ Standard Error
+     ns.TestStatistic←t
+     ns.P←p                          ⍝ p-Value
+     ns.DegreesOfFreedom←df
+     ns.ParameterList←⍬
+     ns._Parameter←'β₁'
+     ns.dist←tDist
+     ns
+
+
+
+
+ }

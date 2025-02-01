@@ -23,5 +23,6 @@
      ns.P←P
      ns.DegreesOfFreedom←(N≤25)/N
      ns.StandardDeviation←⍬
+     ns._Parameter←'η'
      ns
  }
