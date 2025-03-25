@@ -1,5 +1,7 @@
  wilcoxonT←{                                ⍝ Scalar,Arithmetic
-     ⍝⍟ Copyright (c) 2021 by Stephen M. Mansour
+     ⍝⍟ Copyright (c) 2021, 2025 by Stephen M. Mansour
+     ⍝∊ Table A12 QUantiles of Wicoxon Signed Ranks Test
+     ⍝∊ Conover, Practical Nonparametric Statistics Table 12, p. 545
      ⍝∇ Wilcoxon T distribution
      ⍝∊ Distribution Function; Discrete
      ⍝⍺ N N Sample Size
@@ -8,51 +10,27 @@
      ⍝⍕ P ← N wilcoxonT R
      ⍝⍎ 0.0079 0.031746 ←  5 wilcoxonT 2 3
      'Type'≡x←⍵:'Discrete'
-     ⎕ML←3 ⋄ ⎕IO←0                         ⍝ Set system variables
+     ⎕ML←3 ⋄ ⎕IO←0                                  ⍝ Set system variables
      N C←getParameters ⍺
-    ⍝ M N∨.<0 1:∆SigErr'All parameters must be positive'
+     1≠≢N:(N,¨C)∇¨⍵                                 ⍝ Multiple
+     M←0.25×N×N+1                                   ⍝ Mean of distribution
+     RF V←{⍵>10:0,24÷⍨⍵×(⍵+1)×1+2×⍵                 ⍝ Large sample variance
+         RF←relative 1 frequency(1+⍳⍵)+.×(⍵/2)⊤⍳2*⍵ ⍝ Small sample frequency
+         RF(var RF)}N                               ⍝   and variance
+     x≡'Mean':M                                     ⍝ Theoretical Values
+     x≡'Variance':V                                 ⍝    "           "
+     x≡'Mode':M                                     ⍝    "           "
+     x≡'Skewness':0                                 ⍝    "           "
+     x≡'Kurtosis':N{⍺>10:0 ⋄ kurtosis ⍵×⍤1⊢1,2*⍺}RF ⍝    "           "
+     S←sqrt V                                       ⍝ Standard deviation
+     C='d':N{⍺>10:M S normal ⍵ ⋄ RF[⍵;1]}⍵          ⍝ Density
+     C='p':N{⍺>10:M S normal prob≤⍵+0.5             ⍝ Cumulative Prob
+         +/(⍵+1)↑RF[;1]}⍵                           ⍝   Small sample
+     C='q':N{⍵=0.5:M
+         ⍺≤10:1+(+\RF[;1])⍸⍵
+         ⍵<0.5:⌊M S normal critVal>⍵                ⍝ Critical Value
+         ⍵>0.5:⌈M S normal critVal>⍵}¨⍵             ⍝   Small sample
+     C='r':(?(⍵,N)⍴2)+.×1+⍳N                        ⍝ Random Variables
 
-     x≡'Mean':0.25×N×N+1                              ⍝ Theoretical Values
-     x≡'Variance':24÷⍨N×(N+1)+1+2×N              ⍝    "           "
-  ⍝   ∨/~M N∊1+⍳10:∆SigErr'Domain Error'         ⍝ M,N integers between 1 and 10 inclusive
-     RF←⍉⍪0 0 0.005 0.01 0.025 0.05 1
-     RF⍪←5 ¯1 ¯1 ¯1 ¯1 1 16
-     RF⍪←6 ¯1 ¯1 ¯1 1 2 22
-     RF⍪←7 ¯1 ¯1 0 2 4 29
-     RF⍪←8 ¯1 0 2 4 6 37
-     RF⍪←9 ¯1 2 3 6 8 46
-     RF⍪←10 ¯1 3 5 8 11 56
-     RF⍪←11 ¯1 5 7 11 14 67
-     RF⍪←12 ¯1 7 10 14 17 79
-     RF⍪←13 ¯1 10 13 17 21 92
-     RF⍪←14 ¯1 13 16 21 26 106
-     RF⍪←15 ¯1 16 20 25 30 121
-     RF⍪←16 ¯1 19 24 30 36 137
-     RF⍪←17 ¯1 23 28 35 41 154
-     RF⍪←18 ¯1 28 33 40 47 172
-     RF⍪←19 ¯1 32 38 46 54 191
-     RF⍪←20 ¯1 37 43 52 60 211
-     RF⍪←21 ¯1 43 49 59 68 232
-     RF⍪←22 ¯1 49 56 66 75 254
-     RF⍪←23 ¯1 55 62 73 83 277
-     RF⍪←24 ¯1 61 69 81 92 301
-     RF⍪←25 ¯1 68 77 90 101 326
-     RF⍪←26 ¯1 76 85 98 110 352
-     RF⍪←27 ¯1 84 93 107 120 379
-     RF⍪←28 ¯1 92 102 117 130 407
-     RF⍪←29 ¯1 100 111 127 141 436
-     RF⍪←30 ¯1 109 120 137 152 466
 
-     x≡'Mode':'Nonce Error'                           ⍝    "           "
-     x≡'Skewness':'Nonce Error'                    ⍝    "           "
-     x≡'Kurtosis':'Nonce Error'                    ⍝    "           "
-⍝    str←'pdqr'[1 0 ¯1 ¯2⍳c],'hyper(⍵,⍵,⍵,⍵)'    ⍝ Build R Expression
-⍝    rAv:+##.∆r.x str ⍵ m(N-m)n                  ⍝ Use R if requested
-     1≠≢N:(N,¨C)∇¨⍵                                  ⍝ Allow array arguments
-     RF←TableJ
-     C='d':-/N(RF tableInverse)⍵-0 1              ⍝ Probability (X=x)
-     C='p':N(RF tableInverse)⍵                     ⍝ Cumulative Probability X≤x
-    ⍝ C=¯1:N(RF tableLookup)⍵                    ⍝ Critical Values (Inverse)
-     C='q':⌊N(RF tableLookup)⍵                    ⍝ Critical Values (Inverse
-     C='r':(?(⍵,N)⍴2)+.×1+⍳N                          ⍝ Random Variables
  }

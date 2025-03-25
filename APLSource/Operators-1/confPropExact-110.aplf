@@ -1,0 +1,32 @@
+ confPropExact←{
+⍝Calculate confidence interval for small sample sizes
+⍝∊ Reference: Table A4 p. 523 Conover, Practical Non-Parametric Statistics, 3rd Ed.
+⍝⍺ confidence level
+⍝⍵ sampleSize
+⍝⍵ Events
+⍝⍵ [populationSize]
+⍝← confidence interval
+    ⍝ C B←2↑⍺ ⋄ n N←2↑⍵ ⋄ ⎕IO←0
+     ⍺←0.95 ⋄ n x←2↑⍵
+     str←'binom.test(⍵,⍵,conf.level=⍵)' ⍝ Build R expression
+     rAv:(4⊃(##.∆r.x str x n ⍺).Value).Value
+     x>n÷2:⌽1-⍺ ∇-\n x                 ⍝ Always use p < 0.5
+     A←0.5×1-⍺
+     f←{A-n ⍵ binomial prob≤x}
+     g←{A-n ⍵ binomial prob≥x}
+     p←0.1⌈0.9⌊x÷n
+     z←normal critVal<A
+     B←0.005⌈0.995⌊p(-,+)z×sqrt p×(1-p)÷n
+     U←{(n≥28)∧x=0:f SecAlg BB,f¨BB←0.16 0.18
+         f SecAlg ⍵,f¨⍵}B
+     L←{x=0:0
+         x=1:g SecAlg BB,g¨BB←0.001 0.002
+         A≥0.025:g SecAlg ⍵,g¨⍵
+         BB←0.05 0.09
+         (x=4)∧n∊10 11:g SecAlg BB,g¨BB
+         (x=5)∧n between 16 30:g SecAlg BB,g¨BB
+         (x=6)∧n=30:g SecAlg BB,g¨BB
+         g SecAlg ⍵,g¨⍵}B
+     L U
+
+ }

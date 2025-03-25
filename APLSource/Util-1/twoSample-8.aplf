@@ -1,0 +1,10 @@
+ twoSample←{
+⍝∊ Written by Stephen Mansour
+⍝∇ Identify two-sample data
+⍝← 1 = two Samples, 0 = otherwise
+     ⎕ML←1
+     2≠≢⍵:0              ⍝ Does it contain exactly two items?
+     1≠⍴⍴⍵:0             ⍝ Is it a vector?
+     326≠⎕DR ⍵:0         ⍝ Is it simple?
+     ⍵≡⍥(0∘⍴¨)'  ':0     ⍝ Two character vectors
+     1}

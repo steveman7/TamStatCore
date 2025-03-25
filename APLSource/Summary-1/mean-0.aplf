@@ -11,23 +11,39 @@
      ⍝⍎ 3.8 ← mean 2 8 5 1 3      ⍝ Raw Data
      ⍝⍎ 1.4 ← mean 4 2 matrix 0 20 1 30 2 40 3 10 ⍝ Frequency Distribution
      ⍝⍎ 1.4 ← mean 4 2 matrix 0 0.2 1 0.3 2 0.4 3 0.1 ⍝ Relative Frequency
-     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⎕DIV←1 ⋄ ⍺←0      ⍝ Set up variables
-     ⍵≡'Type':'Center'                 ⍝ Measure of center
-     ↑⍺ between 0 1:⍺ confMean ⍵       ⍝ If ⍺∊(0,1)confInt
-     9=⎕NC'⍵':⍵.mean                   ⍝ If namespace, get mean property
-   ⍝  ~'X'check ⍵:⎕SIGNAL 11           ⍝
-     w←frequency⍣(↑(0J1=⍺)∧1=⍴⍴⍵)⊢⍵    ⍝ Convert to frequency?
-     isFrequency w:⍺{⍺=0:(+/×/⍵)÷+/⍵[;1] ⍝ If matrix, treat as frequency
-         d←⍵[;,0],(⍵[;1]÷+/⍵[;1])        ⍝ Values, frequencies
-         d←d,×/d ⋄                       ⍝ X×p
-         FS←'I10,F10.5,F10.5'          ⍝ Set widths to 10
-         z←FS ⎕FMT d⍪+⌿d               ⍝ Format data and totals
-         h←∊¯10↑¨'x' 'P(x)' 'xP(x)'    ⍝ Build Heading
-         u←30⍴1 9/' -'                 ⍝ Underline heading
-         (h⍪u⍪(¯1↓z)⍪u)⍪¯30↑'Total:',10↓,¯1↑z ⍝ Assemble table
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⎕DIV←1 ⋄ ⍺←0              ⍝ Set up variables
+     ⍵≡'Type':'Center'                         ⍝ Measure of center
+     C M←2↑⎕C ⍺
+     M∊'kn':C{z←normal critVal<0.5×1-⍺         ⍝ Known sigma, use normal
+         ~twoSample ⍵:(mean ⍵)(-,+)z×sqrt(var÷count)⍵ ⍝ One-sample estimate
+         n←count¨⍵ ⋄ x←mean¨⍵ ⋄ v←var¨⍵        ⍝ Two-sample estimate
+         (-/x)(-,+)z×sqrt v+.÷n}⍵
+     M='p':C{n s←(≢,sdev)d←↑-/⍵                ⍝ Paired diference
+         t←(n-1)tDist critVal<0.5×1-⍺      ⍝ Use Student t (sigma unknown)
+         (mean d)(-,+)t×s÷sqrt n}⊆⍵
+     M='e':C{~twoSample ⍵:'Two samples required' ⍝ Equal Variances
+         df←¯1+n←count¨⍵ ⋄ x←mean¨⍵ ⋄ v←var¨⍵
+         sp←(v+.×df)÷+/df
+         se←sqrt sp×+/÷n
+         t←(+/df)tDist critVal<0.5×1-⍺
+         (-/x)(-,+)t×se}⍵
+     M='u':C 0 confMean ⍵
+     C between 0 1:⍺ confMean ⍵                ⍝ Default method
+     twoSample ⍵:-/∇¨⍵                         ⍝ If two samples, calculate mean difference
+     9=⎕NC'⍵':⍵.mean                           ⍝ If namespace, get mean property
+   ⍝  ~'X'check ⍵:⎕SIGNAL 11                   ⍝
+     w←frequency⍣(↑(0J1=⍺)∧1=⍴⍴⍵)⊢⍵            ⍝ Convert to frequency?
+     isFrequency w:⍺{⍺=0:(+/×/⍵)÷+/⍵[;1]       ⍝ If matrix, treat as frequency
+         d←⍵[;,0],(⍵[;1]÷+/⍵[;1])              ⍝ Values, frequencies
+         d←d,×/d ⋄                             ⍝ X×p
+         FS←'I10,F10.5,F10.5'                  ⍝ Set widths to 10
+         z←FS ⎕FMT d⍪+⌿d                       ⍝ Format data and totals
+         h←∊¯10↑¨'x' 'P(x)' 'xP(x)'            ⍝ Build Heading
+         u←30⍴1 9/' -'                         ⍝ Underline heading
+         (h⍪u⍪(¯1↓z)⍪u)⍪¯30↑'Total:',10↓,¯1↑z  ⍝ Assemble table
      }w
-     2=≡w:∇¨w~¨⎕NULL                   ⍝ Nested?
-     rAv:+##.∆r.x'mean(⍵)'(⍵~⎕NULL)    ⍝ If available, use R
-     (+/÷≢)w~⎕NULL                     ⍝ Use fork to calculate mean
+     2=≡w:∇¨w~¨⎕NULL                           ⍝ Nested?
+     rAv:+##.∆r.x'mean(⍵)'(⍵~⎕NULL)            ⍝ If available, use R
+     (+/÷≢)w~⎕NULL                             ⍝ Use fork to calculate mean
 
  }

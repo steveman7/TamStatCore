@@ -1,19 +1,34 @@
  formatConfInt←{⍝cl←⍺,(0=≢⍺)/0.95        ⍝ If show operator,
+ ⍝⍺ Confidence Level
+ ⍝⍺ NameList
+ ⍝⍵ Data
      ⎕IO←0 ⋄ ⎕ML←3
      NS←⎕NS''                            ⍝ Create namespace for output
-     cl G NL←⍺
+    ⍝ cl G NL←⍺
+     cl M NL←⍺ ⋄ G←1<≢NL
      cl,←(0=≢cl)/0.95                    ⍝ Default to 95%
-     cb←⍉⍪⍉⊃cl ⍺⍺{G:⍺∘(⍺⍺ confInt)¨⍵
-         ⍺ ⍺⍺ confInt ⍵}⍵                ⍝ Calculate limits
+
+     ⍝cb←⍉⍪⍉⊃cl ⍺⍺{
+⍝         G:⍺∘(⍺⍺ confInt)¨⍵
+⍝         1=≢⍵:⍺ ⍺⍺ confInt↑⍵
+⍝         ⍺ ⍺⍺ confInt ⍵}⍵                ⍝ Calculate limits
+
+    ⍝ cb←⊃,(cl,¨⊂¨M)∘.(⍺⍺{⍺ ⍺⍺ confInt ⍵})⍵
+     cb←⍺⍺{(twoSample ⍵)∧1=≢NL:cl M ⍺⍺ confInt ⍵
+         ⊃,(cl,¨⊂¨M)∘.(⍺⍺{⍺ ⍺⍺ confInt ⍵})⍵}⍵
      pt←⍺⍺{G:⍺⍺¨⍵ ⋄ i←⍺⍺ 1 ¯1
-         i∊¯1 0 2 3:-/⍺⍺¨⍵               ⍝ If sdev or var
+         ⍝i∊¯1 0 2 3:-/⍺⍺¨⍵              ⍝ If sdev or var
+         i∊¯1 0 3:-/⍺⍺¨⍵                ⍝ If sdev or var
          ÷/⍺⍺¨⍵}⍵                        ⍝ Point estimate
+     M←{0≠↑↑0⍴⍵:⍵ ⋄                       ⍝ Blank out zeroes
+         ⊂' '~⍨,'BG<N=ZZZZZZZ9>'⎕FMT ⍵}M ⍝ Format Population Size
      A S←XAxis,cb                        ⍝ Build axis
      I←↓⌊0.5+100×(A[0]-cb,(≢cb)⍴pt)÷-/A  ⍝ Find relative positons
      B←(⍳1⊃⍴S)∘between¨2↑¨I              ⍝ Include values between limits
      J←⊃B{B←⍺ ⋄ B[⍵]←2 3 4 ⋄ B}¨I⌊¯1+≢¨B ⍝ Find position on axis
      H←↓'K2Q<%>LI4 '⎕FMT cl              ⍝ Format conf level
-     H←,H∘.,NL                           ⍝ Append to group names
+   ⍝  H←,H∘.,NL                           ⍝ Append to group names
+     H←,H∘.,M∘.,' ',¨NL
      FS←'<,>,M<->F10.',⍕0⌈5-⌈10⍟⌈/|A     ⍝ Build format string
      X←'(',(0 1↓FS ⎕FMT cb),')'          ⍝ Format limits
      X←(' '∨.≠X)/X                       ⍝ Remove blanks

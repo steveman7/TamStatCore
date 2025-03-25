@@ -17,21 +17,21 @@
      ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←''                   ⍝ Set system variables
     ⍝ 326≡⎕DR ⍵:∇{∆←⍺⍺ 1↓⍵ ⋄ ∆.Name←↑⍵ ⋄ ∆}⍵ ⍝ Insert name if 1st item Char
      b←0=≢⍺
-     3=≢⍵:⍺{count mean sdev←3↑⍵             ⍝ If 3-vector
-         var←sdev*2 ⋄ name←⍺               ⍝ Calculate variance
+     3=≢⍵:⍺{count mean sdev←3↑⍵                  ⍝ If 3-vector
+         var←sdev*2 ⋄ name←⍺                     ⍝ Calculate variance
          ⎕NS b↓'name' 'count' 'mean' 'sdev' 'var'}⍵   ⍝ Include count,mean,sdev
-     2=≢⍵:⍺{count←↑⍵                        ⍝ If 2-vector
-         mean←↑{¯1=×/×⍵-0 1:⍵               ⍝ Assume binomial
-             ⍝(⍵>0)∧(⍵=⌈⍵)∧⍵≤⍺:⍵÷⍺ ⋄ ¯1}/⍵   ⍝ Calc mean
-             (⍵≥0)∧(⍵=⌈⍵)∧⍵≤⍺:⍵÷⍺ ⋄ ¯1}/⍵   ⍝ Calc mean
-         var←{⍵×1-⍵}mean ⋄ name←⍺           ⍝ Var = p(1-p)
-         events←⌊0.5+count×mean             ⍝ Successes
-         sdev←var*÷2                        ⍝ sdev= sqrt var
+     2=≢⍵:⍺{count←↑⍵                             ⍝ If 2-vector
+         mean←↑{¯1=×/×⍵-0 1:⍵                    ⍝ Assume binomial
+             ⍝(⍵>0)∧(⍵=⌈⍵)∧⍵≤⍺:⍵÷⍺ ⋄ ¯1}/⍵       ⍝ Calc mean
+             (⍵≥0)∧(⍵=⌈⍵)∧⍵≤⍺:⍵÷⍺ ⋄ ¯1}/⍵        ⍝ Calc mean
+         var←{⍵×1-⍵}mean ⋄ name←⍺                ⍝ Var = p(1-p)
+         events←⌊0.5+count×mean                  ⍝ Successes
+         sdev←var*÷2                             ⍝ sdev= sqrt var
          ⎕NS b↓'name' 'count' 'events' 'mean' 'sdev' 'var'}⍵ ⍝
      6=≢⍵:⍺{'Nonce Error'}⍵
-     9=⎕NC'⍵':⍵                             ⍝ If ns leave alone
-     count mean var sdev←(count,mean,var,sdev)⍵     ⍝ Put variables
+     9=⎕NC'⍵':⍵                                  ⍝ If ns leave alone
+     count mean var sdev←(count,mean,var,sdev)⍵  ⍝ Put variables
      name←⍺
-     ⎕NS b↓'name' 'count' 'mean' 'sdev' 'var'         ⍝   into namespace
-
+     NS←⎕NS b↓'name' 'count' 'mean' 'sdev' 'var' ⍝   into namespace
+     ~∧/⍵∊0 1:NS ⋄ NS.events←+/⍵ ⋄ NS          ⍝ Include events if binary
  }

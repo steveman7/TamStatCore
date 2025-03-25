@@ -14,5 +14,6 @@
          p←{⍵,1-⍵}(1-⍺)÷2              ⍝ Ratio of V1/V2
          df←n-1
          v÷df fDist criticalValue<p}
-     2=≢⍵:C f2 ⍵ ⋄ C f1 ⍵
+    ⍝ 2=≢⍵:C f2 ⍵ ⋄ C f1 ⍵
+     twoSample ⍵:C f2 ⍵ ⋄ C f1 ⍵
  }

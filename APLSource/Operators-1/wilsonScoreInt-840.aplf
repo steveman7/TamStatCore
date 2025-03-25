@@ -2,13 +2,21 @@
  ⍝∊ Written by Steve Mansour
  ⍝∇ Wilson Score Interval
  ⍝⍺  Normal
- ⍝⍵  N, Events
+ ⍝⍺  Continuity Correction
+ ⍝⍵  N       I    Sample Size
+ ⍝⍵  Events
  ⍝←  critical Value
-     ⍺←95 ⋄ ⎕ML←1                           ⍝ Default conf is 95%
-     p←÷/⌽⍵                                 ⍝ Sample Proportion
-     n←⊃⍵                                   ⍝ Sample Size
-     z←normal criticalValue<0.5×1-⍺÷100     ⍝ CriticalValue
+     ⍺←0.95 1 ⋄ ⎕ML←1 ⋄ CL CC←2↑⍺,1 ⋄ n x←⍵ ⍝ Default conf is 95%; cont correction=1
+     str←'prop.test(⍵,⍵,conf.level=⍵,correct=⍵)'      ⍝ Build R expression
+     rAv:(6⊃(##.∆r.x str x n CL CC).Value).Value
+     p←x÷n                                  ⍝ Sample Proportion
+     z←normal criticalValue<0.5×1-CL        ⍝ CriticalValue
      z2←z*2                                 ⍝ z-squared
+     CC:{n p←⍵
+         A←z2+2×n×p                         ⍝ Continuity correction
+         B←1+z×sqrt(z2-÷n)+(4×n×p-p*2)(-,+)(2-4×p)
+         C←2×n+z2
+         0⌈1⌊C÷⍨A+B×¯1 1}n p
      x←÷/p 1+z2÷n×2 1                       ⍝ Point Estimate
      me←(z÷1+z2÷n)×sqrt(z2÷4×n*2)+(p×1-p)÷n ⍝ Margin of error
      0⌈x(-,+)me                             ⍝ Confidence Interval

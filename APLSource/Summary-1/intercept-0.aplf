@@ -11,14 +11,18 @@
  ⍝⍕
      ⎕ML←1 ⋄ ⎕IO←0 ⋄ ⍺←0           ⍝ Initialize
      ⍵≡'Type':'Association'        ⍝ Measure of center
-     C Y X←⍺{1<≢⍺:0 ⍺ ⍵            ⍝ Confidence Level
-         ⍺,2 toNestedVector ⍵}⍵   ⍝ Dependent and Independent Vars
+   ⍝  C Y X←⍺{1<≢⍺:0 ⍺ ⍵           ⍝ Confidence Level
+⍝         ⍺,2 toNestedVector ⍵}⍵   ⍝ Dependent and Independent Vars
+     C Y X←⍺{⍺=⍥≢⊃⊆⍵:0 ⍺ ⍵         ⍝ Confidence Level
+         (⊂⍺),2 toNestedVector ⍵}⍵    ⍝ Dependent and Independent Vars
      B M←Y⌹1,⍪X                    ⍝ Calculate Intercept Slope
-     C=0:B                         ⍝ If conf=0, done
+     C≡0:B                         ⍝ If conf=0, done
      DF←¯2+≢X                      ⍝ Degrees of Freedom
      S←{(⍺+.×⍵)-(+/⍺)×(+/⍵)÷≢⍵}    ⍝ Calculate Sxx Sxy Syy
      MSE←((S⍨Y)-M×X S Y)÷DF        ⍝ Mean Square Error
-     T←DF tDist critVal<0.5×1-C   ⍝ Student T distribution
+     T←DF tDist critVal<0.5×1-C    ⍝ Student T distribution
      X2←2*⍨mean X                  ⍝
-     B(-,+)T×sqrt MSE×(÷≢X)+X2÷S⍨X ⍝ Confidence Interval
+    ⍝ B(-,+)T×sqrt MSE×(÷≢X)+X2÷S⍨X ⍝ Confidence Interval
+     SE←sqrt MSE×(÷≢X)+X2÷S⍨X      ⍝ Standard Error
+     B+(T×SE)∘.×¯1 1               ⍝ Confidence intervals
  }

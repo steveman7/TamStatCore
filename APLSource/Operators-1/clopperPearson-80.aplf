@@ -1,0 +1,16 @@
+ clopperPearson←{
+⍝Calculate confidence interval for small sample sizes
+⍝∊ Reference: Table A4 p. 523 Conover, Practical Non-Parametric Statistics, 3rd Ed.
+⍝⍺ confidence level
+⍝⍵ sampleSize
+⍝⍵ Events
+⍝⍵ [populationSize]
+⍝← confidence interval
+     ⍺←0.95 ⋄ n x N←3↑⍵
+     str←'binom.test(⍵,⍵,conf.level=⍵)' ⍝ Build R expression
+     rAv:(4⊃(##.∆r.x str x n ⍺).Value).Value
+     A←0.5×1-⍺
+     L←(x,n-x-1)beta critVal>A
+     U←(x+1)(n-x)beta critVal<A
+     L U
+ }

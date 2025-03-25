@@ -12,7 +12,11 @@
     ⍝⍎  frequency 'Joe,Bob,Joe,Steve,Bob,Joe' ⍝ Frequency table with character data
     ⍝⍎  frequency Sex Party                   ⍝ Contingency Table
      ⎕ML←3 ⋄ ⎕IO←0                            ⍝ Set system variables
-     (2=⍴⍴⍵)∧80≠⎕DR ⍵:⍵
+     (2=⍴⍴⍵)∧80≠⎕DR ⍵:⍵                       ⍝ If already frequency, done
+     (9=⎕NC'⍵'):{b←0≠⍵.⎕NC'events'            ⍝ If namespace
+         b:0 1,⍪⍵.(events,⍨count-events)      ⍝ If binary, create matrix
+         x←⍵.(mean sdev)normal randVar ⍵.count⍝ Generate random data
+         frequency x}⍵                        ⍝ Create frequency
      w←{(⎕DR ⍵)∊80 160:toNestedVector ⍵       ⍝ Convert right argument
          (2≠≢⍵)∨~(⎕DR 1⊃⍵)∊83 163 323:⍵       ⍝
          (1∨.>1⊃⍵):⍵                          ⍝

@@ -21,10 +21,11 @@
          cp←N{⍺=0:⍵ 0.5 binomial prob≤⍳⍵+1 ⍝ Cumulative probabilities
              (⌊⍺÷2)⍵ ⍺ hyperGeometric prob≤⍳⍵+1}n
          p←{⍵,1-⍵}(1-C)÷2                  ⍝ Upper lower probs
-         d[0 1+{⍵/⍳⍴⍵}2≠/≠⌿p∘.<cp]}        ⍝ Get conf int
-
+        ⍝d[0 1+{⍵/⍳⍴⍵}2≠/≠⌿p∘.<cp]}        ⍝ Get conf int
+         j←0 1+{⍵/⍳⍴⍵}2≠/≠⌿p∘.<cp          ⍝ Get conf int
+         ⍝j←+/0 1,p∘.>cp
+         d[j⌊¯1+≢d]}
      0J1∊⍺:showMedian ⍵~⎕NULL              ⍝ Show operator
-     ⍝1=×↑⍺:⍺ confMed ⍵
      ↑⍺ between 0 1:⍺ confMed ⍵
     ⍝2=⍴⍴⍵:{(x p)←↓⍉⍵[⍋⍵;]                 ⍝ Frequency Dist?
      isFrequency ⍵:{(x p)←↓⍉⍵[⍋⍵;]         ⍝ Frequency Dist?

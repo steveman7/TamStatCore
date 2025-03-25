@@ -16,9 +16,8 @@
   ⍝⍎ 1 1 1←1 1 beta 0.3 0.5 0.7  ⍝ 0 1 rectangular distribution
   ⍝⍎ 0.0005 0.0405 0.3125 1.2005 3.2805←5 1 beta 0.1 0.3 0.5 0.7 0.9
      x←⍵ ⋄ ⎕ML←3 ⋄ ⎕IO←0                   ⍝ System variables
-     x≡'Type':'Continuous'
-    ⍝a b c←3↑⍺
-     (a b)c←getParameters ⍺
+     x≡'Type':'Continuous'                 ⍝
+     (a b)c←getParameters ⍺                ⍝
      x≡'Mean':a÷a+b                        ⍝ a=Shape; b=Scale
      x≡'Variance':(a×b)÷(a+b+1)×(a+b)*2
      x≡'Mode':(a-1)÷a+b-2
@@ -26,38 +25,40 @@
          ×/2(-/⍵)z,⍵*¯0.5}b a
      x≡'Kurtosis':a{z←(2*⍨⍺-⍵)×(1 2÷.×⍺+⍵+2 1)÷⍺×⍵
          6×(z-1)÷⍺+⍵+3}b
-    ⍝str←'pdqr'[1 0 ¯1 ¯2⍳c],'beta(⍵,⍵,⍵)' ⍝ Build string for R
-     2=≡a b:(↑,¨/⍺)∇¨⍵                       ⍝ Left argument
+     2=≡a b:(↑,¨/⍺)∇¨⍵                     ⍝ Left argument
      str←c,'beta(⍵,⍵,⍵)'                   ⍝ Build string for R
-   ⍝ 2=≡⍺:(↑,¨/⍺)∇¨⍵                       ⍝ Left argument
      rAv:+##.∆r.x str ⍵ a b                ⍝ If requested use R
-     I←a b∘{a b←⍺                          ⍝ Incomplete Beta Function
+     0∊a b:c x{c x←⍺                       ⍝ If a=0 and/or b=0
+         w←0.5-0.5×-/×⍵                    ⍝ w∊{0,0.5,1}
+         c='d':(⌊/⍬)×(x∊0 1)∧w≠x           ⍝ Use R values
+         c='p':x{⍺∊0 1:⍺ ⋄ ⍵}¨w            ⍝
+         c='r':(?∘÷)⍣(w=0.5)⊢x⍴w           ⍝
+         c='q':x{⍺∊0 1:⍺                   ⍝
+             (⍺=0.5)∨⍵≠0.5:1-⍵ ⋄ ⍺>0.5}¨w  ⍝
+         'Nonce Error'}a b                 ⍝
+     ⍝I←a b∘{a b←⍺                         ⍝ Incomplete Beta Function
+     I←{a b←⍺                              ⍝ Incomplete Beta Function
          HyperG←{a b z←⍵                   ⍝ Hypergeometric Function
              f←{⍵×(z÷⍺+1)×(×/a+⍺)÷×/b+⍺}   ⍝ Recursive Kummer terms
-             0{x t←⍵                       ⍝
-                 x=x+t:x                   ⍝
-                 (⍺+1)∇(x+t)(⍺ f t)        ⍝
-             }0 1
-         }
-         z←HyperG(a,1-b)(a+1)⍵
-         z×(⍵*a)÷a
-     }
-     Finv←{⍵≤0:0                           ⍝ Inverse cumulative dist
-         P0←{                              ⍝ Get startingpoints
-             m←a÷a+b                       ⍝ Estimate mean
+             0{x t←⍵ ⋄ x=x+t:x             ⍝
+                 (⍺+1)∇(x+t)(⍺ f t)}0 1}   ⍝
+         z←HyperG(a,1-b)(a+1)⍵             ⍝
+         z×(⍵*a)÷a}                        ⍝
+     Finv←{⍵≤0:0 ⋄ a b←⍺                   ⍝ Inverse cumulative dist
+         P0←{m←a÷a+b                       ⍝ Estimate mean
              s←(a×b)÷(a+b+1)×(a+b)*2       ⍝ Estimate std deviation
-             m+s×1 2*¯1*⍵<0.5
-         }⍵
-         G←⍵∘{⍺-↑I ⍵}¨
-         z←G SecAlg P0,G P0                ⍝ Build function G(x)
-         z                                 ⍝ Use secant alg to solve G(x)=0
-     }
+             m+s×1 2*¯1*⍵<0.5}⍵            ⍝ Get startingpoints
+         G←⍵∘{⍺-↑a b I ⍵}¨                 ⍝ Build function G(x)
+         9○G SecAlg P0,G P0}               ⍝ Use secant alg to solve G(x)=0
      B←÷b×(a-1)!a+b-1                      ⍝ Beta Function
      c='d':(÷B)×{
          pr←1≠×/×⍵∘.-0 1                   ⍝ x∊[0,1]?
          pr×(⍵*a-1)×(1-⍵)*b-1}x            ⍝ Density
-     c='p':(I¨0⌈1⌊x)÷B                       ⍝ Cumulative Distribution
-     c='q':9○Finv¨B×x                       ⍝ Inverse Distribution
-     c='r':a b(16808⌶)'Beta'⍵                 ⍝ Random Variable
+     c='p':(a b∘I¨0⌈1⌊x)÷B                 ⍝ Cumulative Distribution
+  ⍝   c='q':9○a b Finv¨B×x                 ⍝ Inverse Distribution
+     c='q':a b∘{Q←⍺ Finv B×⍵ ⋄ 0≥×/Q-0 1:Q ⍝ If outside range [0,1]
+
+         1-(⌽⍺)Finv B×1-⍵}¨x               ⍝ Recalculate
+     c='r':a b(16808⌶)'Beta'⍵              ⍝ Random Variable
      'Nonce Error'
  }

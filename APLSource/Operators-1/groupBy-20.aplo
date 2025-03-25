@@ -24,12 +24,14 @@
 ⍝⍕    M 40 71.5  2.87
 ⍝⍕    F 11 65.09 3.11
      ⎕ML←1 ⋄ ⎕IO←0
-    ⍝ 0=⎕NC'⍺':⍺⍺(count,mean,sdev)∇∇ ⍵   ⍝ Default summary
-     0=⎕NC'⍺':⍵{⍺ ⍵}⌸⍺⍺                 ⍝ Partition Left operand
-     0::⍵ ⍺⍺{⍺,⍺⍺ ⍵}⌸⍺                  ⍝ Fall back
-     a←toNestedVector ⍺                 ⍝
-     (≢a)≠≢⍵:a ⍺⍺{w←⍉↑toNestedVector¨⍵  ⍝
-         w ⍺⍺{⍺,⍺⍺ ⍵}⌸a}⍵               ⍝ Multiple Grouping
-     w←toNestedVector ⍵                 ⍝
-     w ⍺⍺{⍺,⍺⍺ ⍵}⌸a                     ⍝ Single Grouping
+     5::⍺⍺⊂∇∇ ⍵                             ⍝ Length error
+     0=⎕NC'⍺':⍵{(deleteExcessBlanks↑⍺)⍵}⌸⍺⍺ ⍝ Partition Left operand
+     0::⍵ ⍺⍺{⍺,⍺⍺ ⍵}⌸⍺                      ⍝ Fall back
+     a←toNestedVector ⍺                     ⍝
+     op←{w←⍉↑toNestedVector¨⍵               ⍝ Summary operator
+         w ⍺⍺{⍺,⍺⍺ ⍵}⌸⍺}                    ⍝
+     0≠⊃0⍴⊃a:a⊆∘⍺⍺ op ⍵                    ⍝ Enclose character
+     a≠⍥≢⍵:a ⍺⍺ op ⍵                        ⍝ Multiple Grouping
+     w←toNestedVector ⍵                     ⍝
+     w ⍺⍺{⍺,⍺⍺ ⍵}⌸a                         ⍝ Single Grouping
  }

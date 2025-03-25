@@ -16,6 +16,7 @@
      B DF S C int←⍺⍺                    ⍝ Unpack operator
      ⍵≡'Type':'Linear'                  ⍝ Function type is linear
      ⍺←0                                ⍝ Default
+     0J1=↑⍺:'Nonce Error'               ⍝ Show interval? Not yet implemented.
      CL A←2↑⍺                           ⍝ Action, Conf Level
      B1←(int~1),B                       ⍝ Coefficients
      (2=≢B1)∧1<≢,⍵:⊃⍺∘∇¨⍵               ⍝ Simple regression multiple inputs

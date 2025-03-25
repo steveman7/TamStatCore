@@ -2,27 +2,28 @@
      f1←{⍺←C N ⋄ ⎕DIV←1
          n←count ⍵                              ⍝ Sample size
          p←proportion ⍵                         ⍝ Sample proportion
+         C=1:0 1 ⋄ C=0:p p                      ⍝ Extreme cases
+         (n≤30)∧N=0:C confPropExact×\n p       ⍝ Small sample, use exact method
+        ⍝(n≤30)∧N=0:C clopperPearson×\n p       ⍝ Small sample, use exact method
          rAv:C{n x←×\⍵                          ⍝ If R requested
              str←'prop.test(⍵,⍵,conf.level=⍵,correct = TRUE)'
              u←+##.∆r.x str x n ⍺               ⍝ Build R expression
              (5⊃u.Value).Value}n p              ⍝ Obtain values
-         C=1:0 1 ⋄ C=0:p p                      ⍝ Extreme cases
-         p∊0 1:{1-⌽⍵}⍣p⊢0,-(⍟1-⍺)÷n             ⍝ If p = 0 or 1 use "rule of 3"
-        ⍝ 10∨.>n×p,1-p:⍺{n x←×\⍵ ⋄ x←x⌊n-x      ⍝ If fewer than 10 successes or failures
-         (N=0)∧10∨.>n×p,1-p:C{n x←×\⍵ ⋄ x←x⌊n-x ⍝ If fewer than 10 successes or failures
-             g1←(0.5×1+⍺)-{n ⍵ binomial prob<x} ⍝ Lower bound
-             g2←(0.5×1-⍺)-{n ⍵ binomial prob≤x} ⍝ Upper bound
-             cb←g1 SecAlg∊U,g1¨U←0.4 0.6
-             cb,g2 SecAlg∊U,g2¨U                ⍝  (Clopper-Pearson Interval?)
-             0.5>↑⌽⍵:cb ⋄ 1-⌽cb}n p             ⍝ Use exact formula
          v←p-p*2                                ⍝ Variance
-         me←C N n{C N n←⍺                       ⍝ Margin of Error
-             N=0:{z←normal critVal<(1-C)÷2      ⍝ Infinit Pop.; sampling with replacement
-                 z×(⍵÷n)*÷2}⍵                   ⍝ Get 2-tailed conf int for z
-             t←(n-1)tDist critVal<(1-C)÷2       ⍝ Finite population sampling w/o replacement
-             t×sqrt(1-n÷N)×⍵÷n-1}p-p*2
-      ⍝   me←z×se
-         0⌈1⌊p(-,+)me}                          ⍝ LCL, UCL
+         C N n{C N n←⍺                          ⍝ Margin of Error
+             v←⍵-⍵*2
+          ⍝   N=0:p{z←normal critVal<(1-C)÷2     ⍝ Infinit Pop.; sampling with replacement
+⍝                 p(-,+)z×(⍵÷n)*÷2}v             ⍝ Get 2-tailed conf int for z
+             N=0:C 1 wilsonScoreInt×\n p       ⍝ Use Wilson Score w/cont correction
+             A2←0.5×1(-,+)C
+             t←(n-1)tDist critVal<↑A2           ⍝ Finite population sampling w/o replacement
+             me←t×sqrt(1-n÷N)×v÷n-1             ⍝ Var(P-hat) Thompson, Sampling p. 58
+             cb←p(-,+)me                        ⍝ Approximate conf bounds
+             X←n×p,1-p                          ⍝ If < 10 1's or 0's
+             (¯1∧.=××/cb∘.-0 1)∧X∧.>10:cb       ⍝ Use exact method
+
+         }p
+     }
      f2←{
          n←count¨⍵
             ⍝ p←(+/¨⍵)÷n
@@ -37,4 +38,5 @@
          me←z×se                 ⍝ Margin of Error
          (-/p)(-,+)me            ⍝ LCL, PointEstimate, U
      }
-     2=≢⍵:C f2 ⍵ ⋄ ⍺ f1 ⍵}
+    ⍝  (2=≢⍵)∧1=⍴⍴⍵:C f2 ⍵ ⋄ ⍺ f1 ⍵}
+     twoSample ⍵:C f2 ⍵ ⋄ ⍺ f1 ⍵}

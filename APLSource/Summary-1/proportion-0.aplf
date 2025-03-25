@@ -1,9 +1,10 @@
  proportion←{
-     ⍝⍟ Copyright 2018 by Stephen M. Mansour
+     ⍝⍟ Copyright 2018, 2025 by Stephen M. Mansour
      ⍝∇ Sample proportion
      ⍝∊ Summary function
      ⍝⍺_ Confidence Level, (Optional, 0 = point estimate)
      ⍝⍺_ PopulationSize Is (Optional, 0 = infinite)
+     ⍝⍺_ Method  (Optional, Clopper Pearson,
      ⍝⍵ BooleanValues  Bv True = 1, False = 0
      ⍝⍵ FreqDist    Xm2 Values followed by Counts or Probabilities
      ⍝⍵ SummaryData W   Namespace containing count, events
@@ -13,12 +14,28 @@
      ⍝⍎ proportion STATE eq 'PA'
      ⍝⍎ proportion Height > 72
      ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←0
-     ⍵≡'Type':'Center'                 ⍝ Measure of center
-     ↑⍺ between 0 1:(2↑∊⍺)confProp ⍵
-     1≤⍺:0.95 ⍺ confProp ⍵
-     9=⎕NC'⍵':{1≠×/×⍵-0 1:⍵ ⋄ ¯1}⍵.mean  ⍝ Get mean if summary
-     2=⍴⍴⍵:{b←∧/(⍵[;0]∊0 1)              ⍝ 1st col boolean?
-         b←b∧(⍵[;1]≡⌊⍵[;1])∧⍵[;1]∧.≥0    ⍝ 2nd col pos integer?
-         b:(+/×/⍵)÷+/⍵[;1] ⋄ ¯1}⍵        ⍝ Frequency dist
-     ~∧/⍵∊0 1:¯1 ⋄ (+/⍵)÷↑⍴⍵             ⍝ Boolean vector
- }
+     ⍵≡'Type':'Center'                          ⍝ Measure of center
+     ptEst←{twoSample ⍵:-/∇¨⍵                   ⍝ Difference of proportions
+         9=⎕NC'⍵':{1≠×/×⍵-0 1:⍵ ⋄ ¯1}⍵.mean     ⍝ Get mean if summary
+         2=⍴⍴⍵:{b←∧/(⍵[;0]∊0 1)                 ⍝ 1st col boolean?
+             b←b∧(⍵[;1]≡⌊⍵[;1])∧⍵[;1]∧.≥0       ⍝ 2nd col pos integer?
+             b:(+/×/⍵)÷+/⍵[;1] ⋄ ¯1}⍵           ⍝ Frequency dist
+         ~∧/⍵∊0 1:¯1 ⋄ (+/⍵)÷↑⍴⍵}               ⍝ Boolean vector
+     ⍺≡0:ptEst ⍵                                ⍝ Point estimate
+     ⍝C M←{2=≢A←{⍵[⍋⍵]},⎕C↑¨⍵:A                  ⍝ Confidence Level
+⍝         (¯1*645≠⎕DR A)↓0.95,A,0}⍺              ⍝   and Method
+     C M←⎕C ⍺
+     twoSample ⍵:C{n p←↓⍉⊃(count,mean)¨⍵        ⍝ Two-sample confint
+         Z←normal critVal<0.5×1-⍺
+         (-/p)(-,+)Z×sqrt+/p×(1-p)÷n}⍵
+     n x←×\(count,mean)⍵                        ⍝ Sample Size, Events   bin
+     M='b':C clopperPearson n x                 ⍝ Uses beta distribution
+     M='e':C confPropExact n x                  ⍝ Uses binomial distribution
+     M='w':C 0 wilsonScoreInt n x               ⍝ Wilson score int without CC
+     M='c':C 1 wilsonScoreInt n x               ⍝   "       "   "    With  CC
+     M='n':n{Z←normal critVal<0.5×1-C
+         p←⍵÷⍺ ⋄ p(-,+)Z×sqrt p×(1-p)÷⍺}x       ⍝ Normal approximation
+     M≠0:{PP←⌈\(⍳M)n M hyperGeometric prob>⍵    ⍝ Finite Population
+         M÷⍨PP⍸0.5×1(-,+)C}x                    ⍝ p. 59 Thompson, Sampling
+     n>30:C 1 wilsonScoreInt n x                ⍝ Default method
+     C confPropExact n x}
