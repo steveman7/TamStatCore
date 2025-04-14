@@ -9,15 +9,30 @@
  ⍝⍕ Result ← N percentile RawData|FreqDist
  ⍝⍎ 44.5 ← 30 percentile 32 58 57 96 76 87 21 58 90 5
  ⍝⍎ 44.5 81.5 ← 30 70 percentile 32 58 57 96 76 87 21 58 90 5
-     ∨/~⍺ between 0 100:⎕SIGNAL 11  ⍝ Domain error
+     ⍵≡'Type':'Position'             ⍝ Measure of position
+     ∨/~⍺ between 0 100:⎕SIGNAL 11   ⍝ Domain error
      P←⍺÷100 ⋄ ⎕ML←3 ⋄ ⎕IO←0
  ⍝ #.R_Available:+#.∆r.x'quantile(⍵,⍵)'⍵ P
-     9=⎕NC'⍵':⍵.(mean sdev)normal critVal>P
-     isFrequency ⍵:P{(x p)←↓⍉⍵[⍋⍵;] ⍝ Frequency Dist?
+     ptileconf←{C P←⍺ ⋄ N←count ⍵                   ⍝ Conover, Non-Parametric Statistics
+         I←C{N Q←⍵                                   ⍝ p. 143 ConfInt for a Quartile
+             N≤20:¯1+N Q binomial critVal outside ⍺  ⍝ Small Samples
+             Z←normal critVal<0.5×1-⍺                ⍝ Large Samples
+             ⌊(N×Q)(-,+)Z×sqrt N×Q×1-Q
+         }N,P÷100
+         9=⎕NC'⍵':{b←(⊂'events')∊variables ⍵
+             b:I≥⍵.Events
+             ⍵.(mean sdev)normal critVal≥I÷N}⍵
+         2=⍴⍴⍵:⍵[1+(+\⍵[;1])⍸I;0]
+         X←⍵[⍋⍵] ⋄ X[0⌈I⌊¯1+⍴X]}                     ⍝ Sort and find bounds at position
+     1>↑⍺:⍺ ptileconf ⍵
+     9=⎕NC'⍵':P{b←(⊂'events')∊variables ⍵
+         b:⍺≥⍵.(events÷count)
+         ⍵.(mean sdev)normal critVal>⍺}⍵
+     isFrequency ⍵:P{(x p)←↓⍉⍵[⍋⍵;]                  ⍝ Frequency Dist?
          p∨.<0:'Domain Error'
-         i←+/⍺∘.≥c←(+\p)÷+/p        ⍝ Cum probs
+         i←+/⍺∘.≥c←(+\p)÷+/p                         ⍝ Cum probs
          x[i⌊¯1+≢x]}⍵
-     n←≢x←⍵[⍋⍵]                     ⍝ Sort, get shape
-     (n×P){i←⌊⍺ ⋄ i≠⍺:⍵[i]          ⍝ If not integer, Round up
-         0.5+.×⍵[i-0 1]}¨⊂x         ⍝ Else average
+     n←≢x←⍵[⍋⍵]                                      ⍝ Sort, get shape
+     (n×P){i←⌊⍺ ⋄ i≠⍺:⍵[i]                           ⍝ If not integer, Round up
+         0.5+.×⍵[i-0 1]}¨⊂x                          ⍝ Else average
  }

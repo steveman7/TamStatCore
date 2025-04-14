@@ -18,9 +18,12 @@
          ~twoSample ⍵:(mean ⍵)(-,+)z×sqrt(var÷count)⍵ ⍝ One-sample estimate
          n←count¨⍵ ⋄ x←mean¨⍵ ⋄ v←var¨⍵        ⍝ Two-sample estimate
          (-/x)(-,+)z×sqrt v+.÷n}⍵
-     M='p':C{n s←(≢,sdev)d←↑-/⍵                ⍝ Paired diference
-         t←(n-1)tDist critVal<0.5×1-⍺      ⍝ Use Student t (sigma unknown)
-         (mean d)(-,+)t×s÷sqrt n}⊆⍵
+     M='p':C{ok←{MTX←⊃(⍴∘⍴,≢)¨⍵                ⍝ Paired difference
+             (1∧.=MTX[;0])∧=/MTX[;1]}⍵         ⍝ Check inputs
+         ~ok:'Must be raw data of equal length.'
+         n s←(≢,sdev)d←↑-/⍵                    ⍝ Sample size and std dev
+         t←(n-1)tDist critVal<0.5×1-⍺          ⍝ Use Student t (sigma unknown)
+         (mean d)(-,+)t×s÷sqrt n}⍵
      M='e':C{~twoSample ⍵:'Two samples required' ⍝ Equal Variances
          df←¯1+n←count¨⍵ ⋄ x←mean¨⍵ ⋄ v←var¨⍵
          sp←(v+.×df)÷+/df

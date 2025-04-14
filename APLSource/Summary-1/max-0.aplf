@@ -13,17 +13,17 @@
      ⍝⍎ 5 2 4 ← 5 2 3 max 2 1 4
      ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←⍬              ⍝ Set system variables
      ⍺≢⍬:⍺{~⎕NULL∊⍺,⍵:⍺⌈⍵
-         b←∧/⎕NULL≠yx←⍺,⍪⍵          ⍝ Dyadic version
+         b←∧/⎕NULL≠yx←⍺,⍪⍵            ⍝ Dyadic version
          (⎕NULL@((~b)/⍳⍴b))b\⌈/b⌿yx}⍵ ⍝
-     9=⎕NC'⍵':{n←⍵.count            ⍝ Get count
+     9=⎕NC'⍵':{n←⍵.count              ⍝ Get count
          z←normal criticalValue>n÷n+1 ⍝ Estimate z-score
          ⍵.mean+z×⍵.sdev}⍵            ⍝ Estimate max
-   ⍝  m←↑⌈⌿⍵                           ⍝ Get maximum
+   ⍝  m←↑⌈⌿⍵                          ⍝ Get maximum
      b←∧/⎕NULL≠⍪⍵
      m←↑⌈⌿b⌿⍵                         ⍝ Exclude nuls
      1=⍴⍴⍵:m                          ⍝ If data Set, done
      ~isFrequency ⍵:'Rank Error'
-     ⍝i←∪2-/⍵[⍋⍵;0]                    ⍝ Else get interval
+     ⍝i←∪2-/⍵[⍋⍵;0]                   ⍝ Else get interval
      i←∪2-/{⍵[⍋⍵;0]}b⌿⍵               ⍝ Else get interval
      1<≢i:m                           ⍝ If irregular, done
      m-⌈i÷2                           ⍝ Else get upper boundary

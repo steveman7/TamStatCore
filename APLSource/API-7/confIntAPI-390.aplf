@@ -1,31 +1,31 @@
- Z←confIntAPI NS;pop;⎕IO;⎕ML;V;XP;SH;I;X;S1;S2;H;LB;LN;SN;PA;TY;LV;L2;A    
-          ⍝∇ ns-based API for ConfInt                                      
-          ⍝∊ Written by Steve Mansour     updated 7/7/2019                 
-          ⍝⍵ nsIn Namespace containing the following variables             
+ Z←confIntAPI NS;pop;⎕IO;⎕ML;V;XP;SH;I;X;S1;S2;H;LB;LN;SN;PA;TY;LV;L2;A
+          ⍝∇ ns-based API for ConfInt
+          ⍝∊ Written by Steve Mansour     updated 7/7/2019
+          ⍝⍵ nsIn Namespace containing the following variables
           ⍝   Event:  Init, Stat, Data, Proportion, Events, Var, Sdev, Size
-          ⍝   Parameter:   mean, proportion, sdev, var                     
-          ⍝   Data:  1 or 2-item nested vector:    Expression or stats     
-          ⍝   Values:  1×3 or 2×3 numeric matrix                           
-          ⍝   UserSpace:   Ref or                                          
-          ⍝⍵  Parameter Levels Var GroupBy Var2                            
-          ⍝← nsOut Namespace contain nsIn plus the following:              
-          ⍝←    Labels  2-item nested vector                               
-          ⍝←    Values  1x3 or 2x3 numeric matrix                          
-          ⍝←    Protect 2×3 boolean matrix 1=protect, 0=editable           
- ⎕IO←0 ⋄ ⎕ML←3                                                             
- NS.ReturnCode←0 ⋄ NS.ErrorMessage←'' ⋄ NS.⎕ML←3 ⋄ NS.⎕IO←0                
- LV←toNestedVector'Level1,Level2,Level3,Level4'                            
- :Select NS.Event                                                          
- :Case 'Init'                                                              
-     NS←confIntGrid NS                         ⍝ Build grid                
-     NS←confIntAttr NS    ⍝ Assign attributes                              
-     NS.ReturnCode←0                                                       
- :Case 'Select'                                                            
-     NS←confIntChange NS                                                   
- :Case 'Run'                                                               
-     NS.Grid.Values←LV NS.put 4↑NS.Levels                                  
-     NS←getConfGrid NS                                                     
- :Else                                                                     
-     NS.Grid.Values←NS.rectifyStats NS.Event                               
- :EndSelect                                                                
- Z←NS                                                                      
+          ⍝   Parameter:   mean, proportion, sdev, var
+          ⍝   Data:  1 or 2-item nested vector:    Expression or stats
+          ⍝   Values:  1×3 or 2×3 numeric matrix
+          ⍝   UserSpace:   Ref or
+          ⍝⍵  Parameter Levels Var GroupBy Var2
+          ⍝← nsOut Namespace contain nsIn plus the following:
+          ⍝←    Labels  2-item nested vector
+          ⍝←    Values  1x3 or 2x3 numeric matrix
+          ⍝←    Protect 2×3 boolean matrix 1=protect, 0=editable
+ ⎕IO←0 ⋄ ⎕ML←3
+ NS.ReturnCode←0 ⋄ NS.ErrorMessage←'' ⋄ NS.⎕ML←3 ⋄ NS.⎕IO←0
+ LV←toNestedVector'Level1,Level2,Level3,Level4'
+ :Select NS.Event
+ :Case 'Init'
+     NS←confIntGrid NS                         ⍝ Build grid
+     NS←confIntAttr NS    ⍝ Assign attributes
+     NS.ReturnCode←0
+ :Case 'Select'
+     NS←confIntChange NS
+ :Case 'Run'
+     NS.Grid.Values←LV NS.put 4↑NS.Levels
+     NS←getConfGrid NS
+ :Else
+     NS.Grid.Values←NS.rectifyStats NS.Event
+ :EndSelect
+ Z←NS

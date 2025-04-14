@@ -9,4 +9,5 @@
  ⍝⍕ Z ← Value zScore RawData|FreqDist
  ⍝⍎ ¯0.42331 ← 45 zScore 32 58 57 96 76 87 21 58 90 5
  ⍝⍎ ¯0.42331 0.71638 ← 45 80 zScore 32 58 57 96 76 87 21 58 90 5
+     ⍵≡'Type':'Position'             ⍝ Measure of position
      ⍺←⍵ ⋄ (⍺-mean ⍵)÷sdev ⍵}

@@ -1,67 +1,134 @@
- Z←confIntChange NS;A;I;IT;LB;LN;SN;L2;LN;S1;S2;TY;LV;⎕IO;⎕ML                                           
- ⎕IO←0 ⋄ ⎕ML←3                                                                                          
- LV←toNestedVector'Level1,Level2,Level3,Level4'                                                         
- NS.Grid.Values←LV NS.put 4↑NS.Levels                                                                   
- LB←'Sample Size' 'Mean' 'Std Dev'            ⍝ Label Values                                            
- LN←'Lb'∘,¨SN←'SampSize' 'Mean' 'Sdev'                                                                  
- L2←NS.get'LbSample2'                                                                                   
- S1 S2←(NS.get¨'Sample' 'Sample2')∊⊂'stats'   ⍝ stats selected?                                         
- A←⎕NS'' ⋄                                                                                              
- :Select NS.EventArg                                                                                    
- :Case 'Parameter'                                                                                      
-     :Select NS.get'Parameter'                                                                          
-     :Case 'mean' ⋄ TY←'NFF' ⋄ IT←'f'                    ⍝ mean, proportion or variance?                
-     :Case 'median' ⋄ TY←'NNN' ⋄ IT←'f'                                                                 
-         LB[1 2]←'Below' 'Above'                                                                        
-     :Case 'proportion' ⋄                                                                               
-         LB[1 2]←'Proportion' 'Events'                                                                  
-         TY←'NPN' ⋄ IT←'b'                                                                              
-     :CaseList 'var' 'variance' 'sdev'                        ⍝ Relabel to appropriate parameter        
-         LB[1]←⊂'Variance' ⋄ TY←'NFF' ⋄ IT←'f'                                                          
-     :EndSelect                                                                                         
-     I←⍸NS.Grid.Names∊SN                                                                                
-     NS.Grid.Values←LN NS.put LB                              ⍝ Display labels for Sample1?             
+ Z←confIntChange NS;A;I;IT;LB;LN;SN;L2;LN;S1;S2;TY;LV;J;MT;PARM;METH;NMS;⎕IO;⎕ML
+ ⎕IO←0 ⋄ ⎕ML←3
+ LV←toNestedVector'Level1,Level2,Level3,Level4'
+ NS.Grid.Values←LV NS.put 4↑NS.Levels
+ LB←'Sample Size' 'Mean' 'Std Dev'            ⍝ Label Values
+ LN←'Lb'∘,¨SN←'SampSize' 'Mean' 'Sdev'
+ ⍝L2←NS.get'LbSample2' ⋄ PARM←NS.get'Parameter'
+ L2 PARM METH←NS.get'LbSample2' 'Parameter' 'LbMethod'
+ S1 S2←(NS.get¨'Sample' 'Sample2')∊⊂'stats'   ⍝ stats selected?
+ A←⎕NS'' ⋄ MT←''
+ :Select PARM
+ :Case 'mean'
+     :Select L2
+     :CaseList '--' 'groupBy'
+         MT←'Unknown σ' 'Known σ'
+     :CaseList ' - Sample2' 'splitBy'
+         MT←'Unequal Variance' 'Equal Variance' 'Paired Difference' 'Known σ'
+     :EndSelect
+ :Case 'proportion'
+     :Select L2
+     :CaseList '--' 'groupBy'
+         MT←'Normal' 'Binomial' 'Wilson Score' 'Continuity Correction'
+     :CaseList ' - Sample2' 'splitBy'
+         MT←''
+     :EndSelect
+ :Else ⋄ MT←''
+ :EndSelect
+ J←⍸NS.Grid.Names∊NMS←'Method1' 'Method2' 'Method3' 'Method4'     ⍝ Change Method Options?
+ :If METH≡'Method'
+   ⍝  (J⌷¨⊂NS.Grid.Attributes).Type←'TD'[1<≢MT]                ⍝
+     A←⎕NS'' ⋄ A.Type←'TD'[1<≢MT]
+        ⍝ (J⌷¨⊂NS.Grid.Attributes).Items←⊂MT
+     :If ×≢MT ⋄ A.Items←MT ⋄ :EndIf
+     NS.Grid.Attributes←NMS NS.changeAttributes A
+ :Else
+     ⍝(J⌷¨⊂NS.Grid.Attributes).Type←'FTTT'
+     NS.Grid.Attributes←NMS NS.changeAttributes'FTTT'
+ :EndIf
+ :If (⊂NS.EventArg)∊'lbMethod' 'Parameter' 'LbSample2'
+     NS.Grid.Values←('Method'∘,¨'1234')NS.put 4↑1↑MT
+ :EndIf
+ :Select NS.EventArg
+ :Case 'Parameter'
+     NS.Grid.Values←'LbMethod1'NS.put'Method'
+   ⍝  NS.Grid.Attributes←'Method1' NS.changeAttributes 'D'
+     :Select PARM
+     :Case 'mean' ⋄ TY←'NFF' ⋄ IT←'f'                         ⍝ mean, proportion or variance?
+     :Case 'sum' ⋄ TY←'NFF' ⋄ IT←'f'
+         NS.Grid.Values←'LbMethod' 'Method1'NS.put'Sample Size' 100
+         NS.Grid.Attributes←'Method1'NS.changeAttributes'N'
+     :Case 'median' ⋄ TY←'NNN' ⋄ IT←'f'
+         LB[1 2]←'Below' 'Above'
+     :Case 'proportion' ⋄
+         LB[1 2]←'Proportion' 'Events'
+         TY←'NPN' ⋄ IT←'b'
+     :CaseList 'var' 'variance' 'sdev'                        ⍝ Relabel to appropriate parameter
+         LB[1]←⊂'Variance' ⋄ TY←'NFF' ⋄ IT←'f'
+     :CaseList 'percentile' 'quartile'
+         TY←'TTT' ⋄ IT←'f'
+         NS.Grid.Values←'LbMethod'NS.put''
+         NS.Grid.Values←'Method1'NS.put 1×25*PARM≡'percentile'
+         NS.Grid.Attributes←'Method1'NS.changeAttributes'F'
+     :EndSelect
+
+     I←⍸NS.Grid.Names∊SN
+     NS.Grid.Values←LN NS.put LB                              ⍝ Display labels for Sample1?
      NS.Grid.Attributes←SN NS.changeAttributes TY             ⍝ Change cell types for Sample1 statistics
      NS.Grid.Attributes←(SN,¨'2')NS.changeAttributes TY       ⍝ Change cell types for sample2 statistics
-     A←⎕NS'' ⋄ A.Type←'E' ⋄ A.Items←IT ⋄ A.TopItem←'stats' ⍝ Changes items                              
-     NS.Grid.Attributes←'Sample'NS.changeAttributes A                                                   
-     NS.Grid.Values←NS.rectifyStats'Sample'                                                             
-     (I⌷¨⊂NS.Grid.Attributes).ReadOnly←0                                                                
- :Case 'LbSample2'                                                                                      
-     NS.Grid.Values←'LbSample'NS.put'Sample',(L2≡'Sample 2')/' 1' ⍝ Sample or Sample 1?                 
-      ⋄ I←⍸NS.Grid.Names∊SN,¨'2'                                                                        
-     :Select L2                                                                                         
-     :Case '--'                                                                                         
-         NS.Grid.Values←(SN,¨'2')NS.put ⍬ ⍬ ⍬                                                           
-         NS.Grid.Attributes←(SN,¨'2')NS.changeAttributes'T'   ⍝                                         
-         NS.Grid.Attributes←'Sample2'NS.changeAttributes'T'                                             
-         NS.Grid.Values←'Sample2'NS.put''                                                               
-         (I⌷¨⊂NS.Grid.Attributes).ReadOnly←1                                                            
-     :Case ' - Sample2'                                                                                 
-         NS.Grid.Values←'LbSample'NS.put'Sample1'                                                       
-         NS.Grid.Values←NS.rectifyStats'Sample2'                                                        
-         TY←('proportion'≡NS.get'Parameter')⊃'NFF' 'NPN'                                                
-         NS.Grid.Attributes←(SN,¨'2')NS.changeAttributes TY                                             
-             ⍝ A.Items←(⊂'stats'),1 variables NS.UserSpace                                              
-         NS.Grid.Values←'Sample2'NS.put'stats'                                                          
-         (I⌷¨⊂NS.Grid.Attributes).ReadOnly←0                                                            
-         A.Items←'fp'⊃⍨'proportion'≡NS.get'Parameter'                                                   
-         A.Type←'E' ⋄ A.TopItem←'stats'                                                                 
-         NS.Grid.Attributes←'Sample2'NS.changeAttributes A                                              
-     :Case 'splitBy'                                                                                    
-         :If S2 ⋄ NS.GridValues←'Sample2'NS.put' ' ⋄ :EndIf                                             
-         NS.Grid.Values←'LbSample'NS.put'Sample'                                                        
-         A.Type←'E' ⋄ A.Items←'b' ⋄ A.TopItem←''                                                        
-         (I⌷¨⊂NS.Grid.Attributes).ReadOnly←1                                                            
-         NS.Grid.Attributes←'Sample2'NS.changeAttributes A                                              
-         NS.Grid.Attributes←(SN,¨'2')NS.changeAttributes'T'                                             
-         NS.Grid.Values←(SN,¨'2')NS.put ⍬ ⍬ ⍬                                                           
-     :EndSelect                                                                                         
- :Else                                                                                                  
-     NS.Grid.Values←NS.rectifyStats NS.EventArg                                                         
-     I←⍸NS.Grid.Names∊SN                                                                                
-     (I⌷¨⊂NS.Grid.Attributes).ReadOnly←~S1                                                              
-     I←⍸NS.Grid.Names∊SN,¨'2'                                                                           
-     (I⌷¨⊂NS.Grid.Attributes).ReadOnly←~S2                                                              
- :EndSelect                                                                                             
- Z←NS                                                                                                   
+     A←⎕NS'' ⋄ A.Type←'E' ⋄ A.Items←IT ⋄ A.TopItem←'stats'    ⍝ Changes items
+     NS.Grid.Attributes←'Sample'NS.changeAttributes A
+     NS.Grid.Values←NS.rectifyStats'Sample'
+     (I⌷¨⊂NS.Grid.Attributes).ReadOnly←0
+ ⍝ :CaseList 'Method1' 'Method2' 'Method3' 'Method4'
+⍝     2+      NS.Event
+⍝
+ :Case 'LbMethod'
+     :Select NS.get'LbMethod'
+     :Case 'Method'
+         NS.Grid.Attributes←('Method'∘,¨'1234')NS.changeAttributes'D'
+     :CaseList '''Population Size'
+         NS.Grid.Attributes←('Method'∘,¨'1234')NS.changeAttributes'FTTT'
+         NS.Grid.Values←'Method1'NS.put 100
+         (J⌷¨⊂NS.Grid.Attributes).Items←⊂''
+     :EndSelect
+ :Case 'LbSample2'
+     NS.Grid.Values←'LbSample'NS.put'Sample',(L2≡'Sample 2')/' 1' ⍝ Sample or Sample 1?
+      ⋄ I←⍸NS.Grid.Names∊SN,¨'2'
+     :Select L2
+     :Case '--'
+         NS.Grid.Values←(SN,¨'2')NS.put ⍬ ⍬ ⍬
+         NS.Grid.Attributes←(SN,¨'2')NS.changeAttributes'T'   ⍝
+         NS.Grid.Attributes←'Sample2'NS.changeAttributes'T'
+         NS.Grid.Values←'Sample2'NS.put''
+         (I⌷¨⊂NS.Grid.Attributes).ReadOnly←1
+     :Case ' - Sample2'
+         NS.Grid.Values←'LbSample'NS.put'Sample1'
+         NS.Grid.Values←NS.rectifyStats'Sample2'
+         TY←('proportion'≡NS.get'Parameter')⊃'NFF' 'NPN'
+         NS.Grid.Attributes←(SN,¨'2')NS.changeAttributes TY
+             ⍝ A.Items←(⊂'stats'),1 variables NS.UserSpace
+         NS.Grid.Values←'Sample2'NS.put'stats'
+         (I⌷¨⊂NS.Grid.Attributes).ReadOnly←0
+         A.Items←'fp'⊃⍨'proportion'≡NS.get'Parameter'
+         A.Type←'E' ⋄ A.TopItem←'stats'
+         NS.Grid.Attributes←'Sample2'NS.changeAttributes A
+     :CaseList 'splitBy' 'groupBy'
+         :If S2 ⋄ NS.GridValues←'Sample2'NS.put' ' ⋄ :EndIf
+         NS.Grid.Values←'LbSample'NS.put'Sample'
+         A.Type←'E' ⋄ A.Items←'bC'[L2≡'groupBy'] ⋄ A.TopItem←''
+         (I⌷¨⊂NS.Grid.Attributes).ReadOnly←1
+         NS.Grid.Attributes←'Sample2'NS.changeAttributes A
+         NS.Grid.Values←NS{'Sample'⍺.put('stats'≢⍵)/⍵}NS.get'Sample'
+         A.Items←'f'
+         NS.Grid.Attributes←'Sample'NS.changeAttributes A
+         NS.Grid.Attributes←(SN,¨'2')NS.changeAttributes'T'
+         NS.Grid.Values←(SN,¨'2')NS.put ⍬ ⍬ ⍬
+     :EndSelect
+ :Case 'Method1'
+     ⍝:If 0=≢NS.get 'LbMethod'
+     :If (⊂PARM)∊'percentile' 'quartile'
+         NS.Grid.Values←'LbMethod'NS.put''
+         NS.Grid.Attributes←'Method1'NS.changeAttributes'F'
+
+     :EndIf
+ :Else
+
+     NS.Grid.Values←NS.rectifyStats NS.EventArg
+     I←⍸NS.Grid.Names∊SN
+     (I⌷¨⊂NS.Grid.Attributes).ReadOnly←~S1
+     I←⍸NS.Grid.Names∊SN,¨'2'
+     (I⌷¨⊂NS.Grid.Attributes).ReadOnly←~S2
+ :EndSelect
+ ⍝:IF PARM≡'percentile' ⋄ 2+ ⋄ :EndIf
+ Z←NS

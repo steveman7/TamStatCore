@@ -1,6 +1,6 @@
  wilcoxonT←{                                ⍝ Scalar,Arithmetic
      ⍝⍟ Copyright (c) 2021, 2025 by Stephen M. Mansour
-     ⍝∊ Table A12 QUantiles of Wicoxon Signed Ranks Test
+     ⍝∊ Table A12 QUantiles of Wilcoxon Signed Ranks Test
      ⍝∊ Conover, Practical Nonparametric Statistics Table 12, p. 545
      ⍝∇ Wilcoxon T distribution
      ⍝∊ Distribution Function; Discrete

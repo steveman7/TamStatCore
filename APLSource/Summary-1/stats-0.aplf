@@ -14,24 +14,32 @@
      ⍝⍎ stats 30 10.5 2.7     ⍝ N=30, mean=10.5 sdev=2.7
      ⍝⍎ 'Height' stats 30 68 3.2
      ⍝⍎ stats Height          ⍝ Raw Data
-     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←''                   ⍝ Set system variables
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ ⍺←'' ⋄ ⎕PP←5                ⍝ Set system variables
     ⍝ 326≡⎕DR ⍵:∇{∆←⍺⍺ 1↓⍵ ⋄ ∆.Name←↑⍵ ⋄ ∆}⍵ ⍝ Insert name if 1st item Char
      b←0=≢⍺
-     3=≢⍵:⍺{count mean sdev←3↑⍵                  ⍝ If 3-vector
+     name←b⊃⍺'Namespace'
+     3=≢⍵:name{count mean sdev←3↑⍵                  ⍝ If 3-vector
          var←sdev*2 ⋄ name←⍺                     ⍝ Calculate variance
-         ⎕NS b↓'name' 'count' 'mean' 'sdev' 'var'}⍵   ⍝ Include count,mean,sdev
-     2=≢⍵:⍺{count←↑⍵                             ⍝ If 2-vector
+         NS←⎕NS b↓'name' 'count' 'mean' 'sdev' 'var'
+         DF←⍺,': [n=',(⍕count),'; xbar=',(⍕mean),'; s=',(⍕sdev),']'
+         _←NS.⎕DF DF ⋄ NS}⍵   ⍝ Include count,mean,sdev
+     2=≢⍵:name{count←↑⍵                             ⍝ If 2-vector
          mean←↑{¯1=×/×⍵-0 1:⍵                    ⍝ Assume binomial
              ⍝(⍵>0)∧(⍵=⌈⍵)∧⍵≤⍺:⍵÷⍺ ⋄ ¯1}/⍵       ⍝ Calc mean
              (⍵≥0)∧(⍵=⌈⍵)∧⍵≤⍺:⍵÷⍺ ⋄ ¯1}/⍵        ⍝ Calc mean
          var←{⍵×1-⍵}mean ⋄ name←⍺                ⍝ Var = p(1-p)
          events←⌊0.5+count×mean                  ⍝ Successes
          sdev←var*÷2                             ⍝ sdev= sqrt var
-         ⎕NS b↓'name' 'count' 'events' 'mean' 'sdev' 'var'}⍵ ⍝
+         NS←⎕NS b↓'name' 'count' 'events' 'mean' 'sdev' 'var'
+         DF←⍺,': [n=',(⍕count),'; x=',(⍕events),']'
+         _←NS.⎕DF DF ⋄ NS}⍵                    ⍝
      6=≢⍵:⍺{'Nonce Error'}⍵
      9=⎕NC'⍵':⍵                                  ⍝ If ns leave alone
      count mean var sdev←(count,mean,var,sdev)⍵  ⍝ Put variables
-     name←⍺
+    ⍝ name←⍺
      NS←⎕NS b↓'name' 'count' 'mean' 'sdev' 'var' ⍝   into namespace
-     ~∧/⍵∊0 1:NS ⋄ NS.events←+/⍵ ⋄ NS          ⍝ Include events if binary
+     DF←name,': [n=',(⍕count),'; xbar=',(⍕mean),'; s=',(⍕sdev),']'
+     _←NS.⎕DF DF ⋄ ~∧/⍵∊0 1:NS ⋄
+     NS.events←+/⍵ ⋄ DF←name,': [n=',(⍕count),'; x=',(⍕NS.events),']'
+     _←NS.⎕DF DF ⋄ NS                            ⍝ Include events if binary
  }

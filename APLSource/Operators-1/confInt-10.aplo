@@ -22,10 +22,8 @@
  ⍝⍎ 68.378 69.274←MODEL.f confInt 10           ⍝ Estimate Height Confidence Interval for size 10 Shoe
      ⍺←0.95 ⋄ ⎕ML←3 ⋄ ⎕IO←0                    ⍝ Default conf level is 95%
      'Linear'≡⍺⍺'Type':⍺ 1 ⍺⍺ ⍵                ⍝ If regression, conf int for y
-⍝     'Association'≡⍺⍺'Type':⍺ ⍺⍺{1=≢⍺:⍺ ⍺⍺ ⍵  ⍝ If bivariate function
      'Association'≡⍺⍺'Type':⍺ ⍺⍺{⍺≠⍥≢↑⊆⍵:⍺ ⍺⍺ ⍵  ⍝ If bivariate function
          0.95 ⍺⍺ ⍺ ⍵}⍵                         ⍝    check left argument
-    ⍝ x←⊂⍣(326≠⎕DR ⍵)⊣⍵                        ⍝ Enclose if simple numeric array
      x←⊆⍣(V←2>↑⍴⍴⍵)⊢⍵                          ⍝ Enclose if simple numeric vector
      V∧2<≢x:'No more than two right arguments permitted'
      x←{(9∊⎕NC¨'⍵')∨0 1≢11=⎕DR¨⍵:⍵             ⍝ If 2nd arg boolean
@@ -35,39 +33,19 @@
      A←⍺~0J1
      CL←{0=≢⍵:0.95 ⋄ ↑⍣(1=≢⍵)⊢⍵}(645=⎕DR¨A)/A  ⍝ Find CL where 0<CL<1
      M←{0=≢⍵:0 ⋄ W←↑⍣(1=≢⍵)⊢⍵                  ⍝ Disclose singletons
-       ⍝ ↑¨⎕C toNestedVector W}A~CL,⊂CL        ⍝ Find population size or method(s)
-         toNestedVector W}A~CL,⊂CL             ⍝ Find population size or method(s)
-     NL x←{~C∊⍨⎕DR↑⍵:' '⍵                        ⍝ If grouped data,
+         toNestedVector W}A~CL,⊂CL              ⍝ Find population size or method(s)
+     NL x←{~C∊⍨⎕DR↑⍵:' '⍵                      ⍝ If grouped data,
          w←(1<≢¨0⌷[1]⌽⍵)⌿⍵                     ⍝ Eliminate 1-item groups
          2=↑⍴⍉w:↓⍉w                            ⍝ One set of groups
          NL x←↓⍉⊃¨w⊂⍨2-C∊⍨⎕DR¨w[0;]
          (toDelimitedList¨NL)(,¨x)}x           ⍝ Multiple sets of groups
-    ⍝ 0J1∊⍺:((⍺~0J1)M NL)⍺⍺ formatConfInt x    ⍝ Format using "show" operator
      0J1∊⍺:(CL M NL)⍺⍺ formatConfInt x         ⍝ Format using "show" operator
      M←↑¨⎕C M
-     (twoSample x)∧1=≢NL:⊃(CL,¨M)⍺⍺¨⊂x         ⍝ Two-sample case
+    ⍝(twoSample x)∧1=≢NL:⊃(CL,¨M)⍺⍺¨⊂x         ⍝ Two-sample case
+     (twoSample x)∧1=≢NL:⊃(CL∘.,M)⍺⍺¨⊂x       ⍝ Two-sample case
      K←≢¨CL M x                                ⍝
      K∧.=1:(CL,M)⍺⍺↑x                          ⍝ Simple case - 2-vector result
-     ⊃(CL,¨M)∘.⍺⍺ x
-
-
-
-   ⍝  CL N←2↑{⍵[⍋⍵]}⍺~0J1                       ⍝ ConfidenceLevel PopulationSize|Method
-⍝
-    ⍝ i←↑⍺⍺ 3 9 12                              ⍝ Test Operand on known data
-⍝     p←stats∘{i=¯1:round(count,mean×count)⍵    ⍝ If proportion
-⍝         (count,mean,sdev)⍵}¨x                 ⍝ Convert to summary form
-    ⍝0J1∊⍺:((⍺~0J1)G NL)⍺⍺ formatConfInt(i=2)⊃p x
-
-    ⍝ CL N←{1∧.>∊⍵:(⍵~0)0 ⋄ 2=≢⍵:⍵[⍋⍵] ⋄ 0.95,⍵}⍺   ⍝ Conf Level, Population Size
-    ⍝ CL N←{1∧.>∊⍵:({↑⍣(1=≢⍵)⊢⍵}⍵~0)0
-
-        ⍝ 2=≢⍵:⍵[⍋⍵] ⋄ 0.95,⍵}⍺                  ⍝ Conf Level, Population Size
-     {,⍣(1=≢⍵)⊢⍵}⊃(CL,¨M)∘.⍺⍺ x                 ⍝ Multiple or simple case
-
-     (1<≢NL)∧1<≡x:⊃(CL,¨M)∘.∇ x                 ⍝ Multiple groups and conf levels
-                                                ⍝ Multiple groups
-   ⍝  1<≢C:⊃(C,¨N)∇¨⊂x                           ⍝ Multiple conf levels? ⍝     C N ⍺⍺ p x
-     1<≢CL:⊃(CL,¨M)∇¨⊂x                          ⍝ Multiple conf levels? ⍝     C N ⍺⍺ p x
-     CL M ⍺⍺↑⍣(1=≢⍵)⊢⍵                          ⍝ Simple case
+    ⍝ ⊃(CL,¨M)∘.⍺⍺ x
+     2=⍴⍴x:⊃(CL∘.,M)∘.⍺⍺⊂x                     ⍝ Frequency distribution
+     ⊃(CL∘.,M)∘.⍺⍺ x                           ⍝ Raw data or namespace
  }

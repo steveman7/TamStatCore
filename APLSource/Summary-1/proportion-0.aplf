@@ -29,13 +29,18 @@
          Z←normal critVal<0.5×1-⍺
          (-/p)(-,+)Z×sqrt+/p×(1-p)÷n}⍵
      n x←×\(count,mean)⍵                        ⍝ Sample Size, Events   bin
+     f←{Z←normal critVal<0.5×1-C
+         p←⍵÷⍺ ⋄ p(-,+)Z×sqrt p×(1-p)÷⍺}        ⍝ Normal approximation
      M='b':C clopperPearson n x                 ⍝ Uses beta distribution
      M='e':C confPropExact n x                  ⍝ Uses binomial distribution
      M='w':C 0 wilsonScoreInt n x               ⍝ Wilson score int without CC
      M='c':C 1 wilsonScoreInt n x               ⍝   "       "   "    With  CC
-     M='n':n{Z←normal critVal<0.5×1-C
-         p←⍵÷⍺ ⋄ p(-,+)Z×sqrt p×(1-p)÷⍺}x       ⍝ Normal approximation
+     ⍝M='n':n{Z←normal critVal<0.5×1-C
+⍝         p←⍵÷⍺ ⋄ p(-,+)Z×sqrt p×(1-p)÷⍺}x       ⍝ Normal approximation
+     M='n':n f x
      M≠0:{PP←⌈\(⍳M)n M hyperGeometric prob>⍵    ⍝ Finite Population
          M÷⍨PP⍸0.5×1(-,+)C}x                    ⍝ p. 59 Thompson, Sampling
-     n>30:C 1 wilsonScoreInt n x                ⍝ Default method
-     C confPropExact n x}
+     n f x                                      ⍝ Default = normal approx
+     ⍝n>30:C 1 wilsonScoreInt n x                ⍝ Default method
+⍝     C confPropExact n x
+ }

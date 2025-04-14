@@ -21,14 +21,19 @@
          cp←N{⍺=0:⍵ 0.5 binomial prob≤⍳⍵+1 ⍝ Cumulative probabilities
              (⌊⍺÷2)⍵ ⍺ hyperGeometric prob≤⍳⍵+1}n
          p←{⍵,1-⍵}(1-C)÷2                  ⍝ Upper lower probs
-        ⍝d[0 1+{⍵/⍳⍴⍵}2≠/≠⌿p∘.<cp]}        ⍝ Get conf int
          j←0 1+{⍵/⍳⍴⍵}2≠/≠⌿p∘.<cp          ⍝ Get conf int
-         ⍝j←+/0 1,p∘.>cp
          d[j⌊¯1+≢d]}
+     confMed1←{C N←⍺ ⋄ p←0.5×1-C ⋄ D←⍵[⍋⍵] ⍝ Conover, Non-Parametric
+         W←(≢D)wilcoxonT critVal>p         ⍝ Statistics, p. 360 (Hodges-Lehmann)
+         M←sort D,0.5×+pairwise D
+         M[-⍨\W,≢M]}
      0J1∊⍺:showMedian ⍵~⎕NULL              ⍝ Show operator
-     ↑⍺ between 0 1:⍺ confMed ⍵
-    ⍝2=⍴⍴⍵:{(x p)←↓⍉⍵[⍋⍵;]                 ⍝ Frequency Dist?
-     isFrequency ⍵:{(x p)←↓⍉⍵[⍋⍵;]         ⍝ Frequency Dist?
+      ⍝  ↑⍺ between 0 1:⍺ confMed1 ⍵
+     C M←2↑⎕C ⍺
+     C between 0 1:C M{M='b':C 0 confMed ⍵
+         M='h':C 0 confMed1 ⍵
+         C M confMed ⍵}⍵
+     isFrequency ⍵:{(x p)←↓⍉⍵[⍋⍵;]          ⍝ Frequency Dist?
          p∨.<0:'Domain Error'              ⍝ Validate probabilities
          b←(⊢∧.=⌊)⍵[;0]                    ⍝ If all integers
          b←b∧1∧.=¯2-/⍵[;0]                 ⍝ separated by 1 unit

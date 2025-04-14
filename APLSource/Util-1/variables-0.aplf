@@ -19,6 +19,7 @@
      ⍺=3:V/⍨{0≠↑0⍴∊NS⍎⍵}¨V           ⍝ List only Character Variables
      DB←DB~'TamStat' '_meta'         ⍝ Exclude TamStat namespace
      (⍺=0)∨0=≢DB:V,{'[',⍵,']'}¨DB    ⍝ If 0 or no ns, list vars
-     VV←∇∘⍎¨'⍵.'∘,¨DB                ⍝ Else apply to each namespace
+    ⍝ VV←∇∘⍎¨'⍵.'∘,¨DB                ⍝ Else apply to each namespace
+     VV←∇∘⍎¨'NS.'∘,¨DB                ⍝ Else apply to each namespace
      V,↑,/DB{⍺∘,¨'.',¨⍵}¨VV          ⍝ Append to list
  }
