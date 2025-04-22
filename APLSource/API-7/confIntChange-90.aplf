@@ -44,20 +44,20 @@
      NS.Grid.Values←'LbMethod1'NS.put'Method'
    ⍝  NS.Grid.Attributes←'Method1' NS.changeAttributes 'D'
      :Select PARM
-     :Case 'mean' ⋄ TY←'NFF' ⋄ IT←'f'                         ⍝ mean, proportion or variance?
-     :Case 'sum' ⋄ TY←'NFF' ⋄ IT←'f'
+     :Case 'mean' ⋄ TY←'NFF' ⋄ IT←'F'                         ⍝ mean, proportion or variance?
+     :Case 'sum' ⋄ TY←'NFF' ⋄ IT←'F'
          NS.Grid.Values←'LbMethod' 'Method1'NS.put'Sample Size' 100
          NS.Grid.Attributes←'Method1'NS.changeAttributes'N'
-     :Case 'median' ⋄ TY←'NNN' ⋄ IT←'f'
+     :Case 'median' ⋄ TY←'NNN' ⋄ IT←'F'
          LB[1 2]←'Below' 'Above'
      :Case 'proportion' ⋄
          LB[1 2]←'Proportion' 'Events'
          TY←'NPN' ⋄ IT←'b'
      :CaseList 'var' 'variance' 'sdev'                        ⍝ Relabel to appropriate parameter
-         LB[1]←⊂'Variance' ⋄ TY←'NFF' ⋄ IT←'f'
+         LB[1]←⊂'Variance' ⋄ TY←'NFF' ⋄ IT←'F'
      :CaseList 'percentile' 'quartile'
          TY←'TTT' ⋄ IT←'f'
-         NS.Grid.Values←'LbMethod'NS.put''
+         NS.Grid.Values←'LbMethod'NS.put'--'
          NS.Grid.Values←'Method1'NS.put 1×25*PARM≡'percentile'
          NS.Grid.Attributes←'Method1'NS.changeAttributes'F'
      :EndSelect
@@ -70,14 +70,13 @@
      NS.Grid.Attributes←'Sample'NS.changeAttributes A
      NS.Grid.Values←NS.rectifyStats'Sample'
      (I⌷¨⊂NS.Grid.Attributes).ReadOnly←0
- ⍝ :CaseList 'Method1' 'Method2' 'Method3' 'Method4'
-⍝     2+      NS.Event
-⍝
  :Case 'LbMethod'
      :Select NS.get'LbMethod'
      :Case 'Method'
-         NS.Grid.Attributes←('Method'∘,¨'1234')NS.changeAttributes'D'
-     :CaseList '''Population Size'
+        ⍝ A.(Type Items)←'D' MT
+         NS.Grid.Attributes←('Method'∘,¨'1234')NS.changeAttributes'DDDD'
+         (J⌷¨⊂NS.Grid.Attributes).Items←⊂MT
+     :CaseList '--' 'Population Size'
          NS.Grid.Attributes←('Method'∘,¨'1234')NS.changeAttributes'FTTT'
          NS.Grid.Values←'Method1'NS.put 100
          (J⌷¨⊂NS.Grid.Attributes).Items←⊂''
@@ -106,7 +105,8 @@
      :CaseList 'splitBy' 'groupBy'
          :If S2 ⋄ NS.GridValues←'Sample2'NS.put' ' ⋄ :EndIf
          NS.Grid.Values←'LbSample'NS.put'Sample'
-         A.Type←'E' ⋄ A.Items←'bC'[L2≡'groupBy'] ⋄ A.TopItem←''
+        ⍝A.Type←'E' ⋄ A.Items←'bC'[L2≡'groupBy'] ⋄ A.TopItem←''
+         A.Type←'E' ⋄ A.Items←'bA'[L2≡'groupBy'] ⋄ A.TopItem←''
          (I⌷¨⊂NS.Grid.Attributes).ReadOnly←1
          NS.Grid.Attributes←'Sample2'NS.changeAttributes A
          NS.Grid.Values←NS{'Sample'⍺.put('stats'≢⍵)/⍵}NS.get'Sample'
@@ -118,12 +118,10 @@
  :Case 'Method1'
      ⍝:If 0=≢NS.get 'LbMethod'
      :If (⊂PARM)∊'percentile' 'quartile'
-         NS.Grid.Values←'LbMethod'NS.put''
+         NS.Grid.Values←'LbMethod'NS.put'--'
          NS.Grid.Attributes←'Method1'NS.changeAttributes'F'
-
      :EndIf
  :Else
-
      NS.Grid.Values←NS.rectifyStats NS.EventArg
      I←⍸NS.Grid.Names∊SN
      (I⌷¨⊂NS.Grid.Attributes).ReadOnly←~S1

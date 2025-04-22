@@ -4,13 +4,13 @@
      A.Items←'' 'Method' 'Population Size'
      NS.Grid.Attributes←'LbMethod'NS.changeAttributes A
      A.Items←'Unknown σ' 'Known σ'
-     NS.Grid.Attributes←'Method1'NS.changeAttributes A
+     NS.Grid.Attributes←('Method'∘,¨'1234')NS.changeAttributes A
      A.Items←'mean' 'proportion' 'var' 'sdev' 'median' 'sum' 'percentile' 'quartile'
      NS.Grid.Attributes←'Parameter'NS.changeAttributes A
      A.Items←'--' ' - Sample2' 'splitBy' 'groupBy'
      NS.Grid.Attributes←'LbSample2'NS.changeAttributes A
-         ⍝A.Items←'F' ⋄ A.TopItem←'stats' ⍝ Numeric field (Floating Point)
-     A.Items←'f' ⋄ A.TopItem←'stats' ⍝ Numeric field (Floating Point)
+     A.Items←'F' ⋄ A.TopItem←'stats' ⍝ Numeric field (Floating Point)
+    ⍝ A.Items←'f' ⋄ A.TopItem←'stats' ⍝ Numeric field (Floating Point)
      NS.Grid.Attributes←'Sample'NS.changeAttributes A
      A←⎕NS''
      A.validate←{(⍵=⌊⍵)∧⍵>0}

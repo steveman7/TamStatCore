@@ -1,85 +1,85 @@
- Z←hypothesisChange NS;H;I;LB;LN;A;SN;PA;P;H0;TY;S1;S2;L2;FMT;U                                       
-      ⍝ Change to hypothesis Grid                                                                     
- PA←NS.get'Parameter'                         ⍝ Get parameter                                         
- H0←0.5×PA≡'proportion'                       ⍝ Get null hypothesis                                   
- L2←NS.get'LbSample2'                         ⍝ Get Label2                                            
- LN←'Lb'∘,¨SN←'SampSize' 'Mean' 'Sdev'                                                                
- :If ('Sample 2'≡L2)∧0=↑0⍴NS.get'Sample2'                                                             
-     NS.Grid.Values←'Sample2'NS.put'stats' ⋄ :EndIf                                                   
- S1 S2←(NS.get¨'Sample' 'Sample2')∊⊂'stats'   ⍝ stats selected?                                       
- :If L2≡'splitBy'                                                                                     
-        ⍝  NS.Grid.Attributes←'Sample2'NS.changeAttributes'D' ⍝                                       
-     A←⎕NS'' ⋄ A.Type←'E' ⋄ A.Items←'b' ⋄ A.TopItem←''                                                
-     NS.Grid.Attributes←'Sample2'NS.changeAttributes A                                                
- :EndIf                                                                                               
- A←⎕NS''                                                                                              
- :Select NS.EventArg                                                                                  
- :Case 'Parameter'                                                                                    
-     LB←'Sample Size' 'Mean' 'Std Dev'                 ⍝ Label Values                                 
-     LN←'Lb'∘,¨SN←'SampSize' 'Mean' 'Sdev'             ⍝ Label Names                                  
-     :Select PA←NS.get'Parameter'                                                                     
-     :CaseList 'mean' 'mean paired' 'mean eqVar' ⋄ TY←'NFF'                                           
-         FMT←'I6' 'M<->F10.3' 'F7.3'                                                                  
-         A.Type←'E' ⋄ A.Items←'f'                                                                     
-     :Case 'proportion' ⋄                                                                             
-         LB[1 2]←'Proportion' 'Events'                                                                
-         TY←'NPN'                                                                                     
-         FMT←'I6' 'Q<%>K2F9.3' 'I6'                                                                   
-         A.Type←'E' ⋄ A.Items←'b'                                                                     
-     :CaseList 'var' 'variance' 'sdev'                      ⍝ Relabel to appropriate parameter        
-         LB[1]←⊂'Variance' ⋄ TY←'NFF'                                                                 
-         FMT←'I6' 'F9.3' 'F9.3'                                                                       
-         A.Type←'E' ⋄ A.Items←'f'                                                                     
-     :CaseList 'median' 'median paired'                                                               
-         LB[1 2]←'Below' 'Above'                                                                      
-         FMT←'I6' 'I6' 'I6'                                                                           
-         TY←'NNN'                                                                                     
-         A.Type←'E' ⋄ A.Items←'f'                                                                     
-     :EndSelect                                                                                       
-     NS.Grid.Values←LN NS.put LB                            ⍝ Display labels for Sample1?             
-     NS.Grid.Values←(LN,¨'2')NS.put(L2≡'Sample 2')/¨LB      ⍝ Display labels for Sample2?             
-     NS.Grid.Attributes←SN NS.changeAttributes TY           ⍝ Change cell types for Sample1 statitics 
+ Z←hypothesisChange NS;H;I;LB;LN;A;SN;PA;P;H0;TY;S1;S2;L2;FMT;U
+      ⍝ Change to hypothesis Grid
+ PA←NS.get'Parameter'                         ⍝ Get parameter
+ H0←0.5×PA≡'proportion'                       ⍝ Get null hypothesis
+ L2←NS.get'LbSample2'                         ⍝ Get Label2
+ LN←'Lb'∘,¨SN←'SampSize' 'Mean' 'Sdev'
+ :If ('Sample 2'≡L2)∧0=↑0⍴NS.get'Sample2'
+     NS.Grid.Values←'Sample2'NS.put'stats' ⋄ :EndIf
+ S1 S2←(NS.get¨'Sample' 'Sample2')∊⊂'stats'   ⍝ stats selected?
+ :If L2≡'splitBy'
+        ⍝  NS.Grid.Attributes←'Sample2'NS.changeAttributes'D' ⍝
+     A←⎕NS'' ⋄ A.Type←'E' ⋄ A.Items←'b' ⋄ A.TopItem←''
+     NS.Grid.Attributes←'Sample2'NS.changeAttributes A
+ :EndIf
+ A←⎕NS''
+ :Select NS.EventArg
+ :Case 'Parameter'
+     LB←'Sample Size' 'Mean' 'Std Dev'                 ⍝ Label Values
+     LN←'Lb'∘,¨SN←'SampSize' 'Mean' 'Sdev'             ⍝ Label Names
+     :Select PA←NS.get'Parameter'
+     :CaseList 'mean' 'mean paired' 'mean eqVar' ⋄ TY←'NFF'
+         FMT←'I6' 'M<->F10.3' 'F7.3'
+         A.Type←'E' ⋄ A.Items←'F'
+     :Case 'proportion' ⋄
+         LB[1 2]←'Proportion' 'Events'
+         TY←'NPN'
+         FMT←'I6' 'Q<%>K2F9.3' 'I6'
+         A.Type←'E' ⋄ A.Items←'b'
+     :CaseList 'var' 'variance' 'sdev'                      ⍝ Relabel to appropriate parameter
+         LB[1]←⊂'Variance' ⋄ TY←'NFF'
+         FMT←'I6' 'F9.3' 'F9.3'
+         A.Type←'E' ⋄ A.Items←'F'
+     :CaseList 'median' 'median paired'
+         LB[1 2]←'Below' 'Above'
+         FMT←'I6' 'I6' 'I6'
+         TY←'NNN'
+         A.Type←'E' ⋄ A.Items←'F'
+     :EndSelect
+     NS.Grid.Values←LN NS.put LB                            ⍝ Display labels for Sample1?
+     NS.Grid.Values←(LN,¨'2')NS.put(L2≡'Sample 2')/¨LB      ⍝ Display labels for Sample2?
+     NS.Grid.Attributes←SN NS.changeAttributes TY           ⍝ Change cell types for Sample1 statitics
      NS.Grid.Attributes←(SN,¨'2')NS.changeAttributes TY     ⍝ Change cell types for sample2 statistics
-     NS.Grid.Values←NS.rectifyStats'Sample'                                                           
-     NS.Grid.Attributes←'Sample'NS.changeAttributes A                                                 
-     :If L2≡'Sample 2'                                                                                
-         NS.Grid.Attributes←'Sample2'NS.changeAttributes A                                            
-     :EndIf                                                                                           
- :Case 'LbSample2'                                                                                    
-     NS.Grid.Values←'LbSample'NS.put'Sample',(L2≡'Sample 2')/' 1' ⍝ Sample or Sample 1?               
-     A←⎕NS'' ⋄ I←⍸NS.Grid.Names∊SN,¨'2'                                                               
-     :Select L2                                                                                       
-     :Case 'Hypothesized Value'                                                                       
-         :If 0≠↑0⍴NS.get'Sample2'                                                                     
-             NS.Grid.Values←'Sample2'NS.put H0 ⋄ :EndIf                                               
-             ⍝ NS.Grid.Attributes←(SN,¨'2')NS.changeAttributes'T'                                     
-         (I⌷¨⊂NS.Grid.Attributes).ReadOnly←1                                                          
-         NS.Grid.Values←(SN,¨'2')NS.put ⍬ ⍬ ⍬                                                         
-         A.Type←'F'                                                                                   
-         NS.Grid.Values←('Lb'∘,¨SN,¨'2')NS.put' '                                                     
-     :Case 'Sample 2'                                                                                 
-         NS.Grid.Values←NS.rectifyStats'Sample2'                                                      
-         P←PA≡'proportion'                                                                            
-         TY←P⊃'NFF' 'NPN'                                                                             
-         NS.Grid.Attributes←(SN,¨'2')NS.changeAttributes TY                                           
-         NS.Grid.Values←'Sample2'NS.put'stats'                                                        
-         NS.Grid.Values←('Lb'∘,¨SN,¨'2')NS.put NS.get'Lb'∘,¨SN                                        
-         (I⌷¨⊂NS.Grid.Attributes).ReadOnly←0                                                          
-         A.Type←'E' ⋄ A.Items←P⊃'Fb' ⋄ A.TopItem←'stats'                                              
-         NS.Grid.Attributes←'Sample'NS.changeAttributes A                                             
-     :Case 'splitBy'                                                                                  
-         A.Type←'E' ⋄ A.Items←'b' ⋄ A.TopItem←''                                                      
-         NS.Grid.Attributes←(SN,¨'2')NS.changeAttributes'T'                                           
-         (I⌷¨⊂NS.Grid.Attributes).ReadOnly←1                                                          
-         NS.Grid.Values←(SN,¨'2')NS.put ⍬ ⍬ ⍬                                                         
-         NS.Grid.Values←'Sample2'NS.put''                                                             
-     :EndSelect                                                                                       
-     NS.Grid.Attributes←'Sample2'NS.changeAttributes A                                                
- :Else          ⍝ 'SampleSize' 'Mean' 'Stdev'                                                         
-     NS.Grid.Values←NS.rectifyStats NS.EventArg                                                       
-     I←⍸NS.Grid.Names∊SN                                                                              
-     (I⌷¨⊂NS.Grid.Attributes).ReadOnly←~S1                                                            
-     I←⍸NS.Grid.Names∊SN,¨'2'                                                                         
-     (I⌷¨⊂NS.Grid.Attributes).ReadOnly←~S2                                                            
- :EndSelect                                                                                           
- Z←NS                                                                                                 
+     NS.Grid.Values←NS.rectifyStats'Sample'
+     NS.Grid.Attributes←'Sample'NS.changeAttributes A
+     :If L2≡'Sample 2'
+         NS.Grid.Attributes←'Sample2'NS.changeAttributes A
+     :EndIf
+ :Case 'LbSample2'
+     NS.Grid.Values←'LbSample'NS.put'Sample',(L2≡'Sample 2')/' 1' ⍝ Sample or Sample 1?
+     A←⎕NS'' ⋄ I←⍸NS.Grid.Names∊SN,¨'2'
+     :Select L2
+     :Case 'Hypothesized Value'
+         :If 0≠↑0⍴NS.get'Sample2'
+             NS.Grid.Values←'Sample2'NS.put H0 ⋄ :EndIf
+             ⍝ NS.Grid.Attributes←(SN,¨'2')NS.changeAttributes'T'
+         (I⌷¨⊂NS.Grid.Attributes).ReadOnly←1
+         NS.Grid.Values←(SN,¨'2')NS.put ⍬ ⍬ ⍬
+         A.Type←'F'
+         NS.Grid.Values←('Lb'∘,¨SN,¨'2')NS.put' '
+     :Case 'Sample 2'
+         NS.Grid.Values←NS.rectifyStats'Sample2'
+         P←PA≡'proportion'
+         TY←P⊃'NFF' 'NPN'
+         NS.Grid.Attributes←(SN,¨'2')NS.changeAttributes TY
+         NS.Grid.Values←'Sample2'NS.put'stats'
+         NS.Grid.Values←('Lb'∘,¨SN,¨'2')NS.put NS.get'Lb'∘,¨SN
+         (I⌷¨⊂NS.Grid.Attributes).ReadOnly←0
+         A.Type←'E' ⋄ A.Items←P⊃'Fb' ⋄ A.TopItem←'stats'
+         NS.Grid.Attributes←'Sample'NS.changeAttributes A
+     :Case 'splitBy'
+         A.Type←'E' ⋄ A.Items←'b' ⋄ A.TopItem←''
+         NS.Grid.Attributes←(SN,¨'2')NS.changeAttributes'T'
+         (I⌷¨⊂NS.Grid.Attributes).ReadOnly←1
+         NS.Grid.Values←(SN,¨'2')NS.put ⍬ ⍬ ⍬
+         NS.Grid.Values←'Sample2'NS.put''
+     :EndSelect
+     NS.Grid.Attributes←'Sample2'NS.changeAttributes A
+ :Else          ⍝ 'SampleSize' 'Mean' 'Stdev'
+     NS.Grid.Values←NS.rectifyStats NS.EventArg
+     I←⍸NS.Grid.Names∊SN
+     (I⌷¨⊂NS.Grid.Attributes).ReadOnly←~S1
+     I←⍸NS.Grid.Names∊SN,¨'2'
+     (I⌷¨⊂NS.Grid.Attributes).ReadOnly←~S2
+ :EndSelect
+ Z←NS

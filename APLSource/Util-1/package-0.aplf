@@ -2,7 +2,7 @@
   ⍝⍺ Directory (optional)
   ⍝⍵ List of Namespaces, '' = All
      ⎕IO←0 ⋄ ⎕ML←3
-     ⍺←'E:\TamStat\TamStatScript\'  ⍝ Default directory
+     ⍺←'F:\TamStat\TamStatScript\'  ⍝ Default directory
      x←{0≠≢⍵~' ':⍵
          'Operators,Anova,NonParametric,Arithmetic,Distribution,Graph,Summary,Relational,Regression,Util,UserInterface,KokoStats,API,GUI'}⍵
        ⍝ ⎕SE.SALT.Save'#.TamStat.Operators G:/TamStat/Operators'
