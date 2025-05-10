@@ -13,7 +13,7 @@
      ⍵.Grid←⎕NS''
           ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝ Grid Values ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
      G←f'ConfLevel,.80,.90,.95,.99'
-     G,←f'Method,Unknown σ, , , ,'
+     G,←f'Method,UnknownSigma, , , ,'
      G,←f'Parameter,mean, , , ,'
      G,←f'Operator,confInt,Sample Size,Mean,Std Dev'
      G,←f'Sample,stats,30,0,0'

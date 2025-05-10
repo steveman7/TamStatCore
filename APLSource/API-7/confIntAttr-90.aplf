@@ -3,7 +3,7 @@
      A←⎕NS''
      A.Items←'' 'Method' 'Population Size'
      NS.Grid.Attributes←'LbMethod'NS.changeAttributes A
-     A.Items←'Unknown σ' 'Known σ'
+     A.Items←'UnknownSigma' 'KnownSigma'
      NS.Grid.Attributes←('Method'∘,¨'1234')NS.changeAttributes A
      A.Items←'mean' 'proportion' 'var' 'sdev' 'median' 'sum' 'percentile' 'quartile'
      NS.Grid.Attributes←'Parameter'NS.changeAttributes A

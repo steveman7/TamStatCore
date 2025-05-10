@@ -4,7 +4,6 @@
  NS.Grid.Values←LV NS.put 4↑NS.Levels
  LB←'Sample Size' 'Mean' 'Std Dev'            ⍝ Label Values
  LN←'Lb'∘,¨SN←'SampSize' 'Mean' 'Sdev'
- ⍝L2←NS.get'LbSample2' ⋄ PARM←NS.get'Parameter'
  L2 PARM METH←NS.get'LbSample2' 'Parameter' 'LbMethod'
  S1 S2←(NS.get¨'Sample' 'Sample2')∊⊂'stats'   ⍝ stats selected?
  A←⎕NS'' ⋄ MT←''
