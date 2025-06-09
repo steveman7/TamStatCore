@@ -27,16 +27,21 @@
          i←1⌈15+.<(count ⍵)÷bins              ⍝ Put at least 10 in each group
          bins[i-1]}                           ⍝ Interval width
      ⍺←def w                                  ⍝ Default number of bins
-     rnd←{⍺≤0:⍵ ⋄ ⍺×⌊0.5+⍵÷⍺}¨                ⍝ Range the data?
+     rnd←{⍺≤0:⍵ ⋄ 11::⍵ ⋄ ⍺×⌊0.5+⍵÷⍺}¨        ⍝ Range the data?
      V2←(2=≢⍵)∧1<≡⍵                           ⍝ One or two variables?
      s←0J1≡↑⍺                                 ⍝ If no left argument?
      R←(w~⎕NULL)def{0=≢⍵:⍺⍺ ⍺ ⋄ ↑⍵}⍺~0 0J1    ⍝ Number of bins?
-     a←w{⍵=≢∪⍺:0
-       ⍝ (1<↑⍵)∧326≠⎕DR ⍺~⎕NULL:⍵{(⌊10⍟⍵)round ⍵÷⍺-1}range ⍺ ⍝ Remove nulls and
+    ⍝ a←w{⍵=≢∪⍺:0
+     a←w{V2:⍵
+         ⍵=≢∪⍺:0
          (1<↑⍵)∧326≠⎕DR ⍺~⎕NULL:⍵{(10*¯1+⌊10⍟⍵)round ⍵÷⍺-1}range ⍺ ⍝ Remove nulls and
          |⍵}R                                 ⍝ Get bin width
      V2∧s:a _showCrossTab↑_crossTab/⍵         ⍝ Enhanced Contingency table
-     V2:↑_crossTab/⍺ rnd ⍵                    ⍝ Simple contingency table
+     V2:⍺{z←↑_crossTab/⍺ rnd ⍵                ⍝ Simple contingency table
+         a=0:z                                ⍝
+         (1 1↓z)←a{⍺=1:⍵÷[0]+/⍵               ⍝ Rows total 1
+             ⍺=2:⍵÷[1]+⌿⍵                     ⍝ Columns total 1
+             ⍵÷+/,⍵}1 1↓z ⋄ z}⍵               ⍝ Table totals 1
      s:_showFreq a _freq w                    ⍝ Enhanced frequency table
      a _freq w                                ⍝ Simple frequency table
  }

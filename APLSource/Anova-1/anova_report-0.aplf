@@ -12,7 +12,8 @@
      U←stats¨↓{n m s←↓⍉⍵ ⋄ N←1+n+.-1         ⍝ Adjust "sample size" and
          vp←((s*2)+.×n-1)÷N-1                ⍝ Pooled var to tie confints
          N,m,[0.5]sqrt vp×N÷n}1 1↓⍵.Means    ⍝ to Minitab for anova
-     D←(1-⍺)1(1↓⍵.Means[;0])mean formatConfInt U
+    ⍝D←(1-⍺)1(1↓⍵.Means[;0])mean formatConfInt U
+     D←(1-⍺)'U'(1↓⍵.Means[;0])mean formatConfInt U
            ⍝  LSD←'Treatment' 'Mean Diff' 'DF' 'SE' 'T' 'P' 'LSD'⍪lsd ⍵
      LSD←⍺ lsd ⍵
      TXT←⍕,[⍳0]RPT' '⍵.Means' ' 'Confidence Interval' ' 'D.Output' 'LSD

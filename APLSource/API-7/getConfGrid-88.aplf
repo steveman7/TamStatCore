@@ -1,17 +1,19 @@
- Z←getConfGrid NS;Sample;Sample2;⎕IO;⎕ML;US;RA;XEQ;LV;XP;H;K;Parm;METH
+ Z←getConfGrid NS;Sample;Sample2;⎕IO;⎕ML;US;RA;XEQ;LV;XP;H;K;Parm;METH;V
       ⍝∊ Written by Steve Mansour  2019
       ⍝⍵ Get expression from Hypothesis Grid
       ⍝⍵ Namespace with grid
  ⎕IO←0 ⋄ ⎕ML←3
  Parm←NS.get'Parameter'
+ V←(⊂Parm)∊'var' 'variance' 'sdev'
  :If 'stats'≡NS.get'Sample'
-         ⍝ Sample←1⌽')(',(-Parm≡'proportion')↓NS.get'Sample' 'SampSize' 'Mean' 'Sdev'
      Sample←1⌽')(',1 1(Parm≢'proportion')1/NS.get'Sample' 'SampSize' 'Mean' 'Sdev'
+     Sample[V/3]←0   ⍝ Placeholder for mean
  :Else
      Sample←1⌽')(',NS.get'Sample'
  :EndIf
  :If 'stats'≡NS.get'Sample2'
      Sample2←1⌽')(',1 1(Parm≢'proportion')1/NS.get'Sample2' 'SampSize2' 'Mean2' 'Sdev2'
+     Sample2[V/3]←0
  :Else
      Sample2←{⍵∧.=' ':⍵ ⋄ 1⌽')(',⍵}NS.get'Sample2'
  :EndIf
