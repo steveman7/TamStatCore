@@ -16,7 +16,8 @@
      9=⎕NC'⍵':⍵.sdev×sqrt 1-(⍺=1)÷⍵.count
      ⍵≡'Type':'Spread'
      ⊃⍺ between 0 1:sqrt ⍺ confVar ⍵
-     rAv:⍺{z←##.∆r.x'sd(⍵)'(⍵~⎕NULL)
+    ⍝rAv:⍺{z←##.∆r.x'sd(⍵)'(⍵~⎕NULL)
+     rAv:⍺{z←'sd'rExec(⍵~⎕NULL)
          z≡⎕NULL:0
          ⍺=1:z×sqrt÷/¯1 0+≢⍵ ⋄ z}⍵
      ⍝(⍺ var ⍵)*÷2}

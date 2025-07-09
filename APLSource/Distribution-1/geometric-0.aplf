@@ -18,11 +18,10 @@
      ⍵≡'Variance':(1-p)÷p*2
      ⍵≡'Skewness':(2-p)÷(1-p)*÷2
      ⍵≡'Kurtosis':6+(p*2)÷1-p
-    ⍝str←'pdqr'[1 0 ¯1 ¯2⍳c],'geom(⍵,⍵)' ⍝ Build R expression
      1<≢p:(p,¨c)∇¨⍵
-     str←c,'geom(⍵,⍵)' ⍝ Build R expression
-     ⍝rAv:+##.∆r.x str(⍵-1)p                ⍝ Use R if requested
-     rAv:+##.∆r.x str(⍵-c∊'dp')p          ⍝ Use R if requested
+    ⍝ str←c,'geom(⍵,⍵)' ⍝ Build R expression
+    ⍝ rAv:+##.∆r.x str(⍵-c∊'dp')p          ⍝ Use R if requested
+     rAv:(c,'geom')rExec(⍵-c∊'dp')p        ⍝ Use R if requested
      c='d':((x>0)∧x=⌈x)×p×(1-p)*x-1        ⍝ Prob X=x
      c='p':1-(1-p)*⌊x⌈0                    ⍝ Prob X≤x
      c='q':⌊(1-p)⍟1-x                      ⍝ Inverse prob

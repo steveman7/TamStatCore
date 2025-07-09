@@ -13,6 +13,7 @@
          2=⍵.⎕NC'events':⍵.events<P×⍵.count
          ⍵.(mean sdev)normal critVal>P}⍵        ⍝ Normal or
      (1<⍴⍴⍵)∧~isFrequency ⍵:'Rank Error'           ⍝ If not frequency
-     rAv:+##.∆r.x'IQR(⍵)'⍵                         ⍝ Call R if requested
+  ⍝   rAv:+##.∆r.x'IQR(⍵)'⍵                         ⍝ Call R if requested
+     rAv:'IQR'rExec ⍵
      -/3 1 quartile ⍵   ⍝ Q3 - Q1                  ⍝ Else difference between Q3 and Q1
  }

@@ -13,7 +13,6 @@
      x←⍵
      x≡'Type':'Discrete'
      3=⎕NC'⍺':∆SigErr 14 'Left argument missing'
-     ⍝r p c←3↑⍺
      (r p)c←getParameters ⍺
      ⍝2≠⍴,a.Value:∆SigErr 14 'Left argument must consist of two values'
      ⍵≡'Mean':r×(1-p)÷p
@@ -22,22 +21,21 @@
      ⍵≡'Variance':r×(1-p)÷p*2
      ⍵≡'Skewness':(2-p)÷(r×1-p)
      ⍵≡'Kurtosis':(6÷r)+(p*2)÷r×1-p
-    ⍝ str←'pdqr'[1 0 ¯1 ¯2⍳c],'nbinom(⍵,⍵,⍵)' ⍝ Build R expression
-     str←c,'nbinom(⍵,⍵,⍵)'                   ⍝ Build R expression
-     rAv:+##.∆r.x str ⍵ r p                  ⍝ If requested, use R
-     c='d':{p←(⍵!r+⍵-1)×(p*r)×(1-p)*⍵          ⍝ Probability mass function
-         p×(⍵=⌈⍵)∧⍵≥0}⍵                      ⍝
-     c='p':(x≥0)×(⊂⌊0⌈x)⌷0{⍺≥⌈/x:+\⍵           ⍝ Cumulative Probability X≤x
-         y←(1-p)×(r+⍺)÷⍺+1                   ⍝ y=P(x+1)÷P(x)
-         (⍺+1)∇ ⍵,⍵[⍺]×y},p*r                ⍝
+     ⍝str←c,'nbinom(⍵,⍵,⍵)'                   ⍝ Build R expression
+     ⍝rAv:+##.∆r.x str ⍵ r p                  ⍝ If requested, use R
+     rAv:(c,'nbinom')rExec ⍵ r p              ⍝ If requested, use R
+     c='d':{p←(⍵!r+⍵-1)×(p*r)×(1-p)*⍵         ⍝ Probability mass function
+         p×(⍵=⌈⍵)∧⍵≥0}⍵                       ⍝
+     c='p':(x≥0)×(⊂⌊0⌈x)⌷0{⍺≥⌈/x:+\⍵          ⍝ Cumulative Probability X≤x
+         y←(1-p)×(r+⍺)÷⍺+1                    ⍝ y=P(x+1)÷P(x)
+         (⍺+1)∇ ⍵,⍵[⍺]×y},p*r                 ⍝
      c='q':+/x∘.>0{(+/⍵)≥⌈/x:+\⍵              ⍝ Inverse
          y←(1-p)×(r+⍺)÷⍺+1
          (⍺+1)∇ ⍵,⍵[⍺]×y},p*r
      c='r':+⌿⌊(1-p)⍟?r ⍵⍴0                    ⍝ Random variable
      c≠'r':'Nonce Error'
-     m←⌈x×(1,2÷x*÷2)+.×r×(1-p)÷p*1 2         ⍝ Sample Size
-    ⍝ b←p>(0.5+?m⍴k)÷k←¯1+2*31               ⍝ successes
+     m←⌈x×(1,2÷x*÷2)+.×r×(1-p)÷p*1 2          ⍝ Sample Size
      b←p>?m⍴0
-     i←(+\b)⍳r×1+⍳x                          ⍝ indexes
+     i←(+\b)⍳r×1+⍳x                           ⍝ indexes
      ¯2-/0,+/¨i↑¨⊂~b
  }

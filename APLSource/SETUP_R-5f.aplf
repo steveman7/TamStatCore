@@ -1,4 +1,24 @@
  SETUP_R
+ ⍝:Trap 0
+ :With #
+     2 ⎕FIX'C:\Users\Stephen\Downloads\rsconnect-master\rsconnect-master\rserve.dyalog'
+     RS.start
+ :EndWith
+ :If 0=⎕NC'∆r'
+     ∆r←⎕NEW #.RS.Rserve
+ :EndIf
+ #.TamStat.R_Available←1      ⍝ Set availability
+
+ →0
+ ⍝:Else
+ ⍝    R_Available←0      ⍝ Set availability
+ ⍝:EndTrap
+
+ →0
+
+
+
+
  :If 9=⎕NC'RCONNECT'
 ⍝ We can't assume the state of R_Available. Other fn's can modify its value
      initializeR

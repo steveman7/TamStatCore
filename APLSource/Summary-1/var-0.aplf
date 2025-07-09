@@ -29,7 +29,8 @@
          n≠1:+/((⍵+.×⍺*2)-n÷⍨2*⍨⍵+.×⍺)÷n-⍺⍺≠1 ⍝ Frequency
          (⍵+.×⍺*2)-(⍵+.×⍺)*2}/↓⍉w    ⍝ Probability
      w←w~⎕NULL
-     rAv∧1=⍴⍴⍵:⍺{z←##.∆r.x'var(⍵)'⍵  ⍝ Do R calculation?
+    ⍝rAv∧1=⍴⍴⍵:⍺{z←##.∆r.x'var(⍵)'⍵  ⍝ Do R calculation?
+     rAv∧1=⍴⍴⍵:⍺{z←'var'rExec ⍵     ⍝ Do R calculation?
          ⍺=1:z×÷/¯1 0+≢⍵ ⋄ z}w
      (0≥⍺)∧1≥n←≢w:⎕NULL              ⍝
      (n-⍺≤0)÷⍨(w+.*2)-n÷⍨(+/w)*2     ⍝ unweighted variance

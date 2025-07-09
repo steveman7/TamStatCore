@@ -16,23 +16,16 @@
   ⍝⍎ 0.043551←5 tDist 2.3                  ⍝ Density
      ⎕ML←3 ⋄ ⎕IO←0 ⋄ w←⍵                           ⍝ Set system variables
      w≡'Type':'Continuous'
-     ⍝m c←2↑⍺
-    ⍝ m←{↑⍣(1=≢⍵)⊢⍵}(-1≥c←↑⌽⍺)↓⍺
      m c←getParameters ⍺
-   ⍝  c←c×c≤1                             ⍝ Parameter (D.F)
-   ⍝ c←checkOperator
-    ⍝ w≡'Mean':{⍵>1:0 ⋄ ⎕NULL}m          ⍝ Calculate theoreetical value
      w≡'Mean':(⎕NULL 0)[m>1]             ⍝ Calculate
-    ⍝ w≡'Variance':{⍵>2:⍵÷⍵-2 ⋄ ⎕NULL}m  ⍝    "          "          "
      w≡'Variance':⎕NULL@{m≤2}m÷1⌈m-2     ⍝    "          "          "
      w≡'Mode':0                          ⍝    "          "          "
      w≡'Skewness':(⎕NULL 0)[m>3]
-    ⍝w≡'Kurtosis':{⍵≤4:⌊/⍳0 ⋄ 6÷⍵-4}m    ⍝    "          "          "
      w≡'Kurtosis':{⌊/⍳0}@{⍵≤4}6÷¯4+m+m=4 ⍝    "          "          "
-    ⍝ 1≠≢m:∊⍣(c≠¯2)⊢(m,¨c)∇¨⍵             ⍝ Make pervasive
      1≠≢m:∊⍣(c≠'r')⊢(m,¨c)∇¨⍵             ⍝ Make pervasive
-     str←c,'t(⍵,⍵)'                      ⍝ Build R expression
-     rAv:+##.∆r.x str ⍵ m                ⍝ Use R if requestedion
+    ⍝ str←c,'t(⍵,⍵)'                      ⍝ Build R expression
+⍝     rAv:+##.∆r.x str ⍵ m                ⍝ Use R if requestedion
+     rAv:(c,'t')rExec ⍵ m                ⍝ Use R if requestedion
      TDEN←{Z←÷⌿!¯1+0.5×1 0∘.+K←⍺⌊342     ⍝ Density Function
          Z←Z÷(○K)*÷2
          Z÷(1+(⍵*2)÷K)*(K+1)÷2}

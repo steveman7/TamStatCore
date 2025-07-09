@@ -17,14 +17,14 @@
      ⍵≡'Type':'Continuous'
      ab c←getParameters ⍺
      a b←{2=≢⍵:⍵ ⋄ 0 ⍵}ab
-    ⍝ a b←{⍵[⍋⍵]}a b                         ⍝ Sort lower to upper
      ⍵≡'Mean':(a+b)÷2                       ⍝ Calculate theoretical values
      ⍵≡'Variance':(2*⍨b-a)÷12               ⍝     "         "         "
      ⍵≡'Mode':⍳0                            ⍝     "         "         "
      ⍵≡'Skewness':0                         ⍝     "         "         "
      ⍵≡'Kurtosis':-6÷5                      ⍝     "         "         "
-     str←c,'unif(⍵,⍵,⍵)' ⍝ Build R expression
-     rAv:+##.∆r.x str ⍵ a b                 ⍝ Use R if requested
+     ⍝str←c,'unif(⍵,⍵,⍵)' ⍝ Build R expression
+⍝     rAv:+##.∆r.x str ⍵ a b                 ⍝ Use R if requested
+     rAv:(c,'unif')rExec ⍵ a b               ⍝ Use R if requested
      p←1≠×/×⍵∘.-a b                         ⍝ Is X∊[a,b] ?
      c='d':p÷b-a                              ⍝ Density
      c='p':0⌈1⌊(⍵-a)÷b-a                      ⍝ Cumulative Distribution
@@ -32,7 +32,4 @@
      1≠≡a b:(↑,/¨a b'r')∇¨⍵                ⍝ Multiple random vars
      c='r':a+(b-a)×?⍵⍴0                      ⍝ random Variable
 
-⍝ c=¯3:                                     ⍝ GoodnessOfFit
-⍝b←1≠×/×⍵-a
-⍝     b÷d--/a                               ⍝ Density or probability
  }

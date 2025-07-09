@@ -22,9 +22,9 @@
      ⍵≡'Mode':T50÷*s*2
      ⍵≡'Skewness':{(⍵+2)×(⍵-1)*÷2}*s*2
      ⍵≡'Kurtosis':¯6+1 2 3+.×*4 3 2×s*2
-    ⍝str←'pdqr'[1 0 ¯1 ¯2⍳c],'lnorm(⍵,⍵,⍵)'
-     str←c,'lnorm(⍵,⍵,⍵)'
-     rAv:+##.∆r.x str ⍵(⍟T50)s               ⍝
+     ⍝str←c,'lnorm(⍵,⍵,⍵)'
+⍝     rAv:+##.∆r.x str ⍵(⍟T50)s              ⍝
+     rAv:(c,'lnorm')rExec ⍵(⍟T50)s           ⍝
      U←s÷⍨⍟(⍵÷T50)⌈÷⌊/⍳0                     ⍝ ln(t/T50)÷s
      c='d':(*-0.5×U*2)÷s×⍵×sqrt○2            ⍝ Density
      c='p':normal prob<U                     ⍝ Cumulative Distribution

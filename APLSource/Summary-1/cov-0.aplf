@@ -27,7 +27,8 @@
          m{(⍵,⍨⊂'cov'),⍵⍪⍺}(⍵≠' ')⊂⍵}⍵ ⍝ Add labels
      0J1∊⍺:(1↓⍺)showCov ⍵              ⍝ Display covariance
      1∊≢¨⍺ ⍵:0                         ⍝ 0 if scalar
-     rAv:+##.∆r.x'cov(⍵,⍵)'⍺ ⍵         ⍝ R calculation
+    ⍝rAv:+##.∆r.x'cov(⍵,⍵)'⍺ ⍵         ⍝ R calculation
+     rAv:'cov'rExec ⍺ ⍵
      n←≢⍵                              ⍝ Sample Size
      z←(n×⍺+.×⍵)-×/+/⊃⍺ ⍵              ⍝ Sum of Squares
      z÷n×n-1                           ⍝ Covariance

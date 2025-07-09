@@ -26,8 +26,9 @@
      x≡'Kurtosis':a{z←(2*⍨⍺-⍵)×(1 2÷.×⍺+⍵+2 1)÷⍺×⍵
          6×(z-1)÷⍺+⍵+3}b
      2=≡a b:(↑,¨/⍺)∇¨⍵                     ⍝ Left argument
-     str←c,'beta(⍵,⍵,⍵)'                   ⍝ Build string for R
-     rAv:+##.∆r.x str ⍵ a b                ⍝ If requested use R
+     ⍝str←c,'beta(⍵,⍵,⍵)'                   ⍝ Build string for R
+     ⍝rAv:+##.∆r.x str ⍵ a b                ⍝ If requested use R
+     rAv:(c,'beta')rExec ⍵ a b
      0∊a b:c x{c x←⍺                       ⍝ If a=0 and/or b=0
          w←0.5-0.5×-/×⍵                    ⍝ w∊{0,0.5,1}
          c='d':(⌊/⍬)×(x∊0 1)∧w≠x           ⍝ Use R values

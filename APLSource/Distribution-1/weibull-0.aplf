@@ -27,11 +27,10 @@
          v←⍺ ⍵ weibull'Variance'
          (v*-3÷2)×((!3÷⍺)×⍵*3)-(3×x×v)+x*3}k
      ⍵≡'Kurtosis':'Nonce Error'
-     2=≡m k:(↑,¨/⍺)∇¨⍵                        ⍝ PervasiveLeft argument
-     str←c,'weibull(⍵,⍵,⍵)'
-     ⍝#.R_Available:+#.∆r.x str ⍵ m k
-     rAv:+##.∆r.x str ⍵ m k
-     ⍝c=0:(m÷⍵)×((⍵÷k)*m)×*-(⍵÷k)*m         ⍝ Density
+     2=≡m k:(↑,¨/⍺)∇¨⍵                      ⍝ PervasiveLeft argument
+     ⍝str←c,'weibull(⍵,⍵,⍵)'
+⍝     rAv:+##.∆r.x str ⍵ m k
+     rAv:(c,'weibull')rExec ⍵ m k
      c='d':{z←((t÷k)*m)×(*-(t÷k)*m)×m÷t←⍵⌈⎕CT ⍝ Density
          z←(⌊/(1+×m-1)↑1 0)@(⍸⍵=0),z        ⍝ Replace f(0) with ¯ 1 or 0
          (⍴⍵)⍴z×⍵≥0}⍵                       ⍝ P(X<0)=0

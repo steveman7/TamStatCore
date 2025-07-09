@@ -44,8 +44,9 @@
          u←c[i]÷.-⍨0.5,c[j]                ⍝ Proportion within group
          x[i]+(-/x[j i])×u+0.5             ⍝ See Tobias p. 14
      }⍵
-     rAv:+##.∆r.x'median(⍵)'(⍵~⎕NULL)      ⍝ Call R if available
-     n←↑⍴x←{⍵[⍋⍵]}⍵~⎕NULL                  ⍝ Sort data and get sample size
-     i←¯1+(n+1)÷2                          ⍝ Find median index
-     x[(⌈i),⌊i]+.÷2                        ⍝ Average middle value(s)
+    ⍝ rAv:+##.∆r.x'median(⍵)'(⍵~⎕NULL)      ⍝ Call R if available
+     rAv:'median'rExec ⍵~⎕NULL             ⍝ Call R if available
+     n←↑⍴x←{⍵[⍋⍵]}⍵~⎕NULL                   ⍝ Sort data and get sample size
+     i←¯1+(n+1)÷2                           ⍝ Find median index
+     x[(⌈i),⌊i]+.÷2                         ⍝ Average middle value(s)
  }

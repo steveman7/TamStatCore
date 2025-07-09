@@ -12,7 +12,6 @@
      ⎕IO←0 ⋄ ⎕ML←3
      9=⎕NC'⍵':⍵.count          ⍝ If namespace, extract count variable
      w←toNestedVector ⍵        ⍝ If character convert to nested vector
-    ⍝2≠⍴⍴w:≢w~⎕NULL            ⍝ If vector, get tally
      1=⍴⍴w:≢w                  ⍝ If vector, get tally
      ~isFrequency w:'Rank Error'
      n←⍵[;1]                   ⍝ Count is 2nd col of matrix

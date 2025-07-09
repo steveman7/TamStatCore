@@ -25,8 +25,9 @@
      w≡'Kurtosis':⎕NULL
      2=≡df:⍵ ∇⍨¨↑c,¨⍨¨,¨/(⌈/≢¨df)⍴¨df           ⍝ Left argument pervasive
      Phi2←×⍨↑⌽3↑df,0
-     str←c,'f(⍵,⍵,⍵,⍵)'                         ⍝ Build R expression
-     rAv:+##.∆r.x str ⍵,df,Phi2                 ⍝ Use R if requested
+    ⍝ str←c,'f(⍵,⍵,⍵,⍵)'                         ⍝ Build R expression
+⍝     rAv:+##.∆r.x str ⍵,df,Phi2                 ⍝ Use R if requested
+     rAv:(c,'f')rExec ⍵,df,Phi2                 ⍝ Use R if requested
      R←df[0]÷df[0]+Phi2
      df[0]←{⍵=0:⍵ ⋄ (2*⍨⍵+Phi2)÷⍵+2×Phi2}df[0]  ⍝ Adjust numerator df?
      df←2↑df                                    ⍝ Remove Noncentral parameter

@@ -27,8 +27,9 @@
      x≡'Kurtosis':1 0÷.+¯6 n×p×1-p
      2=≡n p:(1⌽¨c,¨n,¨p)∇¨⍵               ⍝ Left argument pervasive
      ~'X'check ⍵:⎕SIGNAL 11               ⍝ Right argument must be numeric
-     str←c,'binom(⍵,⍵,⍵)'                 ⍝ Build R expression
-     rAv:+##.∆r.x str ⍵ n p               ⍝ If requested, use R
+   ⍝  str←c,'binom(⍵,⍵,⍵)'                 ⍝ Build R expression
+   ⍝  rAv:+##.∆r.x str ⍵ n p               ⍝ If requested, use R
+     rAv:(c,'binom')rExec ⍵ n p
      ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
      f←{(⍵!n)×(p*⍵)×(1-p)*0⌈n-⍵}          ⍝ Binomial formula
      c='d':(⍵=⌊⍵)×f ⍵                     ⍝ Probability X=x

@@ -17,9 +17,9 @@
      x≡'Mode':y⊃⍨</m ∇ y←(⌈¯1+m),⌊m       ⍝   "       "           "
      x≡'Skewness':m*-÷2                   ⍝   "       "           "
      x≡'Kurtosis':÷m                      ⍝   "       "           "
-    ⍝str←'pdqr'[1 0 ¯1 ¯2⍳c],'pois(⍵,⍵)'  ⍝ Build R Expression
-     str←c,'pois(⍵,⍵)'                    ⍝ Build R Expression
-     rAv:+##.∆r.x str ⍵ m                 ⍝ Call R if requested
+    ⍝ str←c,'pois(⍵,⍵)'                    ⍝ Build R Expression
+    ⍝ rAv:+##.∆r.x str ⍵ m                 ⍝ Call R if requested
+     rAv:(c,'pois')rExec ⍵ m              ⍝ Call R if requested
      1<≢m:(m,¨c)∇¨⍵
      c='d':m{p←(*-⍺)×(⍺*⍵)÷!⍵⌈0           ⍝ Probability (X=x)
          p×(⍵=⌊⍵)∧⍵≥0}x                   ⍝ p=0 unless natural number

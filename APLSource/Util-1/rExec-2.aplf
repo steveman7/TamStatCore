@@ -1,0 +1,28 @@
+ Z←F rExec Y;X;X1;X2;_;NM;I;EXP;⎕IO;⎕ML
+⍝∇ Build R-Expression
+⍝⍺ Function Name
+⍝⍵ List of arguments
+⍝← Result
+ ⎕IO←0 ⋄ ⎕ML←1
+ :If 'dpqr'∨.=⊃F
+ :AndIf 4≥≢Y
+     EXP←F,'('
+     EXP,←1↓∊',',¨{1=≢⍵:⍕⍵
+         1⌽')c(',1↓∊',',¨⍕¨⍵}¨Y
+     Z←##.∆r.eval EXP,')'
+ :ElseIf (2=≢Y)∧(2=≡Y)∧(=⍥≢)/Y
+     X1 X2←⎕NEW¨2⍴#.RS.robject
+     X1.attributes['class' 'names']←'vector' ''
+     X2.attributes['class' 'names']←'vector' ''
+     X1.data←X1 ⋄ X2.data←X2
+     _←'X1'##.∆r.set 0⊃Y
+     _←'X2'##.∆r.set 1⊃Y
+     Z←##.∆r.eval F,'(X1,X2)'
+ :Else
+     X←⎕NEW #.RS.robject
+     X.attributes['class' 'names']←'vector' ''
+     X.data←Y
+     _←'X'##.∆r.set X
+     Z←##.∆r.eval F,'(X)'
+
+ :EndIf

@@ -16,7 +16,7 @@
      'W'=⍺:9=⎕NC'⍵'                 ⍝ Namespace
      'v'=⍺:1=↑⍴⍴⍵                   ⍝ Vector
      'm'=⍺:2=↑⍴⍴⍵                   ⍝ Matrix
-     (⎕DR ⍵)∊80 160 326 1289:0      ⍝ Check for numeric
+     (⎕DR ⍵)∊80 160 326 1289:0 ⍝ Check for numeric
      'X'=⍺:1                        ⍝
      'B'=⍺:11=⎕DR ⍵                 ⍝ Boolean
      'I'=⍺:⍵≡⌊⍵                     ⍝ Integer

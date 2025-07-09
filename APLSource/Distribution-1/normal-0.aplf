@@ -17,22 +17,19 @@
      ⍺←0 1 ⋄ ⎕ML←3 ⋄ ⎕IO←0                  ⍝ Default to standard normal
      ⍵≡'Type':'Continuous'                  ⍝ Continuous Distribution
      ⍵≡'Parameters':{⍵.f←(mean,sdev) ⋄ ⍵}⎕NS'' ⍝ Get parameter estimates
-     ⍝m s c←3↑⍺                             ⍝ Mean, sdev, action
      (m s)c←getParameters ⍺
-  ⍝   m s←⍺ ⋄  ∆∆←0 ⋄ c←∆∆
      'Mean' 'Median' 'Mode'∊⍨⊂⍵:m           ⍝ Obtain theoretical values
      'Variance'≡⍵:s*2                       ⍝
      'Skewness' 'Kurtosis'∊⍨⊂⍵:0            ⍝     "    "          "
-   ⍝ 2=≡⍺:(↑,¨/⍺)∇¨⍵                        ⍝ PervasiveLeft argument
-   ⍝  2=≡m s:(↑,¨/⍺)∇¨⍵                        ⍝ PervasiveLeft argument
      2=≡m s:(1⌽¨c,¨m,¨s)∇¨⍵
     ⍝ ~'X23'check ⍺:⎕SIGNAL 5                ⍝ Length error
 ⍝     ~'S'check s:⎕SIGNAL 11                 ⍝ Sdev must be > 0
 ⍝     ~'O'check c:⎕SIGNAL 11                 ⍝ Check Operator
 ⍝     ~'X'check ⍵:⎕SIGNAL 11                 ⍝ Right argument must be numeric
     ⍝str←'pdqr '[1 0 ¯1 ¯2⍳c],'norm(⍵,⍵,⍵)' ⍝ Build R expression
-     str←c,'norm(⍵,⍵,⍵)' ⍝ Build R expression
-     rAv:+##.∆r.x str ⍵ m s                 ⍝ Use R if requested
+     ⍝str←c,'norm(⍵,⍵,⍵)' ⍝ Build R expression
+    ⍝     rAv:+##.∆r.x str ⍵ m s                 ⍝ Use R if requested
+     rAv:(c,'norm')rExec ⍵ m s
      sden←{m s←⍺                            ⍝ Normal Density
          (÷s×(○2)*÷2)×*-0.5×(s÷⍨⍵-m)*2}     ⍝  e ^ (x^2)- 2
      snorm←{d←0.3193815 ¯0.3565638 1.781478 ¯1.821256 1.330274  ⍝ Cumulative Dist

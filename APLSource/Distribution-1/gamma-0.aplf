@@ -23,8 +23,9 @@
      x≡'Skewness':2÷k*÷2              ⍝      "         "         "
      x≡'Kurtosis':6÷k                 ⍝      "         "         "
      2=≡k r:(1⌽¨↑,¨/c k r)∇¨⍵         ⍝ Left argument pervasive
-     str←c,'gamma(⍵,⍵,⍵)'             ⍝ Build R expression
-     rAv:+##.∆r.x str ⍵ k r           ⍝ Use R if requested
+     ⍝str←c,'gamma(⍵,⍵,⍵)'             ⍝ Build R expression
+⍝     rAv:+##.∆r.x str ⍵ k r           ⍝ Use R if requested
+     rAv:(c,'gamma')rExec ⍵ k r     ⍝ Use R if requested
      F←k r∘{                          ⍝ Cumulative distribution
          k r←⍺ ⋄ c←⍵÷r
          g←{x←⍵

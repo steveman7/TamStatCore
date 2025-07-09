@@ -13,9 +13,7 @@
  ⍝⍎ 0.33333 ← 2 4 5 triangular 3                ⍝ Density
      ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⎕DIV←1                     ⍝ Set system variables
      ⍵≡'Type':'Continuous'                      ⍝ Continuous Distribution
-   ⍝  a m b c←4↑⍺                                ⍝ Parameters
      (a m b)c←getParameters ⍺
-   ⍝  a m b←{⍵[⍋⍵]}a m b                         ⍝ Sort them
      ⍵≡'Mean':(a+b+m)÷3                         ⍝ Calculate theoretical value
      ⍵≡'Variance':{18÷⍨(⍵+.*2)-⍵+.×1⌽⍵}a b m    ⍝     "          "        "
      ⍵≡'Mode':m                                 ⍝     "          "        "
@@ -23,14 +21,14 @@
      ⍵≡'Skewness':{z←×/(2×⍵)-(1⌽⍵)+2⌽⍵          ⍝     "          "        "
          z÷←((⍵+.*2)-⍵+.×1⌽⍵)*1.5
          z×(2*0.5)÷5}a m b
-     c='d':0⌈{⍵≤m:2×(⍵-a)÷(b-a)×m-a               ⍝ Density
+     c='d':0⌈{⍵≤m:2×(⍵-a)÷(b-a)×m-a             ⍝ Density
          2×(b-⍵)÷(b-a)×b-m}¨⍵                   ⍝
      1≠≡a m b:(↑,¨/a m b)∇¨⍵
-     c='p':{⍵≤m:(2*⍨⍵-a)÷(b-a)×m-a                ⍝ Distribution
+     c='p':{⍵≤m:(2*⍨⍵-a)÷(b-a)×m-a              ⍝ Distribution
          (m b÷.-a)+(-/2*⍨b-m ⍵)÷b×.-a m}¨a⌈b⌊⍵  ⍝
-     c='q':{⍵≤(m-a)÷b-a:a+0.5*⍨⍵×(m-a)×b-a       ⍝ Inverse
+     c='q':{⍵≤(m-a)÷b-a:a+0.5*⍨⍵×(m-a)×b-a      ⍝ Inverse
          b-0.5*⍨(1-⍵)×(b-a)×b-m}¨⍵              ⍝
-     c='r':⍵⍴{u←?d←(×/⍵)⍴0                       ⍝ random Variable
+     c='r':⍵⍴{u←?d←(×/⍵)⍴0                      ⍝ random Variable
          j←~i←u<(m-a)÷b-a                       ⍝
          (i/d)←a+0.5*⍨(i/u)×(m-a)×b-a           ⍝
          (j/d)←b-0.5*⍨(1-j/u)×(b-a)×b-m ⋄ d}⍵   ⍝

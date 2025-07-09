@@ -22,8 +22,9 @@
      ⍵≡'Skewness':2*×m                    ⍝       "       "
      ⍵≡'Kurtosis':6*×m                    ⍝       "       "
      1≠≢m:∊⍣(c≠'r')⊢(m,¨c)∇¨⍵             ⍝ Make pervasive
-     str←c,'exp(⍵,⍵)'                     ⍝ Build R expression
-     rAv:+##.∆r.x str ⍵ m                 ⍝ If requested, use R
+    ⍝ str←c,'exp(⍵,⍵)'                     ⍝ Build R expression
+    ⍝ rAv:+##.∆r.x str ⍵ m                 ⍝ If requested, use R
+     rAv:(c,'exp')rEval ⍵ m                  ⍝ If requested, use R
      c='d':(⍵≥0)×m×*-⍵×m                  ⍝ Density
      c='p':1-*-m×⍵⌈0                      ⍝ Distribution
      c='q':-(⍟1-⍵)÷m                      ⍝ Inverse

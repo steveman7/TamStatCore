@@ -46,7 +46,8 @@
          (h⍪u⍪(¯1↓z)⍪u)⍪¯30↑'Total:',10↓,¯1↑z  ⍝ Assemble table
      }w
      2=≡w:∇¨w~¨⎕NULL                           ⍝ Nested?
-     rAv:+##.∆r.x'mean(⍵)'(⍵~⎕NULL)            ⍝ If available, use R
+  ⍝   rAv:+##.∆r.x'mean(⍵)'(⍵~⎕NULL)            ⍝ If available, use R
+     rAv:'mean'rExec ⍵~⎕NULL
      (+/÷≢)w~⎕NULL                             ⍝ Use fork to calculate mean
 
  }
