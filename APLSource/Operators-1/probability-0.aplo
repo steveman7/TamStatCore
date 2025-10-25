@@ -33,25 +33,23 @@
      c←(⍺ ⍺⍺'Type')≡'Continuous'            ⍝ Is distribution continuous?
      b←1 0 1 ⍵⍵ 0 1 1                       ⍝ Test relation
      b←,b×2≠⍴⍴b                             ⍝ If outside or between, make all 0's
-    ⍝fc←⍺⍺{a←⍺,1                            ⍝ Continuous
      fc←⍺⍺{a←⍺'p'                           ⍝ Continuous
          2>≡⍵:|b[0]-(a ⍺⍺ ⍵)×≠/2↑b          ⍝ Simple case
          |b[0]-(a∘⍺⍺¨⍵)×≠/2↑b}              ⍝
      fd←⍺⍺{e←(↑b)≠1↓b                       ⍝ Discrete
          d←⌊⍵+(⍵≠⌊⍵)∨∧/e                    ⍝ round up or down
-        ⍝a←⍺,↑e                             ⍝ cumulative?
-         a←⍺('dp'[↑e])
+         a←⍺('dp'[↑e])                      ⍝ cumulative?
          =/2↑b:|b[0]-a ⍺⍺ ⍵                 ⍝ P(X=x) or P(X≠x)
          2>≡⍵:|b[0]-a ⍺⍺ d-↑e               ⍝ P(X<x) , P(X≤x) etc.
          |b[0]-a∘⍺⍺¨d-↑e}                   ⍝ Nested case
      fk←⍺⍺{                                 ⍝ Character
          |b[0]-⍺ ⍺⍺ ⍵}
      fi←⍺⍺{+/⍺ ⍺⍺ ⍵}                        ⍝ Pr(X∊x1,...,xn)
-    ⍝fb←⍺⍺{a←⍺,1                            ⍝ Pr(X∊(a,b))
-     fb←⍺⍺{a←⍺'p'                          ⍝ Pr(X∊(a,b))
-         2=≢⍵:|-/a ⍺⍺ ⍵                      ⍝ If 2 values, include both
-         1=≢⍵:1-2×1-a ⍺⍺ ⍵                  ⍝ If 1 value include negative
-         ¯2-/a ⍺⍺ ⍵}
+     fb←⍺⍺{a←⍺'p'                           ⍝ Pr(X∊(a,b))
+         2=≢⍵:|-/a ⍺⍺ ⍵                     ⍝ If 2 values, include both
+        ⍝1=≢⍵:1-2×1-a ⍺⍺ ⍵                  ⍝ If 1 value include negative
+         1=≢⍵:-/a ⍺⍺ ⍵,-⍵                   ⍝ If 1 value include negative lower bound
+         ¯2-/a ⍺⍺ ⍵}                        ⍝ Partitioned values
      f←⍵⍵{a b c←⍺                           ⍝ General probability
          ∧/b:a fi ⍵                         ⍝ X∊⍵
          0≠↑0⍴∊⍵:a fk ⍵                     ⍝ X is character

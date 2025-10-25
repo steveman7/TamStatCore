@@ -9,6 +9,7 @@
      EXP←F,'('
      EXP,←1↓∊',',¨{1=≢⍵:⍕⍵
          1⌽')c(',1↓∊',',¨⍕¨⍵}¨Y
+     EXP←('¯'⎕R'-')EXP
      Z←##.∆r.eval EXP,')'
  :ElseIf (2=≢Y)∧(2=≡Y)∧(=⍥≢)/Y
      X1 X2←⎕NEW¨2⍴#.RS.robject

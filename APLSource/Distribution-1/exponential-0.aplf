@@ -22,11 +22,14 @@
      ⍵≡'Skewness':2*×m                    ⍝       "       "
      ⍵≡'Kurtosis':6*×m                    ⍝       "       "
      1≠≢m:∊⍣(c≠'r')⊢(m,¨c)∇¨⍵             ⍝ Make pervasive
-    ⍝ str←c,'exp(⍵,⍵)'                     ⍝ Build R expression
-    ⍝ rAv:+##.∆r.x str ⍵ m                 ⍝ If requested, use R
-     rAv:(c,'exp')rEval ⍵ m                  ⍝ If requested, use R
-     c='d':(⍵≥0)×m×*-⍵×m                  ⍝ Density
-     c='p':1-*-m×⍵⌈0                      ⍝ Distribution
+    ⍝ str←c,'exp(⍵,⍵)'                    ⍝ Build R expression
+    ⍝ rAv:+##.∆r.x str ⍵ m                ⍝ If requested, use R
+     rAv:(c,'exp')rExec ⍵ m               ⍝ If requested, use R
+     f←{11::0 ⋄ *-⍵×⍺}                    ⍝ Guard against large input
+    ⍝c='d':(⍵≥0)×m×*-⍵×m                  ⍝ Density
+     c='d':(⍵≥0)×m×m f ⍵                  ⍝ Density
+    ⍝c='p':1-*-m×⍵⌈0                      ⍝ Distribution
+     c='p':1-m f ⍵⌈0                      ⍝ Distribution
      c='q':-(⍟1-⍵)÷m                      ⍝ Inverse
      c='r':2-/+\(÷m)×⍟?0⍴⍨⍵+1             ⍝ Random Variable
      'Nonce Error'

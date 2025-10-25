@@ -2,21 +2,34 @@
      ⎕IO←0 ⋄ ⎕ML←3
      fn←{0=↑0⍴⍵:⍕⍵ ⋄ q,⍵,q←'"'}
      rn cn←{∊{⍺,','⍵}/fn¨⍵}¨1↓¨(⍵[;0])(⍵[0;])
-     rows←↓1 1↓⍵
-     str←'M <- as.table(rbind(',1↓∊(≢rows)⍴⊂',⍵'
-     _←+##.∆r.x(⊂str,'))'),rows
-     str←'dimnames(M) <- list(',(0⊃⍺),' = c(',rn,')'
-     str,←',',(1⊃⍺),' = c(',cn,'))'
-     _←+##.∆r.x str
-     _←+##.∆r.x'XSQ <- chisq.test(M)'
+     ⍝rows←↓1 1↓⍵
+    ⍝ rows←1↓∊1⌽¨ ,/(⊂'),c('),⊃ 1↓¨,/',',¨⍕¨1 1↓⍵
+     data←1↓,',',⎕FMT⍪,⍉1 1↓⍵
+     str←1⌽')matrix(c(',data,'),ncol=',⍕¯1+≢⍉⍵
+     _←'M'##.∆r.set ##.∆r.eval str
+     _←'XSQ'##.∆r.set ##.∆r.eval'chisq.test(M)'
+    ⍝ str←'M <- as.table(rbind(',1↓∊(≢rows)⍴⊂',⍵'
+    ⍝ _←+##.∆r.x(⊂str,'))'),rows
+    ⍝
+⍝      _←'M' ##.∆r.set ##.∆r.eval str
+⍝
+⍝    ⍝ str←'dimnames(M) <- list(',(0⊃⍺),' = c(',rn,')'
+⍝     str← 'list(',(0⊃⍺),' = c(',rn,')'
+⍝     str,←',',(1⊃⍺),' = c(',cn,'))'
+⍝    ⍝ _←+##.∆r.x str
+⍝     _←'dimnames(M)' ##.∆r.set ##.∆r.eval str
+    ⍝ _←+##.∆r.x'XSQ <- chisq.test(M)'
+     ⍝_←' ' ##.∆r.set '(XSQ <- chisq.test(M))'
      ns←⎕NS''
-     ns.TestStatistic←##.∆r.x'XSQ$statistic[[1]]'
-     ns.P←##.∆r.x'XSQ$p.value'
-     ns.DegreesOfFreedom←##.∆r.x'XSQ$parameter[[1]]'
-     u←{##.∆r.g'XSQ$',⍵}¨'observed' 'expected' 'residuals'
-     x←{o e r←,¨⍵ ⋄ o,e,(o-e),[0.5]r*2}u.Value
+    ⍝ ns.TestStatistic←##.∆r.x'XSQ$statistic[[1]]'
+     ns.TestStatistic←##.∆r.eval'XSQ$statistic[[1]]'
+     ns.P←##.∆r.eval'XSQ$p.value[[1]]'
+     ns.DegreesOfFreedom←##.∆r.eval'XSQ$parameter[[1]]'
+     u←{##.∆r.eval'XSQ$',⍵}¨'observed' 'expected' 'residuals'
+     x←{o e r←,¨⍵ ⋄ o,e,(o-e),[0.5]r*2}u.value
      v←⊃,↑∘.{⍺ ⍵}/1↓¨(⍵[;0])(⍵[0;])
      ns.Table←{⍵⍪(-1⊃⍴⍵)↑' ' 'Total',{⍵×1E¯10<|⍵}+⌿¯4↑[1]⍵}v,x
+     ns.Table←'Factor1' 'Factor2' 'Observed' 'Expected' 'Difference' 'ChiSquare'⍪ns.Table
      ns.Factors←⍺
      ns.Type←'Independent'
      ns._Distribution←'Independent'

@@ -39,10 +39,11 @@
          ⍵∘f{⍺⍺ SecAlg ⍵,⍺⍺ ⍵}⍺}            ⍝ Use secant algorithm
      Rand←{u0←?⍵⍴0 ⋄ u1←?⍵⍴0                ⍝ Generate two uniform random vars
          ((-2×⍟u0)*÷2)×2○○2×u1}             ⍝ Transform and combine them
-     c='d':m s sden ⍵                         ⍝ Density
-     c='p':snorm(⍵-m)÷s                       ⍝ Cumulative Distribution
-     c='m':*(m×⍵)+0.5×(s×⍵)*2                ⍝ Moment Generating function?
-     c='r':m+s×Rand ⍵                        ⍝ Random Variable
+     c='d':m s sden ⍵                       ⍝ Density
+    ⍝c='p':snorm(⍵-m)÷s                     ⍝ Cumulative Distribution
+     c='p':snorm ¯64⌈64⌊(⍵-m)÷s             ⍝ Cumulative Distribution
+     c='m':*(m×⍵)+0.5×(s×⍵)*2               ⍝ Moment Generating function?
+     c='r':m+s×Rand ⍵                       ⍝ Random Variable
   ⍝   c=¯2:m s(16808⌶)'Normal'⍵             ⍝ Random Variable using Ron's random variable generator
      b←⍵<0.5                                ⍝ Prob < 0.5?
      z←1 2∘(snorm Inv)¨|⍵-b                 ⍝ Find Z from P

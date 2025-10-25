@@ -26,7 +26,7 @@
          z÷×/u,⍺-2 3}m n                      ⍝
    ⍝  str←c,'hyper(⍵,⍵,⍵,⍵)' ⍝ Build R Expression
    ⍝  rAv:+##.∆r.x str ⍵ m(N-m)n               ⍝ Use R if requested
-     rAv:(c.'hyper')rExec ⍵ m(N-m)n           ⍝ Use R if requested
+     rAv:(c,'hyper')rExec ⍵ m(N-m)n           ⍝ Use R if requested
      1≠≡m n N:(↑,¨/m n N c)∇¨⍵
      c='d':{p←{↑(!/-⍨/⍵)×÷/!⌿⍵}⍵ m,⍪n N
          p×(⍵=⌈⍵)∧⍵≥0}⍵                       ⍝

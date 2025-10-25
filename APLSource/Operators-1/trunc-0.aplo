@@ -1,0 +1,30 @@
+ trunc←{
+ ⍝⍟   Copyright (C) 2025 by Stephen M. Mansour
+ ⍝∇   Truncated Distribution Operator
+ ⍝∊   Operators
+ ⍝⍺   Parms X Distribution Parameters
+ ⍝⍺⍺  Dist fD Distribution
+ ⍝⍵⍵  Bounds  X  Lower, Upper Bounds
+ ⍝⍵   Value
+ ⍝←   Density
+ ⍝⍎   normal trunc 0 2,1.5
+ ⍝⍎   normal trunc 2 prob ≤ 1      ⍝ Prob (Z≤1|¯2≤Z≤2)
+ ⍝⍎   normal trunc inf 2 prob ≤ 1  ⍝ Upper bound
+ ⍝⍎   normal trunc 2 inf prob ≤ 3  ⍝ Lower bound
+ ⍝⍎   normal trunc 0 2 prob ≤ 1.5  ⍝ Lower and upper bounds
+     ⎕IO←0 ⋄ ⎕ML←1
+     ⍺←0 1
+     ⍵≡'Type':⍺⍺'Type'
+     PARMS c←getParameters ⍺
+     AB←{1=≢⍵:⍵×¯1 1             ⍝ If one item (-A≤X≤A)
+         Inf=|⊃⍵:(¯1×|Inf),1↓⍵   ⍝ Upper Bound (X≤B)
+         Inf=⍵[1]:⍵[0],|Inf      ⍝ Lower Bound (X≥A)
+         ⍵}⍵⍵                    ⍝ A≤x≤B
+     P←PARMS ⍺⍺ prob between AB  ⍝ Denominator P(A≤x≤B)
+     c='d':P÷⍨PARMS ⍺⍺ ⍵         ⍝ Density
+     c='p':P÷⍨PARMS ⍺⍺ prob between AB⌊⍵ ⍝ Probability
+     c='q':PARMS ⍺⍺ critVal≥(⍵×P)+PARMS ⍺⍺ prob≤⊃AB
+     N←⌈(⍵÷P)+2×sqrt ⍵×P         ⍝ Augmented sample size
+     Z←PARMS ⍺⍺ randVar N        ⍝ Generate random variables
+     ⍵⍴Z/⍨Z between AB           ⍝ Exclude outside range
+ }

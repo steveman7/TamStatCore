@@ -13,8 +13,11 @@
  ⍝⍎ normal goodnessOfFit D.Height
  ⍝⍎ uniform goodnessOfFit D.State
      ⎕IO←0 ⋄ ⎕ML←3 ⋄ 0≡↑0⍴⍵:'Nonce Error'                   ⍝ Set system variables
-     v←⍺{(1=⍴⍴⍵)∧⍺≡⍬:{str←'XSQ <- chisq.test(table(⍵))' ⍝ Count data
-             _←##.∆r.x str(⍵⍳⍵) ⋄ ∪⍵}⍵                  ⍝
+     v←⍺{(1=⍴⍴⍵)∧⍺≡⍬:{⍝str←'XSQ <- chisq.test(table(⍵))' ⍝ Count data
+             D←1⌽')c(',1↓,',',⎕FMT⍪⍵⍳⍵
+             _←'XSQ'##.∆r.set ##.∆r.eval'chisq.test(table(',D,')'
+             ⍝_←##.∆r.x str(⍵⍳⍵) ⋄
+             ∪⍵}⍵                  ⍝
          1=⍴⍴⍵:⍺{XX←frequency ⍵                         ⍝ Raw data
              i←⍺[;0]⍳XX[;0]                             ⍝
              X←XX[i;1]                                  ⍝

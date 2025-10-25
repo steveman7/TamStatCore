@@ -6,6 +6,7 @@
      ⍝⍵ Vector2 Nv    Numeric 2- vector:   Count, Events|Prob   (Events if integer, prob if between 0 and 1)
      ⍝⍵ Vector3 Nv    count, mean, sdev
      ⍝⍵ VectorN Nv    Data set
+     ⍝⍵ Frequency Distribution:  2-column matrix
      ⍝⍵ Namespace W   Stats object
      ⍝← Stats object
      ⍝⍕ NS ← ['Name'] stats  Count Events|(Mean Sdev)
@@ -18,12 +19,15 @@
     ⍝ 326≡⎕DR ⍵:∇{∆←⍺⍺ 1↓⍵ ⋄ ∆.Name←↑⍵ ⋄ ∆}⍵ ⍝ Insert name if 1st item Char
      b←0=≢⍺
      name←b⊃⍺'Namespace'
-     3=≢⍵:name{count mean sdev←3↑⍵                  ⍝ If 3-vector
+     isFrequency ⍵:∇{⍵[;0]≡1 0:⌽+\⍵[;1]          ⍝ If boolean
+         (count,mean,sdev)⍵}⍵[⍒⍵;]          ⍝ If frequency
+     2≤⍴⍴⍵:'Rank Error'                          ⍝ Must be vector or namespace
+     3=≢⍵:name{count mean sdev←3↑⍵               ⍝ If 3-vector
          var←sdev*2 ⋄ name←⍺                     ⍝ Calculate variance
          NS←⎕NS b↓'name' 'count' 'mean' 'sdev' 'var'
          DF←⍺,': [n=',(⍕count),'; xbar=',(⍕mean),'; s=',(⍕sdev),']'
          _←NS.⎕DF DF ⋄ NS}⍵   ⍝ Include count,mean,sdev
-     2=≢⍵:name{count←↑⍵                             ⍝ If 2-vector
+     2=≢⍵:name{count←↑⍵                          ⍝ If 2-vector
          mean←↑{¯1=×/×⍵-0 1:⍵                    ⍝ Assume binomial
              ⍝(⍵>0)∧(⍵=⌈⍵)∧⍵≤⍺:⍵÷⍺ ⋄ ¯1}/⍵       ⍝ Calc mean
              (⍵≥0)∧(⍵=⌈⍵)∧⍵≤⍺:⍵÷⍺ ⋄ ¯1}/⍵        ⍝ Calc mean

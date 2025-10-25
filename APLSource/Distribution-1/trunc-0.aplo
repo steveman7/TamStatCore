@@ -1,7 +1,0 @@
- trunc←{p←¯1↓⍺ ⋄ op←↑⌽⍺
-     x←⍵{{1⊃⍵[⍋⍵]}⍺,⍵}⍵⍵
-     op=0:(p ⍺⍺ x)÷p ⍺⍺ prob between ⍵⍵
-     op=1:↑÷/⍺⍺{p ⍺⍺ between ⍵}¨(⍵⍵⌊x)⍵⍵
-     op=¯1:2+
-     op=2:
- }
