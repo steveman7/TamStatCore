@@ -1,0 +1,10 @@
+ F←pacf R;RR;N;⎕IO
+⍝@ (c) Copyright 2025 by Stephen Mansour
+⍝∇ Partial Autorocorrelation Function
+⍝R Xv VECTOR OF AUTOCORRELATIONS STARTING WITH LAG 1
+⍝F Xv VECTOR OF PARTIAL AUTOCORRELATIONS
+ ⎕IO←0 ⋄ ⎕ML←3
+ RR←(1,R)[|N∘.-N←⍳1+⍴R]
+ N←1 ⋄ F←⍳0
+L1:F←F,↑⌽(N↑R)⌹N N↑RR
+ →((⍴R)≥N←N+1)/L1

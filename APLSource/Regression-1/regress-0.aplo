@@ -23,8 +23,10 @@
      DB←⊃9=⎕NC'⍵'                        ⍝ Is right argument a database?
      Int X←{(1=≡⍵)∨~(⊂⊃⍵)∊0 1:1 ⍵ ⋄ 2=≢⍵:⍵
          (⊃⍵)(1↓⍵)}⍵                     ⍝ Include intercept?
-     2=⍴⍴X:Int leastSquares ⍺⍺,X         ⍝ Matrix right argument?
-     ~FN:(,⍺⍺)(Int regressInd 1)X
+     ⍝2=⍴⍴X:Int leastSquares ⍺⍺,X        ⍝ Matrix right argument?
+     B←{9=⎕NC'⍵':0 ⋄ (2=⍴⍴⍵)∧0=⊃⊃0⍴⍵}X ⍝ If Matrix right argument
+     B:Int leastSquares ⍺⍺,X            ⍝  and numeric
+     ~FN:(,⍺⍺)(Int regressInd 1)X        ⍝ If not a function
      FN∧~DB:⍺ ⍺⍺{U←3 ⍺⍺ 4                ⍝ Test operand
          U=4:⍺(Int regressPoly)⍵         ⍝ Polynomial (⊥)
          U=5:⍺(⍺⍺ 1)(Int regressPoly)⍵   ⍝ Cubic/Quadratic

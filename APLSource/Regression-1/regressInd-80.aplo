@@ -12,21 +12,18 @@
      W←DB{⍺:⍵⍎¨variables ⍵  ⍝ Obtain data values
          ↑¨⊆⍵}⍵             ⍝
      B←{0≢⊃0⍴⍵}¨W           ⍝ Find character fields
-    ⍝B[0]≥←∨/B,DB           ⍝ Use 1st numeric field as Ind?
      Y←⍺{0=⊃0⍴⍺:⍺ ⋄ ⍵⍎⍺}⍵   ⍝ Response Variable
-   ⍝  U←Y∘{{⊃⍵[⍋⍵[;1];0]}⍺{(⊂⍺),⍥,(+/÷≢)⍵}⌸⍨⍵}¨B/W  ⍝ Make Minimum mean base case
      U←Y∘{0::''
          M←⍺{⍺,⍥⊂(+/÷≢)⍵}⌸⍨⍵
-
          ↑⊃M[⍋M[;1];0]}¨B/W
-
-    ⍝ NS←(⍵⍵∧∨/B){⍺:⊃makeIndicator¨⍵ ⋄ ⎕NS''}B/W
+     U←(⍺⍺≡0)⊃U ⍺⍺          ⍝ If no intercept, keep all indicator variables
      NS←(⍵⍵∧∨/B){⍺:⊃U makeIndicator¨⍵ ⋄ ⎕NS''}B/W ⍝ Put indicator variables into namespace
-     X←{⊃⍣(1=≢⍵)⊢⍵}(~B)/W
-     NMS←DB B{DB B←⍺
+     X←{⊃⍣(1=≢⍵)⊢⍵}(~B)/W                         ⍝ Get values of non-indicator variables
+     NMS←DB B{DB B←⍺                              ⍝ Get names of non-indicator variables
          DB:(~B)/variables ⍵
          'X',¨(B+.=0)↑1↓⎕D}⍵
-     _←⍎⍕NMS'←X'            ⍝ Else assign to names in char field
+   ⍝  _←⍎⍕NMS'←X'                                  ⍝ Else assign to names in char field
+     _←{0=≢⍵:0 ⋄ ⍎⍕⍵'←X'}NMS
      _←'NS'⎕NS NMS
      NMS←variables NS
      DB:⍺⍺ leastSquares NS,⊂⍕NMS(⊢,⊣~⊢)⊂⍺

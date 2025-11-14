@@ -17,9 +17,10 @@
      A W←A{
          2=⍴⍴⍵:⍺ ∇(↓⍉⍵)                          ⍝ If matrix, make vv
          ⍺∧⍥{(1=≡⍵)∧2|⎕DR ⍵}⍵:'*'(⍺ ⍵)           ⍝ Both args numeric vectors
-         1=≡⍵:⍺((1+⍳⍴⍵)⍵)                          ⍝ Simple Numeric vector on right
+        ⍝1=≡⍵:⍺((1+⍳⍴⍵)⍵)                        ⍝ Simple Numeric vector on right
+         1=≡⍵:⍺(⍵(1+⍳⍴⍵))                        ⍝ Simple Numeric vector on right
          2<≢⍵:⍺{W←((↑⍵){(⍺⍴⍨⍴⍵)⍵}∊1↓⍵)
-             1=≢⍺:⍺ W ⋄ (⍺/⍨⍴↑⍵)W}⍵             ⍝ More than two numeric vectors on right
+             1=≢⍺:⍺ W ⋄ (⍺/⍨⍴↑⍵)W}⍵              ⍝ More than two numeric vectors on right
          ⍺ ⍵}⍵
 
      B←↑=⍥{⎕NULL≠⍵}/W ⋄ GP←(B⍴⍨≢A)/A             ⍝ Remove Nulls

@@ -17,7 +17,9 @@
      ⍺←0 1 ⋄ ⎕ML←3 ⋄ ⎕IO←0                  ⍝ Default to standard normal
      ⍵≡'Type':'Continuous'                  ⍝ Continuous Distribution
      ⍵≡'Parameters':{⍵.f←(mean,sdev) ⋄ ⍵}⎕NS'' ⍝ Get parameter estimates
-     (m s)c←getParameters ⍺
+    ⍝(m s)c←getParameters ⍺
+     m c←getParameters ⍺                    ⍝ If only one parameter specified,
+     m s←¯2↑m                               ⍝ Default mean is 0
      'Mean' 'Median' 'Mode'∊⍨⊂⍵:m           ⍝ Obtain theoretical values
      'Variance'≡⍵:s*2                       ⍝
      'Skewness' 'Kurtosis'∊⍨⊂⍵:0            ⍝     "    "          "
@@ -26,9 +28,6 @@
 ⍝     ~'S'check s:⎕SIGNAL 11                 ⍝ Sdev must be > 0
 ⍝     ~'O'check c:⎕SIGNAL 11                 ⍝ Check Operator
 ⍝     ~'X'check ⍵:⎕SIGNAL 11                 ⍝ Right argument must be numeric
-    ⍝str←'pdqr '[1 0 ¯1 ¯2⍳c],'norm(⍵,⍵,⍵)' ⍝ Build R expression
-     ⍝str←c,'norm(⍵,⍵,⍵)' ⍝ Build R expression
-    ⍝     rAv:+##.∆r.x str ⍵ m s                 ⍝ Use R if requested
      rAv:(c,'norm')rExec ⍵ m s
      sden←{m s←⍺                            ⍝ Normal Density
          (÷s×(○2)*÷2)×*-0.5×(s÷⍨⍵-m)*2}     ⍝  e ^ (x^2)- 2
@@ -40,7 +39,6 @@
      Rand←{u0←?⍵⍴0 ⋄ u1←?⍵⍴0                ⍝ Generate two uniform random vars
          ((-2×⍟u0)*÷2)×2○○2×u1}             ⍝ Transform and combine them
      c='d':m s sden ⍵                       ⍝ Density
-    ⍝c='p':snorm(⍵-m)÷s                     ⍝ Cumulative Distribution
      c='p':snorm ¯64⌈64⌊(⍵-m)÷s             ⍝ Cumulative Distribution
      c='m':*(m×⍵)+0.5×(s×⍵)*2               ⍝ Moment Generating function?
      c='r':m+s×Rand ⍵                       ⍝ Random Variable
