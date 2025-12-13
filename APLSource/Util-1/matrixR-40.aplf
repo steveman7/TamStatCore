@@ -1,0 +1,15 @@
+ matrixR←{
+⍝ Create a matrix in R
+⍝⍺ R function (optional)
+⍝⍵  APL Matrix
+⍝←
+     R C←⍴⍵
+     _←'X'##.∆r.set,⍵
+     expr←⍕'M←matrix(X,nrow='R',ncol='C')'
+     ##.∆r.eval expr
+
+
+
+
+
+ }

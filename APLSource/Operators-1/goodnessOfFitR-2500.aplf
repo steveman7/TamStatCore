@@ -12,35 +12,37 @@
  ⍝⍕ NS ← fD goodnessOfFit Av|Xv|W
  ⍝⍎ normal goodnessOfFit D.Height
  ⍝⍎ uniform goodnessOfFit D.State
-     ⎕IO←0 ⋄ ⎕ML←3 ⋄ 0≡↑0⍴⍵:'Nonce Error'                   ⍝ Set system variables
-     v←⍺{(1=⍴⍴⍵)∧⍺≡⍬:{⍝str←'XSQ <- chisq.test(table(⍵))' ⍝ Count data
-             D←1⌽')c(',1↓,',',⎕FMT⍪⍵⍳⍵
-             _←'XSQ'##.∆r.set ##.∆r.eval'chisq.test(table(',D,')'
-             ⍝_←##.∆r.x str(⍵⍳⍵) ⋄
-             ∪⍵}⍵                  ⍝
-         1=⍴⍴⍵:⍺{XX←frequency ⍵                         ⍝ Raw data
-             i←⍺[;0]⍳XX[;0]                             ⍝
-             X←XX[i;1]                                  ⍝
-             P←⍺[;1]                                    ⍝
-             str←'XSQ <- chisq.test(⍵,p = ⍵)'           ⍝
-             _←##.∆r.x str X(P÷+/P)                     ⍝
-             ⍺[;0]}⍵                                    ⍝
-         2=↑⌽⍴⍵:{str←'XSQ <- chisq.test(c('             ⍝ Frequency data
-             X←⍕1↓,',',⍵[;0],'=',⍵[;,1]                 ⍝  Uniform
-             _←##.∆r.x str,X,'))' ⋄ ⍵[;0]}⍵             ⍝   goodness of fit
-         3=↑⌽⍴⍵:{str←'XSQ <- chisq.test(⍵,p = ⍵)'       ⍝ 3-columns data
-             X P←↓⍉1 1↓⍵                                ⍝  Multinomial
-             _←##.∆r.x str X(P÷+/P)                     ⍝   goodness of
-             ⍵[;0]~'*'}⍵}⍵                              ⍝   fit
-     ns←⎕NS''                                           ⍝ Populate
-     ns.TestStatistic←##.∆r.x'XSQ$statistic[[1]]'       ⍝  namespace
-     ns.P←##.∆r.x'XSQ$p.value'                          ⍝   with
-     ns.DegreesOfFreedom←##.∆r.x'XSQ$parameter[[1]]'    ⍝    assigned
-     u←{##.∆r.g'XSQ$',⍵}¨'observed' 'expected' 'residuals' ⍝ properties
-     u←{1=≡⍵:⍵.Value ⋄ ⍵}u                              ⍝
-     x←{o e r←,¨⍵ ⋄ o,e,(o-e),[0.5]r*2}u                ⍝ Calc table
+     ⎕IO←0 ⋄ ⎕ML←3 ⋄ 0≡↑0⍴⍵:'Nonce Error'                 ⍝ Set system variables
+     a2r←{' '~⍨1⌽')c(',1↓,',',⎕FMT⍪⍵}                     ⍝ APL to R vector
+     XSQ v←⍺{(1=⍴⍴⍵)∧⍺≡⍬:{                                ⍝ Count data
+             D←a2r ⍵⍳⍵
+             XSQ←'chisq.test(table(',D,'))'
+             XSQ(∪⍵)}⍵                                    ⍝
+         1=⍴⍴⍵:⍺{XX←frequency ⍵                           ⍝ Raw data
+             i←⍺[;0]⍳XX[;0]                               ⍝
+             X←a2r XX[i;1]                                ⍝
+             P←a2r ⍺[;1]÷+/⍺[;1]                          ⍝
+             str←'XSQ <- chisq.test(⍵,p = ⍵)'             ⍝
+             XSQ←'chisq.test(',X,',p = ',P,')'
+             XSQ(⍺[;0])}⍵                                 ⍝
+         2=↑⌽⍴⍵:{ ⍝str←'XSQ <- chisq.test(c('             ⍝ Frequency data
+             X←⍕1↓,',',⍵[;0],'=',⍵[;,1]                   ⍝  Uniform
+             XSQ←'chisq.test(c(',X,'))'
+             XSQ(⍵[;0])}⍵                                 ⍝   goodness of fit
+         3=↑⌽⍴⍵:{str←'XSQ <- chisq.test(⍵,p = ⍵)'         ⍝ 3-columns data
+             X P←↓⍉1 1↓⍵ ⋄ P←a2r P÷+/P ⋄ X←a2r X          ⍝  Multinomial
+             XSQ←'chisq.test(',X,',p=',P,')'
+             XSQ(⍵[;0]~'*')}⍵}⍵                           ⍝   fit
+     ns←⎕NS''                                             ⍝ Populate
+     ns.TestStatistic←##.∆r.eval XSQ,'$statistic[[1]]'    ⍝  namespace
+     ns.P←##.∆r.eval XSQ,'$p.value'                       ⍝   with
+     ns.DegreesOfFreedom←##.∆r.eval XSQ,'$parameter[[1]]' ⍝    assigned
+     P←'observed' 'expected' 'residuals'                  ⍝ properties
+     u←(1+⍳⍴v)∘.{##.∆r.eval XSQ,'$',⍵,'[[',(⍕⍺),']]'}P
+     u←{1=≡⍵:⍵.Value ⋄ ⍵}u                                ⍝
+     x←{o e r←↓⍉⍵ ⋄ o,e,(o-e),[0.5]r*2}u                  ⍝ Calc table
      ns.Table←{⍵⍪(-1⊃⍴⍵)↑' ' 'Total',{⍵×1E¯10<|⍵}+⌿¯4↑[1]⍵}v,x
-     ns.Type←'GoodnessOfFit'                            ⍝
-     ns.Factors←'CAT1' 'CAT2'                           ⍝ Dummyvalues
+     ns.Type←'GoodnessOfFit'                              ⍝
+     ns.Factors←'CAT1' 'CAT2'                             ⍝ Dummyvalues
      ns._Distribution←(1=≢∪x[;1])⊃'Multinomial' 'Uniform'
      ns}

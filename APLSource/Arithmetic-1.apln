@@ -5,8 +5,10 @@
           ⍺=0:2○⍵
           2○○⍵÷180}
 
-      det←{⎕IO ⎕ML←0 1       ⍝ Determinant of square matrix.
-          rAv:+##.∆r.x'det(⍵)'⍵ ⍝ Use R if requested
+      det←{⎕IO ⎕ML←0 1            ⍝ Determinant of square matrix.
+          rAv:{R C←⍴⍵
+               _←'M' ##.∆r.set ,⍵   
+               ##.∆r.eval ⍕'det(matrix(M,nrow=' R ',ncol=' C '))'}⍵ ⍝ Use R if requested
           ⍺←1                     ⍝ product of co-factor coefficients so far
           0=n←≢⍵:⍺                ⍝ result for 0-by-0
           i j←(⍴⍵)⊤{⍵⍳⌈/⍵}|,⍵     ⍝ row and column index of maximal element
@@ -26,8 +28,11 @@
           ⍝
           ⎕IO←0 ⋄ ⎕ML←1   
           (⍉≢⊢)⍵:'Non-Symmetric Matrix'  
-          rAv:,{_←##.∆r.x'V <- eigen(⍵)'⍵   ⍝ Use R if requested
-              +##.∆r.x'V$values'}⍵         ⍝ Get eigenvalues
+          ⍝rAv:,{_←##.∆r.x'V <- eigen(⍵)'⍵   ⍝ Use R if requested
+          ⍝     +##.∆r.x'V$values'}⍵         ⍝ Get eigenvalues   
+          rAv:{R C←⍴⍵ ⋄ _←'M' ##.∆r.set ,⍵  
+                ##.∆r.eval ⍕'eigen(matrix(M,nrow=' R ',ncol=' C '))$values'  
+                   }⍵
           1=≢⍵:,⍵ 
          ⍝1⊃1 #.TamStat.Koko.Dutils.SymetricEigen ⍵  
           1⊃1 ##.Koko.Dutils.SymetricEigen ⍵  
@@ -36,8 +41,11 @@
 
       eigenVectors←{⎕IO←0 ⋄ ⎕ML←1
           (⍉≢⊢)⍵:'Non-Symmetric Matrix'  
-          rAv:{_←##.∆r.x'V <- eigen(⍵)'⍵                 ⍝ Use R if requested
-              +##.∆r.x'V$vectors'}⍵  
+         ⍝ rAv:{_←##.∆r.x'V <- eigen(⍵)'⍵                 ⍝ Use R if requested
+⍝              +##.∆r.x'V$vectors'}⍵  
+         rAv:{R C←⍴⍵ ⋄ _←'M' ##.∆r.set ,⍵  
+               U←##.∆r.eval ⍕'eigen(matrix(M,nrow=' R ',ncol=' C '))$vectors'  
+               ⍪U.value}⍵
           1=≢⍵:⍪1
          ⍝ 0⊃1 #.TamStat.Koko.Dutils.SymetricEigen ⍵  
            0⊃1 ##.Koko.Dutils.SymetricEigen ⍵

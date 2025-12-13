@@ -6,9 +6,14 @@
 ⍝⍵ Events
 ⍝⍵ [populationSize]
 ⍝← confidence interval
-     ⍺←0.95 ⋄ n x N←3↑⍵
+     ⍺←0.95 ⋄ n x N←3↑⍵ ⋄ io←0
      str←'binom.test(⍵,⍵,conf.level=⍵)' ⍝ Build R expression
-     rAv:(4⊃(##.∆r.x str x n ⍺).Value).Value
+     rAv:{str←'binom.test(',x,',',n
+         str,←',conf.level=',⍵
+         str,←')$conf.int[c(1,2)]'
+         ##.∆r.eval⍕str}⍺
+
+   ⍝  rAv:(4⊃(##.∆r.x str x n ⍺).Value).Value
      A←0.5×1-⍺
      L←(x,n-x-1)beta critVal>A
      U←(x+1)(n-x)beta critVal<A

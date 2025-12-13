@@ -8,8 +8,13 @@
 ⍝← confidence interval
     ⍝ C B←2↑⍺ ⋄ n N←2↑⍵ ⋄ ⎕IO←0
      ⍺←0.95 ⋄ n x←2↑⍵
-     str←'binom.test(⍵,⍵,conf.level=⍵)' ⍝ Build R expression
-     rAv:(4⊃(##.∆r.x str x n ⍺).Value).Value
+   ⍝  str←'binom.test(⍵,⍵,conf.level=⍵)' ⍝ Build R expression
+
+    ⍝ rAv:(4⊃(##.∆r.x str x n ⍺).Value).Value
+     rAv:{str←'binom.test(',x,',',n
+         str,←',conf.level=',⍵
+         str,←')$conf.int[c(1,2)]'
+         ##.∆r.eval⍕str}⍺
      x>n÷2:⌽1-⍺ ∇-\n x                 ⍝ Always use p < 0.5
      A←0.5×1-⍺
      f←{A-n ⍵ binomial prob≤x}

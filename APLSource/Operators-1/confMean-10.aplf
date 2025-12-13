@@ -4,10 +4,12 @@
 
      C N←⍺
      f1←{C N←⍺ ⋄ ⎕DIV←1                    ⍝ Mean estimate
-         rAv:C{str←'t.test(⍵,conf.level=⍵)'⍝ build R expression
+         rAv:C{⍝str←'t.test(⍵,conf.level=⍵)'⍝ build R expression
              x←{2=⍴⍴⍵:⊃(//↓⍉⌽⍵) ⋄ ⍵}⍵      ⍝ Input to R expression
-             u←(↑⍺){+##.∆r.x str ⍵ ⍺}¨⊆x   ⍝ Use R if requested
-             ⊃(3⊃u.Value).Value}⍵         ⍝ Obtain value from frame
+             ~'X'##.∆r.set x:'Error'
+            ⍝u←(↑⍺){+##.∆r.x str ⍵ ⍺}¨⊆x   ⍝ Use R if requested
+             u←'t.test(X,conf.level=',(⍕⍺),')$conf.int[c(1,2)]'
+             ##.∆r.eval u}⍵                 ⍝ Obtain value from frame
          m←mean ⍵                          ⍝ Sample Average
          v←var ⍵                           ⍝ Sample Variance
          n←count ⍵                         ⍝ Sample Sizes
@@ -17,11 +19,12 @@
          me←t×se                           ⍝ Margin of Error
          m(-,+)me}                         ⍝ LCL, UCL
      f2←{rAv:⍺{                            ⍝ Difference of means
-             str←'t.test(⍵,⍵,conf.level=⍵)'⍝ Build R expression
+            ⍝str←'t.test(⍵,⍵,conf.level=⍵)'⍝ Build R expression
              x←{2=⍴⍴⍵:⊃(//↓⍉⌽⍵) ⋄ ⍵}¨⍵     ⍝ Convert freq to data
-             s←')',⍨¨{'c(',('¯'⎕R'-')(' '⎕R',')⍕⍵}¨x
-             u←+##.∆r.x't.test(',(0⊃s),',',(1⊃s),',conf.level=',(⍕⍺),')'
-             (3⊃u.Value).Value}⍵           ⍝ Use R if requested
+             ↑⍲/'XY'##.∆r.set¨x:'Error'
+             u←'t.test(X,Y,conf.level=',(⍕⍺),')$conf.int[c(1,2)]'
+             ##.∆r.eval u}⍵  ⍝ Use R if requested
+
          m←-/mean¨⍵                        ⍝ Get mean(s)
          n←count¨⍵                         ⍝ Get sample size(s)
          v←(variance¨⍵)÷n                  ⍝ Get sampling variance(s)

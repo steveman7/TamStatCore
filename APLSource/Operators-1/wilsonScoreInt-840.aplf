@@ -6,9 +6,15 @@
  ⍝⍵  N       I    Sample Size
  ⍝⍵  Events
  ⍝←  critical Value
-     ⍺←0.95 1 ⋄ ⎕ML←1 ⋄ CL CC←2↑⍺,1 ⋄ n x←⍵ ⍝ Default conf is 95%; cont correction=1
-     str←'prop.test(⍵,⍵,conf.level=⍵,correct=⍵)'      ⍝ Build R expression
-     rAv:(6⊃(##.∆r.x str x n CL CC).Value).Value
+     ⍺←0.95 1 ⋄ ⎕ML←1 ⋄ ⎕IO←0 ⋄ CL CC←2↑⍺,1 ⋄ n x←⍵ ⍝ Default conf is 95%; cont correction=1
+     ⍝str←'prop.test(⍵,⍵,conf.level=⍵,correct=⍵)'      ⍝ Build R expression
+     ⍝rAv:(6⊃(##.∆r.x str x n CL CC).Value).Value
+     rAv:{str←'prop.test(',x,',',n
+         str,←',conf.level='⍵
+         str,←',correct=',CC⊃'FALSE' 'TRUE'
+         str,←')$conf.int[c(1,2)]'
+         ##.∆r.eval⍕str}CL
+
      p←x÷n                                  ⍝ Sample Proportion
      z←normal criticalValue<0.5×1-CL        ⍝ CriticalValue
      z2←z*2                                 ⍝ z-squared

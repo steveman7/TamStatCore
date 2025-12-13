@@ -1,0 +1,10 @@
+ ma←{
+⍝∇ Moving Average
+⍝⍺ K     Is Number of lags
+⍝⍵ Theta Xv Parameters
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄ ⍺←10
+     Theta←1,-⍵
+     A←normal randVar ⍺
+     A←↑(≢Theta),/A
+     A+.×Theta
+ }

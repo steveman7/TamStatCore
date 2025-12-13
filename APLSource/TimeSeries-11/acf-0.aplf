@@ -7,18 +7,20 @@
 ⍝⍕ Y←[K] acf [show] Z
 ⍝⍎ 0.88403 0.80557 0.70944 ← 3 acf +\normal randVar 25
      ⎕IO←0 ⋄ ⎕ML←1
-     DF←10+⌊sqrt≢⍵ ⋄ ⍺←DF                 ⍝ Set default lag
+     DF←10+⌊sqrt≢⍵ ⋄ ⍺←DF                  ⍝ Set default lag
      K SH←¯2↑0J1(~⍨,∊)¯2↑⍺                 ⍝ Parse left argument
-     K+←DF×K=0                          ⍝ Use default if lag=0
-     Z←⍵-(+/⍵)÷⍴⍵                          ⍝ SUBTRACT OFF THE MEAN
-     Z←(KK∘.≤⌽⍳N)×K⌽((⍴KK←⍳1+K),N←⍴Z)⍴Z    ⍝ SET UP Z MATRIX (ROW K = LAG K)
-     Z←1↓Z÷⊃Z←Z+.×Z[0;]                    ⍝ CORR = GAMMA[K]÷GAMMA[0]
-     ~SH:Z                                 ⍝ If show, display graph
-     I←round Z×25                          ⍝ Scale and round output
-     B←(¯27 to 26)include⍤1⊢(I<0)⌽0,⍪I    ⍝ Generate pattern
-     D←'I3,M<->F9.3'⎕FMT(1+⍳K),⍪Z        ⍝
+     K+←DF×K=0                             ⍝ Use default if lag=0
+     MU←⍵-(+/⍵)÷≢⍵                         ⍝ SUBTRACT OFF THE MEAN
+     N←≢MU ⋄ KK←⍳1+K
+     Z←(KK∘.≤⌽⍳N)×KK⌽((1+K),N)⍴MU          ⍝ SET UP Z MATRIX (ROW K = LAG K)
+     ZZ←Z+.×Z[0;]
+     R←1↓ZZ÷⊃ZZ                            ⍝ CORR = GAMMA[K]÷GAMMA[0]
+     ~SH:R                                 ⍝ If show, display graph
+     I←round R×25                          ⍝ Scale and round output
+     B←(¯27 to 26)include⍤1⊢(I<0)⌽0,⍪I     ⍝ Generate pattern
+     D←'I3,M<->F9.3'⎕FMT(1+⍳K),⍪R          ⍝
      G←D,' X'[B]                           ⍝ Display output
      H←'Lag    Corr',,'M<->F5.1'⎕FMT ¯1 to 1,0.2
-     H←↑H('---    -----  ',51⍴'+----')    ⍝ Build header
+     H←↑H('---    -----  ',51⍴'+----')     ⍝ Build header
      H⍪G
  }

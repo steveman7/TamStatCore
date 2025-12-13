@@ -1,0 +1,13 @@
+ difference←{
+      ⍝∇ Calculate lagged difference
+      ⍝⍺ [LAG←1] Nv lags D[i]=TS[i+LAG]-TS[i]
+      ⍝⍵ TS Xv Time Series
+      ⍝← D  Zv Differenced data
+      ⍝⍕ D←[LAG|1]difference TS
+      ⍝⍎ 3 5 7 9←difference 1 4 9 16 25
+      ⍝⍎ 8 12 16←2 difference 1 4 9 16 25
+      ⍝⍎ 2 2 2←1 1 difference 1 4 9 16 25
+     ⍺←1 ⋄ ⎕ML←1          ⍝ Default lag = 1
+     1<≢⍺:⊃∇/⍺,⊂⍵         ⍝ Multiple lags?
+     -⌿⍵↓⍨⍤1 0⊢⍺×1 ¯1    ⍝ Do it
+ }

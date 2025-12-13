@@ -1,0 +1,13 @@
+ ar←{
+⍝∇ Autoregressive Process
+⍝⍺ K     Is Number of lags
+⍝⍵ Phi Xv Parameters
+⍝⍵ Z   Xv Initial Values
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄ ⍺←10
+     Phi Z←{(,2)≡⍴⍵:⍵ ⋄ ↓⍉⍵}⍵
+     K←-≢Phi
+     A←normal randVar ⍺
+     ⍺{⍺=0:⍵
+
+         (⍺-1)∇ ⍵,A[⍺-1]+Phi+.×⌽K↑⍵}Z
+ }

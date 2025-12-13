@@ -1,16 +1,20 @@
- Z←F rExec Y;X;X1;X2;_;NM;I;EXP;⎕IO;⎕ML
+ Z←F rExec Y;X;X1;X2;_;NM;I;EXP;⎕IO;⎕ML;set
 ⍝∇ Build R-Expression
 ⍝⍺ Function Name
 ⍝⍵ List of arguments
 ⍝← Result
  ⎕IO←0 ⋄ ⎕ML←1
- :If 'dpqr'∨.=⊃F
- :AndIf 4≥≢Y
+ set←{11≠⎕DR ⍵:⍺ ##.∆r.set ⍵
+     str←' '~⍨1⌽')c(',1↓,',',⎕FMT⍪⍵
+     ##.∆r.eval ⍺,'<-',str}                     ⍝ APL to R vector
+ :If 'dpqr'∨.=⊃F         ⍝ If a distribution function
+ :AndIf 4≥≢Y             ⍝ Parameter list
      EXP←F,'('
      EXP,←1↓∊',',¨{1=≢⍵:⍕⍵
          1⌽')c(',1↓∊',',¨⍕¨⍵}¨Y
      EXP←('¯'⎕R'-')EXP
      Z←##.∆r.eval EXP,')'
+
  :ElseIf (2=≢Y)∧(2=≡Y)∧(=⍥≢)/Y
      X1 X2←⎕NEW¨2⍴#.RS.robject
      X1.attributes['class' 'names']←'vector' ''
@@ -20,10 +24,10 @@
      _←'X2'##.∆r.set 1⊃Y
      Z←##.∆r.eval F,'(X1,X2)'
  :Else
-     X←⎕NEW #.RS.robject
-     X.attributes['class' 'names']←'vector' ''
-     X.data←Y
-     _←'X'##.∆r.set X
+    ⍝ X←⎕NEW #.RS.robject
+⍝     X.attributes['class' 'names']←'vector' ''
+⍝     X.data←Y
+     _←'X'set Y
      Z←##.∆r.eval F,'(X)'
-
  :EndIf
+ :If 1∧.=(≡,≢)Z ⋄ Z←⊃Z ⋄ :EndIf   ⍝ If 1-item simple vector, make scalar

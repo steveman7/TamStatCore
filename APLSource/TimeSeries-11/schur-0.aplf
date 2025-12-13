@@ -1,0 +1,25 @@
+ Z←schur Y;A;B;P;K;J;U
+⍝⍟ Copyright 2025 by Stephen M. Mansour
+⍝∇ Schur's Theorem to determine invertibility and stationarity of a model
+⍝⍵ COEFF Xv Coefficents low to high order
+⍝← ROOTS Bs 1=All roots outside the unit circle;  0=at least one root NOT ouside the unit circle
+⍝⍕ ROOTS←schur COEFF
+⍝⍎ 1 ← schur  0.8
+⍝⍎ 1 0 ← schur each ¯0.6 1.2
+⍝⍎ 1 ← schur  1.4 ¯0.6
+⍝⍎ 0 ← schur 1.6 0.7
+⍝⍎ 1 ← schur 0 0 0 0.99
+ ⎕IO←1
+ A←¯1,Y
+ B←A×0
+ P←¯1+≢A
+ :For K :In ⌽⍳P
+     :For J :In ⍳K
+         B[J]←-/×⌿A[1 J,⍪K+1,2-J]
+     :EndFor
+     :If U←B[1]≤0
+         :Leave
+     :EndIf
+     (K↑A)←K↑B
+ :EndFor
+ Z←~U

@@ -1,7 +1,7 @@
  SETUP_R
  ⍝:Trap 0
  :With #
-     2 ⎕FIX'C:\Users\Stephen\Downloads\rsconnect-master\rsconnect-master\rserve.dyalog'
+     2 ⎕FIX'C:\Users\steve\Documents\rsconnect-master\rserve.dyalog'
      RS.start
  :EndWith
  :If 0=⎕NC'∆r'
