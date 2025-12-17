@@ -14,7 +14,7 @@
  P←'Operators Util Distribution Summary Relational Logical Arithmetic Graph Regression Anova NonParametric API UserInterface GUI'
  P←'#.TamStat.'∘,¨(P≠' ')⊂P
  ⎕PATH←⍕'# #.TamStat ',P
- :If 202605<100⊥2↑⎕TS    ⍝ Check date for license expiration 2020
+ :If 0  ⍝ 202505<100⊥2↑⎕TS    ⍝ Check date for license expiration 2026
  :AndIf X≡'R'
      f←CreateForm''                      ⍝ Create form.
      f.Caption←'TamStat'
