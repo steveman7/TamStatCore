@@ -11,9 +11,9 @@
      K SH←¯2↑0J1(~⍨,∊)¯2↑⍺                 ⍝ Parse left argument
      K+←DF×K=0                             ⍝ Use default if lag=0
      MU←⍵-(+/⍵)÷≢⍵                         ⍝ SUBTRACT OFF THE MEAN
-     N←≢MU ⋄ KK←⍳1+K
+     N←≢MU ⋄ KK←⍳1+K                       ⍝
      Z←(KK∘.≤⌽⍳N)×KK⌽((1+K),N)⍴MU          ⍝ SET UP Z MATRIX (ROW K = LAG K)
-     ZZ←Z+.×Z[0;]
+     ZZ←Z+.×Z[0;]                          ⍝
      R←1↓ZZ÷⊃ZZ                            ⍝ CORR = GAMMA[K]÷GAMMA[0]
      ~SH:R                                 ⍝ If show, display graph
      I←round R×25                          ⍝ Scale and round output

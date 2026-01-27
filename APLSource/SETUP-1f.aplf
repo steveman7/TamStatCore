@@ -11,7 +11,7 @@
  :If Ver≢'Win'
      X←''         ⍝ No GUI unless Windows
  :EndIf
- P←'Operators Util Distribution Summary Relational Logical Arithmetic Graph Regression Anova NonParametric API UserInterface GUI'
+ P←'Operators Util Distribution Summary Relational Logical Arithmetic Graph Regression Anova NonParametric API TimeSeries UserInterface GUI'
  P←'#.TamStat.'∘,¨(P≠' ')⊂P
  ⎕PATH←⍕'# #.TamStat ',P
  :If 0  ⍝ 202505<100⊥2↑⎕TS    ⍝ Check date for license expiration 2026
@@ -19,7 +19,7 @@
      f←CreateForm''                      ⍝ Create form.
      f.Caption←'TamStat'
      t←'TamStat License Expired:  '
-     t←t'Contact smansour@misericordia.edu for renewal.'
+     t←t'Contact stevemansour@yahoo.com for renewal.'
      t←t,⊂'Web version available at http://jmb.aplcloud.com/index.dyalog.'
      tb←f AddTextBox t
  :Else

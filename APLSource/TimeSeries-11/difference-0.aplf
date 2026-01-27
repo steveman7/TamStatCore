@@ -9,5 +9,5 @@
       ⍝⍎ 2 2 2←1 1 difference 1 4 9 16 25
      ⍺←1 ⋄ ⎕ML←1          ⍝ Default lag = 1
      1<≢⍺:⊃∇/⍺,⊂⍵         ⍝ Multiple lags?
-     -⌿⍵↓⍨⍤1 0⊢⍺×1 ¯1    ⍝ Do it
+     -⌿⍵↓⍨⍤1 0⊢⍺×1 ¯1     ⍝ Do it
  }
