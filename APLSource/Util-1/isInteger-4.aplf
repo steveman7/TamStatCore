@@ -1,0 +1,20 @@
+ isInteger←{
+⍝∊ Utility Function
+⍝⍺ LB Is Lower Bound
+⍝⍵ Data Nv Data
+⍝← Z Bv 1=True 0=False
+⍝⍕ Z←LB isInteger Data
+⍝⍎ 1 1 0 1←isInteger ¯3 0 2.3 4    ⍝ All integers
+⍝⍎ 0 1 0 1←0 isInteger ¯3 0 2.3 4  ⍝ Non-negative integers
+⍝⍎ 0 0 0 1←1 isInteger ¯3 0 2.3 4  ⍝ Positive Integers
+     ⍺←⌈/⍳0 ⋄ ⎕IO←1
+     B←(⍵=⌊⍵)∧⍵≥⍺
+     OK←∧/B:OK
+     ⎕←MSG←{N←+/⍵
+         N=1:'Item ',(⍕⍵⍳1),' is not a valid integer.'
+         NN←(' '⎕R', ')⍕(10⌊N)↑⍵/⍳≢⍵
+         N≤10:'Items ',NN,' are not valid integers.'
+         'There are ',(⍕N),' invalid integers. The first 10 are: ',NN
+     }~B
+     OK
+ }

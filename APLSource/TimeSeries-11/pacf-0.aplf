@@ -1,16 +1,21 @@
  pacf←{
-⍝ F←pacf R;RR;N;⎕IO
-⍝@ (c) Copyright 2025 by Stephen Mansour
+⍝⍟ Copyright (C) 2026 by Stephen Mansour
 ⍝∇ Partial Autorocorrelation Function
-⍝R Xv VECTOR OF AUTOCORRELATIONS STARTING WITH LAG 1
-⍝F Xv VECTOR OF PARTIAL AUTOCORRELATIONS
+⍝⍺ K Ns Number of lags
+⍝⍵ Z Zv Time Series Data
+⍝← R Xv Vector of autocorrelations starting with lag 1
+⍝⍕ Y←pacf [show] Z
+⍝⍎ 0.22727 ¯0.0022578 ¯0.02815 ← 3 pacf 100 20 normal randVar 25
+⍝⍎ pacf 100 20 normal randVar 25
      ⎕IO←0 ⋄ ⎕ML←1 ⋄ ⍺←0
-     R←acf ⍵
+     K SH←¯2↑0J1(~⍨,∊)¯2↑⍺                 ⍝ Parse left argument
+     R←K acf ⍵
      RR←(1,R)[|N∘.-N←⍳1+⍴R]
      F←⌽(≢R){⍺=0:⍵
          Z←⍵,⊃⌽(⍺↑R)⌹⍺ ⍺↑RR
          (⍺-1)∇ Z}⍬
-     ~⍺=0J1:F                              ⍝ If show, display graph
+    ⍝~⍺=0J1:F                              ⍝ If show, display graph
+     ~SH:F
      I←round F×25                          ⍝ Scale and round output
      B←(¯27 to 26)include⍤1⊢(I<0)⌽0,⍪I     ⍝ Generate pattern
      D←'I3,M<->F9.3'⎕FMT(1+⍳⍴F),⍪F         ⍝

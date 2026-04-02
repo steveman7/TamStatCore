@@ -1,10 +1,17 @@
  ma←{
+⍝⍟ Copyright (C) 2026 by Stephen Mansour
 ⍝∇ Moving Average
 ⍝⍺ K     Is Number of lags
+⍝⍺ [Sigma←1] Xs Standard Deviation
 ⍝⍵ Theta Xv Parameters
-     ⎕IO←0 ⋄ ⎕ML←1 ⋄ ⍺←10
+⍝⍕   [K|10_][Sigma] ma Theta [Theta2 ... [ThetaN]]
+⍝⍎   10 ma .9
+⍝⍎   20 0.5 ma ¯0.7
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄ ⍺←10 1
      Theta←1,-⍵
-     A←normal randVar ⍺
-     A←↑(≢Theta),/A
-     A+.×Theta
+     L S←2↑⍺,1
+     A←0 S(16808⌶)'Normal'L
+    ⍝A←normal randVar ⍺
+     Z←↑(-≢Theta),/A
+     Z+.×Theta
  }

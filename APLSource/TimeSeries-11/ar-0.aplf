@@ -1,13 +1,23 @@
  ar←{
-⍝∇ Autoregressive Process
-⍝⍺ K     Is Number of lags
+⍝⍟ Copyright (C) 2026 by Stephen Mansour
+⍝∇ Autoregressive Process Simulation
+⍝⍺ [L←10]    Is  Number of lags
+⍝⍺ [Sigma←1] Ss Standard Deviation
 ⍝⍵ Phi Xv Parameters
-⍝⍵ Z   Xv Initial Values
-     ⎕IO←0 ⋄ ⎕ML←1 ⋄ ⍺←10
-     Phi Z←{(,2)≡⍴⍵:⍵ ⋄ ↓⍉⍵}⍵
+⍝⍵ Y   Yv Initial Values
+⍝← Z  Zv Simulated Values
+⍝⍕   Z←[K|10_] ar Phi Y [... [PhiN Yn]]
+⍝⍎   ar 0.9 1          ⍝ AR(1) model ⌽=0.9 Z[0]=1
+⍝⍎   ar 0.4 ¯1.5       ⍝ AR(1) model ⌽=0.4 Z[0]=-1.5
+⍝⍎   ar ¯0.7 0         ⍝ AR(1) model ⌽=¯0.7 Z[0]=-1.5
+⍝⍎   ar 1.5 1 ¯0.75 .8 ⍝ AR(2) model ⌽[1]=1.5,⌽[2]=-0.75
+     ⎕IO←0 ⋄ ⎕ML←1 ⋄ ⍺←10 1
+     L S←2↑⍺,1
+    ⍝Phi Z←{(,2)≡⍴⍵:⍵ ⋄ ↓⍉⍵}⍵
+     Phi Z←{1=≢⍵:2↑⍵ ⋄ ↓⍉(⌽2,2÷⍨≢⍵)⍴⍵}∊⍵
      K←-≢Phi
-     A←normal randVar ⍺
-     ⍺{⍺=0:⍵
-
+    ⍝ A←normal randVar ⍺
+     A←0 1(16808⌶)'Normal'L
+     L{⍺=0:⍵
          (⍺-1)∇ ⍵,A[⍺-1]+Phi+.×⌽K↑⍵}Z
  }

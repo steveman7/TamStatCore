@@ -1,4 +1,5 @@
  difference←{
+      ⍝⍟ (C) Copyright 2026, by Stephen Mansour
       ⍝∇ Calculate lagged difference
       ⍝⍺ [LAG←1] Nv lags D[i]=TS[i+LAG]-TS[i]
       ⍝⍵ TS Xv Time Series

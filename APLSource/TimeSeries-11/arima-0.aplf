@@ -1,0 +1,68 @@
+ arima←{
+⍝∇ Estimate ARIMA paramters
+⍝⍺ AR   Is Number of autoregressive parameters
+⍝⍺ I    Bs 0=Stationary 1=Integrated
+⍝⍺ MA   Is Number of moving average parameters
+⍝⍵ DATA Xv Time Series data
+⍝⍕ NS←AR I MA arima DATA
+⍝⍎ 1 0 0 arima 25 ar 1 0.5  ⍝ AR1 model
+⍝⍎ 0 0 1 arima 25 ma 0.7    ⍝ MA1 model
+⍝⍎ 1 0 1 arima show ?25⍴100 ⍝ ARMA model
+     ⎕ML←1 ⋄ ⎕IO←0
+     SH←0J1∊⍺
+     MODEL←⊆⍺~0J1
+     _←'X'##.∆r.set ⍵
+     P←(' '⎕R',')∘⍕¨MODEL
+     ⍝U←##.∆r.eval 'arima(X, order = c(',P,'))'
+     EX←{EX←'arima(X, order = c(',(⊃⍵),')'
+         1=≢⍵:EX,')'
+         EX,',seasonal = list(order = c(',(1⊃⍵),'),period = 12))'}P
+     U←##.∆r.eval EX
+     D←¯1⌽(13⊃U.data)[2 3],⊂⍬
+     I←(2⊥×1 0 1/⊃MODEL)⊃0(0 1)(1 0)(1 2)
+     AR MA←D[I]
+     NS←(AR:AR ⋄ MA:MA)
+     NS←MODEL{1=≢⍺:⍵
+         0=1 0⊃⍺:⍵{⍺.SMA←1 11⊃⍵ ⋄ ⍺}D
+         0=1 2⊃⍺:⍵{⍺.SAR←1 11⊃⍵ ⋄ ⍺}D
+         ⍵.SAR←1 11⊃D
+         ⍵.SMA←2 11⊃D
+         ⍵}NS
+     NS.S2←1⊃U.data                  ⍝ Sigma∧2
+     NS.LL←4⊃U.data                  ⍝ Log Likelihood
+     NS.AIC←5⊃U.data                ⍝ AOC
+     ~SH:NS
+     ⎕PP←5
+     N←≢¨AR MA
+     Names←↑,/'AR' 'MA'{⍺∘,∘⍕¨⍵}¨1+⍳¨N
+     COEF←↑Names(AR,MA)
+     PARMS←'σ²='NS.S2'Log Likelihood = 'NS.LL'aic = 'NS.AIC
+     ⍕⍪'Coefficients'COEF PARMS
+
+
+
+
+
+
+     W←¯2-/⍣I⊢⍵
+     AR>0:AR estAR W
+     MA>0:MA estMA W
+ ⍝ Method of Moments - Cryer, Time Series Analysis p. 126
+     R←(⊃⍺)↑acf W        ⍝ AR(n) Time Series Model
+     J←|∘.-⍨⍳≢R          ⍝ Indicies for Yule-Walker Equations
+     Phi←R⌹(1,R)[J]     ⍝ Solve linear equations for ⌽
+ ⍝S2←var ⍵
+     M←(+/÷≢)W
+⍝ Phi←{(+/2×/⍵)÷+/1↓⍵*2}W-M
+     VAR←((+/(W-M)*2)÷¯1+≢W)
+     S2A←VAR×1-Phi+.×R
+     NS←(Phi:Phi ⋄ SA:S2A*÷2 ⋄ Mean:M ⋄ AR:AR ⋄ I:I ⋄ MA:MA ⋄ Var:VAR)
+  ⍝A←NS.SA normal randomVariable 10
+     NS.f←{⍺←1
+         m←{A←0 SA(16808⌶)'Normal' 1
+             Z←(I+AR)↑⌽⍵
+             I=0:⍵,A+(Phi+.×Z)+Mean-Phi+.×Mean
+             I=1:⍵,A+Z-.×⌽+\Phi,1}
+         m⍣⍺⊢⍵}
+     NS
+ }
