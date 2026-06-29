@@ -12,23 +12,24 @@
   ⍝⍎ 11.07 ← 5 chiSquare critVal < .05 ⍝ Value from ChiSquare Table
   ⍝⍎ 0.023379 ←   5 chiSquare prob > 13  ⍝  P-Value
   ⍝⍎ 0.097304 ← 5 chiSquare 6   ⍝ Density
-     ⎕ML←3 ⋄ ⎕IO←0 ⋄ w←⍵                       ⍝ Set System variables
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ w←⍵                        ⍝ Set System variables
      w≡'Type':'Continuous'
      m c←getParameters ⍺
-     w≡'Mean':m                                ⍝ Theoretical Values
-     w≡'Variance':2×m                          ⍝      "        "
-     w≡'Skewness':(8÷m)*÷2                     ⍝      "        "
-     w≡'Kurtosis':12÷m                            ⍝      "        "
-     w≡'Median':m×(1-2÷9×m)*3                     ⍝      "        "
-     w≡'Mode':0⌈m-2                               ⍝      "        "
+     w≡'Mean':m                                 ⍝ Theoretical Values
+     w≡'Variance':2×m                           ⍝      "        "
+     w≡'Skewness':(8÷m)*÷2                      ⍝      "        "
+     w≡'Kurtosis':12÷m                          ⍝      "        "
+     w≡'Median':m×(1-2÷9×m)*3                   ⍝      "        "
+     w≡'Mode':0⌈m-2                             ⍝      "        "
      (1≠≢m)∧c≠'r':∊(m,¨c)∇¨⍵
- ⍝    str←c,'chisq(⍵,⍵)'                           ⍝ Build R expression
- ⍝    rAv:+##.∆r.x str ⍵ m                         ⍝ If requested, use R
-     rAv:(c,'chisq')rExec ⍵ m                            ⍝ If requested, use R
-     p←(m÷2),2                                    ⍝ Paramters for gamma distribution
-     c='d':p gamma 0.001⌈w                          ⍝ Chi-Square special case of gamma
+ ⍝    str←c,'chisq(⍵,⍵)'                        ⍝ Build R expression
+ ⍝    rAv:+##.∆r.x str ⍵ m                      ⍝ If requested, use R
+     rAv:(c,'chisq')rExec ⍵ m                   ⍝ If requested, use R
+     p←(m÷2),2                                  ⍝ Paramters for gamma distribution
+     c='d':p gamma 0.001⌈w                      ⍝ Chi-Square special case of gamma
      c='p':m{⍵≤0:0 ⋄
-         ⍺=1:1-2×normal prob>⍵*÷2                 ⍝ 1 df
+         ⍺=1:1-2×normal prob>⍵*÷2               ⍝ 1 df
+         ⍺>250:⍺(sqrt 2×⍺)normal prob<⍵
          ##.Koko.Distrib.ChiSq_P ⍵ ⍺}¨⍵  ⍝
      c='q':m{##.Koko.Distrib.ChiSq_Xa ⍵ ⍺}¨1-⍵
 

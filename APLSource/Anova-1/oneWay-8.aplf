@@ -13,6 +13,7 @@
      W←↓⍣(2=⊃⍴⍴⍵)⊢⍵           ⍝ If matrix make vector of vectors
      W←{2<≢⍵:⍵
          ,0 1↓↑{⍺ ⍵}⌸/⌽⍵}W
+     W←W~¨⎕NULL               ⍝ Remove nulls
      YN←(2*⍨+/Y)÷≢,Y←∊W
      SSA←(2*⍨+/¨W)+.÷≢¨W
      SST←Y+.*2

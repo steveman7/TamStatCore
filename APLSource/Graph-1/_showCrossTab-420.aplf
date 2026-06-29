@@ -1,7 +1,7 @@
  _showCrossTab←{
      ⎕IO←0 ⋄ ⎕ML←3
      ⍺←⍳4 ⋄ a←10 ⋄ W←⍕a              ⍝ Default Width is 10
-     NMS←⍕¨¨0 1{1↓0⌷[⍺]⍵}¨⊂⍵            ⍝ Get Row, Column Names
+     NMS←⍕¨¨0 1{1↓0⌷[⍺]⍵}¨⊂⍵         ⍝ Get Row, Column Names
      NMS←(a×¯1 1){⍺↑¨⍵,⊂'Total'}¨NMS ⍝ Include Totals
      D←↑{⍵,[⍺]+/[⍺]⍵}/0 1,⊂1 1↓⍵     ⍝ Append Row, Column Totals
      C R←{D÷[~⍵]0⌷[⍵]⌽[⍵]D}¨0 1      ⍝ Calc Row, Column Percents

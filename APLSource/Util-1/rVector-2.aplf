@@ -1,0 +1,8 @@
+ rVector←{
+⍝∇ Build a R vector
+⍝⍺ Name of vector
+⍝⍵ Numeric vector
+⍝← Character vector
+     ⍺←''
+     Prefix←{0=≢⍵:')c(' ⋄ ')'⍵,'<-c('}⍺
+     1⌽Prefix,(' '⎕R',')('¯'⎕R'-')⍕⍵}

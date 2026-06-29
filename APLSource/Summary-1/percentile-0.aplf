@@ -9,11 +9,11 @@
  ⍝⍕ Result ← N percentile RawData|FreqDist
  ⍝⍎ 44.5 ← 30 percentile 32 58 57 96 76 87 21 58 90 5
  ⍝⍎ 44.5 81.5 ← 30 70 percentile 32 58 57 96 76 87 21 58 90 5
-     ⍵≡'Type':'Position'             ⍝ Measure of position
-     ∨/~⍺ between 0 100:⎕SIGNAL 11   ⍝ Domain error
+     ⍵≡'Type':'Position'                            ⍝ Measure of position
+     ∨/⍺ outside 0 100:⎕SIGNAL 11                  ⍝ Domain error
      P←⍺÷100 ⋄ ⎕ML←3 ⋄ ⎕IO←0
  ⍝ #.R_Available:+#.∆r.x'quantile(⍵,⍵)'⍵ P
-     ptileconf←{C P←⍺ ⋄ N←count ⍵                   ⍝ Conover, Non-Parametric Statistics
+     ptileconf←{C P←⍺ ⋄ N←count ⍵                    ⍝ Conover, Non-Parametric Statistics
          I←C{N Q←⍵                                   ⍝ p. 143 ConfInt for a Quartile
              N≤20:¯1+N Q binomial critVal outside ⍺  ⍝ Small Samples
              Z←normal critVal<0.5×1-⍺                ⍝ Large Samples
@@ -23,16 +23,32 @@
              b:I≥⍵.Events
              ⍵.(mean sdev)normal critVal≥I÷N}⍵
          2=⍴⍴⍵:⍵[1+(+\⍵[;1])⍸I;0]
-         X←⍵[⍋⍵] ⋄ X[0⌈I⌊¯1+⍴X]}                     ⍝ Sort and find bounds at position
-     1>↑⍺:⍺ ptileconf ⍵
+         X←⍵[⍋⍵] ⋄ X[0⌈I⌊¯1+⍴X]}                      ⍝ Sort and find bounds at position
+   ⍝  1>↑⍺:⍺ ptileconf ⍵
+     (↑⍺)between 0 1:⍺ ptileconf ⍺
      9=⎕NC'⍵':P{b←(⊂'events')∊variables ⍵
          b:⍺≥⍵.(events÷count)
-         ⍵.(mean sdev)normal critVal>⍺}⍵
+         X←normal critVal>⍺                        ⍝Cornish-Fisher Expansion
+         S←{0::0 ⋄ ⍵.skewness}⍵
+         K←{0::0 ⋄ ⍵.kurtosis}⍵
+         WP←X+(S×¯1+X*2)÷6
+         WP+←K×(X⊥1 0 ¯3 0)÷24
+         WP-←(S*2)×(X⊥2 0 ¯5 0)÷36
+         ⍵.mean+WP×⍵.var*÷2
+     }⍵
      isFrequency ⍵:P{(x p)←↓⍉⍵[⍋⍵;]                  ⍝ Frequency Dist?
          p∨.<0:'Domain Error'
          i←+/⍺∘.≥c←(+\p)÷+/p                         ⍝ Cum probs
          x[i⌊¯1+≢x]}⍵
      n←≢x←⍵[⍋⍵]                                      ⍝ Sort, get shape
-     (n×P){i←⌊⍺ ⋄ i≠⍺:⍵[i]                           ⍝ If not integer, Round up
-         0.5+.×⍵[i-0 1]}¨⊂x                          ⍝ Else average
+    ⍝ (n×P){i←⌊⍺ ⋄ i≠⍺:⍵[i]                           ⍝ If not integer, Round up
+⍝         0.5+.×⍵[i-0 1]}¨⊂x                          ⍝ Else average
+         ⍝ i←0⌈(n-1)⌊⌊1 0∘.+v←n×P
+         ⍝ x[i[1;]]+(1|v)×-⌿x[i]
+     b←v=⌈v←¯1+n×P
+     z←x[0⌈⌈v]
+     (b/z)←0.5×(b/z)+x[(n-1)⌊b/v+1]
+     z
+
+
  }

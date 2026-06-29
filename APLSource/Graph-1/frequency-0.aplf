@@ -42,6 +42,6 @@
          (1 1↓z)←a{⍺=1:⍵÷[0]+/⍵               ⍝ Rows total 1
              ⍺=2:⍵÷[1]+⌿⍵                     ⍝ Columns total 1
              ⍵÷+/,⍵}1 1↓z ⋄ z}⍵               ⍝ Table totals 1
-     s:_showFreq a _freq w                    ⍝ Enhanced frequency table
-     a _freq w                                ⍝ Simple frequency table
+     s:_showFreq a _freq w~⎕NULL              ⍝ Enhanced frequency table
+     a _freq w~⎕NULL                          ⍝ Simple frequency table
  }

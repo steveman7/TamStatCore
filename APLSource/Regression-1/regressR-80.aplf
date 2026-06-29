@@ -66,4 +66,5 @@
      ns.VariableNames←NL←'Y','X',¨(≢INT↓ns.B)↑1↓⎕D
      ns.Equation←NL buildRegressionEquation ns.B
      ns._Report←⍕⍪'The regression equation is:'⍬ ns.Equation ⍬ ns._Report
+     _←ns.⎕DF ns.Equation
      ns.Type←'Regress' ⋄ ns}

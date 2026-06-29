@@ -10,11 +10,19 @@
      ⍝⍕ Ys ← sum Xv|Xm|W
      ⍝⍎ 19 ← sum 2 8 5 1 3
      ⎕ML←1 ⋄ ⎕IO←0 ⋄ ⍺←0
+     confTotal←{
+         C N←⍺
+         M←count ⍵
+         TauH←N×mean ⍵      ⍝ Sample total
+         varH←N×(N-M)×(var ⍵)÷M
+         T←(M-1)tDist criticalValue<0.5×1-C
+         TauH(-,+)T×sqrt varH
+     }
      ⍵≡'Type':'Quantity'           ⍝ Measure of quantity
      ⊃⍺ between 0 1:⍺ confTotal ⍵  ⍝ 1st Left arg∊(0,1) confint
-    ⍝⍺←count ⍵
      C N←¯2↑⍺                      ⍝ C = 0, then point est
-     9=⎕NC'⍵':N×⍵.mean             ⍝ Namespace
+  ⍝  9=⎕NC'⍵':N×⍵.mean             ⍝ Namespace
+     9=⎕NC'⍵':⍵.(mean×count)       ⍝ Namespace
      w←(∧/⎕NULL≠⍪⍵)⌿⍵              ⍝ Any nulls?
      M←count w                     ⍝ Sample Size
      N←N+M×N=0                     ⍝ If N=0, replace with sample size

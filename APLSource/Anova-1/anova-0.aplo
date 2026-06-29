@@ -28,9 +28,12 @@
      NL X←{isNamespace 1⊃2↑(,⍵),0:'a'⍵
          isNamespace↑⍵:{1=≢⍵:⍵.(⊢{⍺ ⍵}⍎¨)variables ⍵
              (' 'toNestedVector 1⊃⍵)(⍵[0]⍎1⊃⍵)}⍵
-         (2≤⍴⍴⍵):⍬(⊃⍵)                  ⍝ If not a vector and nested, disclose
-         (,2)≡⍴⍵:((1↓⎕D)↑⍨⍴⍵)⍵          ⍝ Balanced anova
-         ((1↓⎕D)↑⍨⍴⍵)⍵}⍵                ⍝ One factor unbalanced
+         (2≤⍴⍴⍵):⍬(⊃⍵)                     ⍝ If not a vector and nested, disclose
+         (,2)≡⍴⍵:((1↓⎕D)↑⍨⍴⍵)⍵             ⍝ Balanced anova
+         ⍝((1↓⎕D)↑⍨⍴⍵)⍵}⍵                  ⍝ One factor unbalanced
+         X←(~X∊¨⎕NULL)∘/¨⍵                 ⍝ Remove nulls
+         ((1↓⎕D)↑⍨⍴⍵)X}⍵                   ⍝ One-factor unbalanced
+
      TBL←⍺ ⍺⍺ X ⋄ EFF←TBL[;0]
      EFF←EFF{NS←↑⍵ ⋄
          isNamespace 1⊃(,⍵),0:⍺
@@ -54,8 +57,12 @@
          isNamespace↑⍵:{b←0=⍵[0].⎕NC'name'    ⍝ If names not included
              b:(,¨(≢⍵)↑⎕A)⍵                   ⍝  Use A,B,C
              ⍵.name ⍵}⍵                       ⍝ Else use specified names
-         2<≢⍵:⍺ ⍵
-         ↓⍉↑{⍺ ⍵}⌸/⌽⍵}X
+        ⍝ 2<≢⍵:⍺ ⍵
+⍝         ↓⍉↑{⍺ ⍵}⌸/⌽⍵}X
+         X←⍵/⍨¨∧/~⍵∊¨⎕NULL                    ⍝ Remove nulls
+         2<≢⍵:⍺ X
+         ↓⍉↑{⍺ ⍵}⌸/⌽X}X
+
      H←'Group' 'N' 'Mean' 'StdDev'            ⍝ Build Means Table
      NS.Means←H⍪A,⊃(count,mean,sdev)¨X
     ⍝ NS.Omega2←{(⍵[1;1]-⍵[1;2]×⍵[2;3])÷⍵[3;1]+⍵[2;3]}NS.AnovaTable

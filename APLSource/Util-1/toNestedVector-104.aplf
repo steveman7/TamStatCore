@@ -12,7 +12,8 @@
      2=⍺:{2=≡⍵:⍵                        ⍝ slope Y X
          2=⍴⍴⍵:↓⍉⍣{2≠≢⍵}⍵               ⍝ slope Y,⍪X
          (0.5×≢⍵)(↑{⍺ ⍵}↓)⍵}⍵           ⍝ slope(Y,X)
-     0=↑0⍴∊⍵:⍵                          ⍝ If numeric, leave alone
+    ⍝0=↑0⍴∊⍵:⍵                          ⍝ If numeric, leave alone
+     ~isCharacter ⍵:⍵                   ⍝ If numeric, leave alone
      2=≡⍵:deleteExcessBlanks¨,⍵         ⍝ Already nested vector
      2=⍴⍴⍵:deleteExcessBlanks¨↓⍵        ⍝ Matrix                                                         ←
      ⍺∊⍵:deleteExcessBlanks¨(⍺≠⍵)⊆⍵     ⍝ Delimited list

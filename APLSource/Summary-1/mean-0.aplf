@@ -33,7 +33,13 @@
      M='u':C 0 confMean ⍵
      C between 0 1:⍺ confMean ⍵                ⍝ Default method
      twoSample ⍵:-/∇¨⍵                         ⍝ If two samples, calculate mean difference
-     9=⎕NC'⍵':⍵.mean                           ⍝ If namespace, get mean property
+    ⍝9=⎕NC'⍵':⍵.mean                           ⍝ If namespace, get mean property
+     9=⎕NC'⍵':{2=⍵.⎕NC'mean':⍵.mean            ⍝ If namespace, get mean property
+         Q←⍵.quartile
+         F←Q[1 3]+¯1 1×1.5×-/Q[3 1]            ⍝ Fence
+         Q[0]⌈←F[0] ⋄ Q[4]⌊←F[1]
+        ⍝ 16÷⍨1 5 4 5 1+.×Q}⍵                   ⍝ Or calculate from 5-number summary
+         48÷⍨5 13 12 13 5+.×Q}⍵
    ⍝  ~'X'check ⍵:⎕SIGNAL 11                   ⍝
      w←frequency⍣(↑(0J1=⍺)∧1=⍴⍴⍵)⊢⍵            ⍝ Convert to frequency?
      isFrequency w:⍺{⍺=0:(+/×/⍵)÷+/⍵[;1]       ⍝ If matrix, treat as frequency
@@ -46,7 +52,7 @@
          (h⍪u⍪(¯1↓z)⍪u)⍪¯30↑'Total:',10↓,¯1↑z  ⍝ Assemble table
      }w
      2=≡w:∇¨w~¨⎕NULL                           ⍝ Nested?
-  ⍝   rAv:+##.∆r.x'mean(⍵)'(⍵~⎕NULL)            ⍝ If available, use R
+  ⍝   rAv:+##.∆r.x'mean(⍵)'(⍵~⎕NULL)           ⍝ If available, use R
      rAv:'mean'rExec ⍵~⎕NULL
      (+/÷≢)w~⎕NULL                             ⍝ Use fork to calculate mean
 

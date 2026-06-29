@@ -19,7 +19,8 @@
      ⍺=2:⎕CSV FN'' 3 0                   ⍝
      D H←(⎕CSV⍠'Invert' 2)FN'' 4 1       ⍝ Get names, values from .csv
      D←{b←(d←⍵)∊⊂'' ⋄ (b/d)←⎕NULL ⋄ d}¨D ⍝ Replace empties with ⎕null
-     H←H~¨⊂' .#$&%'                      ⍝ Remove extraneous characters
+     ⍝H←H~¨⊂' .#$&%'                      ⍝ Remove extraneous characters
+     H←{⍵/⍨⍵∊⎕A,⎕D,⎕C ⎕A}¨H              ⍝ Remove extraneous characters
    ⍝  H←1 ⎕C¨H                            ⍝ Convert to upper case
    ⍝  H←(1 ⎕C ↑¨H),¨1↓¨H
      H←{(1 ⎕C↑⍵),1↓⍵}¨H

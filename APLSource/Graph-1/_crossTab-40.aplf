@@ -1,7 +1,9 @@
  _crossTab←{
      ⎕IO←0 ⋄ ⎕ML←3
      a←{0J1∊⍵:↑⌽⍵ ⋄ ⍵}⍺
-     XY←toNestedVector¨a ⍵
+     f←{isCharacter ⍵:⍵ ⋄ ⍕¨⍵}
+     a w←f¨a ⍵
+     XY←toNestedVector¨a w
      X Y←{{⍵[⍋⊃⍵]}∪⍵}¨XY
      U←X∘.{⍺ ⍵}Y
      T←{⍺,≢⍵}⌸↓⍉⊃XY

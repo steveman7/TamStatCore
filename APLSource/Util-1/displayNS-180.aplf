@@ -1,0 +1,24 @@
+ displayNS←{
+⍝∊ Utility FUnction
+⍝∇ Default Display form for a namespace using array notation
+⍝⍺ NAMES Cv Variable names delimited by commas
+⍝⍵ NS    W  Namespace
+⍝← DF    Cv Executable string (Name1:Value1  ⋄ Name2:Value2 ... )
+⍝⍕ DF←[NAMES] displayForm NS
+     ⎕PP←5 ⋄ ⎕ML←1 ⋄ ⎕IO←0 ⋄ Q←''''
+     N←⍵.⎕NL 2 ⋄ ⍺←N            ⍝ Get Variable Names
+     I←N⍳⍥toNestedVector ⍺      ⍝ Find variables in name list
+     N←N[I~≢N;]                 ⍝ Sort by left argument
+     V←⍵⍎,' ',N                 ⍝ Get Values
+     B←1≥(≢∘⍴⌈|∘≡)¨V            ⍝ Check rank and depth
+     B←B∧10>≢¨V                 ⍝ Check length
+     N V←B∘⌿¨N V                ⍝ Keep only simple scalars and vectors
+     C←0≠{⊃0⍴⍵}¨V               ⍝ Find Text Variables
+     (C/V)←{Q,⍵,Q}¨C/V          ⍝ Add Quotes to character strings
+     D←'⋄',N,':',⍕⍪V             ⍝ Assemble Names, Values
+     D←1⌽')(',1↓,D               ⍝ Include parenthesis
+     D←(' \)'⎕R')')('⋄'⎕R' ⋄ ')D ⍝  "   "  "      "
+     D←('  '∘⍷~⍛/⊢)D             ⍝ Remove multiple blanks
+     (' :'⎕R':')(': '⎕R':')D     ⍝ Make it more readable
+
+ }

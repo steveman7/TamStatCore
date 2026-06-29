@@ -1,0 +1,14 @@
+ isCharacter←{
+⍝∊ Utility Function
+⍝⍵ Data Nv Any Array or Namespace
+⍝← Z Bs 1=True 0=False
+⍝⍕ Z←isCharacter Data
+⍝⍎ 1←isCharacter 'ABC,DEF'
+⍝⍎ 0←isCharacter 1 2 3
+⍝⍎ 0←isCharacter (Name:'Steve' ⋄ Age:73)
+     ⎕ML←0          ⍝ ∊ is Type
+     9=⎕NC'⍵':0     ⍝ Namespace
+     P←∊⊃⊃⍵         ⍝ Prototype
+     P∊⎕NULL 0:0    ⍝ Numeric
+     1              ⍝ Character
+ }

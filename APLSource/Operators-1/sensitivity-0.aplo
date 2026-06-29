@@ -1,0 +1,46 @@
+ sensitivity←{
+ ⍝⍟ Copyright (c) 2026 by Stephen M. Mansour
+ ⍝∇ Calculate sensitivity of a summary function to outliers.  NewValue - OldValue
+ ⍝∊ Operator
+ ⍝⍺  NameSpace     W   Count, Mean, Variance
+ ⍝⍺  Freq          Xm  Frequency Distribution
+ ⍝⍺  RawData       Xv  Sample Data in a vector
+ ⍝⍺⍺ fS            fS  Summary Function
+ ⍝⍵⍵ f             f   + add outlier(s); - remove outlier(s)
+ ⍝⍵  Outlier       Xs  Outlier Value(s)
+ ⍝←  Result        Xs  Sensitivity Factor
+ ⍝⍕ Result ←  [Sample|Freq|RawData]EventA|ProbA (fD|fL probability fR|Table|independent) X|EventB|ProbB
+ ⍝⍎ Height mean sensitivity + 78      ⍝ Mean sensitivity if 78 is added to database
+ ⍝⍎ ShoeSize var sensitivity - 12     ⍝ Variance sensitivity if 12 is removed from database
+     ⎕ML←1 ⋄ ⎕IO←0
+     remove←{⍺/⍨~(⍳⍴⍺)∊⍺⍳⍵}
+     9≠⎕NC'⍺':⍺ ⍺⍺{NewSamp←⍺ ⍵⍵{                 ⍝ If not summary data
+             Case←⍺⍺⍴⍴⍺                          ⍝ If raw data
+             Case=1:⍺,⍵                          ⍝ Append right argument or
+             Case=¯1:⍺ remove ⍵                  ⍝ Remove right argument
+             I←,(0,(1↓⍺[;0])-0.5×¯2-/⍺[;0])⍸⍵    ⍝ If frequency distribution
+             A←⍺ ⋄ A[;1]⍺⍺←+⌿I∘.=⍳≢⍺ ⋄ A}⍵       ⍝ Find and update frequencies
+         NewSamp-⍥⍺⍺ ⍺}⍵⍵ ⍵                      ⍝ Compare new vs old
+     fm←{n xbar←(count,mean)⍺                    ⍝ Estimate new mean from summary data
+         m ybar←(count,mean)⍵
+      ⍝  (n m ⍺⍺.×xbar ybar)÷n ⍺⍺ m
+         xbar ybar(⍺⍺.×÷(⍺⍺/⊢))n m
+     }
+     fv←{n xbar vx←(count,mean,var)⍺             ⍝ Estimate new variance from summary data
+         B←1=count ⍵
+         B∧(⍺⍺=⊢)2:(vx×1-÷n)+(2+.*⍨⍵-xbar)÷n+1
+         B∧(⍺⍺=-)2:(vx×÷/n-1 2)-n×(2+.*⍨⍵-xbar)÷×/n-1 2
+         k ybar vy←(count,mean,var)⍵
+         v←((n k-1)⍺⍺.×vx vy)÷¯1+n ⍺⍺ k
+         v ⍺⍺(n×k××⍨xbar-ybar)÷×/-\(n ⍺⍺ k)1
+     }
+     MSG←'This estimate requires the use of raw data, not summary data.'
+     'Quantity'≡⍺⍺'Type':{×⍺⍺ 0 1:⍺⍺ ⍵ ⋄ MSG}
+     'Position'≡⍺⍺'Type':MSG
+     ob←⍺⍺ 1 2 3 7 7
+     ob=4:(⍺ ⍵⍵ fm ⍵)-mean ⍺
+     ob=8:(⍺ ⍵⍵ fv ⍵)-var ⍺
+     8=ob*2:(sqrt ⍺ ⍵⍵ fv ⍵)-sdev ⍺
+     MSG
+
+ }

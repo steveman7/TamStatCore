@@ -4,14 +4,18 @@
  #.⎕RL←⍬
  _←Distribution.(?⎕TS[6]⍴0)     ⍝ Set random seed so that all students results are different
  (# #.TamStat.Operators #.TamStat.Distribution).⎕RL←⊂⍬
+<<<<<<< Updated upstream
  Koko←#.KS.Main
+=======
+⍝ Koko←#.KS.Main
+>>>>>>> Stashed changes
  ⍝ X can be 'R' 'DEMO' or 'GUI'
  ⍝ _←#.Distribution.(16807⌶2)
  Ver←3↑↑'.'⎕WG'APLVersion'
  :If Ver≢'Win'
      X←''         ⍝ No GUI unless Windows
  :EndIf
- P←'Operators Util Distribution Summary Relational Logical Arithmetic Graph Regression Anova NonParametric API TimeSeries UserInterface GUI'
+ P←'Operators Util Distribution Summary Relational Logical Arithmetic Graph Regression Anova NonParametric API TimeSeries UserInterface GUI Koko'
  P←'#.TamStat.'∘,¨(P≠' ')⊂P
  ⎕PATH←⍕'# #.TamStat ',P
  :If 0  ⍝ 202505<100⊥2↑⎕TS    ⍝ Check date for license expiration 2026

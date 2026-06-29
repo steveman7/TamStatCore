@@ -8,45 +8,47 @@
      ⍝⍕ Middle ← median RawData|FreqDist
      ⍝⍎ 3 ← median 2 8 5 1 3
      ⍝⍎ 3.5 ← median 2 8 5 1 3 4
-     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←⍬ ⋄ 0∊⍴⍵:0          ⍝ Set up variables
-     ⍵≡'Type':'Center'                     ⍝ Measure of center
-     showMedian←{0::⍵                      ⍝ Error check
-         n←≢d←⍵[⍋⍵]                        ⍝ Sort data and get sample size
-         odd←2∘|                           ⍝ Odd or Even?
-         c←⌈(n-1)÷2                        ⍝ Center of the data
-         odd n:(c↑d)('(',d[c],')')((-c)↑d) ⍝ If odd, show middle value
-         (c↑d)('|')(c↓d)                   ⍝ If even, put bar between values
-     }
-     confMed←{C N←⍺ ⋄ n←≢d←⍵[⍋⍵]           ⍝ Sort the data
-         cp←N{⍺=0:⍵ 0.5 binomial prob≤⍳⍵+1 ⍝ Cumulative probabilities
+     ⍵≡'Type':'Center'                            ⍝ Measure of center
+     ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←⍬ ⋄ 0∊⍴⍵:0 ⋄ H←÷2          ⍝ Set up variables
+     showMedian←{0::⍵                             ⍝ Error check
+         n←≢d←⍵[⍋⍵]                               ⍝ Sort data and get sample size
+         odd←2∘|                                  ⍝ Odd or Even?
+         c←⌈(n-1)÷2                               ⍝ Center of the data
+         odd n:(c↑d)('(',d[c],')')((-c)↑d)        ⍝ If odd, show middle value
+         (c↑d)('|')(c↓d)}                         ⍝ If even, put bar between values
+     confMed←{C N←⍺ ⋄ n←≢d←⍵[⍋⍵]                  ⍝ Sort the data
+         cp←N{⍺=0:⍵ H binomial prob≤⍳⍵+1          ⍝ Cumulative probabilities
              (⌊⍺÷2)⍵ ⍺ hyperGeometric prob≤⍳⍵+1}n
-         p←{⍵,1-⍵}(1-C)÷2                  ⍝ Upper lower probs
-         j←0 1+{⍵/⍳⍴⍵}2≠/≠⌿p∘.<cp          ⍝ Get conf int
+         p←{⍵,1-⍵}(1-C)÷2                         ⍝ Upper lower probs
+         j←0 1+{⍵/⍳⍴⍵}2≠/≠⌿p∘.<cp                 ⍝ Get conf int
          d[j⌊¯1+≢d]}
-     confMed1←{C N←⍺ ⋄ p←0.5×1-C ⋄ D←⍵[⍋⍵] ⍝ Conover, Non-Parametric
-         W←(≢D)wilcoxonT critVal>p         ⍝ Statistics, p. 360 (Hodges-Lehmann)
-         M←sort D,0.5×+pairwise D
+     confMed1←{C N←⍺ ⋄ p←H×1-C ⋄ D←⍵[⍋⍵]          ⍝ Conover, Non-Parametric
+         W←(≢D)wilcoxonT critVal>p                ⍝ Statistics, p. 360 (Hodges-Lehmann)
+         M←sort D,H×+pairwise D
          M[-⍨\W,≢M]}
-     0J1∊⍺:showMedian ⍵~⎕NULL              ⍝ Show operator
-      ⍝  ↑⍺ between 0 1:⍺ confMed1 ⍵
-     C M←2↑⎕C ⍺
-     C between 0 1:C M{M='b':C 0 confMed ⍵
-         M='h':C 0 confMed1 ⍵
-         C M confMed ⍵}⍵
-     isFrequency ⍵:{(x p)←↓⍉⍵[⍋⍵;]          ⍝ Frequency Dist?
-         p∨.<0:'Domain Error'              ⍝ Validate probabilities
-         b←(⊢∧.=⌊)⍵[;0]                    ⍝ If all integers
-         b←b∧1∧.=¯2-/⍵[;0]                 ⍝ separated by 1 unit
-         (x p)←(p≠0)∘/¨x p                 ⍝ Remove 0 frequencies
-         c←(+\÷+/)p                        ⍝ Cumulative probabilities
-         b:x[(c⍸0.5)+1,~0.5∊c]+.÷2         ⍝ Find position of midpoint
-         i j←0 1+c⍸0.5                     ⍝ Indices of neighboring groups
-         u←c[i]÷.-⍨0.5,c[j]                ⍝ Proportion within group
-         x[i]+(-/x[j i])×u+0.5             ⍝ See Tobias p. 14
-     }⍵
-    ⍝ rAv:+##.∆r.x'median(⍵)'(⍵~⎕NULL)      ⍝ Call R if available
-     rAv:'median'rExec ⍵~⎕NULL             ⍝ Call R if available
-     n←↑⍴x←{⍵[⍋⍵]}⍵~⎕NULL                   ⍝ Sort data and get sample size
-     i←¯1+(n+1)÷2                           ⍝ Find median index
-     x[(⌈i),⌊i]+.÷2                         ⍝ Average middle value(s)
+     0J1∊⍺:showMedian ⍵~⎕NULL                     ⍝ Show operator
+     C M←2↑⎕C ⍺                                   ⍝ Conf Level, Method
+     C between 0 1:C M{
+         W←{1=⍴⍴⍵:⍵ ⋄ 2=⍴⍴⍵:∊(//⌽⍵) ⋄ ⍵.count↑⍵.events/1}⍵
+         M='b':C 0 confMed W
+         M='h':C 0 confMed1 W                     ⍝ Hodges-Lehman Method
+         C M confMed W}⍵                          ⍝ Standard Method
+     isFrequency ⍵:{(x p)←↓⍉⍵[⍋⍵;]                ⍝ Frequency Dist?
+         p∨.<0:'Domain Error'                     ⍝ Validate probabilities
+         b←(⊢∧.=⌊)⍵[;0]                           ⍝ If all integers
+         b←b∧1∧.=¯2-/⍵[;0]                        ⍝ separated by 1 unit
+         (x p)←(p≠0)∘/¨x p                        ⍝ Remove 0 frequencies
+         c←(+\÷+/)p                               ⍝ Cumulative probabilities
+         b:x[(c⍸H)+1,~H∊c]+.÷2                    ⍝ Find position of midpoint
+         i j←0 1+c⍸H                              ⍝ Indices of neighboring groups
+         u←c[i]÷.-⍨H,c[j]                         ⍝ Proportion within group
+         x[i]+(-/x[j i])×u+H}⍵                    ⍝ See Tobias p. 14
+     9=⎕NC'⍵':{2=⍵.⎕NC'median':⍵.median           ⍝ IF namespace input
+         2=⍵.⎕NC'quartile':2⊃quartile             ⍝ Get from 5-number summary
+         2=⍵.⎕NC'events':H+H××⍵.(events÷count)-H  ⍝ If binary data, median is 0,0.5 or 1
+         'median not available'}⍵                 ⍝
+     rAv:'median'rExec ⍵~⎕NULL                    ⍝ Call R if available
+     n←↑⍴x←{⍵[⍋⍵]}⍵~⎕NULL                         ⍝ Sort data and get sample size
+     i←¯1+(n+1)÷2                                 ⍝ Find median index
+     x[(⌈i),⌊i]+.÷2                               ⍝ Average middle value(s)
  }

@@ -328,23 +328,10 @@
           Z,←' ',I⊃'Scalar' 'Vector' 'Matrix' 'Array' 'Nested',FF,⊂''
       :EndIf
      
-     ⍝ I←'DSRL'⍳↑1↓TYPE
-⍝      Z,←I⊃'Distribution' 'Summary' 'Relational' 'Logical' ''
-     
-      ⍝:If ∨/B←'DSRL'∊1↓TYPE
-⍝          Z,←' ',↑{⍺,' or ',⍵}/('FCXS'∊TYPE)/'Field' 'Constant' 'Expression' 'String'
-⍝      :EndIf
-⍝      Z,←';'
-⍝      :If ∨/'>0'⍷TYPE ⋄ Z,←' Positive ' ⋄ :EndIf
-⍝      :If ∨/'≥0'⍷TYPE ⋄ Z,←' Non-negative ' ⋄ :EndIf
-⍝      :If '%'∊TYPE ⋄ Z,←' Percentage ' ⋄ :EndIf
-⍝      :If '$'∊TYPE ⋄ Z,←' Dollar Amount' ⋄ :EndIf
-⍝      :If 'I'∊TYPE ⋄ Z,←' Integer' ⋄ :EndIf
-⍝      :If '{'∊TYPE ⋄ Z,←'; Range  ',1↓(≠\TYPE∊'{}')/TYPE ⋄ :EndIf
-⍝      ⍝:If 'W'∊TYPE ⋄ Z,←' Width = ',(1+TYPE⍳'W')↓TYPE ⋄ :EndIf
+  
       :If ' '∨.≠DEF ⋄ Z,←' Default = ',DEF ⋄ :EndIf
       Z←(-';'=↑⌽Z)↓Z
-     ⍝ Z,←'</LI>'
+     
       Z,←'<br>'
     ∇
 

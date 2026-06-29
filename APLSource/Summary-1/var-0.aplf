@@ -17,14 +17,23 @@
      ⍵≡'Type':'Spread'               ⍝ Spread function
      ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←¯1            ⍝ Set system variables
      (↑⍺~0J1)between 0 1:⍺ confVar ⍵ ⍝ If 0<⍺<1:Conf Int
-     9=⎕NC'⍵':⍵.var×1-(⍺=1)÷⍵.count  ⍝ If namespace, extract variance
-     b←isFrequency⊢w←1/⍵
+    ⍝ 9=⎕NC'⍵':⍵.var×1-(⍺=1)÷⍵.count  ⍝ If namespace, extract variance
+     9=⎕NC'⍵':{2=⍵.⎕NC'var':⍵.var     ⍝ If namespace, get mean property
+         2=⍵.⎕NC'sdev':⍵.sdev*2
+         Q←⍵.quartile
+         F←Q[1 3]+¯1 1×1.5×-/Q[3 1]            ⍝ Fence
+         Q[0]⌈←F[0] ⋄ Q[4]⌊←F[1]
+         EX←48÷⍨5 13 12 13 5+.×Q
+         EX2←48÷⍨5 13 12 13 5+.×Q*2
+         EX2-EX*2}⍵
+     b←isFrequency⊢w←1/⍵             ⍝ Is it afrequency?
      b←↑b∧(2=≡w)∨0≡↑0⍴w              ⍝
      w←toNestedVector⍣(~b)⊢w         ⍝ Nest it?
      varChar←{⍺:1-+/2*⍨(⊢÷+/)⍵[;1]   ⍝ Variability for Categorial Variables
          (+/,∘.≢⍨⍵)÷(≢⍵)*2}          ⍝   (Kader and Perry 2007)
      0J1∊⍺:(⍺~0J1)showCov w          ⍝ Display form?
-     0≠↑0⍴↑w:b varChar w             ⍝ Character variability
+   ⍝ 0≠↑0⍴↑w:b varChar w             ⍝ Character variability
+     isCharacter w:b varChar w       ⍝
      b:↑⍺{(⍺⍺=0)∧1≥n←+/⍵:⎕NULL
          n≠1:+/((⍵+.×⍺*2)-n÷⍨2*⍨⍵+.×⍺)÷n-⍺⍺≠1 ⍝ Frequency
          (⍵+.×⍺*2)-(⍵+.×⍺)*2}/↓⍉w    ⍝ Probability

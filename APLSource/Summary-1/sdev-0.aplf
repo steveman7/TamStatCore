@@ -13,7 +13,10 @@
  ⍝⍎ 0.92113 ← sdev 4 2 matrix 0 20 1 30 2 40 3 10 ⍝ Frequency Distribution
  ⍝⍎ 0.91652 ← sdev 4 2 matrix 0 0.2 1 0.3 2 0.4 3 0.1 ⍝ Relative Frequency
      ⍺←¯1 ⋄ ⎕IO←0 ⋄ ⎕ML←1
-     9=⎕NC'⍵':⍵.sdev×sqrt 1-(⍺=1)÷⍵.count
+    ⍝ 9=⎕NC'⍵':⍵.sdev       ⍝×sqrt 1-(⍺=1)÷⍵.count
+     9=⎕NC'⍵':{2=⍵.⎕NC'sdev':⍵.sdev     ⍝ If namespace, get mean property
+         2=⍵.⎕NC'var':sqrt ⍵.var
+         sqrt var ⍵}⍵
      ⍵≡'Type':'Spread'
      ⊃⍺ between 0 1:sqrt ⍺ confVar ⍵
     ⍝rAv:⍺{z←##.∆r.x'sd(⍵)'(⍵~⎕NULL)

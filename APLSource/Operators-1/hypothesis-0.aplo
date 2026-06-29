@@ -42,8 +42,8 @@
          i=20:⍺ mseHo ⍵
          i=22:⍺ covHo ⍵}
      SD←7=i*2                                 ⍝ Is std deviation?
-    ⍝ y←{9=⎕NC'⍵':⍵ ⋄ ⍵*2*(s=0)∧i≠⌊i}x2       ⍝ Square if sdev
      y←SD{9=⎕NC'⍵':⍵ ⋄ ⍵*2*⍺∧s=0}x2          ⍝ Square if sdev
+    ⍝ns←R s f x1 y                            ⍝ Apply the test
      ns←R s f x1 y                            ⍝ Apply the test
      ns.Estimate*←÷2*SD                       ⍝ Adjust for sdev
      ns←SD{~⍺:⍵ ⋄ ⍵._Parameter←'σ' ⋄ ⍵}ns     ⍝  "      "   "

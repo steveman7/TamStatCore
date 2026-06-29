@@ -22,7 +22,6 @@
      f←{Q←(⍳5)quartile ⍵                 ⍝ Five number summary
          F←Q[1 3]+¯1 1×1.5×-/Q[3 1]      ⍝ Fence
          OUT←(1=×/×⍵∘.-F)/⍵              ⍝ Outliers
-        ⍝ Q[0]⌈←F[0] ⋄ Q[4]⌊←F[1]        ⍝ Whisker bounds
          Q[0 4]←(⌊/,⌈/)⍵~OUT             ⍝ Whisker bounds
          D←⍳101                          ⍝
          QS←⌊0.5+100×(Q-A)÷R             ⍝ Scale quartiles

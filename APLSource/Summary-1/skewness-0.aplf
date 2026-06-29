@@ -12,14 +12,23 @@
  ⍝⍎ 0.30319 ← 1 skewness  3 4 5 2 3 4 5 6 4 7 ⍝ Population
      ⎕DIV←1 ⋄ ⎕ML←3 ⋄ ⎕IO←0 ⋄ ⍺←¯1 ⍝ Set system variables
      ⍝ rAv:+##.∆r.x'skewness(⍵)'⍵  ⍝ If requested call R
+   ⍝  n m s←(count,mean,1∘sdev)⍵    ⍝ Get count, mean, sdev of data
+     bowley←{Q←⍵.quartile[1 2 3]          ⍝ Bowley's Measure of Skewness
+         C←[1 ¯2 1 ⋄ ¯1 0 1]
+         ÷/C+.×Q}
+     pearson←{0::'Missing Data'
+         S←{2=⍵.⎕NC'sdev':⍵.sdev
+             ⍵.var*÷2}⍵
+         3×⍵.(mean-median)÷S}      ⍝ Karl Pearson's Measure
+     9=⎕NC'⍵':{
+         2=⍵.⎕NC'quartile':bowley ⍵
+         2=⍵
+         pearson ⍵}⍵
      n m s←(count,mean,1∘sdev)⍵    ⍝ Get count, mean, sdev of data
-     9=⎕NC'⍵':'Nonce Error'
-    ⍝ x←{isFrequency ⍵:∊(//⌽⍵) ⋄ ⍵}⍵
      isFrequency ⍵:⍺{U←+/⍵[;1]×3*⍨⍵[;0]-m
-         1∨.=⍺,+/⍵[;1]:U÷(+/⍵[;1])×s*3  ⍝ Population
-         (U÷n)×(sqrt n×n-1)÷(n-2)×s*3}⍵ ⍝ Sample                        ⍝ Sample
-    ⍝ z←+/(s÷⍨⍵-m)*3
-     3>n←≢⍵:'Sample Size Too Small' ⍝ If Sample size < 3, get out
+         1∨.=⍺,+/⍵[;1]:U÷(+/⍵[;1])×s*3   ⍝ Population
+         (U÷n)×(sqrt n×n-1)÷(n-2)×s*3}⍵  ⍝ Sample                        ⍝ Sample
+     3>n←≢⍵:'Sample Size Too Small'      ⍝ If Sample size < 3, get out
      z←-n÷⍨+/(s÷⍨m-⍵~⎕NULL)*3
      ⍺=1:z
      z×(sqrt n×n-1)÷n-2

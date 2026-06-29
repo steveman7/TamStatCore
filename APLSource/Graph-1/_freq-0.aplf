@@ -7,7 +7,8 @@
      d←toNestedVector ⍵               ⍝ If character, make nested
      n←+/d∊⎕NULL,⊂,⎕NULL              ⍝ Count nulls
      d←{⍵[⍋⊃⍵]}d~⎕NULL                ⍝ Remove nulls and sort
-     c←2=≡d                           ⍝ Character?
+    ⍝ c←2=≡d                           ⍝ Character?
+     c←isCharacter d
      f←{⍺,≢⍵}⌸                        ⍝ Grouping function
      g←{(⍺=0)∨⍺≥≢⍵:⍵ ⋄ K←⍺-1          ⍝ Unique Groups
          W←⍵[⍒⍵[;1];]                 ⍝ Sort by frequency
