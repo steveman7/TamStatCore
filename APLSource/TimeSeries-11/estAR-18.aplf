@@ -1,0 +1,21 @@
+ estAR←{⎕IO←0 ⋄ ⎕ML←1
+     R←⍺↑acf ⍵        ⍝ AR(n) Time Series Model
+     J←|∘.-⍨⍳≢R          ⍝ Indicies for Yule-Walker Equations
+     Phi←R⌹(1,R)[J]     ⍝ Solve linear equations for ⌽
+ ⍝S2←var ⍵
+     M←(+/÷≢)⍵
+⍝ Phi←{(+/2×/⍵)÷+/1↓⍵*2}W-M
+     VAR←((+/(⍵-M)*2)÷¯1+≢⍵)
+     S2A←VAR×1-Phi+.×R
+     AR←⍺
+     NS←(Phi:Phi ⋄ SA:S2A*÷2 ⋄ Mean:M ⋄ AR:AR ⋄ Var:VAR)
+
+  ⍝A←NS.SA normal randomVariable 10
+     NS.f←{⍺←1
+         m←{A←0 SA(16808⌶)'Normal' 1
+             Z←(I+AR)↑⌽⍵
+             I=0:⍵,A+(Phi+.×Z)+Mean-Phi+.×Mean
+             I=1:⍵,A+Z-.×⌽+\Phi,1}
+         m⍣⍺⊢⍵}
+     NS
+ }

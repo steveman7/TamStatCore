@@ -1,11 +1,13 @@
  acf←{
-⍝∇ Autocorrelation Function
-⍝∊ @ (C) 2025 by Stephen Mansour
-⍝⍺ K Ns NUMBER OF LAGS
-⍝⍵ Z Zv TIME SERIES
-⍝← R Yv VECTOR OF AUTOCORRELATIONS
+⍝⍟ Copyright (C) 2026 by Stephen Mansour
+⍝∇ Autocorrelation function
+⍝∊
+⍝⍺ K Ns Number of lags
+⍝⍵ Z Zv Time series Datas
+⍝← R Yv Vector of Autocorrelations starting with lag 1.
 ⍝⍕ Y←[K] acf [show] Z
-⍝⍎ 0.88403 0.80557 0.70944 ← 3 acf +\normal randVar 25
+⍝⍎ 0.31579 0.14415 ¯0.027926 ← 3 acf 100 20 normal randVar 25
+⍝⍎ acf show 100 20 normal randVar 25
      ⎕IO←0 ⋄ ⎕ML←1
      DF←10+⌊sqrt≢⍵ ⋄ ⍺←DF                  ⍝ Set default lag
      K SH←¯2↑0J1(~⍨,∊)¯2↑⍺                 ⍝ Parse left argument
